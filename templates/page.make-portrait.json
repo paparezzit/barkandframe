@@ -1,0 +1,84 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "make-portrait-configurator": {
+      "type": "make-portrait-configurator",
+      "blocks": {
+        "style_fWfEFh": {
+          "type": "style",
+          "settings": {
+            "name": "Pure Portrait",
+            "image": "shopify://shop_images/pure-portrait.jpg",
+            "artist_name": "Petr Dokoupil",
+            "artist_bio": "",
+            "description": "",
+            "tags": "Realistic, Minimal",
+            "base_price": 74
+          }
+        },
+        "style_CBAeCJ": {
+          "type": "style",
+          "settings": {
+            "name": "Atelier Sketch",
+            "image": "shopify://shop_images/atelier-sketch.jpg",
+            "artist_name": "Anna K.",
+            "artist_bio": "",
+            "description": "<p>A clean and emotional portrait with soft tones and gentle brushwork. Contemporary and timeless.</p>",
+            "tags": "Realistic, Minimal",
+            "base_price": 74
+          }
+        },
+        "tab-overview": {
+          "type": "tab",
+          "settings": {
+            "tab_id": "overview",
+            "content": "<p>Each portrait begins with a photo. We use it as the foundation for everything that follows — gesture, expression, presence. The style you choose determines how far we take it from there.</p>"
+          }
+        },
+        "tab-artist": {
+          "type": "tab",
+          "settings": {
+            "tab_id": "artist",
+            "content": "<p>Our portraits are created by a curated selection of independent artists, each with a distinct visual language. When you choose a style, you're choosing an artist — and everything that comes with their approach.</p>"
+          }
+        },
+        "tab-product": {
+          "type": "tab",
+          "settings": {
+            "tab_id": "product",
+            "content": "<p>Available in multiple formats and sizes. All prints are produced on premium materials with archival inks. Frames are hand-assembled and shipped ready to hang.</p>"
+          }
+        },
+        "tab-contact": {
+          "type": "tab",
+          "settings": {
+            "tab_id": "contact",
+            "content": "<p>Questions about your order? Reach us at <a href=\"mailto:hello@barkandframe.com\">hello@barkandframe.com</a>. We typically reply within one business day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "style_fWfEFh",
+        "style_CBAeCJ",
+        "tab-overview",
+        "tab-artist",
+        "tab-product",
+        "tab-contact"
+      ],
+      "settings": {
+        "products_collection": "make-portrait"
+      }
+    }
+  },
+  "order": [
+    "make-portrait-configurator"
+  ]
+}

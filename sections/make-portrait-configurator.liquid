@@ -1,0 +1,1799 @@
+{% liquid
+  assign products_collection = collections[section.settings.products_collection]
+%}
+
+{%- comment -%} Embedded style data for JS {%- endcomment -%}
+<script>
+  window.MakePortraitStyles = [
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'style' -%}
+        {
+          "id": {{ block.id | json }},
+          "name": {{ block.settings.name | default: '' | json }},
+          "imageUrl": "{{ block.settings.image | image_url: width: 900 }}",
+          "artistName": {{ block.settings.artist_name | default: '' | json }},
+          "artistBio": {{ block.settings.artist_bio | default: '' | json }},
+          "description": {{ block.settings.description | default: '' | json }},
+          "tags": {{ block.settings.tags | default: '' | json }},
+          "basePrice": {{ block.settings.base_price | default: 0 }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  ].filter(s => s.name);
+
+  window.MakePortraitProducts = [
+    {%- if products_collection != blank -%}
+      {%- for product in products_collection.products -%}
+        {
+          "id": {{ product.id }},
+          "title": {{ product.title | json }},
+          "handle": {{ product.handle | json }},
+          "featuredImage": "{{ product.featured_image | image_url: width: 600 }}",
+          "price": {{ product.price_min }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+  ];
+</script>
+
+<div class="make-portrait section section--page-width" id="make-portrait-section">
+  <div class="make-portrait__layout">
+
+    {%- comment -%}————————————————————————————————————————
+      LEFT PANEL – Preview + Tabs
+    ————————————————————————————————————————{%- endcomment -%}
+    <div class="make-portrait__left">
+
+      <div class="make-portrait__preview-wrap">
+        <img
+          class="make-portrait__preview-img"
+          id="mp-preview-img"
+          src="{% if section.blocks.first.settings.image %}{{ section.blocks.first.settings.image | image_url: width: 900 }}{% endif %}"
+          width="900"
+          height="1125"
+          alt=""
+        >
+
+        {%- comment -%} Artist badge – visible on step 1 {%- endcomment -%}
+        <div class="make-portrait__artist-badge" id="mp-artist-badge">
+          <div class="artist-badge__dot"></div>
+          <div class="artist-badge__text">
+            <span class="artist-badge__label">This style was created by</span>
+            <span class="artist-badge__name" id="mp-artist-name"></span>
+          </div>
+        </div>
+
+        {%- comment -%} Product label – visible on step 2+ {%- endcomment -%}
+        <div class="make-portrait__product-label" id="mp-product-label" hidden></div>
+
+        {%- comment -%} Size label – visible on step 3 {%- endcomment -%}
+        <div class="make-portrait__size-label" id="mp-size-label" hidden></div>
+      </div>
+
+      {%- comment -%} Tabs {%- endcomment -%}
+      <div class="make-portrait__tabs">
+        <nav class="make-portrait__tab-nav" role="tablist">
+          <button class="tab-nav__btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
+          <button class="tab-nav__btn" data-tab="artist" role="tab" aria-selected="false">Artist</button>
+          <button class="tab-nav__btn" data-tab="product" role="tab" aria-selected="false">Product</button>
+          <button class="tab-nav__btn" data-tab="contact" role="tab" aria-selected="false">Contact</button>
+        </nav>
+        <div class="make-portrait__tab-panels">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'tab' -%}
+              <div
+                class="tab-panel"
+                id="tab-{{ block.settings.tab_id }}"
+                data-tab="{{ block.settings.tab_id }}"
+                role="tabpanel"
+                {%- unless block.settings.tab_id == 'overview' %} hidden{%- endunless -%}
+              >
+                {{ block.settings.content }}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+
+    {%- comment -%}————————————————————————————————————————
+      RIGHT PANEL – Configurator (sticky)
+    ————————————————————————————————————————{%- endcomment -%}
+    <div class="make-portrait__right">
+
+      {%- comment -%} Step indicator {%- endcomment -%}
+      <div class="make-portrait__step-indicator" aria-label="Progress">
+        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Style">1</button>
+        <span class="step-indicator__line"></span>
+        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Product">2</button>
+        <span class="step-indicator__line"></span>
+        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Details">3</button>
+        <span class="step-indicator__line"></span>
+        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Upload">4</button>
+      </div>
+
+      {%- comment -%}——— STEP 1: Choose Style ———{%- endcomment -%}
+      <div class="make-portrait__step" data-step="1">
+        <h2 class="make-portrait__step-title">Choose a style<br>for your pet</h2>
+
+        <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'style' -%}
+              <button
+                class="style-picker__item{% if forloop.first %} selected{% endif %}"
+                data-style-id="{{ block.id }}"
+                role="option"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                title="{{ block.settings.name }}"
+              >
+                {%- if block.settings.image -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 120 }}"
+                    width="120"
+                    height="160"
+                    alt="{{ block.settings.name }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="style-picker__placeholder"></div>
+                {%- endif -%}
+                <span class="style-picker__name">{{ block.settings.name }}</span>
+                {%- if block.settings.tags != blank -%}
+                  <span class="style-picker__tags" aria-hidden="true">
+                    {%- assign tag_list = block.settings.tags | split: ',' -%}
+                    {%- for tag in tag_list -%}
+                      <span class="style-picker__tag">{{ tag | strip }}</span>
+                    {%- endfor -%}
+                  </span>
+                {%- endif -%}
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="make-portrait__style-info" id="mp-style-info">
+          <p class="make-portrait__style-name" id="mp-style-name-display"></p>
+          <div class="make-portrait__style-description" id="mp-style-description"></div>
+        </div>
+
+        <div class="make-portrait__subtotal">
+          <div class="subtotal__row">
+            <span class="subtotal__label">Subtotal</span>
+            <span class="subtotal__price" id="mp-subtotal-1">—</span>
+          </div>
+          <div class="subtotal__row subtotal__row--meta">
+            <span>Estimated delivery</span>
+            <span class="subtotal__delivery" id="mp-delivery-1"></span>
+          </div>
+        </div>
+
+        <button class="button make-portrait__cta" id="mp-cta-step1">Go to product</button>
+      </div>
+
+      {%- comment -%}——— STEP 2: Choose Product ———{%- endcomment -%}
+      <div class="make-portrait__step" data-step="2" hidden>
+        <button class="make-portrait__back" data-goto="1">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <h2 class="make-portrait__step-title">Choose a product</h2>
+
+        <div class="product-picker" id="mp-product-picker" role="listbox" aria-label="Product types">
+          {%- if products_collection != blank -%}
+            {%- for product in products_collection.products -%}
+              <button
+                class="product-picker__item"
+                data-product-handle="{{ product.handle }}"
+                data-product-id="{{ product.id }}"
+                role="option"
+                aria-selected="false"
+              >
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 200 }}"
+                    width="200"
+                    height="200"
+                    alt="{{ product.title }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="product-picker__placeholder"></div>
+                {%- endif -%}
+                <span class="product-picker__name">{{ product.title }}</span>
+                <span class="product-picker__price">{{ product.price_min | money }}</span>
+              </button>
+            {%- endfor -%}
+          {%- else -%}
+            <p class="make-portrait__empty-note">No products assigned. Set a collection in theme settings.</p>
+          {%- endif -%}
+        </div>
+
+        <div class="make-portrait__subtotal">
+          <div class="subtotal__row">
+            <span class="subtotal__label">Subtotal</span>
+            <span class="subtotal__price" id="mp-subtotal-2">—</span>
+          </div>
+          <div class="subtotal__row subtotal__row--meta">
+            <span>Estimated delivery</span>
+            <span class="subtotal__delivery" id="mp-delivery-2"></span>
+          </div>
+        </div>
+
+        <button class="button make-portrait__cta" id="mp-cta-step2" disabled>Choose options</button>
+      </div>
+
+      {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
+      <div class="make-portrait__step" data-step="3" hidden>
+        <button class="make-portrait__back" data-goto="2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <h2 class="make-portrait__step-title">Choose a detail</h2>
+
+        <div id="mp-options-container">
+          {%- comment -%} Populated dynamically by JS after product is fetched {%- endcomment -%}
+          <p class="make-portrait__loading" id="mp-options-loading">Loading options…</p>
+        </div>
+
+        <div class="make-portrait__option-group">
+          <p class="make-portrait__option-label">Number of pets</p>
+          <div class="pet-count-picker">
+            <button class="pet-count__btn" id="mp-pets-minus" aria-label="Decrease">−</button>
+            <span class="pet-count__value" id="mp-pets-count" aria-live="polite">1</span>
+            <button class="pet-count__btn" id="mp-pets-plus" aria-label="Increase">+</button>
+          </div>
+        </div>
+
+        <div class="make-portrait__option-group">
+          <label class="make-portrait__option-label" for="mp-pet-name">Pet name <span class="make-portrait__optional">(optional)</span></label>
+          <input
+            class="make-portrait__text-input"
+            type="text"
+            id="mp-pet-name"
+            placeholder="e.g. Milo"
+            maxlength="60"
+          >
+        </div>
+
+        <div class="make-portrait__subtotal">
+          <div class="subtotal__row">
+            <span class="subtotal__label">Subtotal</span>
+            <span class="subtotal__price" id="mp-subtotal-3">—</span>
+          </div>
+          <div class="subtotal__row subtotal__row--meta">
+            <span>Estimated delivery</span>
+            <span class="subtotal__delivery" id="mp-delivery-3"></span>
+          </div>
+        </div>
+
+        <button class="button make-portrait__cta" id="mp-cta-step3">Upload photo</button>
+      </div>
+
+      {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
+      <div class="make-portrait__step" data-step="4" hidden>
+        <button class="make-portrait__back" data-goto="3">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <h2 class="make-portrait__step-title">Upload photo</h2>
+
+        <div class="photo-upload" id="mp-upload-area">
+          <div class="photo-upload__zone" id="mp-upload-zone" role="button" tabindex="0" aria-label="Upload photo – click or drag and drop">
+            <svg class="photo-upload__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M10.667 21.333S6.667 21.333 6.667 17.333C6.667 13.333 10 12 12 12c0-4 3.333-6.667 6.667-6.667 3.333 0 5.333 2.667 5.333 2.667s1.333-1.333 3.333-1.333c2.667 0 4 2 4 4 0 1.333-.667 2.667-2 3.333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19.333 21.333 16 18l-3.333 3.333M16 18v10.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="photo-upload__instruction">Drag and drop your photo here</p>
+            <p class="photo-upload__sub">or</p>
+            <label class="button button--secondary photo-upload__browse" for="mp-file-input">Browse files</label>
+            <input
+              type="file"
+              id="mp-file-input"
+              accept="image/*"
+              class="photo-upload__input"
+              aria-label="Upload pet photo"
+            >
+          </div>
+          <div class="photo-upload__previews" id="mp-photo-previews" aria-live="polite"></div>
+        </div>
+
+        <p class="make-portrait__upload-note">
+          Your photo will be securely handled and used only to create your portrait.
+          After checkout you will receive a confirmation with the upload details.
+        </p>
+
+        {%- assign has_addons = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'addon' -%}
+            {%- assign has_addons = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_addons -%}
+          <div class="make-portrait__addons">
+            <h3 class="make-portrait__addons-title">Add-ons</h3>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'addon' -%}
+                <label class="addon-item" {{ block.shopify_attributes }}>
+                  <input
+                    type="checkbox"
+                    class="addon-item__check"
+                    data-addon-price="{{ block.settings.price | default: 0 }}"
+                    data-addon-name="{{ block.settings.name | escape }}"
+                    aria-label="{{ block.settings.name }}"
+                  >
+                  <div class="addon-item__content">
+                    <div class="addon-item__header">
+                      <span class="addon-item__name">{{ block.settings.name }}</span>
+                      <span class="addon-item__price">+{{ block.settings.price | default: 0 | times: 100 | money }}</span>
+                    </div>
+                    {%- if block.settings.description != blank -%}
+                      <div class="addon-item__description">{{ block.settings.description }}</div>
+                    {%- endif -%}
+                  </div>
+                </label>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="make-portrait__subtotal">
+          <div class="subtotal__row subtotal__row--total">
+            <span class="subtotal__label">Subtotal</span>
+            <span class="subtotal__price" id="mp-subtotal-4">—</span>
+          </div>
+          <div class="subtotal__row subtotal__row--meta">
+            <span>Estimated delivery</span>
+            <span class="subtotal__delivery" id="mp-delivery-4"></span>
+          </div>
+        </div>
+
+        <button class="button make-portrait__cta" id="mp-cta-order">Order portrait</button>
+
+        <p id="mp-cart-error" class="make-portrait__error" hidden></p>
+      </div>
+
+    </div>{%- comment -%} end .make-portrait__right {%- endcomment -%}
+  </div>{%- comment -%} end .make-portrait__layout {%- endcomment -%}
+</div>
+
+{% stylesheet %}
+
+.make-portrait {
+  padding: 40px 0 100px;
+}
+
+/* ——— Layout ——— */
+.make-portrait__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (min-width: 900px) {
+  .make-portrait__layout {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .make-portrait__right {
+    position: sticky;
+    top: 20px;
+  }
+}
+
+/* ——— Left Panel ——— */
+.make-portrait__left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.make-portrait__preview-wrap {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #f4efe5;
+}
+
+.make-portrait__preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.4s ease;
+}
+
+/* Artist badge */
+.make-portrait__artist-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(244, 239, 229, 0.92);
+  backdrop-filter: blur(4px);
+  border-radius: 40px;
+  padding: 8px 14px 8px 10px;
+  transition: opacity 0.3s;
+}
+
+.make-portrait__artist-badge[hidden] {
+  display: none;
+}
+
+.artist-badge__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green, #4a5c3f);
+  flex-shrink: 0;
+}
+
+.artist-badge__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.artist-badge__label {
+  font-size: 10px;
+  opacity: 0.6;
+  line-height: 1.2;
+}
+
+.artist-badge__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+  line-height: 1.2;
+}
+
+/* Product / size labels */
+.make-portrait__product-label,
+.make-portrait__size-label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(244, 239, 229, 0.92);
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+}
+
+.make-portrait__size-label {
+  top: auto;
+  bottom: 16px;
+  left: auto;
+  right: 16px;
+  font-size: 11px;
+}
+
+/* ——— Tabs ——— */
+.make-portrait__tabs {
+  border-top: 1px solid var(--brown, #5a4035);
+}
+
+.make-portrait__tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(90, 64, 53, 0.15);
+}
+
+.tab-nav__btn {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  margin-right: 24px;
+  font-size: 13px;
+  color: rgba(90, 64, 53, 0.5);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-nav__btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--brown, #5a4035);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.tab-nav__btn.active {
+  color: var(--brown, #5a4035);
+}
+
+.tab-nav__btn.active::after {
+  transform: scaleX(1);
+}
+
+.make-portrait__tab-panels {
+  padding: 20px 0;
+}
+
+.tab-panel {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--brown, #5a4035);
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* ——— Right Panel ——— */
+.make-portrait__right {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Step indicator */
+.make-portrait__step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.step-indicator__btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(90, 64, 53, 0.3);
+  background: transparent;
+  color: rgba(90, 64, 53, 0.4);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: default;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.step-indicator__btn.active {
+  background: var(--brown, #5a4035);
+  border-color: var(--brown, #5a4035);
+  color: #fff;
+}
+
+.step-indicator__btn.completed {
+  background: var(--green, #4a5c3f);
+  border-color: var(--green, #4a5c3f);
+  color: #fff;
+}
+
+.step-indicator__line {
+  flex: 1;
+  height: 1px;
+  background: rgba(90, 64, 53, 0.2);
+  margin: 0 6px;
+}
+
+/* ——— Step common ——— */
+.make-portrait__step-title {
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--brown, #5a4035);
+  margin: 0 0 20px;
+  font-family: var(--font-heading--family, "display", serif);
+}
+
+@media (min-width: 1100px) {
+  .make-portrait__step-title {
+    font-size: 28px;
+  }
+}
+
+.make-portrait__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: rgba(90, 64, 53, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  transition: color 0.2s;
+}
+
+.make-portrait__back:hover {
+  color: var(--brown, #5a4035);
+}
+
+/* ——— Style picker ——— */
+.style-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.style-picker__item {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.style-picker__item img,
+.style-picker__placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+  background: #ede8df;
+}
+
+.style-picker__name {
+  font-size: 11px;
+  color: var(--brown, #5a4035);
+  padding: 4px 2px 0;
+  line-height: 1.2;
+}
+
+.style-picker__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 3px 2px 4px;
+}
+
+.style-picker__tag {
+  font-size: 9px;
+  background: rgba(90, 64, 53, 0.1);
+  color: var(--brown, #5a4035);
+  border-radius: 10px;
+  padding: 2px 6px;
+}
+
+.style-picker__item.selected {
+  border-color: var(--brown, #5a4035);
+}
+
+.style-picker__item.selected img,
+.style-picker__item.selected .style-picker__placeholder {
+  border-radius: 8px;
+}
+
+/* Style info */
+.make-portrait__style-info {
+  margin-bottom: 20px;
+}
+
+.make-portrait__style-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brown, #5a4035);
+  margin: 0 0 6px;
+}
+
+.make-portrait__style-description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(90, 64, 53, 0.7);
+}
+
+/* ——— Product picker ——— */
+.product-picker {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.product-picker__item {
+  background: #f9f6f1;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.product-picker__item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.product-picker__placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #ede8df;
+  border-radius: 8px;
+}
+
+.product-picker__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+  line-height: 1.2;
+}
+
+.product-picker__price {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.6);
+}
+
+.product-picker__item:hover {
+  background: #f0ebe1;
+}
+
+.product-picker__item.selected {
+  border-color: var(--brown, #5a4035);
+  background: #f4efe5;
+}
+
+/* ——— Options ——— */
+.make-portrait__option-group {
+  margin-bottom: 18px;
+}
+
+.make-portrait__option-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+  margin: 0 0 8px;
+}
+
+.make-portrait__optional {
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.option-btn-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.option-btn {
+  background: #f4efe5;
+  border: 1.5px solid rgba(90, 64, 53, 0.2);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--brown, #5a4035);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.option-btn:hover {
+  border-color: rgba(90, 64, 53, 0.5);
+}
+
+.option-btn.selected {
+  border-color: var(--brown, #5a4035);
+  background: var(--brown, #5a4035);
+  color: #fff;
+}
+
+/* Pet count */
+.pet-count-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid rgba(90, 64, 53, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pet-count__btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--brown, #5a4035);
+  transition: background 0.15s;
+}
+
+.pet-count__btn:hover {
+  background: #f4efe5;
+}
+
+.pet-count__value {
+  min-width: 36px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+  border-left: 1px solid rgba(90, 64, 53, 0.2);
+  border-right: 1px solid rgba(90, 64, 53, 0.2);
+  padding: 0 8px;
+  line-height: 36px;
+}
+
+/* Text input */
+.make-portrait__text-input {
+  width: 100%;
+  border: 1.5px solid rgba(90, 64, 53, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--brown, #5a4035);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.make-portrait__text-input:focus {
+  border-color: var(--brown, #5a4035);
+}
+
+/* Loading state */
+.make-portrait__loading {
+  color: rgba(90, 64, 53, 0.5);
+  font-size: 13px;
+  padding: 16px 0;
+}
+
+/* ——— Photo upload ——— */
+.photo-upload {
+  margin-bottom: 16px;
+}
+
+.photo-upload__zone {
+  border: 2px dashed rgba(90, 64, 53, 0.3);
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: #faf7f2;
+}
+
+.photo-upload__zone:hover,
+.photo-upload__zone.drag-over {
+  border-color: var(--brown, #5a4035);
+  background: #f4efe5;
+}
+
+.photo-upload__icon {
+  margin: 0 auto 12px;
+  color: rgba(90, 64, 53, 0.4);
+}
+
+.photo-upload__instruction {
+  font-size: 14px;
+  color: var(--brown, #5a4035);
+  margin: 0 0 4px;
+}
+
+.photo-upload__sub {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.5);
+  margin: 0 0 12px;
+}
+
+.photo-upload__input {
+  display: none;
+}
+
+.photo-upload__browse {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.photo-upload__previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.photo-preview {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid rgba(90, 64, 53, 0.2);
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-preview__remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(90, 64, 53, 0.8);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.make-portrait__upload-note {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.55);
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+/* ——— Add-ons ——— */
+.make-portrait__addons {
+  margin-bottom: 20px;
+}
+
+.make-portrait__addons-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--brown, #5a4035);
+  margin: 0 0 12px;
+}
+
+.addon-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 1.5px solid rgba(90, 64, 53, 0.15);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.addon-item:hover {
+  border-color: rgba(90, 64, 53, 0.4);
+}
+
+.addon-item__check {
+  margin-top: 2px;
+  accent-color: var(--brown, #5a4035);
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.addon-item__content {
+  flex: 1;
+}
+
+.addon-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.addon-item__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+}
+
+.addon-item__price {
+  font-size: 13px;
+  color: var(--brown, #5a4035);
+  white-space: nowrap;
+}
+
+.addon-item__description {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.6);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ——— Subtotal ——— */
+.make-portrait__subtotal {
+  border-top: 1px solid rgba(90, 64, 53, 0.15);
+  padding-top: 16px;
+  margin: 20px 0 16px;
+}
+
+.subtotal__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--brown, #5a4035);
+  margin-bottom: 6px;
+}
+
+.subtotal__row--total {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.subtotal__row--meta {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.55);
+}
+
+.subtotal__price {
+  font-weight: 700;
+}
+
+.subtotal__delivery {
+  font-style: italic;
+}
+
+/* ——— CTA button ——— */
+.make-portrait__cta {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.make-portrait__error {
+  color: #c0392b;
+  font-size: 13px;
+  margin: 8px 0 0;
+  padding: 10px;
+  background: rgba(192, 57, 43, 0.08);
+  border-radius: 8px;
+}
+
+.make-portrait__empty-note {
+  font-size: 13px;
+  color: rgba(90, 64, 53, 0.5);
+  padding: 16px 0;
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+
+(function () {
+
+  /* ————————————————————————————————————————
+     State
+  ———————————————————————————————————————— */
+  var state = {
+    step: 1,
+    styleId: null,
+    style: null,
+    productHandle: null,
+    product: null,
+    variantId: null,
+    variant: null,
+    selectedOptions: {},
+    petCount: 1,
+    petName: '',
+    addonTotal: 0,   // in cents
+    files: []
+  };
+
+  var STYLES = window.MakePortraitStyles || [];
+  var PRODUCTS = window.MakePortraitProducts || [];
+
+  /* ————————————————————————————————————————
+     Utilities
+  ———————————————————————————————————————— */
+  function formatMoney(cents) {
+    var amount = Math.round(cents) / 100;
+    return '$' + amount.toFixed(0);
+  }
+
+  function getDeliveryDate() {
+    var d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function $(selector) {
+    return document.getElementById(selector);
+  }
+
+  /* ————————————————————————————————————————
+     Delivery dates
+  ———————————————————————————————————————— */
+  function updateDeliveryDates() {
+    var date = getDeliveryDate();
+    ['mp-delivery-1', 'mp-delivery-2', 'mp-delivery-3', 'mp-delivery-4'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.textContent = date;
+    });
+  }
+
+  /* ————————————————————————————————————————
+     Subtotal
+  ———————————————————————————————————————— */
+  function getBasePrice() {
+    if (state.variant && state.variant.price) {
+      return state.variant.price; // already in cents
+    }
+    if (state.product && state.product.variants && state.product.variants.length) {
+      return state.product.variants[0].price;
+    }
+    if (state.style && state.style.basePrice) {
+      return state.style.basePrice * 100;
+    }
+    return 0;
+  }
+
+  function updateSubtotals() {
+    var total = getBasePrice() + state.addonTotal;
+    var formatted = total > 0 ? formatMoney(total) : '—';
+    ['mp-subtotal-1', 'mp-subtotal-2', 'mp-subtotal-3', 'mp-subtotal-4'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.textContent = formatted;
+    });
+  }
+
+  /* ————————————————————————————————————————
+     Step navigation
+  ———————————————————————————————————————— */
+  function goToStep(step) {
+    document.querySelectorAll('.make-portrait__step').forEach(function (el) {
+      el.hidden = parseInt(el.dataset.step, 10) !== step;
+    });
+
+    document.querySelectorAll('.step-indicator__btn').forEach(function (btn) {
+      var s = parseInt(btn.dataset.step, 10);
+      btn.classList.toggle('active', s === step);
+      btn.classList.toggle('completed', s < step);
+    });
+
+    state.step = step;
+    updateSubtotals();
+
+    // Show/hide artist badge and product label
+    var artistBadge = $('mp-artist-badge');
+    var productLabel = $('mp-product-label');
+    var sizeLabel = $('mp-size-label');
+
+    if (artistBadge) artistBadge.hidden = step !== 1;
+    if (productLabel) productLabel.hidden = step < 2;
+    if (sizeLabel) sizeLabel.hidden = step !== 3;
+
+    // Scroll right panel to top on mobile
+    var right = document.querySelector('.make-portrait__right');
+    if (right) right.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ————————————————————————————————————————
+     Step 1 – Style
+  ———————————————————————————————————————— */
+  function selectStyle(styleId) {
+    state.styleId = styleId;
+    state.style = STYLES.filter(function (s) { return s.id === styleId; })[0] || null;
+
+    document.querySelectorAll('.style-picker__item').forEach(function (btn) {
+      var selected = btn.dataset.styleId === styleId;
+      btn.classList.toggle('selected', selected);
+      btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+
+    if (!state.style) return;
+
+    // Preview image
+    var img = $('mp-preview-img');
+    if (img && state.style.imageUrl) {
+      img.style.opacity = '0';
+      img.onload = function () { img.style.opacity = '1'; };
+      img.src = state.style.imageUrl;
+    }
+
+    // Artist badge
+    var artistName = $('mp-artist-name');
+    if (artistName) artistName.textContent = state.style.artistName || '';
+
+    // Style info
+    var nameDisplay = $('mp-style-name-display');
+    if (nameDisplay) nameDisplay.textContent = state.style.name || '';
+
+    var desc = $('mp-style-description');
+    if (desc) desc.innerHTML = state.style.description || '';
+
+    updateSubtotals();
+  }
+
+  /* ————————————————————————————————————————
+     Step 2 – Product
+  ———————————————————————————————————————— */
+  function selectProduct(handle) {
+    state.productHandle = handle;
+    state.product = null;
+    state.variantId = null;
+    state.variant = null;
+
+    document.querySelectorAll('.product-picker__item').forEach(function (btn) {
+      var selected = btn.dataset.productHandle === handle;
+      btn.classList.toggle('selected', selected);
+      btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+
+    // Update product label
+    var productLabel = $('mp-product-label');
+    var matchedProduct = PRODUCTS.filter(function (p) { return p.handle === handle; })[0];
+    if (productLabel && matchedProduct) productLabel.textContent = matchedProduct.title;
+
+    // Update preview image
+    if (matchedProduct && matchedProduct.featuredImage) {
+      var img = $('mp-preview-img');
+      if (img) {
+        img.style.opacity = '0';
+        img.onload = function () { img.style.opacity = '1'; };
+        img.src = matchedProduct.featuredImage;
+      }
+    }
+
+    // Fetch full product data for variants
+    fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (product) {
+        state.product = product;
+        if (product.variants && product.variants.length) {
+          state.variantId = product.variants[0].id;
+          state.variant = product.variants[0];
+        }
+        var ctaStep2 = $('mp-cta-step2');
+        if (ctaStep2) ctaStep2.disabled = false;
+        updateSubtotals();
+      })
+      .catch(function (err) {
+        console.error('Failed to fetch product:', err);
+      });
+
+    updateSubtotals();
+  }
+
+  /* ————————————————————————————————————————
+     Step 3 – Options
+  ———————————————————————————————————————— */
+  function buildOptionsUI(product) {
+    var container = $('mp-options-container');
+    var loading = $('mp-options-loading');
+    if (!container || !product) return;
+
+    // Clear previous
+    container.innerHTML = '';
+    if (loading) loading.remove();
+
+    state.selectedOptions = {};
+
+    if (!product.options || product.options.length === 0) {
+      // No options – just use first variant
+      if (product.variants && product.variants.length) {
+        state.variantId = product.variants[0].id;
+        state.variant = product.variants[0];
+      }
+      return;
+    }
+
+    product.options.forEach(function (option, optIdx) {
+      var group = document.createElement('div');
+      group.className = 'make-portrait__option-group';
+
+      var label = document.createElement('p');
+      label.className = 'make-portrait__option-label';
+      label.textContent = option;
+      group.appendChild(label);
+
+      var grid = document.createElement('div');
+      grid.className = 'option-btn-grid';
+
+      // Collect unique values for this option position
+      var seen = {};
+      var values = [];
+      product.variants.forEach(function (v) {
+        var val = v.options[optIdx];
+        if (!seen[val]) {
+          seen[val] = true;
+          values.push(val);
+        }
+      });
+
+      values.forEach(function (value, vIdx) {
+        var btn = document.createElement('button');
+        btn.className = 'option-btn' + (vIdx === 0 ? ' selected' : '');
+        btn.textContent = value;
+        btn.type = 'button';
+        btn.dataset.optionIndex = optIdx;
+        btn.dataset.value = value;
+
+        if (vIdx === 0) {
+          state.selectedOptions[optIdx] = value;
+        }
+
+        btn.addEventListener('click', function () {
+          grid.querySelectorAll('.option-btn').forEach(function (b) {
+            b.classList.remove('selected');
+          });
+          btn.classList.add('selected');
+          state.selectedOptions[optIdx] = value;
+          matchVariant(product);
+        });
+
+        grid.appendChild(btn);
+      });
+
+      group.appendChild(grid);
+      container.appendChild(group);
+    });
+
+    // Set initial defaults
+    product.options.forEach(function (_, idx) {
+      if (!state.selectedOptions.hasOwnProperty(idx)) {
+        var firstBtn = container.querySelector('[data-option-index="' + idx + '"]');
+        if (firstBtn) state.selectedOptions[idx] = firstBtn.dataset.value;
+      }
+    });
+
+    matchVariant(product);
+  }
+
+  function matchVariant(product) {
+    if (!product) return;
+    var variant = null;
+    for (var i = 0; i < product.variants.length; i++) {
+      var v = product.variants[i];
+      var match = true;
+      for (var idx = 0; idx < v.options.length; idx++) {
+        if (state.selectedOptions[idx] !== v.options[idx]) {
+          match = false;
+          break;
+        }
+      }
+      if (match) { variant = v; break; }
+    }
+
+    if (variant) {
+      state.variantId = variant.id;
+      state.variant = variant;
+
+      // Update size label
+      var sizeLabel = $('mp-size-label');
+      if (sizeLabel) sizeLabel.textContent = variant.title;
+
+      // Update preview if variant has image
+      if (variant.featured_image && variant.featured_image.src) {
+        var img = $('mp-preview-img');
+        if (img) {
+          img.style.opacity = '0';
+          img.onload = function () { img.style.opacity = '1'; };
+          img.src = variant.featured_image.src;
+        }
+      }
+    }
+
+    updateSubtotals();
+  }
+
+  /* ————————————————————————————————————————
+     Pet count
+  ———————————————————————————————————————— */
+  function updatePetCount(delta) {
+    state.petCount = Math.max(1, Math.min(4, state.petCount + delta));
+    var display = $('mp-pets-count');
+    if (display) display.textContent = state.petCount;
+  }
+
+  /* ————————————————————————————————————————
+     File upload
+  ———————————————————————————————————————— */
+  function handleFiles(files) {
+    var previews = $('mp-photo-previews');
+    if (!previews) return;
+
+    Array.from(files).forEach(function (file) {
+      if (!file.type.startsWith('image/')) return;
+      state.files.push(file);
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var preview = document.createElement('div');
+        preview.className = 'photo-preview';
+
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Pet photo preview';
+        preview.appendChild(img);
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'photo-preview__remove';
+        removeBtn.type = 'button';
+        removeBtn.textContent = '×';
+        removeBtn.setAttribute('aria-label', 'Remove photo');
+        removeBtn.addEventListener('click', function () {
+          var idx = state.files.indexOf(file);
+          if (idx > -1) state.files.splice(idx, 1);
+          preview.remove();
+        });
+        preview.appendChild(removeBtn);
+
+        previews.appendChild(preview);
+
+        // Mirror upload in preview area
+        var mainImg = $('mp-preview-img');
+        if (mainImg) {
+          mainImg.style.opacity = '0';
+          mainImg.onload = function () { mainImg.style.opacity = '1'; };
+          mainImg.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ————————————————————————————————————————
+     Add to cart
+  ———————————————————————————————————————— */
+  function addToCart() {
+    if (!state.variantId) {
+      showError('Please complete all options before ordering.');
+      return;
+    }
+
+    var btn = $('mp-cta-order');
+    if (btn) { btn.disabled = true; btn.textContent = 'Adding to cart…'; }
+    hideError();
+
+    var properties = {
+      'Style': state.style ? state.style.name : '',
+      'Artist': state.style ? state.style.artistName : '',
+      'Product': state.product ? state.product.title : '',
+      'Variant': state.variant ? state.variant.title : '',
+      'Number of pets': String(state.petCount)
+    };
+
+    if (state.petName) properties['Pet name'] = state.petName;
+
+    // Selected add-ons
+    var checkedAddons = [];
+    document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
+      checkedAddons.push(c.dataset.addonName);
+    });
+    if (checkedAddons.length) properties['Add-ons'] = checkedAddons.join(', ');
+
+    properties['_configuration'] = JSON.stringify({
+      style: state.style ? {
+        id: state.styleId,
+        name: state.style.name,
+        artist: state.style.artistName,
+        tags: state.style.tags
+      } : null,
+      product: state.product ? {
+        id: state.product.id,
+        title: state.product.title,
+        handle: state.product.handle
+      } : null,
+      variant: state.variant ? {
+        id: state.variant.id,
+        title: state.variant.title,
+        options: state.variant.options,
+        price: state.variant.price
+      } : null,
+      extras: {
+        petCount: state.petCount,
+        petName: state.petName,
+        addons: checkedAddons
+      }
+    });
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: state.variantId,
+        quantity: 1,
+        properties: properties
+      })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (result) {
+        if (result.ok) {
+          // Trigger cart:update so cart drawer can react
+          document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true }));
+          window.location.href = '/cart';
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
+          showError(result.data.description || result.data.message || 'An error occurred. Please try again.');
+        }
+      })
+      .catch(function () {
+        if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
+        showError('An error occurred. Please try again.');
+      });
+  }
+
+  function showError(msg) {
+    var el = $('mp-cart-error');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+  }
+
+  function hideError() {
+    var el = $('mp-cart-error');
+    if (el) el.hidden = true;
+  }
+
+  /* ————————————————————————————————————————
+     Tabs (left panel)
+  ———————————————————————————————————————— */
+  function initTabs() {
+    document.querySelectorAll('.tab-nav__btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var tabId = btn.dataset.tab;
+        document.querySelectorAll('.tab-nav__btn').forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.querySelectorAll('.tab-panel').forEach(function (p) {
+          p.hidden = p.dataset.tab !== tabId;
+        });
+      });
+    });
+  }
+
+  /* ————————————————————————————————————————
+     Init
+  ———————————————————————————————————————— */
+  function init() {
+    updateDeliveryDates();
+    initTabs();
+
+    // Auto-select first style
+    if (STYLES.length > 0) {
+      selectStyle(STYLES[0].id);
+    }
+
+    // Style picker
+    document.querySelectorAll('.style-picker__item').forEach(function (btn) {
+      btn.addEventListener('click', function () { selectStyle(btn.dataset.styleId); });
+    });
+
+    // Product picker
+    document.querySelectorAll('.product-picker__item').forEach(function (btn) {
+      btn.addEventListener('click', function () { selectProduct(btn.dataset.productHandle); });
+    });
+
+    // CTA step 1
+    var ctaStep1 = $('mp-cta-step1');
+    if (ctaStep1) {
+      ctaStep1.addEventListener('click', function () {
+        if (!state.styleId) return;
+        goToStep(2);
+      });
+    }
+
+    // CTA step 2
+    var ctaStep2 = $('mp-cta-step2');
+    if (ctaStep2) {
+      ctaStep2.addEventListener('click', function () {
+        if (!state.productHandle) return;
+        buildOptionsUI(state.product);
+        goToStep(3);
+      });
+    }
+
+    // CTA step 3
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) {
+      ctaStep3.addEventListener('click', function () {
+        state.petName = ($('mp-pet-name') || {}).value || '';
+        goToStep(4);
+      });
+    }
+
+    // CTA order
+    var ctaOrder = $('mp-cta-order');
+    if (ctaOrder) ctaOrder.addEventListener('click', addToCart);
+
+    // Back buttons
+    document.querySelectorAll('.make-portrait__back').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        goToStep(parseInt(btn.dataset.goto, 10));
+      });
+    });
+
+    // Pet count
+    var petsMin = $('mp-pets-minus');
+    var petsPlus = $('mp-pets-plus');
+    if (petsMin) petsMin.addEventListener('click', function () { updatePetCount(-1); });
+    if (petsPlus) petsPlus.addEventListener('click', function () { updatePetCount(1); });
+
+    // Pet name
+    var petNameInput = $('mp-pet-name');
+    if (petNameInput) {
+      petNameInput.addEventListener('input', function () {
+        state.petName = petNameInput.value;
+      });
+    }
+
+    // File upload
+    var fileInput = $('mp-file-input');
+    if (fileInput) {
+      fileInput.addEventListener('change', function () { handleFiles(fileInput.files); });
+    }
+
+    var uploadZone = $('mp-upload-zone');
+    if (uploadZone) {
+      uploadZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+      });
+      uploadZone.addEventListener('dragleave', function () {
+        uploadZone.classList.remove('drag-over');
+      });
+      uploadZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        handleFiles(e.dataTransfer.files);
+      });
+    }
+
+    // Add-on checkboxes
+    document.querySelectorAll('.addon-item__check').forEach(function (check) {
+      check.addEventListener('change', function () {
+        state.addonTotal = 0;
+        document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
+          state.addonTotal += parseFloat(c.dataset.addonPrice || 0) * 100;
+        });
+        updateSubtotals();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Portrait Configurator",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "products_collection",
+      "label": "Products collection",
+      "info": "Select the collection that contains your portrait product formats (Poster, Canvas, etc.)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "style",
+      "name": "Portrait Style",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Style name",
+          "default": "Pure Portrait"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Preview image"
+        },
+        {
+          "type": "text",
+          "id": "artist_name",
+          "label": "Artist name",
+          "default": "Anna K."
+        },
+        {
+          "type": "richtext",
+          "id": "artist_bio",
+          "label": "Artist bio"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Style description",
+          "info": "Shown when the style is selected. Describe the visual approach."
+        },
+        {
+          "type": "text",
+          "id": "tags",
+          "label": "Tags (comma-separated)",
+          "default": "Realistic, Minimal",
+          "info": "e.g. Elegant, Painterly, Bold"
+        },
+        {
+          "type": "number",
+          "id": "base_price",
+          "label": "Base price (USD)",
+          "default": 74,
+          "info": "Starting price shown before a product is selected."
+        }
+      ]
+    },
+    {
+      "type": "addon",
+      "name": "Add-on Service",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Add-on name",
+          "default": "Rush delivery"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "number",
+          "id": "price",
+          "label": "Price (USD)",
+          "default": 15
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Info Tab",
+      "settings": [
+        {
+          "type": "select",
+          "id": "tab_id",
+          "label": "Tab",
+          "options": [
+            { "value": "overview", "label": "Overview" },
+            { "value": "artist", "label": "Artist" },
+            { "value": "product", "label": "Product" },
+            { "value": "contact", "label": "Contact" }
+          ],
+          "default": "overview"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Portrait Configurator"
+    }
+  ]
+}
+{% endschema %}
