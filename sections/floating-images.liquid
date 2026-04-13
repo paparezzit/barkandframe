@@ -1,0 +1,271 @@
+<div class="floating-images">
+  <div class="floating-images__content">
+    <div class="floating-images__content__inner">
+      <div class="floating-images__icon">
+        <img src="{{ 'logo-icon.svg' | asset_url }}" alt="Logo">
+      </div>
+
+      <h2 class="floating-images__title">
+        <svg class="title__svg" width=240 height="108" viewBox="0 0 240 108">
+          <text x="120" y="30" text-anchor="middle" fill="#4C443F" stroke-width="1">
+            <tspan x="120" dy="0">Bark & Frame</tspan><tspan x="120" dy="35">goes beyond</tspan><tspan x="120" dy="35">portraits</tspan>
+          </text>
+        </svg>
+      </h2>
+
+      <div class="floating-images__button">
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-images__fake-title" aria-hidden="true">
+    <svg class="fake-title__svg" width=240 height="108" viewBox="0 0 240 108">
+      <text x="120" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
+        <tspan x="120" dy="0">Bark & Frame</tspan><tspan x="120" dy="35">goes beyond</tspan><tspan x="120" dy="35">portraits</tspan>
+      </text>
+    </svg>
+  </div>
+
+  <div class="floating-images__holder">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% javascript %}
+  
+{% endjavascript %}
+
+{% stylesheet %}
+  .floating-images{
+    color: var(--brown);
+    margin: 0 0 120px;
+    text-align: center;
+
+    .floating-images__content{
+      padding: 0 var(--page-margin);
+      margin: 0 auto;
+      min-height: calc(100dvh - var(--header-height));
+      position: sticky;
+      top: var(--header-height);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .floating-images__content__inner{
+        background: #F4EFE5;
+        padding: 40px 20px;
+        border-radius: 80px;
+        width: 100%;
+        height: 80dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .floating-images__icon{
+        img{
+          height: 70px;
+        }
+      }
+
+      .floating-images__title{
+        line-height: 36px;
+        font-size: 36px;
+        margin: 30px auto;
+        max-width: 240px;
+      }
+
+      .floating-images__button{
+        width: fit-content;
+        margin: 0 auto;
+      }
+    }
+
+    .floating-images__fake-title{
+      line-height: 1em;
+      font-size: 36px;
+      font-family: "display", "Times New Roman", serif !important;
+      position: sticky;
+      top: var(--header-height);
+      height: calc(100dvh - var(--header-height));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding-top: 0;
+      color: #fff;
+      margin-top: calc(-100dvh + var(--header-height));
+      z-index: 1;
+      pointer-events: none;
+      padding-top: 27px;
+    }
+
+    .floating-images__holder{
+      padding: 0 calc(var(--page-margin)*2) 80vh;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      margin: -33dvh auto 0;
+
+      product-card--floating{
+        &:nth-child(even){
+          margin-left: auto;
+        }
+
+        &:nth-child(2){
+          width: 400px;
+
+          .image-block{
+            aspect-ratio: 4/5;
+          }
+
+          .product-title{
+            left: 75%;
+            top: 50%;
+          }
+        }
+
+        &:nth-child(3){
+          width: 400px;
+
+          .image-block{
+            aspect-ratio: 4/3;
+          }
+
+          .product-title{
+            left: 50%;
+            top: 45%;
+          }
+        }
+
+        &:nth-child(4){
+          .product-title{
+            left: 30%;
+            top: 80%;
+          }
+        }
+
+        &:nth-child(5){
+          width: 300px;
+
+          .image-block{
+            aspect-ratio: 1/1;
+          }
+
+          .product-title{
+            left: 20%;
+            top: 85%;
+          }
+        }
+      }
+    }
+
+    &.hovered{
+      product-card--floating:not(:hover){
+        opacity: .27;
+      }
+    }
+  }
+
+
+
+  @media(min-width: 1200px){
+    .floating-images{
+      .floating-images__content{
+        max-width: 1280px;
+
+        .floating-images__content__inner{
+          border-radius: 270px;
+        }
+
+        .floating-images__title{
+          margin: 120px 0;
+          max-width: 600px;
+
+          svg{
+            transform: scale(calc(96/36));
+
+            text{
+              stroke-width: .333333;
+            }
+          }
+        }
+      }
+
+      .floating-images__holder{
+        max-width: 1280px;
+        gap: 0;
+        padding: 0 calc(var(--page-margin)*3) 80vh;
+
+        .product-card--floating{
+          &:nth-child(2){
+            margin-top: -100px;
+          }
+
+          &:nth-child(3){
+            margin-left: 100px;
+            margin-top: -100px
+          }
+
+          &:nth-child(4){
+            margin-right: 50px;
+            margin-top: -100px;
+          }
+
+          &:nth-child(5){
+            margin-top: -50px;
+          }
+        }
+      }
+
+      .floating-images__fake-title{
+        svg{
+          transform: scale(calc(96/36));
+
+          text{
+            stroke-width: .333333;
+          }
+        }
+      }
+
+      .floating-images-title .title_svg{
+        
+      }
+    }
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Floating Images",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Turn your favorite moments into timeless art"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+  ],
+  "blocks": [
+    {
+      "type": "product-card--floating"
+    },
+  ]
+}
+{% endschema %}

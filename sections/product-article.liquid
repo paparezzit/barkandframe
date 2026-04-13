@@ -1,0 +1,146 @@
+<div class="product-article section section--page-width">
+  <div class=product-article__inner>
+    <div class="col-left">
+      <h2 class="product-article__title">
+        {{ section.settings.main-text }}
+      </h2>
+      <p>
+        The most important part of your order, crucial to the quality of the final pet portrait, is the quality of the image you upload.  Let's review the following tips and guidelines to make sure yours is just right:
+      </p>
+      <ul>
+        <li>
+          Take a photo or choose an existing photo that is taken in daylight or in a brightly lit room.
+        </li>
+        <li>
+          Use a smartphone or high quality camera.
+        </li>
+        <li>
+          Ensure the whole face & neck is visible and not in shadows.
+        </li>
+        <li>
+          Avoid overly filtered photos to ensure we correctly capture your pet's coloring.
+        </li>
+        <li>
+          Make sure your pet is looking directly at the camera at eye level, facing forward. Other positions are acceptable, but your pet will be shown in that position in the final portrait.
+        </li>
+        <li>
+          Please note: collars, leashes, bows, hats, and other cute outfits will not be illustrated in your final portrait.
+        </li>
+      </ul>
+    </div>
+    <div class="col-right">
+      <div class="product-article__images">
+        <div class="product-article__left">
+          <div class="product-article__image">
+            <img src="{{ 'customer01.jpg' | asset_url }}" alt="">
+          </div>
+        </div>
+
+        <div class="product-article__right">
+          <div class="product-article__image">
+            <img src="{{ 'customer02.jpg' | asset_url }}" alt="">
+          </div>
+
+          <div class="product-article__image">
+            <img src="{{ 'customer03.jpg' | asset_url }}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.product-article{
+  margin: 100px 0;
+  color: var(--brown);
+
+  .product-article__images{
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+
+    .product-article__image{
+      margin-top: 20px;
+      border-radius: 20px;
+      background-color: var(--beige);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      max-width: 400px;
+
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .product-article__right{
+      .product-article__image:first-child{
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+@media(min-width: 750px){
+  .product-article{
+    margin: 140px 0;
+
+    .product-article__inner{
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 40px;
+
+      .col-left, .col-right{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .product-article__images{
+        margin-top: 0px;
+      }
+    }
+  }
+}
+
+@media(min-width: 1200px){
+  .product-article{
+    margin: 200px 0;
+
+    .product-article__inner{
+      .col-left{
+        padding: 0 8.33333%;
+      }
+
+      .col-right{
+        .product-article__images{
+          display: flex;
+          flex-direction: row;
+          gap: 20px;
+
+          .product-article__left{
+            margin-top: 120px;
+          }
+        }
+      }
+    }
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Article",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Which Materials to Choose?"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,410 @@
+<div class="section section--page-width">
+  <div class="three-steps-carousel__inner">
+    <h2 class="three-steps-carousel__title">
+      {{ section.settings.main-text }}
+    </h2>
+
+    {% if section.blocks.size > 1 %}
+      {% capture controls %}
+        {%- render 'slideshow-controls',
+          style: section.settings.slideshow_controls_style,
+          autoplay: section.settings.autoplay,
+          item_count: section.blocks.size,
+          show_arrows: true,
+          arrows_on_media: true,
+          controls_on_media: true,
+          pagination_position: 'center',
+          icon_style: section.settings.icons_style
+        -%}
+      {% endcapture %}
+    {% endif %}
+
+    {% capture slides %}
+      {% content_for 'blocks' %}
+    {% endcapture %}
+
+    {% liquid
+      assign slideshow_class = "slideshow--single-media"
+      if section.blocks.size > 1
+        assign slideshow_class = section.settings.custom_class
+      endif
+
+      assign show_arrows = true
+      if section.settings.icons_style == 'none' or section.blocks.size <= 1
+        assign show_arrows = false
+      endif
+    %}
+
+
+    {% render 'slideshow',
+      class: slideshow_class,
+      show_arrows: show_arrows,
+      icon_style: section.settings.icons_style,
+      autoplay: section.settings.autoplay,
+      autoplay_speed: section.settings.autoplay_speed,
+      slides: slides,
+      slide_count: section.blocks.size,
+      slide_size: section.settings.slide_height,
+      infinite: false
+    %}
+
+  </div>
+</div>
+
+
+{% javascript %}
+
+{% endjavascript %}
+
+{% stylesheet %}
+.three-steps-carousel{
+  margin: 60px 0 100px;
+  counter-reset: three-steps-carousel;
+
+  .three-steps-carousel__inner{
+    background-color: var(--beige);
+    border-radius: 80px;
+    padding: 60px 0 0;
+    text-align: center;
+    overflow: hidden;
+
+    .three-steps-carousel__title{
+      padding: 0 20px;
+    }
+
+    slideshow-slide{
+      counter-increment: three-steps-carousel;
+
+      .group-block-content{
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+
+        .group-block{
+          padding: 20px 80px 0;
+          text-align: center;
+          position: relative;
+
+          &::before{
+            content: counter(three-steps-carousel);
+            color: var(--brown);
+            position: absolute;
+            font-family: "display", "Times New Roman", serif !important;
+            font-size: 200px;
+            opacity: .05;
+            left: 0;
+            width: 100%;
+            top: -40px;
+          }
+
+          h2{
+            font-size: 28px;
+            text-align: center;
+          }
+
+          .text-block{
+            padding: 0;
+          }
+
+          p{
+            color: var(--brown);
+            text-align: center;
+          }
+        }
+
+        .image-block{
+          margin: auto;
+          padding: 10px 20px 40px;
+
+          img{
+            max-height: 160px;
+            object-fit: contain;
+            object-position: center;
+          }
+        }
+      }
+    }
+
+    slideshow-arrows{
+      button{
+        background-color: transparent;
+        border: 1px solid var(--brown);
+
+        svg{
+          width: 18px;
+          height: 18px;
+
+          path{
+            stroke: var(--brown);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media(min-width: 750px){
+  .three-steps-carousel{
+    margin: 100px 0 160px;
+
+    .three-steps-carousel__title{
+      margin-bottom: 0;
+    }
+
+    .three-steps-carousel__inner{
+      slideshow-component{
+        margin-bottom: 40px;
+
+        slideshow-slide{
+          .group-block-content{
+            flex-direction: row;
+            padding: 0 140px;
+
+            .group-block{
+              padding: 40px 0;
+              width: calc(60% - 120px);
+              flex-basis: 60%;
+              margin: auto;
+
+              &::before{
+                font-size: 200px;
+                width: 80%;
+              }
+
+              .group-block-content{
+                padding: 0;
+                flex-direction: column;
+              }
+
+              h2, p{
+                text-align: left;
+                width: 100%;
+                max-width: 100%;
+              }
+            }
+
+            .image-block{
+              padding: 0;
+              width: calc(40% - 120px);
+              flex-basis: 40%;
+
+              img{
+                max-height: 180px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media(min-width: 1200px){
+  .three-steps-carousel{
+    margin: 160px 0 200px;
+
+    .three-steps-carousel__inner{
+      padding: 100px 0 40px;
+      width: 960px;
+      margin: 0 auto;
+
+      slideshow-component {
+        slideshow-slide {
+          .group-block-content{
+            padding: 0 160px;
+
+            .group-block{
+              width: 50%;
+              flex-basis: 50%;
+
+              &::before{
+                font-size: 320px;
+                top: -90px;
+              }
+
+              h2{
+                font-size: 40px;
+                margin-bottom: .5em;
+              }
+            }
+
+            .image-block{
+              width: 50%;
+              flex-basis: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Three Steps Carousel",
+  "class": "three-steps-carousel",
+  "blocks": [
+    {
+      "type": "_slide"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Three Steps Carousel",
+      "category": "t:categories.storytelling",
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Pet Portraits Image Guidelines"
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "t:settings.navigation",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "t:options.arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "t:options.chevrons"
+        },
+        {
+          "value": "arrows_large",
+          "label": "t:options.large_arrows"
+        },
+        {
+          "value": "chevron_large",
+          "label": "t:options.large_chevrons"
+        },
+        {
+          "value": "none",
+          "label": "t:options.none"
+        }
+      ],
+      "default": "arrows_large"
+    },
+    {
+      "type": "select",
+      "id": "slideshow_controls_style",
+      "label": "t:settings.pagination",
+      "options": [
+        {
+          "value": "dots",
+          "label": "t:options.dots"
+        },
+        {
+          "value": "counter",
+          "label": "t:options.counter"
+        }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "primary"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:settings.auto_rotate_slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "t:settings.speed",
+      "min": 3,
+      "max": 7,
+      "step": 1,
+      "unit": "s",
+      "default": 4,
+      "visible_if": "{{ section.settings.autoplay }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.size"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "slide_height",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:options.auto"
+        },
+        {
+          "value": "small",
+          "label": "t:options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:options.large"
+        }
+      ],
+      "default": "medium",
+      "label": "t:settings.height"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS class",
+      "default": "slideshow"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,169 @@
+<div class="dogstrust section section--page-width">
+  <div class="dogstrust__inner">
+    <div class="dogstrust__wrapper">
+      <div class="dogstrust__bg">
+        <img src="{{ 'dogstrust.png' | asset_url }}" alt="" data-parallax>
+      </div>
+
+      <div class="dogstrust__content">
+        <h2 class="dogstrust__title">
+          Every portrait<br>
+          makes a difference 
+        </h2>
+
+        <div class="dogstrust__text">
+          <p>
+            Dogs are family.<br>
+            For every personalised portrait we donate €2 to Dogs Trust.<br>
+            Helping provide care, protection and a second chance.<br>
+            Celebrating your dog should help another one too.
+          </p>
+        </div>
+
+        <div class="dogstrust__button">
+          <a href="https://www.dogstrust.org.uk/" class="button">
+            Dogs<strong>Trust</strong>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dogstrust__image">
+    <img src="{{ 'dogstrust-icon.svg' | asset_url }}" alt="">
+  </div>
+</div>
+
+<style>
+  .dogstrust__inner {
+    -webkit-mask-image: url({{ 'dogstrust-mask--mobile.svg' | asset_url }});
+    mask-image: url({{ 'dogstrust-mask--mobile.svg' | asset_url }});
+    mask-repeat: no-repeat;
+  }
+
+  @media(min-width: 750px){
+    .dogstrust__inner {
+      -webkit-mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
+      mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
+    }
+  }
+</style>
+
+{% stylesheet %}
+.dogstrust{
+  margin: 120px 0;
+  position: relative;
+
+  .dogstrust__inner {
+    background: var(--purple);
+    aspect-ratio: 1/1;
+  }
+
+  .dogstrust__wrapper{
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    height: 100%;
+
+    .dogstrust__bg{
+      img{
+        width: 100%;
+        height: 120%;
+        object-fit: cover;
+        object-position: right center;
+      }
+    }
+
+    .dogstrust__content{
+      padding: 30px 30px 30px 10px;
+      margin: auto;
+    }
+
+    .dogstrust__title{
+      font-size: 21px;
+    }
+
+    .dogstrust__text{
+      color: var(--brown);
+      font-size: 12px;
+    }
+
+    .dogstrust__button{
+      margin-top: 20px;
+
+      .button{
+        white-space: nowrap;
+        display: inline-block;
+        background-color: var(--beige);
+        border: 1px solid var(--beige);
+        color: var(--brown);
+
+        &:hover{
+          background-color: var(--purple);
+        }
+      }
+    }
+  }
+
+  .dogstrust__image{
+    position: absolute;
+    right: 10px;
+    bottom: -30px;
+
+    img{
+      width: 120px;
+    }
+  }
+
+  @media(min-width: 750px){
+    margin: 180px auto;
+    max-width: 920px;
+
+    .dogstrust__inner{
+      aspect-ratio: 845/467;
+    }
+
+    .dogstrust__wrapper{
+      grid-template-columns: 1fr 2fr;
+
+      .dogstrust__title{
+        font-size: 36px;
+        margin-bottom: 15px
+      }
+
+      .dogstrust__text{
+        font-size: 14px;
+        width: 240px;
+      }
+
+      .dogstrust__button{
+        margin-top: 30px
+      }
+    }
+
+    .dogstrust__image{
+      right: 10px;
+      bottom: -30px;
+
+      img{
+        width: 240px;
+      }
+    }
+  }
+
+  @media(min-width: 1200px){
+    .dogstrust__wrapper{
+      grid-template-columns: 5fr 6fr;
+
+      .dogstrust__content{
+        padding: 30px 80px 30px 0;
+      }
+    }
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "DogsTrust",
+}
+{% endschema %}

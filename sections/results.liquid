@@ -1,0 +1,337 @@
+<div class="results section section--page-width">
+  <div class=results__inner>
+    <div class="col-left">
+      <h2 class="results__title">
+        {{ section.settings.main-text }}
+      </h2>
+      <p class="results__text">
+        {{ section.settings.text }}
+      </p>
+      <a href="{{ section.settings.button_link }}" class="results__button results__button--desktop button">
+        {{ section.settings.button_text }}
+      </a>
+    </div>
+    <div class="col-right">
+      <div class="results__wrapper">
+        <div class="result">
+          <div class="result__before" data-parallax>
+            <img src="{{ 'results/result01--before.jpg' | asset_url }}" alt="">
+          </div>
+          <div class="result__after">
+            <img src="{{ 'results/result01--after.jpg' | asset_url }}" alt="">
+
+            <div class="tags">
+              <div class="tag" data-parallax="3vh" style="top: 18%; left: 75%;">
+                Clear details
+              </div>
+
+              <div class="tag" style="top: 10%; left: 30%;">
+                Short coat
+              </div>
+              <div class="tag__line__center" style="top: 25%; left: 40%;"></div>
+              <div class="tag__line__line" style="top: 25%; left: 40%; width: 20%; transform: rotate(-120deg);"></div>
+
+              <div class="tag" style="top: 60%; left: 80%;">
+                Black fur
+              </div>
+              <div class="tag__line__center" style="top: 53%; left: 62%;"></div>
+              <div class="tag__line__line" style="top: 53%; left: 62%; width: 18%; transform: rotate(25deg);"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result result--odd" data-parallax>
+          <div class="result__before" data-parallax>
+            <img src="{{ 'results/result02--before.jpg' | asset_url }}" alt="">
+          </div>
+          <div class="result__after">
+            <img src="{{ 'results/result02--after.jpg' | asset_url }}" alt="">
+
+            <div class="tags">
+              <div class="tag" data-parallax="3vh" style="top: 80%; left: 30%;">
+                Accurate proportions
+              </div>
+
+              <div class="tag" style="top: 10%; left: 45%;">
+                Head shape
+              </div>
+              <div class="tag__line__center" style="top: 27%; left: 52%;"></div>
+              <div class="tag__line__line" style="top: 27%; left: 52%; width: 20%; transform: rotate(-110deg);"></div>
+
+              <div class="tag" style="top: 47%; left: 15%;">
+                Long hair
+              </div>
+              <div class="tag__line__center" style="top: 52%; left: 33%;"></div>
+              <div class="tag__line__line" style="top: 52%; left: 33%; width: 18%; transform: rotate(200deg);"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result" data-parallax="-10vh">
+          <div class="result__before" data-parallax>
+            <img src="{{ 'results/result03--before.jpg' | asset_url }}" alt="">
+          </div>
+          <div class="result__after">
+            <img src="{{ 'results/result03--after.jpg' | asset_url }}" alt="">
+
+            <div class="tags">
+              <div class="tag" data-parallax="3vh" style="top: 75%; left: 25%;">
+                It's him
+              </div>
+
+              <div class="tag" style="top: 10%; left: 72%;">
+                Spots & brindle
+              </div>
+              <div class="tag__line__center" style="top: 30%; left: 55%;"></div>
+              <div class="tag__line__line" style="top: 30%; left: 55%; width: 30%; transform: rotate(-53deg);"></div>
+
+              <div class="tag" style="top: 45%; left: 80%;">
+                Face folds
+              </div>
+              <div class="tag__line__center" style="top: 49%; left: 63%;"></div>
+              <div class="tag__line__line" style="top: 49%; left: 63%; width: 15%; transform: rotate(-17deg);"></div>
+            </div>
+          </div>
+        </div>
+
+        <a href="{{ section.settings.button_link }}" class="results__button results__button--mobile button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.results{
+  margin: 100px 0 80px;
+  text-align: center;
+
+  .results__title{
+    margin-bottom: 0;
+    font-size: 36px;
+  }
+
+  .results__text{
+    margin: 1em 0 3em;
+    font-weight: 700;
+    color: var(--brown);
+  }
+
+  .results__button{
+    margin: 0 auto;
+
+    &.results__button--desktop{
+      display: none;
+    }
+  }
+
+  .results__wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin: 40px 0;
+  }
+
+  .result{
+    position: relative;
+
+    .result__before{
+      aspect-ratio: 3/4;
+      border-radius: 40px;
+      position: absolute;
+      width: 40%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .result__after{
+      aspect-ratio: 52/59;
+      border-radius: 80px;
+      width: 75%;
+      margin: 15% 0 0 auto;
+      position: relative;
+
+      .tags{
+        position: absolute;
+        top: 0;
+        left: 0;  
+        width: 100%;
+        height: 100%;
+
+        .tag{
+          background: var(--beige);
+          color: var(--green);
+          width: fit-content;
+          border-radius: 1000px;
+          position: absolute;
+          padding: 4px 12px;
+          transform: translate(-50%, -50%);
+          white-space: nowrap;
+          z-index: 2;
+        }
+
+        .tag__line__center{
+          position: absolute;
+          z-index: 1;
+
+          &::before{
+            width: 6px;
+            height: 6px;
+            background-color: var(--beige);
+            border-radius: 50%;
+            content: "";
+            display: block;
+            margin: -3px;
+          }
+        }
+
+        .tag__line__line{
+          height: 1px;
+          background-color: var(--beige);
+          position: absolute;
+          transform-origin: center left;
+          z-index: 1;
+        }
+      }
+    }
+
+    .result__before, .result__after{
+      overflow: hidden;
+      box-shadow: 0px 0px 15px 0px #4C443F2E;
+
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    &.result--odd{
+      .result__before{
+        left: 60%;
+      }
+
+      .result__after{
+        margin: 15% 0 0;
+      }
+    }
+  }
+}
+
+@media(min-width: 750px){
+  .results{
+    text-align: left;
+
+    .results__title{
+      font-size: 54px;
+    }
+
+    .results__text{
+      font-size: 18px;
+    }
+
+    .results__inner{
+      display: flex;
+      gap: 40px;
+    }
+
+    .results__wrapper{
+      gap: 100px;
+    }
+
+    .col-left{
+      width: 40%;
+      max-height: 100vh;
+      position: sticky;
+      top: 0;
+      padding: 80px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .col-right{
+      width: 60%;
+    }
+
+    .results__button{
+      margin: 200px 0 0;
+
+      &.results__button--desktop{
+        display: block;
+      }
+
+      &.results__button--mobile{
+        display: none;
+      }
+    }
+  }
+}
+
+@media(min-width: 1200px){
+ .results{
+  margin: 120px 0;
+
+  .results__title{
+    font-size: 63px;
+  }
+
+  .results__inner{
+    gap: 60px;
+  }
+
+  .col-left{
+    width: 35%;
+  }
+
+  .col-right{
+    width: 65%;
+  }
+
+  .result{
+    width: 85%;
+
+    &:not(.result--odd){
+      margin-left: auto;
+    }
+  }
+ }
+}
+{% endstylesheet %}
+
+{% javascript %}
+
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Results",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Title",
+      "default": "From photo to portrait.<br>Still your dog."
+    },{
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Recognizable at first glance"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Create portrait"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}

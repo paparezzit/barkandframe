@@ -1,0 +1,193 @@
+<div class="image-guidelines section section--page-width">
+  <div class=image-guidelines__inner>
+    <div class="col-left">
+      <h2 class="image-guidelines__title">
+        {{ section.settings.main-text }}
+      </h2>
+      <p>
+        The most important part of your order, crucial to the quality of the final pet portrait, is the quality of the image you upload. Let's review the following tips and guidelines to make sure yours is just right:
+      </p>
+      <ul>
+        <li>
+          Take a photo or choose an existing photo that is taken in daylight or in a brightly lit room.
+        </li>
+        <li>
+          Use a smartphone or high quality camera.
+        </li>
+        <li>
+          Ensure the whole face & neck is visible and not in shadows.
+        </li>
+        <li>
+          Avoid overly filtered photos to ensure we correctly capture your pet's coloring.
+        </li>
+        <li>
+          Make sure your pet is looking directly at the camera at eye level, facing forward. Other positions are acceptable, but your pet will be shown in that position in the final portrait.
+        </li>
+        <li>
+          Please note: collars, leashes, bows, hats, and other cute outfits will not be illustrated in your final portrait.
+        </li>
+      </ul>
+    </div>
+    <div class="col-right">
+      <div class="image-guidelines__images">
+        <div class="image-guidelines__image">
+          <img src="{{ 'good-photo.jpg' | asset_url }}" alt="Good Photo">
+          <div class="image-guidelines__label">
+            <h3 class="image-guidelines__title">
+              Good Photo
+            </h3>
+            <ul class="image-guidelines__list image-guidelines__list--positive" style='--check: url("{{ "check-positive.svg" | asset_url }}");'>
+              <li>
+                Pet facing camera at eye level
+              </li>
+              <li>
+                Great lighting
+              </li>
+              <li>
+                Face & neck are clearly visible
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="image-guidelines__image">
+          <img src="{{ 'bad-photo.jpg' | asset_url }}" alt="Good Photo">
+          <div class="image-guidelines__label">
+            <h3 class="image-guidelines__title">
+              Bad Photo
+            </h3>
+            <ul class="image-guidelines__list image-guidelines__list--negative" style='--check: url("{{ "check-negative.svg" | asset_url }}");'>
+              <li>
+                Angled face & not at eye level
+              </li>
+              <li>
+                Low lighting & heavy shadows
+              </li>
+              <li>
+                Head & neck not completely visible
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.image-guidelines{
+  margin: 100px 0;
+
+  .image-guidelines__inner{
+    color: var(--brown);
+  }
+
+  .image-guidelines__images{
+    margin-top: 60px;
+
+    .image-guidelines__image{
+      position: relative;
+      margin-bottom: 100px;
+
+      img{
+        border-radius: 20px;
+        width: 75%;
+      }
+
+      .image-guidelines__label{
+        background-color: var(--beige);
+        border-radius: 20px;
+        position: absolute;
+        right: 0;
+        bottom: -80px;
+        z-index: 1;
+        padding: 20px;
+
+        .image-guidelines__title{
+          font-size: 14px;
+          font-weight: 700;
+          margin-bottom: 10px;
+        }
+
+        .image-guidelines__list{
+          margin: 0;
+          padding-left: 15px;
+          list-style-image: var(--check);
+
+          li{
+            margin-inline: 10px;
+            
+            &::marker{
+              font-size: 2em;
+              line-height: .1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media(min-width: 750px){
+  .image-guidelines{
+    .image-guidelines__inner{
+      display: flex;
+      gap: 40px;
+
+      .col-left, .col-right{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .image-guidelines__images{
+        margin-top: 40px;
+      }
+    }
+  }
+}
+
+@media(min-width: 1200px){
+  .image-guidelines{
+    margin: 200px 0;
+    .image-guidelines__inner{
+      .col-left{
+        padding: 0 8.33333%;
+      }
+
+      .col-right{
+        padding: 0 8.33333% 0 0;
+      }
+
+      .image-guidelines__images{
+        .image-guidelines__image{
+          margin-bottom: 20px;
+
+          img{
+            width: 80%;
+          }
+
+          .image-guidelines__label{
+            bottom: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image Guidelines",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Pet Portraits Image Guidelines"
+    }
+  ]
+}
+{% endschema %}

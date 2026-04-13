@@ -1,0 +1,544 @@
+<div class="portrait-styles section section--page-width">
+  <div class=portrait-styles__inner>
+    <div class="portrait-styles__wrapper">
+      <h2 class="portrait-styles__title">
+        {{ section.settings.main-title }}
+      </h2>
+
+      <div class="portrait-styles__content">
+        <div class="portrait-grid">
+          <a href="/" class="portrait" data-style="defined-persona">
+            <span class="portrait__image">
+              <img src="{{ 'styles/10.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Expressive Line
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="pure-identity">
+            <span class="portrait__image">
+              <img src="{{ 'styles/01.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Pure portrait
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="pure-identity">
+            <span class="portrait__image">
+              <img src="{{ 'styles/02.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Atelier Sketch
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="pure-identity">
+            <span class="portrait__image">
+              <img src="{{ 'styles/03.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Classic Outline
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="graphic-presence">
+            <span class="portrait__image">
+              <img src="{{ 'styles/11.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Art Decco
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="graphic-presence">
+            <span class="portrait__image">
+              <img src="{{ 'styles/04.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Modern Illustration
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="graphic-presence defined-persona">
+            <span class="portrait__image">
+              <img src="{{ 'styles/05.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Signature Line
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="defined-persona">
+            <span class="portrait__image">
+              <img src="{{ 'styles/06.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              La Parisienne
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="pure-identity">
+            <span class="portrait__image">
+              <img src="{{ 'styles/12.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Pastel Sketch
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="defined-persona">
+            <span class="portrait__image">
+              <img src="{{ 'styles/07.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Regal Duchess
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="grand-scene">
+            <span class="portrait__image">
+              <img src="{{ 'styles/08.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Heritage Lounge
+            </span>
+          </a>
+
+          <a href="/" class="portrait" data-style="grand-scene">
+            <span class="portrait__image">
+              <img src="{{ 'styles/09.jpg' | asset_url }}" alt="">
+            </span>
+            <span class="portrait__label">
+              Royal Chamber
+            </span>
+          </a>
+        </div>
+
+        <div class="portrait-selector">
+          <p class="portrait-selector__text">
+            {{ section.settings.main-text }}
+          </p>
+
+          <div class="accordion">
+
+            <div class="accordion-item">
+              <button class="accordion-header" data-key="pure-identity">Pure Identity</button>
+
+              <div class="accordion-content">
+                <div class="accordion-inner">
+                  Portraits focused on resemblance. Chosen when the goal is to preserve how your dog actually looks, including proportions, gaze and familiar expression. These styles keep intervention minimal so the result works almost like a memory, simple, calm and immediately recognizable.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" data-key="graphic-presence">Graphic Presence</button>
+
+              <div class="accordion-content">
+                <div class="accordion-inner">
+                  Portraits reduced into visual language. Instead of realism the dog becomes a clear form built from shape, contour and contrast. Suitable when the image should function as a visual object rather than a sentimental piece.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" data-key="defined-persona">Defined Persona</button>
+
+              <div class="accordion-content">
+                <div class="accordion-inner">
+                  Portraits that keep the dog recognizable but add interpretation. Clothing, pose or stylization introduces character without replacing the dog itself. Chosen when likeness matters but personality matters more.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" data-key="grand-scene">Grand Scene</button>
+
+              <div class="accordion-content">
+                <div class="accordion-inner">
+                  Portraits where the dog becomes part of a setting. Furniture, interior and composition create atmosphere and narrative. Selected when the image should behave like a decorative artwork and shape the space it hangs in.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+        
+    </div>
+
+    {% if section.settings.button_text != blank %}
+      <div class="portrait-styles__button">
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
+    
+  </div>
+</div>
+
+{% stylesheet %}
+.portrait-styles{
+  margin: 120px 0;
+
+  .portrait-styles__inner{
+    padding: 80px 20px 60px;
+    background: #F4EFE5;
+    border-radius: 80px;
+  }
+
+  .portrait-styles__title{
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .portrait-grid{
+    margin: 40px -20px 20px;
+    overflow-y: scroll;
+    white-space: nowrap;
+    gap: 10px;
+
+    .portrait{
+      position: relative;
+      aspect-ratio: 5/6;
+      width: 50vw;
+      display: inline-block;
+      margin: 0 5px;
+
+      &:first-child{
+        margin-left: 20px;
+      }
+
+      &:last-child{
+        margin-right: 20px;
+      }
+
+      .portrait__image{
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: opacity .3s, transform .3s;
+
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+      }
+
+      .portrait__label{
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        background-color: var(--beige);
+        color: var(--green);
+        white-space: nowrap;
+        border-radius: 1000px;
+        padding: 2px 8px;
+        font-size: 9px;
+        transform: translate(-50%, 0);
+        transition: opacity .3s, bottom .3s;
+      }
+
+      &.faded{
+        .portrait__image{
+          opacity: .27;
+        }
+
+        .portrait__label{
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .portrait-selector{
+    .portrait-selector__text{
+      font-weight: 700;
+    }
+
+    .accordion{
+      margin: 40px 0 30px;
+      border-bottom: 1px solid var(--brown);
+
+      .accordion-header{
+        width: 100%;
+        padding: 10px 0;
+        font-size: 24px;
+        border: none;
+        border-top: 1px solid var(--brown);
+        color: var(--brown);
+        text-align:left;
+        background: transparent;
+        cursor: pointer;
+        font-family: "display", "Times New Roman", serif;
+        position: relative;
+
+        &::before, &::after{
+          width: 16px;
+          height: 1px;
+          background-color: var(--brown);
+          content: "";
+          display: block;
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform-origin: center;
+          transition: transform .3s;
+        }
+
+        &::after{
+          transform: rotate(90deg);
+        }
+      }
+
+      .accordion-item.active{
+        .accordion-header{
+          &::before{
+            transform: rotate(45deg);
+          }
+
+          &::after{
+            transform: rotate(135deg);
+          }
+        }
+      }
+
+      .accordion-content{
+        height:0;
+        overflow:hidden;
+        transition:height .35s ease;
+      }
+
+      .accordion-inner{
+        padding: 0 0 80px;
+        max-width: 420px;
+      }
+    }
+  }
+
+  .portrait-styles__button{
+    text-align: center;
+
+    .button{
+      display: inline-block;
+    }
+  }
+
+  @media(min-width: 750px){
+    .portrait-styles__inner{
+      padding: 80px 40px 60px
+    }
+
+    .portrait-styles__content{
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 30px;
+      margin: 60px 0 40px;
+
+      .portrait-grid{
+        flex: 6;
+        margin: 0 0 auto;
+        overflow: visible;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        .portrait{
+          width: auto;
+          margin: 0;
+        }
+
+        &:hover{
+          .portrait:not(:hover){
+            .portrait__image{
+              opacity: .27;
+            }
+
+            .portrait__label{
+              opacity: 0;
+              pointer-events: none;
+            }
+          }
+
+          .portrait:hover{
+            .portrait__image{
+              opacity: 1;
+              transform: scale(1.3);
+              z-index: 2;
+            }
+
+            .portrait__label{
+              opacity: 1;
+              pointer-events: auto;
+              z-index: 3;
+              bottom: 0;
+            }
+          }
+        }
+      }
+
+      .portrait-selector{
+        flex: 4;
+      }
+    }
+  }
+
+  @media(min-width: 1200px){
+    margin: 220px 0; 
+
+    .portrait-styles__inner{
+      padding: 130px 40px 100px
+    }
+
+    .portrait-styles__title{
+      font-size: 96px;
+      line-height: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .portrait-styles__content{
+      margin: 90px 0;
+
+      .portrait-grid{
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        flex: 8;
+        
+        .portrait{
+          .portrait__label{
+            font-size: 14px;
+            padding: 3px 12px;
+            bottom: 20px;
+          }
+        }
+      }
+    }
+
+    .portrait-selector{
+      .portrait-selector__text{
+        font-size: 18px;
+        margin-bottom: 200px;
+        color: var(--brown);
+      }
+
+      .accordion{
+        .accordion-header{
+          font-size: 36px;
+          padding: 20px 0;
+
+          &::before, &::after{
+            width: 28px;
+          }
+        }
+      }
+    }
+  }
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+  const headers = document.querySelectorAll(".accordion-header");
+  const portraits = document.querySelectorAll(".portrait-grid .portrait");
+
+  function closeItem(item){
+
+    const content = item.querySelector(".accordion-content");
+    const inner = item.querySelector(".accordion-inner");
+
+    content.style.height = "0px";
+
+    requestAnimationFrame(()=>{
+      content.style.height = "0px";
+    });
+
+    item.classList.remove("active");
+
+    portraits.forEach(portrait => {
+      portrait.classList.remove("faded");
+    })
+
+  }
+
+  function openItem(item){
+
+    const content = item.querySelector(".accordion-content");
+    const inner = item.querySelector(".accordion-inner");
+
+    content.style.height = inner.scrollHeight + "px";
+
+    item.classList.add("active");
+  }
+
+  headers.forEach(header => {
+
+    header.addEventListener("click", () => {
+
+      const item = header.parentElement;
+      const key = header.dataset.key;
+      const isOpen = item.classList.contains("active");
+
+      document.querySelectorAll(".accordion-item.active").forEach(open => {
+
+        if(open !== item){
+          closeItem(open);
+        }
+
+      });
+
+      if(isOpen){
+        closeItem(item);
+        return;
+      }
+
+      openItem(item);
+
+      portraits.forEach(portrait => {
+        if (portrait.dataset.style.includes(header.dataset.key)) {
+          portrait.classList.remove("faded");
+        } else {
+          portrait.classList.add("faded");
+        }
+      })
+
+    });
+
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Three Steps",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Each style preserves something different.<br>Not better, just different."
+    },
+    {
+      "type": "text",
+      "id": "main-title",
+      "label": "Main Title",
+      "default": "Every portrait tells differently"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}

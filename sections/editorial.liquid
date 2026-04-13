@@ -1,0 +1,162 @@
+<div class="editorial section section--page-width">
+  <div class=editorial__inner>
+    <div class="editorial__wrapper" data-id="0">
+      {% content_for 'blocks' %}
+    </div>
+    <div class="editorial__navigation">
+      <button class="editorial__arrow editorial__arrow--left">←</button>
+      <button class="editorial__arrow editorial__arrow--right">→</button>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.editorial{
+  margin: 120px 0;
+
+  .editorial__wrapper{
+    position: relative;
+
+    product-card-link:not(:nth-of-type(1)){
+      display: none;
+    }
+
+    .product-card__content{
+      color: var(--brown);
+
+      .group-block{
+        margin: 0;
+        width: 100%;
+        position: revert;
+
+        .image-block{
+          padding: 20px;
+
+          img{
+            border-radius: 40px;
+          }
+        }
+
+        .group-block{
+          background-color: var(--beige);
+          padding: 20px;
+          line-height: 1em;
+          width: fit-content;
+          border-radius: 20px;
+          position: absolute;
+          bottom: 40px;
+          right: 0px;
+          
+
+          .group-block-content{
+            gap: 5px !important;
+
+            .text-block{
+              padding-top: 0;
+            }
+
+            & > .text-block:last-child{
+              background-color: var(--brown);
+              color: var(--beige);
+              padding: 12px 15px;
+              border-radius: 1000px;
+              width: 100%;
+              font-weight: 500;
+              text-align: center;
+              margin-top: 10px;
+              display: block;
+
+              *{
+                text-align: center;
+                display: block;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .editorial__navigation{
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    z-index: 5;
+
+    .editorial__arrow{
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background-color: transparent;
+      border: 1px solid var(--brown);
+      cursor: pointer;
+    }
+  }
+}
+
+@media(min-width: 750px){
+  .editorial{
+    margin: 200px 0;
+
+    .editorial__wrapper{
+      .product-card__content{
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
+
+        .group-block{
+          width: 50%;
+        }
+      }
+    }
+
+    .editorial__navigation{
+      left: calc(50% + 20px);
+      bottom: 60px;
+    }
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+document.querySelector(".editorial__arrow--left").addEventListener("click", ()=>{
+  let actualId = parseInt(document.querySelector(".editorial__wrapper").dataset.id);
+  let objects = document.querySelectorAll(".editorial__wrapper product-card-link");
+
+  actualId = (actualId + objects.length - 1)%objects.length;
+  document.querySelector(".editorial__wrapper").dataset.id = actualId;
+
+  objects.forEach(object => {
+    object.style.display = "none";
+  })
+
+  objects[actualId].style.display = "block";
+})
+
+document.querySelector(".editorial__arrow--right").addEventListener("click", ()=>{
+  let actualId = parseInt(document.querySelector(".editorial__wrapper").dataset.id);
+  let objects = document.querySelectorAll(".editorial__wrapper product-card-link");
+
+  actualId = (actualId + + 1)%objects.length;
+  document.querySelector(".editorial__wrapper").dataset.id = actualId;
+
+  objects.forEach(object => {
+    object.style.display = "none";
+  })
+
+  objects[actualId].style.display = "block";
+})
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Editorial",
+  "blocks": [
+    {
+      "type": "product-card"
+    },
+  ],
+}
+{% endschema %}

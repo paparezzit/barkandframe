@@ -1,0 +1,199 @@
+<div class="three-steps section section--page-width">
+  <div class=three-steps__inner>
+    <div class="three-steps__wrapper">
+      <h2 class="three-steps__title">
+        {{ section.settings.main-text }}
+      </h2>
+      <div class="three-steps__content">
+        <div class="three-steps__step">
+          <div class="three-steps__step__content">
+            <h3 class="three-steps__step__title">
+              Choose a style
+            </h3>
+            <p class="three-steps__step__text">
+              Pick what feels like them
+            </p>
+          </div>
+          <div class="three-steps__step__image">
+            <img src="{{ 'illustrations/01.svg' | asset_url }}" alt="">
+          </div>
+        </div>
+
+        <div class="three-steps__step">
+          <div class="three-steps__step__content">
+            <h3 class="three-steps__step__title">
+              Pick a format
+            </h3>
+            <p class="three-steps__step__text">
+              Choose how<br>it exists
+            </p>
+          </div>
+          <div class="three-steps__step__image">
+            <img src="{{ 'illustrations/02.svg' | asset_url }}" alt="">
+          </div>
+        </div>
+
+        <div class="three-steps__step">
+          <div class="three-steps__step__content">
+            <h3 class="three-steps__step__title">
+              Refine the details
+            </h3>
+            <p class="three-steps__step__text">
+              Make it<br>truly yours
+            </p>
+          </div>
+          <div class="three-steps__step__image">
+            <img src="{{ 'illustrations/03.svg' | asset_url }}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if section.settings.button_text != blank %}
+      <div class="three-steps__button">
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
+    
+  </div>
+</div>
+
+{% stylesheet %}
+.three-steps{
+  .three-steps__inner{
+    padding: 80px 20px 0px;
+  }
+
+  .three-steps__title{
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 36px;
+  }
+
+  .three-steps__step{
+    margin: 40px 0 80px;
+
+    .three-steps__step__content{
+      position: relative;
+      text-align: center;
+      color: var(--brown);
+      max-width: 260px;
+      margin: 0 auto;
+
+      .three-steps__step__title{
+        font-size: 14px;
+        color: var(--beige);
+        background-color: var(--green);
+        width: fit-content;
+        margin: 0 auto;
+        padding: 4px 12px;
+        border-radius: 1000px;
+      }
+      .three-steps__step__text{
+        font-family: "display", "Times New Roman", serif !important;
+        font-weight: normal !important;
+        font-size: 27px;
+        line-height: 1em;
+        margin: 30px 0 0;
+      }
+    }
+
+    .three-steps__step__image{
+      img{
+        width: 140px;
+        margin: 20px auto;
+      }
+    }
+  }
+
+  .three-steps__button{
+    text-align: center;
+
+    .button{
+      display: inline-block;
+    }
+  }
+
+  @media(min-width: 750px){
+
+    .three-steps__inner{
+      padding: 180px 0 40px;
+    }
+
+    .three-steps__content{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .three-steps__step__image{
+      img{
+        width: 160px;
+      }
+    }
+
+    .three-steps__title{
+      font-size: 96px;
+      line-height: 90px;
+    }
+
+    .three-steps__step{
+      margin: 80px 0 60px;
+      width: 220px;
+
+      .three-steps__step__content{
+        max-width: none;
+
+        .three-steps__step__text{
+          margin: 50px 0 30px;
+          font-size: 36px;
+        }
+      }
+    }
+  }
+
+  @media(min-width: 1200px){
+    
+
+    .three-steps__step{
+      width: 250px;
+
+      .three-steps__step__image{
+      img{
+        width: 250px;
+      }
+    }
+    }
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Three Steps",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "It only takes three steps"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Start your portrait"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}

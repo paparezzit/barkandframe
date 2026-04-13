@@ -1,0 +1,178 @@
+<div class="cta-section">
+  <div class="cta-section__inner">
+    <div class="cta-section__background">
+      <img src="{{ 'cta-section/01.jpg' | asset_url }}" alt="" data-parallax="-5vh">
+      <img src="{{ 'cta-section/02.jpg' | asset_url }}" alt="" data-parallax="-15vh">
+      <img src="{{ 'cta-section/03.jpg' | asset_url }}" alt="" data-parallax="-10vh">
+      <img src="{{ 'cta-section/04.jpg' | asset_url }}" alt="" data-parallax="-15vh">
+      <img src="{{ 'cta-section/05.jpg' | asset_url }}" alt="" data-parallax="-5vh">
+      <img src="{{ 'cta-section/06.jpg' | asset_url }}" alt="" data-parallax="-10vh">
+    </div>
+
+    <div class="cta-section__content">
+      <div class="cta-section__icon">
+        <img src="{{ 'logo-icon--light.svg' | asset_url }}" alt="Logo">
+      </div>
+
+      <h2 class="cta-section__title">
+        {{ section.settings.main-text }}
+      </h2>
+
+      <div class="cta-section__button">
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .cta-section{
+    margin: 140px var(--page-margin);
+    text-align: center;
+
+    .cta-section__inner{
+      background: var(--brown);
+      padding: 100px 20px 80px;
+      border-radius: 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cta-section__background{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .36;
+
+      img{
+        width: 10%;
+        position: absolute;
+        left: 20%;
+        top: 15%;
+
+        &:nth-child(2){
+          width: 8%;
+          top: 35%;
+          left: 65%;
+        }
+
+        &:nth-child(3){
+          width: 14%;
+          top: 55%;
+          left: 10%;
+        }
+
+        &:nth-child(4){
+          width: 14%;
+          top: 50%;
+          left: 80%;
+        }
+
+        &:nth-child(5){
+          width: 8%;
+          top: 75%;
+          left: 30%;
+        }
+
+        &:nth-child(6){
+          top: 75%;
+          left: 65%;
+        }
+      }
+    }
+
+    .cta-section__content{
+      padding: 0 var(--page-margin);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+
+      .cta-section__icon{
+        img{
+          height: 70px;
+        }
+      }
+
+      .cta-section__title{
+        line-height: 36px;
+        font-size: 36px;
+        margin: 30px auto;
+        max-width: 240px;
+        color: var(--beige);
+      }
+
+      .cta-section__button{
+        width: fit-content;
+        margin: 0 auto;
+
+        .button{
+          background-color: var(--beige);
+          color: var(--brown);
+
+          &:hover{
+            background-color: var(--purple);
+          }
+        }
+      }
+    }
+  }
+
+  @media(min-width: 1200px){
+    .cta-section{
+      max-width: 1280px;
+      margin: 180px auto 120px;
+
+      .cta-section__inner{
+        border-radius: 270px;
+        padding: 160px;
+        margin: 0 var(--page-margin);
+        width: auto;
+      }
+
+      .cta-section__content{
+        .cta-section__title{
+          font-size: 96px;
+          line-height: 96px;
+          max-width: 780px;
+        }
+      }
+    }
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CTA Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Bring what matters most into your home"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Create portrait"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}
