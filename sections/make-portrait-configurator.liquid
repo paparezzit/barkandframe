@@ -7,14 +7,15 @@
   window.MakePortraitStyles = [
     {%- for block in section.blocks -%}
       {%- if block.type == 'style' -%}
+        {%- assign _artist = block.settings.artist -%}
         {
           "id": {{ block.id | json }},
           "name": {{ block.settings.name | default: '' | json }},
           "imageUrl": "{{ block.settings.image | image_url: width: 900 }}",
-          "artistName": {{ block.settings.artist_name | default: '' | json }},
-          "artistBio": {{ block.settings.artist_bio | default: '' | json }},
+          "artistName": {%- if _artist != blank -%}{{ _artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
+          "artistPhotoUrl": "{%- if _artist != blank -%}{{ _artist.photo.value | image_url: width: 200 }}{%- endif -%}",
           "description": {{ block.settings.description | default: '' | json }},
-          "tags": {{ block.settings.tags | default: '' | json }},
+          "tag": {{ block.settings.tag | default: '' | json }},
           "basePrice": {{ block.settings.base_price | default: 0 }}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endif -%}
@@ -40,7 +41,7 @@
   <div class="make-portrait__layout">
 
     {%- comment -%}————————————————————————————————————————
-      LEFT PANEL – Preview + Tabs
+      LEFT PANEL – Preview only
     ————————————————————————————————————————{%- endcomment -%}
     <div class="make-portrait__left">
 
@@ -56,7 +57,7 @@
 
         {%- comment -%} Artist badge – visible on step 1 {%- endcomment -%}
         <div class="make-portrait__artist-badge" id="mp-artist-badge">
-          <div class="artist-badge__dot"></div>
+          <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
           <div class="artist-badge__text">
             <span class="artist-badge__label">This style was created by</span>
             <span class="artist-badge__name" id="mp-artist-name"></span>
@@ -70,31 +71,6 @@
         <div class="make-portrait__size-label" id="mp-size-label" hidden></div>
       </div>
 
-      {%- comment -%} Tabs {%- endcomment -%}
-      <div class="make-portrait__tabs">
-        <nav class="make-portrait__tab-nav" role="tablist">
-          <button class="tab-nav__btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
-          <button class="tab-nav__btn" data-tab="artist" role="tab" aria-selected="false">Artist</button>
-          <button class="tab-nav__btn" data-tab="product" role="tab" aria-selected="false">Product</button>
-          <button class="tab-nav__btn" data-tab="contact" role="tab" aria-selected="false">Contact</button>
-        </nav>
-        <div class="make-portrait__tab-panels">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'tab' -%}
-              <div
-                class="tab-panel"
-                id="tab-{{ block.settings.tab_id }}"
-                data-tab="{{ block.settings.tab_id }}"
-                role="tabpanel"
-                {%- unless block.settings.tab_id == 'overview' %} hidden{%- endunless -%}
-              >
-                {{ block.settings.content }}
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </div>
-
     </div>
 
     {%- comment -%}————————————————————————————————————————
@@ -103,15 +79,15 @@
     <div class="make-portrait__right">
 
       {%- comment -%} Step indicator {%- endcomment -%}
-      <div class="make-portrait__step-indicator" aria-label="Progress">
-        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Style">1</button>
-        <span class="step-indicator__line"></span>
-        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Product">2</button>
-        <span class="step-indicator__line"></span>
-        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Details">3</button>
-        <span class="step-indicator__line"></span>
-        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Upload">4</button>
-      </div>
+      <nav class="make-portrait__step-indicator" aria-label="Progress">
+        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Choose a style"><span class="step-label--long">Choose a style</span><span class="step-label--short">Style</span></button>
+        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Choose a product"><span class="step-label--long">Choose a product</span><span class="step-label--short">Product</span></button>
+        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Choose a detail"><span class="step-label--long">Choose a detail</span><span class="step-label--short">Detail</span></button>
+        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order a portrait"><span class="step-label--long">Order a portrait</span><span class="step-label--short">Order</span></button>
+      </nav>
 
       {%- comment -%}——— STEP 1: Choose Style ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="1">
@@ -121,7 +97,7 @@
           {%- for block in section.blocks -%}
             {%- if block.type == 'style' -%}
               <button
-                class="style-picker__item{% if forloop.first %} selected{% endif %}"
+                class="style-picker__item{% if forloop.first %} selected{% endif %}{% if block.settings.tag != blank %} style--{{ block.settings.tag }}{% endif %}"
                 data-style-id="{{ block.id }}"
                 role="option"
                 aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
@@ -138,15 +114,15 @@
                 {%- else -%}
                   <div class="style-picker__placeholder"></div>
                 {%- endif -%}
-                <span class="style-picker__name">{{ block.settings.name }}</span>
-                {%- if block.settings.tags != blank -%}
-                  <span class="style-picker__tags" aria-hidden="true">
-                    {%- assign tag_list = block.settings.tags | split: ',' -%}
-                    {%- for tag in tag_list -%}
-                      <span class="style-picker__tag">{{ tag | strip }}</span>
-                    {%- endfor -%}
-                  </span>
+                {%- if block.settings.tag != blank -%}
+                  {%- case block.settings.tag -%}
+                    {%- when 'new' -%}{%- assign _tag_label = 'New' -%}
+                    {%- when 'limited' -%}{%- assign _tag_label = 'Limited' -%}
+                    {%- when 'sold-out' -%}{%- assign _tag_label = 'Sold out' -%}
+                  {%- endcase -%}
+                  <span class="style-picker__tag">{{ _tag_label }}</span>
                 {%- endif -%}
+                <span class="style-picker__name">{{ block.settings.name }}</span>
               </button>
             {%- endif -%}
           {%- endfor -%}
@@ -159,12 +135,18 @@
 
         <div class="make-portrait__subtotal">
           <div class="subtotal__row">
-            <span class="subtotal__label">Subtotal</span>
-            <span class="subtotal__price" id="mp-subtotal-1">—</span>
-          </div>
-          <div class="subtotal__row subtotal__row--meta">
-            <span>Estimated delivery</span>
-            <span class="subtotal__delivery" id="mp-delivery-1"></span>
+            <span class="subtotal__label">
+              <span class="subtotal__label__title">
+                Subtotal
+              </span>
+              <span class="subtotal__label__note">
+                Free shipping over $100
+              </span>
+            </span>
+            <span class="subtotal__price">
+              from
+              <span class="subtotal__price__amount" id="mp-subtotal-1">—</span>
+            </span>
           </div>
         </div>
 
@@ -173,10 +155,6 @@
 
       {%- comment -%}——— STEP 2: Choose Product ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="2" hidden>
-        <button class="make-portrait__back" data-goto="1">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Back
-        </button>
         <h2 class="make-portrait__step-title">Choose a product</h2>
 
         <div class="product-picker" id="mp-product-picker" role="listbox" aria-label="Product types">
@@ -214,10 +192,6 @@
             <span class="subtotal__label">Subtotal</span>
             <span class="subtotal__price" id="mp-subtotal-2">—</span>
           </div>
-          <div class="subtotal__row subtotal__row--meta">
-            <span>Estimated delivery</span>
-            <span class="subtotal__delivery" id="mp-delivery-2"></span>
-          </div>
         </div>
 
         <button class="button make-portrait__cta" id="mp-cta-step2" disabled>Choose options</button>
@@ -225,10 +199,6 @@
 
       {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="3" hidden>
-        <button class="make-portrait__back" data-goto="2">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Back
-        </button>
         <h2 class="make-portrait__step-title">Choose a detail</h2>
 
         <div id="mp-options-container">
@@ -261,10 +231,6 @@
             <span class="subtotal__label">Subtotal</span>
             <span class="subtotal__price" id="mp-subtotal-3">—</span>
           </div>
-          <div class="subtotal__row subtotal__row--meta">
-            <span>Estimated delivery</span>
-            <span class="subtotal__delivery" id="mp-delivery-3"></span>
-          </div>
         </div>
 
         <button class="button make-portrait__cta" id="mp-cta-step3">Upload photo</button>
@@ -272,10 +238,6 @@
 
       {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="4" hidden>
-        <button class="make-portrait__back" data-goto="3">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Back
-        </button>
         <h2 class="make-portrait__step-title">Upload photo</h2>
 
         <div class="photo-upload" id="mp-upload-area">
@@ -343,10 +305,6 @@
             <span class="subtotal__label">Subtotal</span>
             <span class="subtotal__price" id="mp-subtotal-4">—</span>
           </div>
-          <div class="subtotal__row subtotal__row--meta">
-            <span>Estimated delivery</span>
-            <span class="subtotal__delivery" id="mp-delivery-4"></span>
-          </div>
         </div>
 
         <button class="button make-portrait__cta" id="mp-cta-order">Order portrait</button>
@@ -354,7 +312,46 @@
         <p id="mp-cart-error" class="make-portrait__error" hidden></p>
       </div>
 
+      <p class="make-portrait__availability">
+        <span class="make-portrait__availability__indicator"></span>
+        The artist is available
+      </p>
+      
+      <p class="make-portrait__delivery-note">
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M2.72222 9.45312C2.35926 9.08854 2.17778 8.64583 2.17778 8.125H0.622222L0.902222 6.875H2.66C2.8363 6.67708 3.0437 6.52344 3.28222 6.41406C3.52074 6.30469 3.77481 6.25 4.04444 6.25C4.31407 6.25 4.56815 6.30469 4.80667 6.41406C5.04519 6.52344 5.25259 6.67708 5.42889 6.875H8.02667L9.33333 1.25H2.52L2.58222 0.984375C2.64444 0.692708 2.78704 0.455729 3.01 0.273438C3.23296 0.0911458 3.49481 0 3.79556 0H10.8889L10.3133 2.5H12.1333L14 5L13.3778 8.125H12.1333C12.1333 8.64583 11.9519 9.08854 11.5889 9.45312C11.2259 9.81771 10.7852 10 10.2667 10C9.74815 10 9.30741 9.81771 8.94444 9.45312C8.58148 9.08854 8.4 8.64583 8.4 8.125H5.91111C5.91111 8.64583 5.72963 9.08854 5.36667 9.45312C5.0037 9.81771 4.56296 10 4.04444 10C3.52593 10 3.08519 9.81771 2.72222 9.45312ZM9.59778 5.625H12.6L12.6622 5.29688L11.5111 3.75H10.0333L9.59778 5.625ZM9.30222 1.35938L9.33333 1.25L8.02667 6.875L8.05778 6.76562L8.58667 4.48438L9.30222 1.35938ZM0 5.82812L0.311111 4.57812H3.73333L3.42222 5.82812H0ZM1.24444 3.54688L1.55556 2.29688H5.6L5.28889 3.54688H1.24444ZM4.04444 8.75C4.22074 8.75 4.36852 8.6901 4.48778 8.57031C4.60704 8.45052 4.66667 8.30208 4.66667 8.125C4.66667 7.94792 4.60704 7.79948 4.48778 7.67969C4.36852 7.5599 4.22074 7.5 4.04444 7.5C3.86815 7.5 3.72037 7.5599 3.60111 7.67969C3.48185 7.79948 3.42222 7.94792 3.42222 8.125C3.42222 8.30208 3.48185 8.45052 3.60111 8.57031C3.72037 8.6901 3.86815 8.75 4.04444 8.75ZM10.2667 8.75C10.443 8.75 10.5907 8.6901 10.71 8.57031C10.8293 8.45052 10.8889 8.30208 10.8889 8.125C10.8889 7.94792 10.8293 7.79948 10.71 7.67969C10.5907 7.5599 10.443 7.5 10.2667 7.5C10.0904 7.5 9.94259 7.5599 9.82333 7.67969C9.70407 7.79948 9.64444 7.94792 9.64444 8.125C9.64444 8.30208 9.70407 8.45052 9.82333 8.57031C9.94259 8.6901 10.0904 8.75 10.2667 8.75Z" fill="currentColor"/></svg>
+        <span class="mp-delivery__label">Estimated delivery to</span>
+        <span id="mp-delivery"></span>
+      </p>
+
     </div>{%- comment -%} end .make-portrait__right {%- endcomment -%}
+
+    
+
+    {%- comment -%} Tabs – third grid child, spans below preview on desktop {%- endcomment -%}
+    <div class="make-portrait__tabs">
+      <nav class="make-portrait__tab-nav" role="tablist">
+        <button class="tab-nav__btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
+        <button class="tab-nav__btn" data-tab="artist" role="tab" aria-selected="false">Artist</button>
+        <button class="tab-nav__btn" data-tab="product" role="tab" aria-selected="false">Product</button>
+        <button class="tab-nav__btn" data-tab="limited" role="tab" aria-selected="false">Limited</button>
+      </nav>
+      <div class="make-portrait__tab-panels">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tab' -%}
+            <div
+              class="tab-panel"
+              id="tab-{{ block.settings.tab_id }}"
+              data-tab="{{ block.settings.tab_id }}"
+              role="tabpanel"
+              {%- unless block.settings.tab_id == 'overview' %} hidden{%- endunless -%}
+            >
+              {{ block.settings.content }}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
   </div>{%- comment -%} end .make-portrait__layout {%- endcomment -%}
 </div>
 
@@ -362,6 +359,7 @@
 
 .make-portrait {
   padding: 40px 0 100px;
+  font-family: var(--font-normal);
 }
 
 /* ——— Layout ——— */
@@ -375,14 +373,16 @@
   .make-portrait__layout {
     display: grid;
     grid-template-columns: 3fr 2fr;
+    grid-template-areas:
+      "left  right"
+      "tabs  right";
     gap: 48px;
     align-items: start;
   }
 
-  .make-portrait__right {
-    position: sticky;
-    top: 20px;
-  }
+  .make-portrait__left  { grid-area: left; }
+  .make-portrait__right { grid-area: right; position: sticky; top: 20px; }
+  .make-portrait__tabs  { grid-area: tabs; }
 }
 
 /* ——— Left Panel ——— */
@@ -427,12 +427,13 @@
   display: none;
 }
 
-.artist-badge__dot {
-  width: 10px;
-  height: 10px;
+.artist-badge__photo {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: var(--green, #4a5c3f);
+  object-fit: cover;
   flex-shrink: 0;
+  background: rgba(90, 64, 53, 0.15);
 }
 
 .artist-badge__text {
@@ -550,41 +551,49 @@
 }
 
 .step-indicator__btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(90, 64, 53, 0.3);
+  padding: 4px 0;
   background: transparent;
-  color: rgba(90, 64, 53, 0.4);
-  font-size: 13px;
-  font-weight: 600;
+  border: none;
+  color: var(--brown);
+  opacity: .27;
+  font-size: 10px;
+  font-weight: 500;
   cursor: default;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+  transition: color 0.2s;
   flex-shrink: 0;
+  font-family: var(--font-normal);
 }
 
 .step-indicator__btn.active {
-  background: var(--brown, #5a4035);
-  border-color: var(--brown, #5a4035);
-  color: #fff;
+  opacity: 1;
+  font-weight: 700;
 }
 
 .step-indicator__btn.completed {
-  background: var(--green, #4a5c3f);
-  border-color: var(--green, #4a5c3f);
-  color: #fff;
+  opacity: 1;
+  cursor: pointer;
 }
 
-.step-indicator__line {
-  flex: 1;
-  height: 1px;
-  background: rgba(90, 64, 53, 0.2);
-  margin: 0 6px;
+.step-indicator__arrow {
+  margin: 0 10px;
+  opacity: .54;
+
+  svg{
+    stroke: var(--brown);
+  }
+}
+
+.step-label--short { display: none; }
+
+@media (max-width: 600px) {
+  .step-label--long { display: none; }
+  .step-label--short { display: inline; }
 }
 
 /* ——— Step common ——— */
 .make-portrait__step-title {
-  font-size: 22px;
+  font-size: 36px;
   line-height: 1.2;
   color: var(--brown, #5a4035);
   margin: 0 0 20px;
@@ -597,24 +606,6 @@
   }
 }
 
-.make-portrait__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  color: rgba(90, 64, 53, 0.6);
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 16px;
-  transition: color 0.2s;
-}
-
-.make-portrait__back:hover {
-  color: var(--brown, #5a4035);
-}
-
 /* ——— Style picker ——— */
 .style-picker {
   display: grid;
@@ -624,6 +615,7 @@
 }
 
 .style-picker__item {
+  position: relative;
   background: none;
   border: 2px solid transparent;
   border-radius: 12px;
@@ -655,20 +647,27 @@
   line-height: 1.2;
 }
 
-.style-picker__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  padding: 3px 2px 4px;
+.style-picker__tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 2px 6px;
+  pointer-events: none;
+  background: rgba(90, 64, 53, 0.85);
+  color: #fff;
 }
 
-.style-picker__tag {
-  font-size: 9px;
-  background: rgba(90, 64, 53, 0.1);
-  color: var(--brown, #5a4035);
-  border-radius: 10px;
-  padding: 2px 6px;
-}
+.style--new      .style-picker__tag { background: var(--green, #4a5c3f); }
+.style--limited  .style-picker__tag { background: rgba(90, 64, 53, 0.85); }
+.style--sold-out .style-picker__tag { background: rgba(120, 120, 120, 0.85); }
+
+.style--sold-out img,
+.style--sold-out .style-picker__placeholder { opacity: 0.45; }
 
 .style-picker__item.selected {
   border-color: var(--brown, #5a4035);
@@ -1021,36 +1020,68 @@
 
 /* ——— Subtotal ——— */
 .make-portrait__subtotal {
-  border-top: 1px solid rgba(90, 64, 53, 0.15);
-  padding-top: 16px;
   margin: 20px 0 16px;
+  background-color: #F4EFE5;
+  border-radius: 10px;
+  padding: 10px 20px;
 }
 
 .subtotal__row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 10px;
   color: var(--brown, #5a4035);
   margin-bottom: 6px;
 }
 
-.subtotal__row--total {
+.subtotal__label{
+  display: flex;
+  flex-direction: column;
+}
+
+.subtotal__label__title{
+  font-size: 14px;
+}
+
+.subtotal__price__amount{
+  font-family: "display", "Times New Roman", serif !important;
+  font-size: 36px;
+  line-height: 1em;
+  margin-top: 5px;
+  display: inline-block;
+}
+
+.make-portrait__availability{
+  font-size: 10px;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin: 30px 0 7px;
+}
+
+.make-portrait__availability__indicator{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #2DCA7C;
+  display: inline-block;
+}
+
+.make-portrait__delivery-note {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  margin: 0;
+  gap: 2px;
+}
+
+.mp-delivery__label{
+  margin-left: 3px;
+}
+
+#mp-delivery{
   font-weight: 700;
-  font-size: 16px;
-}
-
-.subtotal__row--meta {
-  font-size: 12px;
-  color: rgba(90, 64, 53, 0.55);
-}
-
-.subtotal__price {
-  font-weight: 700;
-}
-
-.subtotal__delivery {
-  font-style: italic;
 }
 
 /* ——— CTA button ——— */
@@ -1124,7 +1155,7 @@
   ———————————————————————————————————————— */
   function updateDeliveryDates() {
     var date = getDeliveryDate();
-    ['mp-delivery-1', 'mp-delivery-2', 'mp-delivery-3', 'mp-delivery-4'].forEach(function (id) {
+    ['mp-delivery'].forEach(function (id) {
       var el = $(id);
       if (el) el.textContent = date;
     });
@@ -1212,6 +1243,12 @@
     // Artist badge
     var artistName = $('mp-artist-name');
     if (artistName) artistName.textContent = state.style.artistName || '';
+    var artistPhoto = $('mp-artist-photo');
+    if (artistPhoto) {
+      artistPhoto.src = state.style.artistPhotoUrl || '';
+      artistPhoto.alt = state.style.artistName || '';
+      artistPhoto.hidden = !state.style.artistName;
+    }
 
     // Style info
     var nameDisplay = $('mp-style-name-display');
@@ -1486,7 +1523,7 @@
         id: state.styleId,
         name: state.style.name,
         artist: state.style.artistName,
-        tags: state.style.tags
+        tag: state.style.tag
       } : null,
       product: state.product ? {
         id: state.product.id,
@@ -1618,10 +1655,11 @@
     var ctaOrder = $('mp-cta-order');
     if (ctaOrder) ctaOrder.addEventListener('click', addToCart);
 
-    // Back buttons
-    document.querySelectorAll('.make-portrait__back').forEach(function (btn) {
+    document.querySelectorAll('.step-indicator__btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        goToStep(parseInt(btn.dataset.goto, 10));
+        if (btn.classList.contains('completed')) {
+          goToStep(parseInt(btn.dataset.step, 10));
+        }
       });
     });
 
@@ -1711,28 +1749,36 @@
           "label": "Preview image"
         },
         {
-          "type": "text",
-          "id": "artist_name",
-          "label": "Artist name",
-          "default": "Anna K."
-        },
-        {
-          "type": "richtext",
-          "id": "artist_bio",
-          "label": "Artist bio"
-        },
-        {
           "type": "richtext",
           "id": "description",
           "label": "Style description",
           "info": "Shown when the style is selected. Describe the visual approach."
         },
         {
-          "type": "text",
-          "id": "tags",
-          "label": "Tags (comma-separated)",
-          "default": "Realistic, Minimal",
-          "info": "e.g. Elegant, Painterly, Bold"
+          "type": "header",
+          "content": "Artist"
+        },
+        {
+          "type": "metaobject",
+          "id": "artist",
+          "label": "Artist",
+          "metaobject_type": "artist"
+        },
+        {
+          "type": "select",
+          "id": "tag",
+          "label": "Tag",
+          "options": [
+            { "value": "",          "label": "None" },
+            { "value": "new",       "label": "New" },
+            { "value": "limited",   "label": "Limited" },
+            { "value": "sold-out",  "label": "Sold out" }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Pricing"
         },
         {
           "type": "number",
@@ -1778,7 +1824,7 @@
             { "value": "overview", "label": "Overview" },
             { "value": "artist", "label": "Artist" },
             { "value": "product", "label": "Product" },
-            { "value": "contact", "label": "Contact" }
+            { "value": "limited", "label": "Limited" }
           ],
           "default": "overview"
         },

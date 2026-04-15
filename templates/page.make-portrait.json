@@ -17,10 +17,9 @@
           "settings": {
             "name": "Pure Portrait",
             "image": "shopify://shop_images/pure-portrait.jpg",
-            "artist_name": "Petr Dokoupil",
-            "artist_bio": "",
             "description": "",
-            "tags": "Realistic, Minimal",
+            "artist": "petr-dokoupil",
+            "tag": "",
             "base_price": 74
           }
         },
@@ -29,10 +28,42 @@
           "settings": {
             "name": "Atelier Sketch",
             "image": "shopify://shop_images/atelier-sketch.jpg",
-            "artist_name": "Anna K.",
-            "artist_bio": "",
             "description": "<p>A clean and emotional portrait with soft tones and gentle brushwork. Contemporary and timeless.</p>",
-            "tags": "Realistic, Minimal",
+            "artist": "anna-pospisilova",
+            "tag": "limited",
+            "base_price": 74
+          }
+        },
+        "style_EYWg6x": {
+          "type": "style",
+          "settings": {
+            "name": "Pastel Sketch",
+            "image": "shopify://shop_images/pastel-sketch.png",
+            "description": "",
+            "artist": "petr-dokoupil",
+            "tag": "new",
+            "base_price": 74
+          }
+        },
+        "style_QqBaBD": {
+          "type": "style",
+          "settings": {
+            "name": "Classic Outline",
+            "image": "shopify://shop_images/classic-outline.jpg",
+            "description": "",
+            "artist": "anna-pospisilova",
+            "tag": "",
+            "base_price": 74
+          }
+        },
+        "style_JFaB7b": {
+          "type": "style",
+          "settings": {
+            "name": "Modern Illustration",
+            "image": "shopify://shop_images/modern-illustration.jpg",
+            "description": "",
+            "artist": "petr-dokoupil",
+            "tag": "sold-out",
             "base_price": 74
           }
         },
@@ -68,6 +99,9 @@
       "block_order": [
         "style_fWfEFh",
         "style_CBAeCJ",
+        "style_EYWg6x",
+        "style_QqBaBD",
+        "style_JFaB7b",
         "tab-overview",
         "tab-artist",
         "tab-product",
