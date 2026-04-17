@@ -22,6 +22,15 @@
     {%- endfor -%}
   ].filter(s => s.name);
 
+  window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
+  window.MakePortraitCloudinary = {
+    cloudName: {{ section.settings.cloudinary_cloud_name | default: '' | json }},
+    uploadPreset: {{ section.settings.cloudinary_upload_preset | default: '' | json }}
+  };
+
+  {%- assign _donation_block = section.blocks | where: "type", "donation" | first -%}
+  window.MakePortraitDonationTitle = {{ _donation_block.settings.title | default: 'Donation' | json }};
+
   window.MakePortraitProducts = [
     {%- if products_collection != blank -%}
       {%- for product in products_collection.products -%}
@@ -207,11 +216,30 @@
         </div>
 
         <div class="make-portrait__option-group">
+          <p class="make-portrait__option-label">Border</p>
+          <div class="option-btn-grid" id="mp-border-grid">
+            <button class="option-btn selected" data-border="no-border" type="button">No Border</button>
+            <button class="option-btn" data-border="white-border" type="button">White Border</button>
+          </div>
+        </div>
+
+        <div class="make-portrait__option-group">
+          <p class="make-portrait__option-label">Background</p>
+          <div class="option-btn-grid" id="mp-background-grid">
+            <button class="option-btn selected" data-background="classic" type="button">Classic</button>
+            <button class="option-btn" data-background="clear" type="button">Clear</button>
+            <button class="option-btn" data-background="royal-pattern" type="button">Royal Pattern</button>
+            <button class="option-btn" data-background="midnight" type="button">Midnight</button>
+          </div>
+        </div>
+
+        <div class="make-portrait__option-group">
           <p class="make-portrait__option-label">Number of pets</p>
-          <div class="pet-count-picker">
-            <button class="pet-count__btn" id="mp-pets-minus" aria-label="Decrease">−</button>
-            <span class="pet-count__value" id="mp-pets-count" aria-live="polite">1</span>
-            <button class="pet-count__btn" id="mp-pets-plus" aria-label="Increase">+</button>
+          <div class="option-btn-grid" id="mp-pets-grid">
+            <button class="option-btn selected" data-pet-count="1" type="button">1</button>
+            <button class="option-btn" data-pet-count="2" type="button">2</button>
+            <button class="option-btn" data-pet-count="3" type="button">3</button>
+            <button class="option-btn" data-pet-count="4" type="button">4</button>
           </div>
         </div>
 
@@ -266,15 +294,15 @@
         </p>
 
         {%- assign has_addons = false -%}
+        {%- assign has_donation = false -%}
         {%- for block in section.blocks -%}
-          {%- if block.type == 'addon' -%}
-            {%- assign has_addons = true -%}
-          {%- endif -%}
+          {%- if block.type == 'addon' -%}{%- assign has_addons = true -%}{%- endif -%}
+          {%- if block.type == 'donation' -%}{%- assign has_donation = true -%}{%- endif -%}
         {%- endfor -%}
 
         {%- if has_addons -%}
           <div class="make-portrait__addons">
-            <h3 class="make-portrait__addons-title">Add-ons</h3>
+            <h3 class="make-portrait__addons-title">Customize your order</h3>
             {%- for block in section.blocks -%}
               {%- if block.type == 'addon' -%}
                 <label class="addon-item" {{ block.shopify_attributes }}>
@@ -285,10 +313,10 @@
                     data-addon-name="{{ block.settings.name | escape }}"
                     aria-label="{{ block.settings.name }}"
                   >
-                  <div class="addon-item__content">
-                    <div class="addon-item__header">
+                  <div class="addon-item__body">
+                    <div class="addon-item__left">
                       <span class="addon-item__name">{{ block.settings.name }}</span>
-                      <span class="addon-item__price">+{{ block.settings.price | default: 0 | times: 100 | money }}</span>
+                      <span class="addon-item__price">+ {{ block.settings.price | default: 0 | times: 100 | money }}</span>
                     </div>
                     {%- if block.settings.description != blank -%}
                       <div class="addon-item__description">{{ block.settings.description }}</div>
@@ -300,10 +328,54 @@
           </div>
         {%- endif -%}
 
-        <div class="make-portrait__subtotal">
+        {%- if has_donation -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'donation' -%}
+              <div class="donation-card" {{ block.shopify_attributes }}>
+                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'Donate' }}</h3>
+                <div class="donation-card__inner">
+                  {%- if block.settings.image -%}
+                    <img
+                      class="donation-card__image"
+                      src="{{ block.settings.image | image_url: width: 300 }}"
+                      width="150" height="150"
+                      alt=""
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+                  <div class="donation-card__content">
+                    {%- if block.settings.heading != blank -%}
+                      <p class="donation-card__heading">{{ block.settings.heading }}</p>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <p class="donation-card__description">{{ block.settings.description }}</p>
+                    {%- endif -%}
+                    <div class="option-btn-grid donation-card__amounts">
+                      {%- assign amounts = block.settings.amounts | default: '' | split: ',' -%}
+                      {%- for amount in amounts -%}
+                        {%- assign clean = amount | strip | times: 1 -%}
+                        {%- if clean > 0 -%}
+                          <button
+                            class="option-btn"
+                            data-donation="{{ clean | times: 100 }}"
+                            type="button"
+                          >{{ clean | times: 100 | money }}</button>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        <div class="make-portrait__subtotal make-portrait__subtotal--summary">
+          <p class="subtotal__label__title">Subtotal</p>
+          <div id="mp-order-summary" class="order-summary"></div>
           <div class="subtotal__row subtotal__row--total">
-            <span class="subtotal__label">Subtotal</span>
-            <span class="subtotal__price" id="mp-subtotal-4">—</span>
+            <span class="subtotal__label__note">Free shipping over $100</span>
+            <span class="subtotal__price__amount" id="mp-subtotal-4">—</span>
           </div>
         </div>
 
@@ -797,42 +869,6 @@
   color: #fff;
 }
 
-/* Pet count */
-.pet-count-picker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  border: 1.5px solid rgba(90, 64, 53, 0.3);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.pet-count__btn {
-  background: none;
-  border: none;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-  cursor: pointer;
-  color: var(--brown, #5a4035);
-  transition: background 0.15s;
-}
-
-.pet-count__btn:hover {
-  background: #f4efe5;
-}
-
-.pet-count__value {
-  min-width: 36px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--brown, #5a4035);
-  border-left: 1px solid rgba(90, 64, 53, 0.2);
-  border-right: 1px solid rgba(90, 64, 53, 0.2);
-  padding: 0 8px;
-  line-height: 36px;
-}
 
 /* Text input */
 .make-portrait__text-input {
@@ -927,6 +963,40 @@
   object-fit: cover;
 }
 
+.photo-preview__spinner {
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 239, 229, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-preview__spinner::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(90, 64, 53, 0.3);
+  border-top-color: var(--brown, #5a4035);
+  border-radius: 50%;
+  animation: mp-spin 0.7s linear infinite;
+}
+
+.photo-preview__spinner--error::after {
+  content: '!';
+  border: none;
+  width: auto;
+  height: auto;
+  animation: none;
+  font-size: 18px;
+  font-weight: 700;
+  color: #c0392b;
+}
+
+@keyframes mp-spin {
+  to { transform: rotate(360deg); }
+}
+
 .photo-preview__remove {
   position: absolute;
   top: 3px;
@@ -966,56 +1036,132 @@
 
 .addon-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 16px 20px;
   border: 1.5px solid rgba(90, 64, 53, 0.15);
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
+  background: #faf7f2;
 }
 
 .addon-item:hover {
-  border-color: rgba(90, 64, 53, 0.4);
+  border-color: rgba(90, 64, 53, 0.35);
+  background: #f4efe5;
+}
+
+.addon-item:has(.addon-item__check:checked) {
+  border-color: var(--brown, #5a4035);
+  background: #f4efe5;
 }
 
 .addon-item__check {
-  margin-top: 2px;
-  accent-color: var(--brown, #5a4035);
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  display: none;
 }
 
-.addon-item__content {
-  flex: 1;
-}
-
-.addon-item__header {
+.addon-item__body {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.addon-item__left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
 }
 
 .addon-item__name {
-  font-size: 13px;
-  font-weight: 600;
+  font-family: var(--font-heading--family, "display", serif);
+  font-size: 20px;
+  line-height: 1.15;
+  color: rgba(90, 64, 53, 0.5);
+  transition: color 0.2s;
+}
+
+.addon-item:has(.addon-item__check:checked) .addon-item__name {
   color: var(--brown, #5a4035);
 }
 
 .addon-item__price {
-  font-size: 13px;
-  color: var(--brown, #5a4035);
-  white-space: nowrap;
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.55);
 }
 
 .addon-item__description {
   font-size: 12px;
   color: rgba(90, 64, 53, 0.6);
-  margin-top: 4px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* ——— Donation card ——— */
+.donation-card {
+  margin-bottom: 8px;
+}
+
+.donation-card__inner {
+  display: flex;
+  gap: 16px;
+  background: #e8e4f5;
+  border-radius: 16px;
+  padding: 20px;
+  align-items: center;
+}
+
+.donation-card__image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.donation-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.donation-card__heading {
+  font-family: var(--font-heading--family, "display", serif);
+  font-size: 22px;
+  line-height: 1.2;
+  color: #2d2057;
+  margin: 0;
+}
+
+.donation-card__description {
+  font-size: 12px;
+  color: rgba(45, 32, 87, 0.7);
   line-height: 1.4;
+  margin: 0;
+}
+
+.donation-card__amounts {
+  margin-top: 4px;
+}
+
+.donation-card__amounts .option-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(45, 32, 87, 0.2);
+  color: #2d2057;
+}
+
+.donation-card__amounts .option-btn:hover {
+  border-color: rgba(45, 32, 87, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.donation-card__amounts .option-btn.selected {
+  background: #2d2057;
+  border-color: #2d2057;
+  color: #fff;
 }
 
 /* ——— Subtotal ——— */
@@ -1084,6 +1230,51 @@
   font-weight: 700;
 }
 
+/* ——— Order summary (step 4 subtotal) ——— */
+.make-portrait__subtotal--summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(90, 64, 53, 0.15);
+}
+
+.order-summary__line {
+  font-size: 12px;
+  color: rgba(90, 64, 53, 0.65);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.order-summary__line strong {
+  color: var(--brown, #5a4035);
+  font-weight: 600;
+}
+
+.order-summary__section {
+  margin-top: 6px;
+}
+
+.order-summary__section-label {
+  font-size: 11px;
+  color: rgba(90, 64, 53, 0.5);
+  margin: 0 0 1px;
+}
+
+.order-summary__section-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brown, #5a4035);
+  margin: 0;
+  line-height: 1.5;
+}
+
 /* ——— CTA button ——— */
 .make-portrait__cta {
   width: 100%;
@@ -1125,8 +1316,13 @@
     selectedOptions: {},
     petCount: 1,
     petName: '',
+    border: 'no-border',
+    background: 'classic',
     addonTotal: 0,   // in cents
-    files: []
+    donation: 0,     // in cents
+    files: [],
+    photoUrls: [],
+    pendingUploads: 0
   };
 
   var STYLES = window.MakePortraitStyles || [];
@@ -1136,8 +1332,14 @@
      Utilities
   ———————————————————————————————————————— */
   function formatMoney(cents) {
+    var format = window.MakePortraitMoneyFormat || '${{amount}}';
     var amount = Math.round(cents) / 100;
-    return '$' + amount.toFixed(0);
+    var intAmount = Math.round(amount);
+    return format
+      .replace('{{amount}}', amount % 1 === 0 ? intAmount : amount.toFixed(2))
+      .replace('{{amount_no_decimals}}', intAmount)
+      .replace('{{amount_with_comma_separator}}', amount.toFixed(2).replace('.', ','))
+      .replace('{{amount_no_decimals_with_comma_separator}}', intAmount);
   }
 
   function getDeliveryDate() {
@@ -1178,7 +1380,7 @@
   }
 
   function updateSubtotals() {
-    var total = getBasePrice() + state.addonTotal;
+    var total = getBasePrice() + state.addonTotal + state.donation;
     var formatted = total > 0 ? formatMoney(total) : '—';
     ['mp-subtotal-1', 'mp-subtotal-2', 'mp-subtotal-3', 'mp-subtotal-4'].forEach(function (id) {
       var el = $(id);
@@ -1202,6 +1404,7 @@
 
     state.step = step;
     updateSubtotals();
+    if (step === 4) buildSummary();
 
     // Show/hide artist badge and product label
     var artistBadge = $('mp-artist-badge');
@@ -1433,17 +1636,138 @@
   }
 
   /* ————————————————————————————————————————
-     Pet count
+     Order summary (step 4)
   ———————————————————————————————————————— */
-  function updatePetCount(delta) {
-    state.petCount = Math.max(1, Math.min(4, state.petCount + delta));
-    var display = $('mp-pets-count');
-    if (display) display.textContent = state.petCount;
+  function getSelectedLabel(gridId) {
+    var btn = document.querySelector('#' + gridId + ' .option-btn.selected');
+    return btn ? btn.textContent.trim() : '';
+  }
+
+  function buildSummary() {
+    var container = $('mp-order-summary');
+    if (!container) return;
+    container.innerHTML = '';
+
+    function addLine(label, value) {
+      var p = document.createElement('p');
+      p.className = 'order-summary__line';
+      p.innerHTML = label + ' \u2013 <strong>' + value + '</strong>';
+      container.appendChild(p);
+    }
+
+    if (state.style) addLine('Style', state.style.name);
+    if (state.product) addLine('Product', state.product.title);
+
+    var details = [];
+    if (state.variant && state.variant.options) {
+      state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') details.push(o); });
+    }
+    var border = getSelectedLabel('mp-border-grid');
+    var bg = getSelectedLabel('mp-background-grid');
+    if (border) details.push(border);
+    if (bg) details.push(bg + ' Background');
+    details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
+    if (state.petName) details.push(state.petName);
+    if (details.length) addLine('Details', details.join(' | '));
+
+    var addonNames = [];
+    document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
+      addonNames.push(c.dataset.addonName);
+    });
+    if (addonNames.length) {
+      var section = document.createElement('div');
+      section.className = 'order-summary__section';
+      var lbl = document.createElement('p');
+      lbl.className = 'order-summary__section-label';
+      lbl.textContent = 'Customize order';
+      var val = document.createElement('p');
+      val.className = 'order-summary__section-value';
+      val.textContent = addonNames.join(' | ');
+      section.appendChild(lbl);
+      section.appendChild(val);
+      container.appendChild(section);
+    }
+
+    if (state.donation > 0) {
+      addLine(window.MakePortraitDonationTitle || 'Donation', formatMoney(state.donation));
+    }
+  }
+
+  /* ————————————————————————————————————————
+     Option button groups (border, background, pet count)
+  ———————————————————————————————————————— */
+  function initOptionGroup(gridId, stateKey) {
+    var grid = $(gridId);
+    if (!grid) return;
+    grid.querySelectorAll('.option-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        grid.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        var val = btn.dataset[stateKey];
+        if (stateKey === 'petCount') {
+          state.petCount = parseInt(val, 10);
+        } else {
+          state[stateKey] = val;
+        }
+      });
+    });
   }
 
   /* ————————————————————————————————————————
      File upload
   ———————————————————————————————————————— */
+  function updateOrderButton() {
+    var btn = $('mp-cta-order');
+    if (!btn) return;
+    if (state.pendingUploads > 0) {
+      btn.disabled = true;
+      btn.textContent = 'Uploading photo…';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Order portrait';
+    }
+  }
+
+  function uploadToCloudinary(file, previewEl) {
+    var cfg = window.MakePortraitCloudinary;
+    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
+
+    state.pendingUploads++;
+    updateOrderButton();
+
+    var spinner = document.createElement('div');
+    spinner.className = 'photo-preview__spinner';
+    previewEl.appendChild(spinner);
+
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', cfg.uploadPreset);
+
+    fetch('https://api.cloudinary.com/v1_1/' + cfg.cloudName + '/image/upload', {
+      method: 'POST',
+      body: formData
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.secure_url) {
+          state.photoUrls.push(data.secure_url);
+          previewEl.dataset.photoUrl = data.secure_url;
+          spinner.remove();
+        } else {
+          spinner.classList.add('photo-preview__spinner--error');
+          spinner.title = 'Upload failed';
+        }
+      })
+      .catch(function () {
+        spinner.classList.add('photo-preview__spinner--error');
+        spinner.title = 'Upload failed';
+      })
+      .finally(function () {
+        state.pendingUploads = Math.max(0, state.pendingUploads - 1);
+        updateOrderButton();
+      });
+  }
+
   function handleFiles(files) {
     var previews = $('mp-photo-previews');
     if (!previews) return;
@@ -1470,6 +1794,10 @@
         removeBtn.addEventListener('click', function () {
           var idx = state.files.indexOf(file);
           if (idx > -1) state.files.splice(idx, 1);
+          if (preview.dataset.photoUrl) {
+            var urlIdx = state.photoUrls.indexOf(preview.dataset.photoUrl);
+            if (urlIdx > -1) state.photoUrls.splice(urlIdx, 1);
+          }
           preview.remove();
         });
         preview.appendChild(removeBtn);
@@ -1483,6 +1811,8 @@
           mainImg.onload = function () { mainImg.style.opacity = '1'; };
           mainImg.src = e.target.result;
         }
+
+        uploadToCloudinary(file, preview);
       };
       reader.readAsDataURL(file);
     });
@@ -1501,29 +1831,37 @@
     if (btn) { btn.disabled = true; btn.textContent = 'Adding to cart…'; }
     hideError();
 
+    var detailParts = [];
+    if (state.variant && state.variant.options) {
+      state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') detailParts.push(o); });
+    }
+    var borderLabel = getSelectedLabel('mp-border-grid');
+    var bgLabel = getSelectedLabel('mp-background-grid');
+    if (borderLabel) detailParts.push(borderLabel);
+    if (bgLabel) detailParts.push(bgLabel + ' Background');
+    detailParts.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
+    if (state.petName) detailParts.push(state.petName);
+
     var properties = {
       'Style': state.style ? state.style.name : '',
-      'Artist': state.style ? state.style.artistName : '',
       'Product': state.product ? state.product.title : '',
-      'Variant': state.variant ? state.variant.title : '',
-      'Number of pets': String(state.petCount)
+      'Details': detailParts.join(' | ')
     };
 
-    if (state.petName) properties['Pet name'] = state.petName;
-
-    // Selected add-ons
     var checkedAddons = [];
     document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
       checkedAddons.push(c.dataset.addonName);
     });
-    if (checkedAddons.length) properties['Add-ons'] = checkedAddons.join(', ');
+    if (checkedAddons.length) properties['Customize order'] = checkedAddons.join(' | ');
+
+    if (state.donation > 0) {
+      properties[window.MakePortraitDonationTitle || 'Donation'] = formatMoney(state.donation);
+    }
 
     properties['_configuration'] = JSON.stringify({
       style: state.style ? {
         id: state.styleId,
-        name: state.style.name,
-        artist: state.style.artistName,
-        tag: state.style.tag
+        name: state.style.name
       } : null,
       product: state.product ? {
         id: state.product.id,
@@ -1540,7 +1878,8 @@
         petCount: state.petCount,
         petName: state.petName,
         addons: checkedAddons
-      }
+      },
+      photos: state.photoUrls
     });
 
     fetch('/cart/add.js', {
@@ -1663,11 +2002,10 @@
       });
     });
 
-    // Pet count
-    var petsMin = $('mp-pets-minus');
-    var petsPlus = $('mp-pets-plus');
-    if (petsMin) petsMin.addEventListener('click', function () { updatePetCount(-1); });
-    if (petsPlus) petsPlus.addEventListener('click', function () { updatePetCount(1); });
+    // Option button groups
+    initOptionGroup('mp-border-grid', 'border');
+    initOptionGroup('mp-background-grid', 'background');
+    initOptionGroup('mp-pets-grid', 'petCount');
 
     // Pet name
     var petNameInput = $('mp-pet-name');
@@ -1709,6 +2047,24 @@
         updateSubtotals();
       });
     });
+
+    // Donation amounts
+    document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var val = parseInt(btn.dataset.donation, 10);
+        if (btn.classList.contains('selected')) {
+          btn.classList.remove('selected');
+          state.donation = 0;
+        } else {
+          document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (b) {
+            b.classList.remove('selected');
+          });
+          btn.classList.add('selected');
+          state.donation = val;
+        }
+        updateSubtotals();
+      });
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -1730,6 +2086,22 @@
       "id": "products_collection",
       "label": "Products collection",
       "info": "Select the collection that contains your portrait product formats (Poster, Canvas, etc.)"
+    },
+    {
+      "type": "header",
+      "content": "Photo upload (Cloudinary)"
+    },
+    {
+      "type": "text",
+      "id": "cloudinary_cloud_name",
+      "label": "Cloudinary cloud name",
+      "info": "Found in your Cloudinary dashboard (e.g. my-store)"
+    },
+    {
+      "type": "text",
+      "id": "cloudinary_upload_preset",
+      "label": "Cloudinary upload preset",
+      "info": "Create an unsigned upload preset in Cloudinary Settings → Upload"
     }
   ],
   "blocks": [
@@ -1809,6 +2181,41 @@
           "id": "price",
           "label": "Price (USD)",
           "default": 15
+        }
+      ]
+    },
+    {
+      "type": "donation",
+      "name": "Donation Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Section title",
+          "default": "Donate"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Spread the love"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "amounts",
+          "label": "Donation amounts",
+          "default": "10, 50, 100, 5",
+          "info": "Comma-separated whole numbers (e.g. 10, 50, 100)"
         }
       ]
     },

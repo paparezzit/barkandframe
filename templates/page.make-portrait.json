@@ -12,6 +12,48 @@
     "make-portrait-configurator": {
       "type": "make-portrait-configurator",
       "blocks": {
+        "addon_JAeLG7": {
+          "type": "addon",
+          "settings": {
+            "name": "Preview before print",
+            "description": "<p>Before we print your artwork, we’ll send you a preview for your approval.</p>",
+            "price": 30
+          }
+        },
+        "addon_QTcjeX": {
+          "type": "addon",
+          "settings": {
+            "name": "Send print file",
+            "description": "<p>We will send you the original print file. The file is yours to keep for personal use.</p>",
+            "price": 30
+          }
+        },
+        "addon_jUPjRt": {
+          "type": "addon",
+          "settings": {
+            "name": "Add prints",
+            "description": "<p>Want to share the artwork with others around you? Enter the number of additional copies you need.</p>",
+            "price": 30
+          }
+        },
+        "addon_BFcPdG": {
+          "type": "addon",
+          "settings": {
+            "name": "Skip the line",
+            "description": "<p>Skip the queue for your artwork and cut the waiting time in half.</p>",
+            "price": 30
+          }
+        },
+        "donation_enNYcj": {
+          "type": "donation",
+          "settings": {
+            "title": "Donate",
+            "image": "shopify://shop_images/28d40fd9b67164816fd95f9a47352f3792df7335.png",
+            "heading": "Spread the love",
+            "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
+            "amounts": "10, 50, 100, 5"
+          }
+        },
         "style_fWfEFh": {
           "type": "style",
           "settings": {
@@ -31,7 +73,7 @@
             "description": "<p>A clean and emotional portrait with soft tones and gentle brushwork. Contemporary and timeless.</p>",
             "artist": "anna-pospisilova",
             "tag": "limited",
-            "base_price": 74
+            "base_price": 77
           }
         },
         "style_EYWg6x": {
@@ -42,7 +84,7 @@
             "description": "",
             "artist": "petr-dokoupil",
             "tag": "new",
-            "base_price": 74
+            "base_price": 73
           }
         },
         "style_QqBaBD": {
@@ -53,7 +95,7 @@
             "description": "",
             "artist": "anna-pospisilova",
             "tag": "",
-            "base_price": 74
+            "base_price": 80
           }
         },
         "style_JFaB7b": {
@@ -97,6 +139,11 @@
         }
       },
       "block_order": [
+        "addon_JAeLG7",
+        "addon_QTcjeX",
+        "addon_jUPjRt",
+        "addon_BFcPdG",
+        "donation_enNYcj",
         "style_fWfEFh",
         "style_CBAeCJ",
         "style_EYWg6x",
@@ -108,7 +155,9 @@
         "tab-contact"
       ],
       "settings": {
-        "products_collection": "make-portrait"
+        "products_collection": "make-portrait",
+        "cloudinary_cloud_name": "dpkilh6fx",
+        "cloudinary_upload_preset": "Unsigned"
       }
     }
   },
