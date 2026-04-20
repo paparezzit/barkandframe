@@ -64,6 +64,8 @@
           alt=""
         >
 
+        <p class="make-portrait__preview-style-name" id="mp-preview-style-name"></p>
+
         {%- comment -%} Artist badge – visible on step 1 {%- endcomment -%}
         <div class="make-portrait_artist-badge" id="mp-artist-badge">
           <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
@@ -466,32 +468,35 @@
 
 .make-portrait__preview-wrap {
   position: relative;
-  aspect-ratio: 4/5;
-  border-radius: 20px;
+  aspect-ratio: 1/1;
+  border-radius: 80px;
   overflow: hidden;
-  background: #f4efe5;
+  background: var(--color-cream);
 }
 
 .make-portrait__preview-img {
-  width: 100%;
-  height: 100%;
+  height: 70%;
+  width: auto;
+  aspect-ratio: 4/5;
+  margin: 15% auto;
   object-fit: cover;
   object-position: center;
   transition: opacity 0.4s ease;
+  box-shadow: 0px 4px 27px 5px #00000026;
 }
 
 /* Artist badge */
 .make-portrait_artist-badge {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
+  bottom: 0;
+  left: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  background: rgba(244, 239, 229, 0.92);
-  backdrop-filter: blur(4px);
-  border-radius: 40px;
-  padding: 8px 14px 8px 10px;
+  gap: 12px;
+  background: var(--purple);
+  padding: 40px;
+  text-align: center;
   transition: opacity 0.3s;
 }
 
@@ -500,12 +505,12 @@
 }
 
 .artist-badge__photo {
-  width: 32px;
-  height: 32px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  background: rgba(90, 64, 53, 0.15);
+  background: rgba(222, 214, 211, 0.15);
 }
 
 .artist-badge__text {
@@ -516,15 +521,11 @@
 
 .artist-badge__label {
   font-size: 10px;
-  opacity: 0.6;
   line-height: 1.2;
 }
 
 .artist-badge__name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--brown, #5a4035);
-  line-height: 1.2;
+  font-size: 10px;
 }
 
 /* Product / size labels */
@@ -680,17 +681,16 @@
 
 /* ——— Style picker ——— */
 .style-picker {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 400px;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
 .style-picker__item {
   position: relative;
   background: none;
-  border: 2px solid transparent;
-  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   padding: 0;
@@ -698,25 +698,26 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  transition: border-color 0.2s;
   position: relative;
+  border: 0;
 }
 
 .style-picker__item img,
 .style-picker__placeholder {
-  width: 100%;
-  aspect-ratio: 3/4;
+  width: 64px;;
+  aspect-ratio: 1/1;
   object-fit: cover;
   display: block;
   border-radius: 10px;
-  background: #ede8df;
+  transition: border-color 0.2s;
+  border: 2px solid transparent;
 }
 
 .style-picker__name {
-  font-size: 11px;
-  color: var(--brown, #5a4035);
+  font-size: 10px;
+  color: var(--brown);
   padding: 4px 2px 0;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .style-picker__tag {
@@ -741,13 +742,9 @@
 .style--sold-out img,
 .style--sold-out .style-picker__placeholder { opacity: 0.45; }
 
-.style-picker__item.selected {
-  border-color: var(--brown, #5a4035);
-}
-
 .style-picker__item.selected img,
 .style-picker__item.selected .style-picker__placeholder {
-  border-radius: 8px;
+  border-color: var(--green);
 }
 
 /* Style info */
@@ -760,6 +757,16 @@
   font-weight: 700;
   color: var(--brown, #5a4035);
   margin: 0 0 6px;
+}
+
+.make-portrait__preview-style-name {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--brown);
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
 }
 
 .make-portrait__style-description {
@@ -822,7 +829,7 @@
 
 .product-picker__item.selected {
   border-color: var(--brown, #5a4035);
-  background: #f4efe5;
+  background: var(--color-cream);
 }
 
 /* ——— Options ——— */
@@ -849,7 +856,7 @@
 }
 
 .option-btn {
-  background: #f4efe5;
+  background: var(--color-cream);
   border: 1.5px solid rgba(90, 64, 53, 0.2);
   border-radius: 8px;
   padding: 7px 14px;
@@ -912,7 +919,7 @@
 .photo-upload__zone:hover,
 .photo-upload__zone.drag-over {
   border-color: var(--brown, #5a4035);
-  background: #f4efe5;
+  background: var(--color-cream);
 }
 
 .photo-upload__icon {
@@ -1049,12 +1056,12 @@
 
 .addon-item:hover {
   border-color: rgba(90, 64, 53, 0.35);
-  background: #f4efe5;
+  background: var(--color-cream);
 }
 
 .addon-item:has(.addon-item__check:checked) {
   border-color: var(--brown, #5a4035);
-  background: #f4efe5;
+  background: var(--color-cream);
 }
 
 .addon-item__check {
@@ -1457,6 +1464,9 @@
     // Style info
     var nameDisplay = $('mp-style-name-display');
     if (nameDisplay) nameDisplay.textContent = state.style.name || '';
+
+    var previewName = $('mp-preview-style-name');
+    if (previewName) previewName.textContent = state.style.name || '';
 
     var desc = $('mp-style-description');
     if (desc) desc.innerHTML = state.style.description || '';
