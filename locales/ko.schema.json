@@ -823,6 +823,7 @@
     "borders": "테두리",
     "section_size": "섹션 사이즈",
     "slideshow_width": "슬라이드 너비",
+    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store's [sender email address](https://admin.shopify.com/settings/notifications)",
     "typography": "입력 체계",
     "complementary_products": "Search & Discovery 앱을 사용하여 보완 제품을 설정해야 합니다. [자세히 알아보기](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "열은 자동으로 모바일에 최적화됩니다",

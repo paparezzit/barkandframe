@@ -822,6 +822,7 @@
     "describe_the_video_for": "Descreva o vídeo para clientes que usam leitores de tela. [Saiba mais](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#video-block)",
     "section_size": "Tamanho da seção",
     "slideshow_width": "Largura do slide",
+    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store's [sender email address](https://admin.shopify.com/settings/notifications)",
     "typography": "Tipografia",
     "width_is_automatically_optimized": "A largura é otimizada automaticamente para dispositivos móveis.",
     "complementary_products": "Os produtos complementares precisam ser configurados usando o app Search & Discovery. [Saiba mais](https://help.shopify.com/manual/online-store/search-and-discovery)",

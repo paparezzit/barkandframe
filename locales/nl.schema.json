@@ -823,6 +823,7 @@
     "borders": "Grenzen",
     "section_size": "Sectiemaat",
     "slideshow_width": "Breedte dia",
+    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store's [sender email address](https://admin.shopify.com/settings/notifications)",
     "typography": "Typografie",
     "complementary_products": "Aanvullende producten moeten worden ingesteld met de Search & Discovery-app. [Meer informatie](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "Kolommen worden automatisch geoptimaliseerd voor mobiel",

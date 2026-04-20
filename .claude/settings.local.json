@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(shopify version:*)",
-      "Bash(shopify theme:*)"
+      "Bash(shopify theme:*)",
+      "Bash(theme check *)",
+      "Bash(python3)"
     ]
   }
 }

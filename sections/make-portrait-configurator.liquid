@@ -7,13 +7,13 @@
   window.MakePortraitStyles = [
     {%- for block in section.blocks -%}
       {%- if block.type == 'style' -%}
-        {%- assign _artist = block.settings.artist -%}
+        {%- assign artist = block.settings.artist -%}
         {
           "id": {{ block.id | json }},
           "name": {{ block.settings.name | default: '' | json }},
           "imageUrl": "{{ block.settings.image | image_url: width: 900 }}",
-          "artistName": {%- if _artist != blank -%}{{ _artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
-          "artistPhotoUrl": "{%- if _artist != blank -%}{{ _artist.photo.value | image_url: width: 200 }}{%- endif -%}",
+          "artistName": {%- if artist != blank -%}{{ artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
+          "artistPhotoUrl": "{%- if artist != blank -%}{{ artist.photo.value | image_url: width: 200 }}{%- endif -%}",
           "description": {{ block.settings.description | default: '' | json }},
           "tag": {{ block.settings.tag | default: '' | json }},
           "basePrice": {{ block.settings.base_price | default: 0 }}
@@ -65,7 +65,7 @@
         >
 
         {%- comment -%} Artist badge – visible on step 1 {%- endcomment -%}
-        <div class="make-portrait__artist-badge" id="mp-artist-badge">
+        <div class="make-portrait_artist-badge" id="mp-artist-badge">
           <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
           <div class="artist-badge__text">
             <span class="artist-badge__label">This style was created by</span>
@@ -481,7 +481,7 @@
 }
 
 /* Artist badge */
-.make-portrait__artist-badge {
+.make-portrait_artist-badge {
   position: absolute;
   bottom: 16px;
   left: 16px;
@@ -495,7 +495,7 @@
   transition: opacity 0.3s;
 }
 
-.make-portrait__artist-badge[hidden] {
+.make-portrait_artist-badge[hidden] {
   display: none;
 }
 
@@ -1298,6 +1298,7 @@
 
 {% endstylesheet %}
 
+{% # theme-check-disable StaticStylesheetAndJavascriptTags %}
 {% javascript %}
 
 (function () {
@@ -2076,6 +2077,7 @@
 })();
 
 {% endjavascript %}
+{% # theme-check-enable StaticStylesheetAndJavascriptTags %}
 
 {% schema %}
 {

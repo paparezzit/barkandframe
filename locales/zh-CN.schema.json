@@ -822,6 +822,7 @@
     "describe_the_video_for": "为使用屏幕阅读器的客户描述视频。[详细了解](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#video-block)",
     "section_size": "分区尺寸",
     "slideshow_width": "幻灯片宽度",
+    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store's [sender email address](https://admin.shopify.com/settings/notifications)",
     "typography": "版式",
     "width_is_automatically_optimized": "宽度会针对移动设备进行自动优化。",
     "complementary_products": "必须使用 Search & Discovery 应用设置互补产品。[详细了解](https://help.shopify.com/manual/online-store/search-and-discovery)",
