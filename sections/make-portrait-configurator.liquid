@@ -23,9 +23,10 @@
   ].filter(s => s.name);
 
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
-  window.MakePortraitCloudinary = {
-    cloudName: {{ section.settings.cloudinary_cloud_name | default: '' | json }},
-    uploadPreset: {{ section.settings.cloudinary_upload_preset | default: '' | json }}
+  window.MakePortraitGCS = {
+    signingEndpoint: {{ section.settings.gcs_signing_endpoint | default: '' | json }},
+    bucketName: {{ section.settings.gcs_bucket_name | default: '' | json }},
+    folder: {{ section.settings.gcs_folder | default: 'uploads' | json }}
   };
 
   {%- assign _donation_block = section.blocks | where: "type", "donation" | first -%}
@@ -1752,9 +1753,9 @@
     }
   }
 
-  function uploadToCloudinary(file, previewEl) {
-    var cfg = window.MakePortraitCloudinary;
-    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
+  function uploadToGCS(file, previewEl) {
+    var cfg = window.MakePortraitGCS;
+    if (!cfg || !cfg.signingEndpoint || !cfg.bucketName) return;
 
     state.pendingUploads++;
     updateOrderButton();
@@ -1763,24 +1764,26 @@
     spinner.className = 'photo-preview__spinner';
     previewEl.appendChild(spinner);
 
-    var formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', cfg.uploadPreset);
+    var filename = cfg.folder + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
 
-    fetch('https://api.cloudinary.com/v1_1/' + cfg.cloudName + '/image/upload', {
+    fetch(cfg.signingEndpoint, {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: filename, contentType: file.type })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        if (data.secure_url) {
-          state.photoUrls.push(data.secure_url);
-          previewEl.dataset.photoUrl = data.secure_url;
-          spinner.remove();
-        } else {
-          spinner.classList.add('photo-preview__spinner--error');
-          spinner.title = 'Upload failed';
-        }
+        if (!data.signedUrl) throw new Error('No signed URL');
+        return fetch(data.signedUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type },
+          body: file
+        }).then(function () { return data.publicUrl; });
+      })
+      .then(function (publicUrl) {
+        state.photoUrls.push(publicUrl);
+        previewEl.dataset.photoUrl = publicUrl;
+        spinner.remove();
       })
       .catch(function () {
         spinner.classList.add('photo-preview__spinner--error');
@@ -1836,7 +1839,7 @@
           mainImg.src = e.target.result;
         }
 
-        uploadToCloudinary(file, preview);
+        uploadToGCS(file, preview);
       };
       reader.readAsDataURL(file);
     });
@@ -2114,19 +2117,26 @@
     },
     {
       "type": "header",
-      "content": "Photo upload (Cloudinary)"
+      "content": "Photo upload (Google Cloud Storage)"
     },
     {
       "type": "text",
-      "id": "cloudinary_cloud_name",
-      "label": "Cloudinary cloud name",
-      "info": "Found in your Cloudinary dashboard (e.g. my-store)"
+      "id": "gcs_signing_endpoint",
+      "label": "Signing endpoint URL",
+      "info": "URL of your Cloud Function that generates signed upload URLs"
     },
     {
       "type": "text",
-      "id": "cloudinary_upload_preset",
-      "label": "Cloudinary upload preset",
-      "info": "Create an unsigned upload preset in Cloudinary Settings → Upload"
+      "id": "gcs_bucket_name",
+      "label": "GCS bucket name",
+      "info": "Name of your Google Cloud Storage bucket (e.g. barkandframe-uploads)"
+    },
+    {
+      "type": "text",
+      "id": "gcs_folder",
+      "label": "Upload folder",
+      "default": "uploads",
+      "info": "Folder prefix inside the bucket (e.g. uploads or orders/photos)"
     }
   ],
   "blocks": [
