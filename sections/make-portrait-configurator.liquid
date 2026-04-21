@@ -174,29 +174,88 @@
 
         <div class="product-picker" id="mp-product-picker" role="listbox" aria-label="Product types">
           {%- if products_collection != blank -%}
+
+            {%- comment -%} === Prints on Canvas === {%- endcomment -%}
+            {%- assign _group_started = false -%}
             {%- for product in products_collection.products -%}
-              <button
-                class="product-picker__item"
-                data-product-handle="{{ product.handle }}"
-                data-product-id="{{ product.id }}"
-                role="option"
-                aria-selected="false"
-              >
-                {%- if product.featured_image -%}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 200 }}"
-                    width="200"
-                    height="200"
-                    alt="{{ product.title }}"
-                    loading="lazy"
-                  >
-                {%- else -%}
-                  <div class="product-picker__placeholder"></div>
-                {%- endif -%}
-                <span class="product-picker__name">{{ product.title }}</span>
-                <span class="product-picker__price">{{ product.price_min | money }}</span>
-              </button>
+              {%- assign _type = product.type | downcase -%}
+              {%- if _type contains 'canvas' -%}
+                {%- unless _group_started -%}
+                  <p class="product-picker__category-label">Prints on Canvas</p>
+                  {%- assign _group_started = true -%}
+                {%- endunless -%}
+                <button
+                  class="product-picker__item"
+                  data-product-handle="{{ product.handle }}"
+                  data-product-id="{{ product.id }}"
+                  role="option"
+                  aria-selected="false"
+                >
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ product.title }}" loading="lazy">
+                  {%- else -%}
+                    <div class="product-picker__placeholder"></div>
+                  {%- endif -%}
+                  <span class="product-picker__name">{{ product.title }}</span>
+                  <span class="product-picker__price">{{ product.price_min | money }}</span>
+                </button>
+              {%- endif -%}
             {%- endfor -%}
+
+            {%- comment -%} === Prints on Paper === {%- endcomment -%}
+            {%- assign _group_started = false -%}
+            {%- for product in products_collection.products -%}
+              {%- assign _type = product.type | downcase -%}
+              {%- if _type contains 'paper' -%}
+                {%- unless _group_started -%}
+                  <p class="product-picker__category-label">Prints on Paper</p>
+                  {%- assign _group_started = true -%}
+                {%- endunless -%}
+                <button
+                  class="product-picker__item"
+                  data-product-handle="{{ product.handle }}"
+                  data-product-id="{{ product.id }}"
+                  role="option"
+                  aria-selected="false"
+                >
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ product.title }}" loading="lazy">
+                  {%- else -%}
+                    <div class="product-picker__placeholder"></div>
+                  {%- endif -%}
+                  <span class="product-picker__name">{{ product.title }}</span>
+                  <span class="product-picker__price">{{ product.price_min | money }}</span>
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- comment -%} === Other items === {%- endcomment -%}
+            {%- assign _group_started = false -%}
+            {%- for product in products_collection.products -%}
+              {%- assign _type = product.type | downcase -%}
+              {%- unless _type contains 'canvas' or _type contains 'paper' -%}
+                {%- unless _group_started -%}
+                  <p class="product-picker__category-label">Other items</p>
+                  {%- assign _group_started = true -%}
+                {%- endunless -%}
+                <button
+                  class="product-picker__item"
+                  data-product-handle="{{ product.handle }}"
+                  data-product-id="{{ product.id }}"
+                  role="option"
+                  aria-selected="false"
+                >
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ product.title }}" loading="lazy">
+                  {%- else -%}
+                    <div class="product-picker__placeholder"></div>
+                  {%- endif -%}
+                  <span class="product-picker__name">{{ product.title }}</span>
+                  <span class="product-picker__price">{{ product.price_min | money }}</span>
+                </button>
+              {%- endunless -%}
+            {%- endfor -%}
+
           {%- else -%}
             <p class="make-portrait__empty-note">No products assigned. Set a collection in theme settings.</p>
           {%- endif -%}
@@ -447,22 +506,6 @@
   gap: 40px;
 }
 
-@media (min-width: 900px) {
-  .make-portrait__layout {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    grid-template-areas:
-      "left  right"
-      "tabs  right";
-    gap: 48px;
-    align-items: start;
-  }
-
-  .make-portrait__left  { grid-area: left; }
-  .make-portrait__right { grid-area: right; position: sticky; top: 20px; }
-  .make-portrait__tabs  { grid-area: tabs; }
-}
-
 /* ——— Left Panel ——— */
 .make-portrait__left {
   display: flex;
@@ -556,41 +599,31 @@
 
 /* ——— Tabs ——— */
 .make-portrait__tabs {
-  border-top: 1px solid var(--brown, #5a4035);
+  
 }
 
 .make-portrait__tab-nav {
   display: flex;
-  gap: 0;
-  border-bottom: 1px solid rgba(90, 64, 53, 0.15);
+  justify-content: space-between;
+  max-width: 360px;
+  margin: 0 auto 1em;
 }
 
 .tab-nav__btn {
   background: none;
   border: none;
   padding: 12px 0;
-  margin-right: 24px;
-  font-size: 13px;
-  color: rgba(90, 64, 53, 0.5);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brown);
   cursor: pointer;
   position: relative;
-  transition: color 0.2s;
-}
-
-.tab-nav__btn::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--brown, #5a4035);
-  transform: scaleX(0);
-  transition: transform 0.2s;
+  transition: opacity 0.2s;
+  opacity: .45;
 }
 
 .tab-nav__btn.active {
-  color: var(--brown, #5a4035);
+  opacity: 1;
 }
 
 .tab-nav__btn.active::after {
@@ -660,12 +693,7 @@
   }
 }
 
-.step-label--short { display: none; }
-
-@media (max-width: 600px) {
-  .step-label--long { display: none; }
-  .step-label--short { display: inline; }
-}
+.step-label--long { display: none; }
 
 /* ——— Step common ——— */
 .make-portrait__step-title {
@@ -780,8 +808,9 @@
   text-align: center;
   color: var(--brown);
   position: absolute;
-  bottom: 30px;
+  bottom: calc(7.5% - 10px);
   width: 100%;
+  margin: 0;
 }
 
 .make-portrait__style-description {
@@ -795,6 +824,20 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-bottom: 20px;
+}
+
+.product-picker__category-label {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(90, 64, 53, 0.55);
+  margin: 16px 0 4px;
+}
+
+.product-picker__category-label:first-child {
+  margin-top: 0;
 }
 
 .product-picker__item {
@@ -1317,6 +1360,47 @@
   padding: 16px 0;
 }
 
+@media (min-width: 800px) {
+  .make-portrait__layout {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-areas:
+      "left  right"
+      "tabs  right";
+    gap: 40px;
+    align-items: start;
+  }
+
+  .make-portrait__left  { grid-area: left; }
+  .make-portrait__right { grid-area: right; position: sticky; top: 20px; }
+  .make-portrait__tabs  { grid-area: tabs; }
+}
+
+@media (min-width: 1200px) {
+  .step-label--long { display: inline; }
+  .step-label--short { display: none; }
+
+  .make-portrait__layout{
+    gap: 100px;
+  }
+
+  .make-portrait_artist-badge{
+    padding: 40px;
+    gap: 20px;
+
+    .artist-badge__photo{
+      width: 60px;
+      height: 60px;
+    }
+
+    .artist-badge__text{
+      .artist-badge__label, .artist-badge__name{
+        font-size: 10px;
+      }
+    }
+  }
+}
+
 {% endstylesheet %}
 
 {% # theme-check-disable StaticStylesheetAndJavascriptTags %}
@@ -1434,8 +1518,14 @@
     var sizeLabel = $('mp-size-label');
 
     if (artistBadge) artistBadge.hidden = step !== 1;
-    if (productLabel) productLabel.hidden = step < 2;
+    if (productLabel) productLabel.hidden = true;
     if (sizeLabel) sizeLabel.hidden = step !== 3;
+
+    // Restore style name in preview when returning to step 1
+    var previewName = $('mp-preview-style-name');
+    if (previewName && step === 1 && state.style) {
+      previewName.textContent = state.style.name || '';
+    }
 
     // Scroll right panel to top on mobile
     var right = document.querySelector('.make-portrait__right');
@@ -1503,10 +1593,12 @@
       btn.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
 
-    // Update product label
+    // Update product label and preview name
     var productLabel = $('mp-product-label');
     var matchedProduct = PRODUCTS.filter(function (p) { return p.handle === handle; })[0];
     if (productLabel && matchedProduct) productLabel.textContent = matchedProduct.title;
+    var previewName = $('mp-preview-style-name');
+    if (previewName && matchedProduct) previewName.textContent = matchedProduct.title;
 
     // Update preview image
     if (matchedProduct && matchedProduct.featuredImage) {
