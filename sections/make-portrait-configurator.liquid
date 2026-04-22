@@ -45,6 +45,15 @@
       {%- endfor -%}
     {%- endif -%}
   ];
+
+  window.MakePortraitCanvasHandles = {
+    unframed: {{ section.settings.canvas_unframed_handle | default: '' | json }},
+    framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
+  };
+  window.MakePortraitPaperHandles = {
+    unframed: {{ section.settings.paper_unframed_handle | default: '' | json }},
+    framed:   {{ section.settings.paper_framed_handle   | default: '' | json }}
+  };
 </script>
 
 <div class="make-portrait section section--page-width" id="make-portrait-section">
@@ -148,19 +157,14 @@
           <div class="make-portrait__style-description" id="mp-style-description"></div>
         </div>
 
-        <div class="make-portrait__subtotal">
-          <div class="subtotal__row">
-            <span class="subtotal__label">
-              <span class="subtotal__label__title">
-                Subtotal
-              </span>
-              <span class="subtotal__label__note">
-                Free shipping over $100
-              </span>
-            </span>
+        {%- comment -%} Shared subtotal panel – moved before active CTA by JS {%- endcomment -%}
+        <div class="make-portrait__subtotal" id="mp-subtotal-panel">
+          <p class="subtotal__label__title">Subtotal</p>
+          <div id="mp-order-summary" class="order-summary"></div>
+          <div class="subtotal__row subtotal__row--total">
+            <span class="subtotal__label__note">Free shipping over $100</span>
             <span class="subtotal__price">
-              from
-              <span class="subtotal__price__amount" id="mp-subtotal-1">—</span>
+              <span id="mp-subtotal-prefix">from </span><span class="subtotal__price__amount" id="mp-subtotal-price">—</span>
             </span>
           </div>
         </div>
@@ -175,67 +179,85 @@
         <div class="product-picker" id="mp-product-picker" role="listbox" aria-label="Product types">
           {%- if products_collection != blank -%}
 
-            {%- comment -%} === Prints on Canvas === {%- endcomment -%}
-            {%- assign _group_started = false -%}
-            {%- for product in products_collection.products -%}
-              {%- assign _type = product.type | downcase -%}
-              {%- if _type contains 'canvas' -%}
-                {%- unless _group_started -%}
-                  <p class="product-picker__category-label">Prints on Canvas</p>
-                  {%- assign _group_started = true -%}
-                {%- endunless -%}
-                <button
-                  class="product-picker__item"
-                  data-product-handle="{{ product.handle }}"
-                  data-product-id="{{ product.id }}"
-                  role="option"
-                  aria-selected="false"
-                >
-                  {%- if product.featured_image -%}
-                    <img src="{{ product.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ product.title }}" loading="lazy">
-                  {%- else -%}
-                    <div class="product-picker__placeholder"></div>
+            {%- comment -%} === Prints on Canvas + Paper (side by side, each with own label) === {%- endcomment -%}
+            <div class="product-picker__print-group">
+              <p class="product-picker__category-label">Print on canvas</p>
+              <button
+                class="product-picker__item product-picker__item--category"
+                data-category="canvas"
+                role="option"
+                aria-selected="false"
+              >
+                {%- assign _canvas_img = nil -%}
+                {%- assign _canvas_min_price = nil -%}
+                {%- for product in products_collection.products -%}
+                  {%- assign _ptype = product.type | downcase -%}
+                  {%- assign _is_cv = false -%}
+                  {%- if _ptype contains 'canvas' or product.handle == section.settings.canvas_unframed_handle or product.handle == section.settings.canvas_framed_handle -%}
+                    {%- assign _is_cv = true -%}
                   {%- endif -%}
-                  <span class="product-picker__name">{{ product.title }}</span>
-                  <span class="product-picker__price">{{ product.price_min | money }}</span>
-                </button>
-              {%- endif -%}
-            {%- endfor -%}
+                  {%- if _is_cv -%}
+                    {%- if _canvas_img == nil -%}{%- assign _canvas_img = product.featured_image -%}{%- endif -%}
+                    {%- if _canvas_min_price == nil or product.price_min < _canvas_min_price -%}
+                      {%- assign _canvas_min_price = product.price_min -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if _canvas_img -%}
+                  <img src="{{ _canvas_img | image_url: width: 200 }}" width="200" height="200" alt="Print on Canvas" loading="lazy">
+                {%- else -%}
+                  <div class="product-picker__placeholder"></div>
+                {%- endif -%}
+                <span class="product-picker__name">Canvas</span>
+                <span class="product-picker__sub">from {{ _canvas_min_price | money }}</span>
+              </button>
+            </div>
 
-            {%- comment -%} === Prints on Paper === {%- endcomment -%}
-            {%- assign _group_started = false -%}
-            {%- for product in products_collection.products -%}
-              {%- assign _type = product.type | downcase -%}
-              {%- if _type contains 'paper' -%}
-                {%- unless _group_started -%}
-                  <p class="product-picker__category-label">Prints on Paper</p>
-                  {%- assign _group_started = true -%}
-                {%- endunless -%}
-                <button
-                  class="product-picker__item"
-                  data-product-handle="{{ product.handle }}"
-                  data-product-id="{{ product.id }}"
-                  role="option"
-                  aria-selected="false"
-                >
-                  {%- if product.featured_image -%}
-                    <img src="{{ product.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ product.title }}" loading="lazy">
-                  {%- else -%}
-                    <div class="product-picker__placeholder"></div>
+            {%- comment -%} === Prints on Paper (category – product loaded in step 3) === {%- endcomment -%}
+            <div class="product-picker__print-group">
+              <p class="product-picker__category-label">Print on paper</p>
+              <button
+                class="product-picker__item product-picker__item--category"
+                data-category="paper"
+                role="option"
+                aria-selected="false"
+              >
+                {%- assign _paper_img = nil -%}
+                {%- assign _paper_min_price = nil -%}
+                {%- for product in products_collection.products -%}
+                  {%- assign _ptype = product.type | downcase -%}
+                  {%- assign _is_paper = false -%}
+                  {%- if _ptype contains 'paper' or product.handle == section.settings.paper_unframed_handle or product.handle == section.settings.paper_framed_handle -%}
+                    {%- assign _is_paper = true -%}
                   {%- endif -%}
-                  <span class="product-picker__name">{{ product.title }}</span>
-                  <span class="product-picker__price">{{ product.price_min | money }}</span>
-                </button>
-              {%- endif -%}
-            {%- endfor -%}
+                  {%- if _is_paper -%}
+                    {%- if _paper_img == nil -%}{%- assign _paper_img = product.featured_image -%}{%- endif -%}
+                    {%- if _paper_min_price == nil or product.price_min < _paper_min_price -%}
+                      {%- assign _paper_min_price = product.price_min -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if _paper_img -%}
+                  <img src="{{ _paper_img | image_url: width: 200 }}" width="200" height="200" alt="Print on paper" loading="lazy">
+                {%- else -%}
+                  <div class="product-picker__placeholder"></div>
+                {%- endif -%}
+                <span class="product-picker__name">Paper</span>
+                <span class="product-picker__sub">from {{ _paper_min_price | money }}</span>
+              </button>
+            </div>
 
             {%- comment -%} === Other items === {%- endcomment -%}
             {%- assign _group_started = false -%}
             {%- for product in products_collection.products -%}
               {%- assign _type = product.type | downcase -%}
-              {%- unless _type contains 'canvas' or _type contains 'paper' -%}
+              {%- assign _is_reserved_handle = false -%}
+              {%- if product.handle == section.settings.canvas_unframed_handle or product.handle == section.settings.canvas_framed_handle or product.handle == section.settings.paper_unframed_handle or product.handle == section.settings.paper_framed_handle -%}
+                {%- assign _is_reserved_handle = true -%}
+              {%- endif -%}
+              {%- unless _type contains 'canvas' or _type contains 'paper' or _is_reserved_handle -%}
                 {%- unless _group_started -%}
-                  <p class="product-picker__category-label">Other items</p>
+                  <p class="product-picker__category-label">Other products</p>
                   {%- assign _group_started = true -%}
                 {%- endunless -%}
                 <button
@@ -261,14 +283,8 @@
           {%- endif -%}
         </div>
 
-        <div class="make-portrait__subtotal">
-          <div class="subtotal__row">
-            <span class="subtotal__label">Subtotal</span>
-            <span class="subtotal__price" id="mp-subtotal-2">—</span>
-          </div>
-        </div>
-
         <button class="button make-portrait__cta" id="mp-cta-step2" disabled>Choose options</button>
+        <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1">Change a style</button>
       </div>
 
       {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
@@ -317,13 +333,6 @@
             placeholder="e.g. Milo"
             maxlength="60"
           >
-        </div>
-
-        <div class="make-portrait__subtotal">
-          <div class="subtotal__row">
-            <span class="subtotal__label">Subtotal</span>
-            <span class="subtotal__price" id="mp-subtotal-3">—</span>
-          </div>
         </div>
 
         <button class="button make-portrait__cta" id="mp-cta-step3">Upload photo</button>
@@ -434,15 +443,6 @@
             {%- endif -%}
           {%- endfor -%}
         {%- endif -%}
-
-        <div class="make-portrait__subtotal make-portrait__subtotal--summary">
-          <p class="subtotal__label__title">Subtotal</p>
-          <div id="mp-order-summary" class="order-summary"></div>
-          <div class="subtotal__row subtotal__row--total">
-            <span class="subtotal__label__note">Free shipping over $100</span>
-            <span class="subtotal__price__amount" id="mp-subtotal-4">—</span>
-          </div>
-        </div>
 
         <button class="button make-portrait__cta" id="mp-cta-order">Order portrait</button>
 
@@ -599,7 +599,6 @@
 
 /* ——— Tabs ——— */
 .make-portrait__tabs {
-  
 }
 
 .make-portrait__tab-nav {
@@ -826,67 +825,88 @@
   margin-bottom: 20px;
 }
 
-.product-picker__category-label {
-  grid-column: 1 / -1;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: rgba(90, 64, 53, 0.55);
-  margin: 16px 0 4px;
+.product-picker__print-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.product-picker__category-label:first-child {
+.product-picker__print-group .product-picker__item {
+  width: 100%;
+}
+
+.product-picker__print-group .product-picker__category-label {
   margin-top: 0;
 }
 
+.product-picker__category-label {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  color: var(--brown);
+  margin: 6em 0 0.5em;
+}
+
 .product-picker__item {
-  background: #f9f6f1;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 12px;
+  background: transparent;
+  border: 2px solid var(--cream);
+  border-radius: 20px;
+  padding: 15px 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
+  align-items: start;
+  gap: 4px;
+  text-align: left;
   transition: border-color 0.2s, background 0.2s;
+
+  &.product-picker__item--category{
+    border-color: transparent;
+    background-color: var(--cream);
+  }
 }
 
 .product-picker__item img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: contain;
-  border-radius: 8px;
 }
 
 .product-picker__placeholder {
   width: 100%;
   aspect-ratio: 1;
-  background: #ede8df;
+  background: var(--beige);
   border-radius: 8px;
 }
 
+.make-portrait__cta--secondary {
+  background: var(--purple);
+  color: var(--brown);
+  margin-top: 8px;
+}
+
+.make-portrait__error-note {
+  font-size: 13px;
+  color: #c0392b;
+  padding: 8px 0;
+}
+
 .product-picker__name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--brown, #5a4035);
-  line-height: 1.2;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--brown);
+  line-height: 1;
+  margin-top: 10px;
 }
 
-.product-picker__price {
-  font-size: 12px;
-  color: rgba(90, 64, 53, 0.6);
+.product-picker__sub, .product-picker__price{
+  font-size: 10px;
+  color: var(--brown);
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.product-picker__item:hover {
-  background: #f0ebe1;
-}
-
-.product-picker__item.selected {
-  border-color: var(--brown, #5a4035);
-  background: var(--cream);
+.product-picker__item:hover, .product-picker__item.selected {
+  border-color: var(--green);
 }
 
 /* ——— Options ——— */
@@ -1230,10 +1250,11 @@
 
 /* ——— Subtotal ——— */
 .make-portrait__subtotal {
-  margin: 20px 0 16px;
-  background-color: #F4EFE5;
+  margin: 80px 0 20px;
+  background-color: var(--cream);
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 15px 20px;
+  color: var(--brown);
 }
 
 .subtotal__row {
@@ -1241,8 +1262,6 @@
   justify-content: space-between;
   align-items: center;
   font-size: 10px;
-  color: var(--brown, #5a4035);
-  margin-bottom: 6px;
 }
 
 .subtotal__label{
@@ -1254,11 +1273,18 @@
   font-size: 14px;
 }
 
+.subtotal__label__note{
+  margin: auto 0 5px;
+}
+
+#mp-subtotal-prefix {
+  vertical-align: middle;
+}
+
 .subtotal__price__amount{
   font-family: "display", "Times New Roman", serif !important;
   font-size: 36px;
   line-height: 1em;
-  margin-top: 5px;
   display: inline-block;
 }
 
@@ -1294,31 +1320,20 @@
   font-weight: 700;
 }
 
-/* ——— Order summary (step 4 subtotal) ——— */
 .make-portrait__subtotal--summary {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.order-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(90, 64, 53, 0.15);
-}
-
 .order-summary__line {
-  font-size: 12px;
-  color: rgba(90, 64, 53, 0.65);
+  font-size: 10px;
   margin: 0;
   line-height: 1.5;
 }
 
 .order-summary__line strong {
-  color: var(--brown, #5a4035);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .order-summary__section {
@@ -1373,7 +1388,7 @@
 
   .make-portrait__left  { grid-area: left; }
   .make-portrait__right { grid-area: right; position: sticky; top: 20px; }
-  .make-portrait__tabs  { grid-area: tabs; }
+  .make-portrait__tabs  { grid-area: tabs; align-self: start; }
 }
 
 @media (min-width: 1200px) {
@@ -1415,6 +1430,8 @@
     step: 1,
     styleId: null,
     style: null,
+    productCategory: null,   // 'canvas' | null
+    canvasFrameChoice: null, // 'unframed' | 'framed'
     productHandle: null,
     product: null,
     variantId: null,
@@ -1433,6 +1450,8 @@
 
   var STYLES = window.MakePortraitStyles || [];
   var PRODUCTS = window.MakePortraitProducts || [];
+  var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
+  var PAPER_HANDLES  = window.MakePortraitPaperHandles  || {};
 
   /* ————————————————————————————————————————
      Utilities
@@ -1488,10 +1507,11 @@
   function updateSubtotals() {
     var total = getBasePrice() + state.addonTotal + state.donation;
     var formatted = total > 0 ? formatMoney(total) : '—';
-    ['mp-subtotal-1', 'mp-subtotal-2', 'mp-subtotal-3', 'mp-subtotal-4'].forEach(function (id) {
-      var el = $(id);
-      if (el) el.textContent = formatted;
-    });
+    var priceEl = $('mp-subtotal-price');
+    if (priceEl) priceEl.textContent = formatted;
+    var prefix = $('mp-subtotal-prefix');
+    if (prefix) prefix.hidden = !!state.variant;
+    buildSummary();
   }
 
   /* ————————————————————————————————————————
@@ -1510,7 +1530,6 @@
 
     state.step = step;
     updateSubtotals();
-    if (step === 4) buildSummary();
 
     // Show/hide artist badge and product label
     var artistBadge = $('mp-artist-badge');
@@ -1526,6 +1545,12 @@
     if (previewName && step === 1 && state.style) {
       previewName.textContent = state.style.name || '';
     }
+
+    // Move shared subtotal panel before the active step's CTA button
+    var ctaMap = { 1: 'mp-cta-step1', 2: 'mp-cta-step2', 3: 'mp-cta-step3', 4: 'mp-cta-order' };
+    var panel = $('mp-subtotal-panel');
+    var cta = $(ctaMap[step]);
+    if (panel && cta && cta.parentNode) cta.parentNode.insertBefore(panel, cta);
 
     // Scroll right panel to top on mobile
     var right = document.querySelector('.make-portrait__right');
@@ -1582,6 +1607,8 @@
      Step 2 – Product
   ———————————————————————————————————————— */
   function selectProduct(handle) {
+    state.productCategory = null;
+    state.canvasFrameChoice = null;
     state.productHandle = handle;
     state.product = null;
     state.variantId = null;
@@ -1631,6 +1658,215 @@
   }
 
   /* ————————————————————————————————————————
+     Step 2 – Canvas category selection
+  ———————————————————————————————————————— */
+  function selectCategory(category) {
+    state.productCategory = category;
+    state.canvasFrameChoice = null;
+    state.productHandle = null;
+    state.product = null;
+    state.variantId = null;
+    state.variant = null;
+
+    document.querySelectorAll('.product-picker__item, .product-picker__item--category').forEach(function (btn) {
+      var selected = btn.dataset.category === category;
+      btn.classList.toggle('selected', selected);
+      btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+
+    var categoryNames = { canvas: 'Canvas', paper: 'Paper' };
+    var previewName = $('mp-preview-style-name');
+    if (previewName) previewName.textContent = categoryNames[category] || '';
+
+    var ctaStep2 = $('mp-cta-step2');
+    if (ctaStep2) ctaStep2.disabled = false;
+
+    updateSubtotals();
+  }
+
+  /* ————————————————————————————————————————
+     Step 3 – Canvas frame toggle
+  ———————————————————————————————————————— */
+  function buildCanvasFrameUI() {
+    var container = $('mp-options-container');
+    var loading = $('mp-options-loading');
+    if (!container) return;
+
+    container.innerHTML = '';
+    if (loading) loading.remove();
+
+    state.canvasFrameChoice = null;
+    state.product = null;
+    state.variantId = null;
+    state.variant = null;
+
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) ctaStep3.disabled = true;
+
+    var group = document.createElement('div');
+    group.className = 'make-portrait__option-group';
+
+    var lbl = document.createElement('p');
+    lbl.className = 'make-portrait__option-label';
+    lbl.textContent = 'Frame';
+    group.appendChild(lbl);
+
+    var grid = document.createElement('div');
+    grid.className = 'option-btn-grid';
+    grid.id = 'mp-canvas-frame-grid';
+
+    ['unframed', 'framed'].forEach(function (choice) {
+      var btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = choice === 'unframed' ? 'Unframed' : 'Framed';
+      btn.type = 'button';
+      btn.dataset.canvasChoice = choice;
+      btn.addEventListener('click', function () {
+        grid.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        selectCanvasProduct(choice);
+      });
+      grid.appendChild(btn);
+    });
+
+    group.appendChild(grid);
+    container.appendChild(group);
+
+    var variantsSlot = document.createElement('div');
+    variantsSlot.id = 'mp-canvas-variants';
+    container.appendChild(variantsSlot);
+  }
+
+  function selectCanvasProduct(choice) {
+    state.canvasFrameChoice = choice;
+    var handle = choice === 'framed' ? CANVAS_HANDLES.framed : CANVAS_HANDLES.unframed;
+
+    var variantsSlot = $('mp-canvas-variants');
+    if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__loading">Loading…</p>';
+
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) ctaStep3.disabled = true;
+
+    if (!handle) {
+      if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__error-note">Canvas product handle not configured.</p>';
+      return;
+    }
+
+    fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (product) {
+        state.productHandle = handle;
+        state.product = product;
+        state.variantId = null;
+        state.variant = null;
+        state.selectedOptions = {};
+
+        if (variantsSlot) {
+          variantsSlot.innerHTML = '';
+          buildVariantOptions(product, variantsSlot);
+        }
+
+        if (ctaStep3) ctaStep3.disabled = false;
+        updateSubtotals();
+      })
+      .catch(function (err) {
+        console.error('Failed to fetch canvas product:', err);
+        if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__error-note">Failed to load product.</p>';
+      });
+  }
+
+  /* ————————————————————————————————————————
+     Step 3 – Paper frame toggle
+  ———————————————————————————————————————— */
+  function buildPaperFrameUI() {
+    var container = $('mp-options-container');
+    var loading = $('mp-options-loading');
+    if (!container) return;
+
+    container.innerHTML = '';
+    if (loading) loading.remove();
+
+    state.canvasFrameChoice = null;
+    state.product = null;
+    state.variantId = null;
+    state.variant = null;
+
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) ctaStep3.disabled = true;
+
+    var group = document.createElement('div');
+    group.className = 'make-portrait__option-group';
+
+    var lbl = document.createElement('p');
+    lbl.className = 'make-portrait__option-label';
+    lbl.textContent = 'Frame';
+    group.appendChild(lbl);
+
+    var grid = document.createElement('div');
+    grid.className = 'option-btn-grid';
+    grid.id = 'mp-paper-frame-grid';
+
+    ['unframed', 'framed'].forEach(function (choice) {
+      var btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = choice === 'unframed' ? 'Unframed' : 'Framed';
+      btn.type = 'button';
+      btn.dataset.canvasChoice = choice;
+      btn.addEventListener('click', function () {
+        grid.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        selectPaperProduct(choice);
+      });
+      grid.appendChild(btn);
+    });
+
+    group.appendChild(grid);
+    container.appendChild(group);
+
+    var variantsSlot = document.createElement('div');
+    variantsSlot.id = 'mp-paper-variants';
+    container.appendChild(variantsSlot);
+  }
+
+  function selectPaperProduct(choice) {
+    state.canvasFrameChoice = choice;
+    var handle = choice === 'framed' ? PAPER_HANDLES.framed : PAPER_HANDLES.unframed;
+
+    var variantsSlot = $('mp-paper-variants');
+    if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__loading">Loading…</p>';
+
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) ctaStep3.disabled = true;
+
+    if (!handle) {
+      if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__error-note">Paper product handle not configured.</p>';
+      return;
+    }
+
+    fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (product) {
+        state.productHandle = handle;
+        state.product = product;
+        state.variantId = null;
+        state.variant = null;
+        state.selectedOptions = {};
+
+        if (variantsSlot) {
+          variantsSlot.innerHTML = '';
+          buildVariantOptions(product, variantsSlot);
+        }
+
+        if (ctaStep3) ctaStep3.disabled = false;
+        updateSubtotals();
+      })
+      .catch(function (err) {
+        console.error('Failed to fetch paper product:', err);
+        if (variantsSlot) variantsSlot.innerHTML = '<p class="make-portrait__error-note">Failed to load product.</p>';
+      });
+  }
+
+  /* ————————————————————————————————————————
      Step 3 – Options
   ———————————————————————————————————————— */
   function buildOptionsUI(product) {
@@ -1638,14 +1874,15 @@
     var loading = $('mp-options-loading');
     if (!container || !product) return;
 
-    // Clear previous
     container.innerHTML = '';
     if (loading) loading.remove();
 
     state.selectedOptions = {};
+    buildVariantOptions(product, container);
+  }
 
+  function buildVariantOptions(product, container) {
     if (!product.options || product.options.length === 0) {
-      // No options – just use first variant
       if (product.variants && product.variants.length) {
         state.variantId = product.variants[0].id;
         state.variant = product.variants[0];
@@ -1665,15 +1902,11 @@
       var grid = document.createElement('div');
       grid.className = 'option-btn-grid';
 
-      // Collect unique values for this option position
       var seen = {};
       var values = [];
       product.variants.forEach(function (v) {
         var val = v.options[optIdx];
-        if (!seen[val]) {
-          seen[val] = true;
-          values.push(val);
-        }
+        if (!seen[val]) { seen[val] = true; values.push(val); }
       });
 
       values.forEach(function (value, vIdx) {
@@ -1684,14 +1917,10 @@
         btn.dataset.optionIndex = optIdx;
         btn.dataset.value = value;
 
-        if (vIdx === 0) {
-          state.selectedOptions[optIdx] = value;
-        }
+        if (vIdx === 0) state.selectedOptions[optIdx] = value;
 
         btn.addEventListener('click', function () {
-          grid.querySelectorAll('.option-btn').forEach(function (b) {
-            b.classList.remove('selected');
-          });
+          grid.querySelectorAll('.option-btn').forEach(function (b) { b.classList.remove('selected'); });
           btn.classList.add('selected');
           state.selectedOptions[optIdx] = value;
           matchVariant(product);
@@ -1704,7 +1933,6 @@
       container.appendChild(group);
     });
 
-    // Set initial defaults
     product.options.forEach(function (_, idx) {
       if (!state.selectedOptions.hasOwnProperty(idx)) {
         var firstBtn = container.querySelector('[data-option-index="' + idx + '"]');
@@ -1773,19 +2001,28 @@
     }
 
     if (state.style) addLine('Style', state.style.name);
-    if (state.product) addLine('Product', state.product.title);
 
-    var details = [];
-    if (state.variant && state.variant.options) {
-      state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') details.push(o); });
+    var categoryNames = { canvas: 'Print on Canvas', paper: 'Print on Paper' };
+    if (state.product) {
+      addLine('Product', state.product.title);
+    } else if (state.productCategory) {
+      addLine('Product', categoryNames[state.productCategory] || state.productCategory);
     }
-    var border = getSelectedLabel('mp-border-grid');
-    var bg = getSelectedLabel('mp-background-grid');
-    if (border) details.push(border);
-    if (bg) details.push(bg + ' Background');
-    details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
-    if (state.petName) details.push(state.petName);
-    if (details.length) addLine('Details', details.join(' | '));
+
+    if (state.step >= 3) {
+      var details = [];
+      if (state.canvasFrameChoice) details.push(state.canvasFrameChoice === 'framed' ? 'Framed' : 'Unframed');
+      if (state.variant && state.variant.options) {
+        state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') details.push(o); });
+      }
+      var border = getSelectedLabel('mp-border-grid');
+      var bg = getSelectedLabel('mp-background-grid');
+      if (border) details.push(border);
+      if (bg) details.push(bg + ' Background');
+      if (state.step >= 4) details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
+      if (state.petName) details.push(state.petName);
+      if (details.length) addLine('Details', details.join(' | '));
+    }
 
     var addonNames = [];
     document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
@@ -2078,7 +2315,11 @@
 
     // Product picker
     document.querySelectorAll('.product-picker__item').forEach(function (btn) {
-      btn.addEventListener('click', function () { selectProduct(btn.dataset.productHandle); });
+      if (btn.dataset.category) {
+        btn.addEventListener('click', function () { selectCategory(btn.dataset.category); });
+      } else {
+        btn.addEventListener('click', function () { selectProduct(btn.dataset.productHandle); });
+      }
     });
 
     // CTA step 1
@@ -2090,12 +2331,22 @@
       });
     }
 
+    // Back to step 1
+    var backStep1 = $('mp-back-step1');
+    if (backStep1) backStep1.addEventListener('click', function () { goToStep(1); });
+
     // CTA step 2
     var ctaStep2 = $('mp-cta-step2');
     if (ctaStep2) {
       ctaStep2.addEventListener('click', function () {
-        if (!state.productHandle) return;
-        buildOptionsUI(state.product);
+        if (!state.productHandle && !state.productCategory) return;
+        if (state.productCategory === 'canvas') {
+          buildCanvasFrameUI();
+        } else if (state.productCategory === 'paper') {
+          buildPaperFrameUI();
+        } else {
+          buildOptionsUI(state.product);
+        }
         goToStep(3);
       });
     }
@@ -2206,6 +2457,34 @@
       "id": "products_collection",
       "label": "Products collection",
       "info": "Select the collection that contains your portrait product formats (Poster, Canvas, etc.)"
+    },
+    {
+      "type": "header",
+      "content": "Paper products"
+    },
+    {
+      "type": "product",
+      "id": "paper_unframed_handle",
+      "label": "Unframed Paper"
+    },
+    {
+      "type": "product",
+      "id": "paper_framed_handle",
+      "label": "Framed Paper"
+    },
+    {
+      "type": "header",
+      "content": "Canvas products"
+    },
+    {
+      "type": "product",
+      "id": "canvas_unframed_handle",
+      "label": "Unframed Canvas"
+    },
+    {
+      "type": "product",
+      "id": "canvas_framed_handle",
+      "label": "Framed Canvas"
     },
     {
       "type": "header",

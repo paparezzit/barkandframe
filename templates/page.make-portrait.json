@@ -156,8 +156,13 @@
       ],
       "settings": {
         "products_collection": "make-portrait",
-        "cloudinary_cloud_name": "dpkilh6fx",
-        "cloudinary_upload_preset": "Unsigned"
+        "paper_unframed_handle": "poster",
+        "paper_framed_handle": "framed-matte-paper-poster",
+        "canvas_unframed_handle": "unframed-canvas",
+        "canvas_framed_handle": "framed-canvas",
+        "gcs_signing_endpoint": "",
+        "gcs_bucket_name": "",
+        "gcs_folder": "uploads"
       }
     }
   },
