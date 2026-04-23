@@ -156,8 +156,8 @@
       ],
       "settings": {
         "products_collection": "make-portrait",
-        "paper_unframed_handle": "poster",
-        "paper_framed_handle": "framed-matte-paper-poster",
+        "paper_unframed_handle": "unframed-poster",
+        "paper_framed_handle": "framed-poster",
         "canvas_unframed_handle": "unframed-canvas",
         "canvas_framed_handle": "framed-canvas",
         "gcs_signing_endpoint": "",

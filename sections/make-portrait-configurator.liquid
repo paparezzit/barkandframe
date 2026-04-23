@@ -54,6 +54,9 @@
     unframed: {{ section.settings.paper_unframed_handle | default: '' | json }},
     framed:   {{ section.settings.paper_framed_handle   | default: '' | json }}
   };
+  window.MakePortraitExtraPetUSD = {{ section.settings.extra_pet_price | default: 9 }};
+  window.MakePortraitPetNameUSD  = {{ section.settings.pet_name_price  | default: 5 }};
+  window.MakePortraitShopCurrency = {{ shop.currency | json }};
 
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
@@ -123,8 +126,7 @@
         {%- comment -%} Product label – visible on step 2+ {%- endcomment -%}
         <div class="make-portrait__product-label" id="mp-product-label" hidden></div>
 
-        {%- comment -%} Size label – visible on step 3 {%- endcomment -%}
-        <div class="make-portrait__size-label" id="mp-size-label" hidden></div>
+
       </div>
 
     </div>
@@ -223,21 +225,13 @@
                 role="option"
                 aria-selected="false"
               >
-                {%- assign _canvas_img = nil -%}
-                {%- assign _canvas_min_price = nil -%}
-                {%- for product in products_collection.products -%}
-                  {%- assign _ptype = product.type | downcase -%}
-                  {%- assign _is_cv = false -%}
-                  {%- if _ptype contains 'canvas' or product.handle == section.settings.canvas_unframed_handle or product.handle == section.settings.canvas_framed_handle -%}
-                    {%- assign _is_cv = true -%}
-                  {%- endif -%}
-                  {%- if _is_cv -%}
-                    {%- if _canvas_img == nil -%}{%- assign _canvas_img = product.featured_image -%}{%- endif -%}
-                    {%- if _canvas_min_price == nil or product.price_min < _canvas_min_price -%}
-                      {%- assign _canvas_min_price = product.price_min -%}
-                    {%- endif -%}
-                  {%- endif -%}
-                {%- endfor -%}
+                {%- assign _cu = all_products[section.settings.canvas_unframed_handle] -%}
+                {%- assign _cf = all_products[section.settings.canvas_framed_handle] -%}
+                {%- assign _canvas_img = _cu.featured_image | default: _cf.featured_image -%}
+                {%- assign _canvas_min_price = _cu.price_min -%}
+                {%- if _cf != blank and _cf.price_min < _canvas_min_price -%}
+                  {%- assign _canvas_min_price = _cf.price_min -%}
+                {%- endif -%}
                 {%- if _canvas_img -%}
                   <img src="{{ _canvas_img | image_url: width: 200 }}" width="200" height="200" alt="Print on Canvas" loading="lazy">
                 {%- else -%}
@@ -257,21 +251,13 @@
                 role="option"
                 aria-selected="false"
               >
-                {%- assign _paper_img = nil -%}
-                {%- assign _paper_min_price = nil -%}
-                {%- for product in products_collection.products -%}
-                  {%- assign _ptype = product.type | downcase -%}
-                  {%- assign _is_paper = false -%}
-                  {%- if _ptype contains 'paper' or product.handle == section.settings.paper_unframed_handle or product.handle == section.settings.paper_framed_handle -%}
-                    {%- assign _is_paper = true -%}
-                  {%- endif -%}
-                  {%- if _is_paper -%}
-                    {%- if _paper_img == nil -%}{%- assign _paper_img = product.featured_image -%}{%- endif -%}
-                    {%- if _paper_min_price == nil or product.price_min < _paper_min_price -%}
-                      {%- assign _paper_min_price = product.price_min -%}
-                    {%- endif -%}
-                  {%- endif -%}
-                {%- endfor -%}
+                {%- assign _pu = all_products[section.settings.paper_unframed_handle] -%}
+                {%- assign _pf = all_products[section.settings.paper_framed_handle] -%}
+                {%- assign _paper_img = _pu.featured_image | default: _pf.featured_image -%}
+                {%- assign _paper_min_price = _pu.price_min -%}
+                {%- if _pf != blank and _pf.price_min < _paper_min_price -%}
+                  {%- assign _paper_min_price = _pf.price_min -%}
+                {%- endif -%}
                 {%- if _paper_img -%}
                   <img src="{{ _paper_img | image_url: width: 200 }}" width="200" height="200" alt="Print on paper" loading="lazy">
                 {%- else -%}
@@ -342,20 +328,20 @@
         <div class="make-portrait__option-group">
           <p class="make-portrait__option-label">Background</p>
           <div class="option-btn-grid" id="mp-background-grid" data-option-name="background">
-            <button class="option-btn selected" data-background="classic" data-value="classic" type="button">Classic</button>
-            <button class="option-btn" data-background="clear" data-value="clear" type="button">Clear</button>
-            <button class="option-btn" data-background="royal-pattern" data-value="royal-pattern" type="button">Royal Pattern</button>
-            <button class="option-btn" data-background="midnight" data-value="midnight" type="button">Midnight</button>
+            <button class="option-btn option-btn--small selected" data-background="classic" data-value="classic" type="button">Classic</button>
+            <button class="option-btn option-btn--small" data-background="clear" data-value="clear" type="button">Clear</button>
+            <button class="option-btn option-btn--small" data-background="royal-pattern" data-value="royal-pattern" type="button">Royal Pattern</button>
+            <button class="option-btn option-btn--small" data-background="midnight" data-value="midnight" type="button">Midnight</button>
           </div>
         </div>
 
         <div class="make-portrait__option-group">
           <p class="make-portrait__option-label">Number of pets</p>
           <div class="option-btn-grid" id="mp-pets-grid" data-option-name="number-of-pets">
-            <button class="option-btn selected" data-pet-count="1" data-value="1" type="button">1</button>
-            <button class="option-btn" data-pet-count="2" data-value="2" type="button">2</button>
-            <button class="option-btn" data-pet-count="3" data-value="3" type="button">3</button>
-            <button class="option-btn" data-pet-count="4" data-value="4" type="button">4</button>
+            <button class="option-btn option-btn--small selected" data-pet-count="1" data-value="1" type="button">1 pet</button>
+            <button class="option-btn option-btn--small" data-pet-count="2" data-value="2" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 1 }}" type="button">2 pets</button>
+            <button class="option-btn option-btn--small" data-pet-count="3" data-value="3" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 2 }}" type="button">3 pets</button>
+            <button class="option-btn option-btn--small" data-pet-count="4" data-value="4" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 3 }}" type="button">4 pets</button>
           </div>
         </div>
 
@@ -368,6 +354,10 @@
             placeholder="Alister"
             maxlength="40"
           >
+          <div class="make-portrait__pet-name-fee" id="mp-pet-name-fee" hidden>
+            <span>Add name</span>
+            <span id="mp-pet-name-fee-amount"></span>
+          </div>
         </div>
 
         <button class="button make-portrait__cta" id="mp-cta-step3">Upload photo</button>
@@ -846,6 +836,23 @@
   bottom: calc(7.5% - 10px);
   width: 100%;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.preview-size-cm {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: -.5em;
+}
+
+.preview-size-inch {
+  font-size: 18px;
+  font-weight: 700;
+  opacity: 0.45;
+  margin-bottom: -.5em;
 }
 
 .make-portrait__style-description {
@@ -947,14 +954,14 @@
 
 /* ——— Options ——— */
 .make-portrait__option-group {
-  margin-bottom: 18px;
+  margin-bottom: 40px;
 }
 
 .make-portrait__option-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--brown, #5a4035);
-  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--brown);
+  margin: 0 0 10px;
+  display: block;
 }
 
 .make-portrait__optional {
@@ -965,7 +972,8 @@
 .option-btn-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
+  align-items: start;
 }
 
 .option-btn {
@@ -982,7 +990,7 @@
 .option-btn .option-btn__img {
   width: 100%;
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   flex-shrink: 0;
   border: 2px solid transparent;
@@ -994,7 +1002,7 @@
 .option-btn .option-btn__label {
   text-align: left;
   font-weight: 700;
-  margin: 1em 0;
+  margin: 1em 0 0;
   display: block;
   opacity: .45;
   transition: opacity .2s;
@@ -1010,21 +1018,105 @@
   }
 }
 
+.option-btn--size {
+  background-color: var(--cream);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  transition: border .2s;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  min-width: 80px;
+  margin-bottom: 20px;
+
+  &.selected, &:hover {
+    border-color: var(--green);
+  }
+
+  .option-btn__img {
+    border: 0;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .option-btn__label {
+    padding: 5px 15px 10px;
+    opacity: 1;
+    margin: 0;
+    font-size: 10px;;
+  }
+
+  .option-btn__size-cm {
+    display: block;
+  }
+
+  .option-btn__size-inch {
+    opacity: .45;
+    display: block;
+  }
+
+  .option-btn__size-price {
+    margin-top: 10px;
+    display: block;
+    font-weight: 500;
+  }
+}
+
+.option-btn__extra-price {
+  display: block;
+  font-size: 10px;
+}
+
+.option-btn--small{
+  width: 64px;
+}
+
 /* Text input */
 .make-portrait__text-input {
   width: 100%;
-  border: 1.5px solid rgba(90, 64, 53, 0.3);
-  border-radius: 8px;
+  border: 2px solid transparent;
+  border-radius: 10px;
   padding: 10px 14px;
-  font-size: 14px;
-  color: var(--brown, #5a4035);
+  font-size: 36px;
+  color: var(--brown);
   background: #fff;
   outline: none;
   transition: border-color 0.2s;
+  display: block;
+  background: var(--cream);
+  font-family: "display", serif;
+
+  &:hover, &:focus{
+    border-color: var(--green);
+    background: var(--cream);
+  }
+
+  &::placeholder{
+    color: var(--brown);
+    opacity: .36;
+  }
 }
 
 .make-portrait__text-input:focus {
-  border-color: var(--brown, #5a4035);
+  border-color: var(--green);
+}
+
+.make-portrait__pet-name-fee {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--brown);
+  opacity: 0.7;
+}
+
+.make-portrait__pet-name-fee[hidden] {
+  display: none;
 }
 
 /* Loading state */
@@ -1512,6 +1604,28 @@
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
   var PAPER_HANDLES  = window.MakePortraitPaperHandles  || {};
+  var EXTRA_PET_USD   = window.MakePortraitExtraPetUSD || 9;
+  var PET_NAME_USD    = window.MakePortraitPetNameUSD  || 5;
+  var SHOP_CURRENCY   = window.MakePortraitShopCurrency || 'USD';
+  var EXTRA_PET_PRICE = EXTRA_PET_USD * 100;
+  var PET_NAME_PRICE  = PET_NAME_USD  * 100;
+
+  function resolveExchangeRate() {
+    if (SHOP_CURRENCY === 'USD') return Promise.resolve(1);
+    var cacheKey = 'mp_fx_' + SHOP_CURRENCY;
+    try {
+      var cached = sessionStorage.getItem(cacheKey);
+      if (cached) return Promise.resolve(parseFloat(cached));
+    } catch (e) {}
+    return fetch('https://open.er-api.com/v6/latest/USD')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var rate = (d.rates && d.rates[SHOP_CURRENCY]) ? d.rates[SHOP_CURRENCY] : 1;
+        try { sessionStorage.setItem(cacheKey, rate); } catch (e) {}
+        return rate;
+      })
+      .catch(function () { return 1; });
+  }
 
   /* ————————————————————————————————————————
      Utilities
@@ -1564,8 +1678,13 @@
     return 0;
   }
 
+  function getPetExtra() {
+    var extraPets = Math.max(0, state.petCount - 1);
+    return extraPets * EXTRA_PET_PRICE + (state.petName ? PET_NAME_PRICE : 0);
+  }
+
   function updateSubtotals() {
-    var total = getBasePrice() + state.addonTotal + state.donation;
+    var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation;
     var formatted = total > 0 ? formatMoney(total) : '—';
     var priceEl = $('mp-subtotal-price');
     if (priceEl) priceEl.textContent = formatted;
@@ -1594,11 +1713,8 @@
     // Show/hide artist badge and product label
     var artistBadge = $('mp-artist-badge');
     var productLabel = $('mp-product-label');
-    var sizeLabel = $('mp-size-label');
-
     if (artistBadge) artistBadge.hidden = step !== 1;
     if (productLabel) productLabel.hidden = true;
-    if (sizeLabel) sizeLabel.hidden = step !== 3;
 
     // Restore style name in preview when returning to step 1
     var previewName = $('mp-preview-style-name');
@@ -1875,6 +1991,25 @@
     return map[key] || null;
   }
 
+  function getSizeDimensions(value) {
+    var s = String(value).replace(/×/g, 'x').replace(/[″"']/g, '').trim();
+    var isCm = /cm/i.test(s);
+    var parts = s.split('x');
+    if (parts.length !== 2) return null;
+    var a = parseFloat(parts[0]);
+    var b = parseFloat(parts[1]);
+    if (isNaN(a) || isNaN(b)) return null;
+    var inchStr, cmStr;
+    if (isCm) {
+      cmStr = Math.round(a) + '×' + Math.round(b) + ' cm';
+      inchStr = Math.round(a / 2.54) + '×' + Math.round(b / 2.54) + '″';
+    } else {
+      inchStr = Math.round(a) + '×' + Math.round(b) + '″';
+      cmStr = Math.round(a * 2.54) + '×' + Math.round(b * 2.54) + ' cm';
+    }
+    return { inches: inchStr, cm: cmStr };
+  }
+
   function applyImageToBtn(btn, imgUrl, label) {
     btn.classList.add('option-btn--with-img');
     var img = document.createElement('img');
@@ -1899,13 +2034,27 @@
       grid.querySelectorAll('.option-btn[data-value]').forEach(function (btn) {
         var value = btn.dataset.value;
         var imgUrl = optionImageUrl(optName, value);
+        var extraUsd = btn.dataset.extraUsd;
+        var originalText = btn.textContent.trim();
+        btn.textContent = '';
         if (imgUrl) {
-          var originalText = btn.textContent.trim();
-          btn.textContent = '';
           applyImageToBtn(btn, imgUrl, originalText);
+        } else {
+          var textSpan = document.createElement('span');
+          textSpan.textContent = originalText;
+          btn.appendChild(textSpan);
+        }
+        if (extraUsd) {
+          var extraEl = document.createElement('span');
+          extraEl.className = 'option-btn__extra-price';
+          extraEl.textContent = '+' + formatMoney(Math.round(parseFloat(extraUsd) * EXTRA_PET_PRICE / EXTRA_PET_USD));
+          btn.appendChild(extraEl);
         }
       });
     });
+    // Update pet name fee display amount
+    var feeAmount = $('mp-pet-name-fee-amount');
+    if (feeAmount) feeAmount.textContent = '+ ' + formatMoney(PET_NAME_PRICE);
   }
 
   function normalizeOptions(rawOptions) {
@@ -1922,7 +2071,8 @@
     group.className = 'make-portrait__option-group';
     var label = document.createElement('p');
     label.className = 'make-portrait__option-label';
-    label.textContent = opt.name;
+    var optionLabelNames = { 'color': 'Frame Color' };
+    label.textContent = optionLabelNames[opt.name.toLowerCase()] || opt.name;
     group.appendChild(label);
     var grid = document.createElement('div');
     grid.className = 'option-btn-grid';
@@ -1939,12 +2089,52 @@
     values.forEach(function (value, vIdx) {
       var isSelected = hasPrev ? (value === prevValue) : (vIdx === 0);
       var btn = document.createElement('button');
-      btn.className = 'option-btn' + (isSelected ? ' selected' : '');
+      var optNameLower = opt.name.toLowerCase();
+      btn.className = 'option-btn' +
+        (optNameLower === 'size' ? ' option-btn--size' : '') +
+        (optNameLower === 'color' ? ' option-btn--small' : '') +
+        (isSelected ? ' selected' : '');
       btn.type = 'button';
       btn.dataset.optionIndex = opt.position;
       btn.dataset.value = value;
       var imgUrl = optionImageUrl(opt.name, value);
-      if (imgUrl) {
+      if (opt.name.toLowerCase() === 'size') {
+        // Size button: always show inch + cm + price stacked; image optional
+        if (imgUrl) {
+          var sImg = document.createElement('img');
+          sImg.className = 'option-btn__img';
+          sImg.src = imgUrl;
+          sImg.alt = value;
+          sImg.onerror = function () { sImg.remove(); };
+          btn.appendChild(sImg);
+        }
+        var sLabel = document.createElement('span');
+        sLabel.className = 'option-btn__label';
+        var dims = getSizeDimensions(value);
+        if (dims) {
+          var sCm = document.createElement('span');
+          sCm.className = 'option-btn__size-cm';
+          sCm.textContent = dims.cm;
+          sLabel.appendChild(sCm);
+        }
+        var sInch = document.createElement('span');
+        sInch.className = 'option-btn__size-inch';
+        sInch.textContent = dims ? dims.inches : value;
+        sLabel.appendChild(sInch);
+        var sizePrice = null;
+        product.variants.forEach(function (v) {
+          if (v.options[opt.position] === value && (sizePrice === null || v.price < sizePrice)) {
+            sizePrice = v.price;
+          }
+        });
+        if (sizePrice !== null) {
+          var sPrice = document.createElement('span');
+          sPrice.className = 'option-btn__size-price';
+          sPrice.textContent = formatMoney(sizePrice);
+          sLabel.appendChild(sPrice);
+        }
+        btn.appendChild(sLabel);
+      } else if (imgUrl) {
         applyImageToBtn(btn, imgUrl, value);
       } else {
         btn.textContent = value;
@@ -2014,9 +2204,21 @@
       state.variantId = variant.id;
       state.variant = variant;
 
-      // Update size label
-      var sizeLabel = $('mp-size-label');
-      if (sizeLabel) sizeLabel.textContent = variant.title;
+      // Update preview with selected size (cm first, then inches)
+      var previewName = $('mp-preview-style-name');
+      if (previewName) {
+        var sizeOpts = normalizeOptions(state.product ? state.product.options : [])
+          .filter(function (o) { return o.name.toLowerCase() === 'size'; });
+        var sizeValue = sizeOpts.length ? state.selectedOptions[sizeOpts[0].position] : null;
+        var dims = sizeValue ? getSizeDimensions(sizeValue) : null;
+        if (dims) {
+          previewName.innerHTML =
+            '<span class="preview-size-cm">' + dims.cm + '</span>' +
+            '<span class="preview-size-inch">' + dims.inches + '</span>';
+        } else {
+          previewName.textContent = sizeValue || '';
+        }
+      }
 
       // Update preview if variant has image
       if (variant.featured_image && variant.featured_image.src) {
@@ -2063,16 +2265,35 @@
 
     if (state.step >= 3) {
       var details = [];
+
+      // Size first — cm + inches with reduced opacity
+      var sizeValue = null;
+      if (state.product) {
+        var sizeOpts = normalizeOptions(state.product.options)
+          .filter(function (o) { return o.name.toLowerCase() === 'size'; });
+        if (sizeOpts.length) sizeValue = state.selectedOptions[sizeOpts[0].position];
+      }
+      if (sizeValue) {
+        var dims = getSizeDimensions(sizeValue);
+        details.push(dims
+          ? dims.cm + ' <span style="opacity:0.45">' + dims.inches + '</span>'
+          : sizeValue);
+      }
+
       if (state.canvasFrameChoice) details.push(state.canvasFrameChoice === 'framed' ? 'Framed' : 'Unframed');
       if (state.variant && state.variant.options) {
-        state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') details.push(o); });
+        state.variant.options.forEach(function (o) {
+          if (!o || o === 'Default Title') return;
+          if (o === sizeValue) return; // already shown above
+          details.push(o);
+        });
       }
       var border = getSelectedLabel('mp-border-grid');
       var bg = getSelectedLabel('mp-background-grid');
       if (border) details.push(border);
       if (bg) details.push(bg + ' Background');
-      if (state.step >= 4) details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
-      if (state.petName) details.push(state.petName);
+      details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
+      if (state.petName) details.push('Add name');
       if (details.length) addLine('Details', details.join(' | '));
     }
 
@@ -2430,14 +2651,21 @@
     initOptionGroup('mp-background-grid', 'background');
     initOptionGroup('mp-pets-grid', 'petCount');
 
-    // Apply images to custom option buttons (border, background, number-of-pets)
-    initCustomOptionImages();
+    // Apply images after exchange rate is resolved (so prices show in shop currency)
+    resolveExchangeRate().then(function (rate) {
+      EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
+      PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
+      initCustomOptionImages();
+    });
 
     // Pet name
     var petNameInput = $('mp-pet-name');
     if (petNameInput) {
       petNameInput.addEventListener('input', function () {
         state.petName = petNameInput.value;
+        var feeEl = $('mp-pet-name-fee');
+        if (feeEl) feeEl.hidden = !state.petName;
+        updateSubtotals();
       });
     }
 
@@ -2570,6 +2798,22 @@
       "label": "Upload folder",
       "default": "uploads",
       "info": "Folder prefix inside the bucket (e.g. uploads or orders/photos)"
+    },
+    {
+      "type": "header",
+      "content": "Pricing extras"
+    },
+    {
+      "type": "number",
+      "id": "extra_pet_price",
+      "label": "Extra pet price (per additional pet, in store currency)",
+      "default": 9
+    },
+    {
+      "type": "number",
+      "id": "pet_name_price",
+      "label": "Pet name fee (in store currency)",
+      "default": 5
     }
   ],
   "blocks": [
