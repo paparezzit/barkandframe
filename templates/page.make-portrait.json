@@ -47,11 +47,11 @@
         "donation_enNYcj": {
           "type": "donation",
           "settings": {
-            "title": "Donate",
+            "title": "DogsTrust donate",
             "image": "shopify://shop_images/28d40fd9b67164816fd95f9a47352f3792df7335.png",
             "heading": "Spread the love",
             "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
-            "amounts": "10, 50, 100, 5"
+            "amounts": "10, 50, 100"
           }
         },
         "style_fWfEFh": {
@@ -162,7 +162,9 @@
         "canvas_framed_handle": "framed-canvas",
         "gcs_signing_endpoint": "",
         "gcs_bucket_name": "",
-        "gcs_folder": "uploads"
+        "gcs_folder": "uploads",
+        "extra_pet_price": 9,
+        "pet_name_price": 5
       }
     }
   },

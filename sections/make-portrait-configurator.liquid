@@ -56,7 +56,7 @@
   };
   window.MakePortraitExtraPetUSD = {{ section.settings.extra_pet_price | default: 9 }};
   window.MakePortraitPetNameUSD  = {{ section.settings.pet_name_price  | default: 5 }};
-  window.MakePortraitShopCurrency = {{ shop.currency | json }};
+  window.MakePortraitShopCurrency = {{ localization.country.currency.iso_code | json }};
 
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
@@ -360,7 +360,7 @@
           </div>
         </div>
 
-        <button class="button make-portrait__cta" id="mp-cta-step3">Upload photo</button>
+        <button class="button make-portrait__cta" id="mp-cta-step3">Go to last step</button>
       </div>
 
       {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
@@ -409,13 +409,14 @@
                     type="checkbox"
                     class="addon-item__check"
                     data-addon-price="{{ block.settings.price | default: 0 }}"
+                    data-addon-eur="{{ block.settings.price | default: 0 }}"
                     data-addon-name="{{ block.settings.name | escape }}"
                     aria-label="{{ block.settings.name }}"
                   >
                   <div class="addon-item__body">
                     <div class="addon-item__left">
                       <span class="addon-item__name">{{ block.settings.name }}</span>
-                      <span class="addon-item__price">+ {{ block.settings.price | default: 0 | times: 100 | money }}</span>
+                      <span class="addon-item__price"></span>
                     </div>
                     {%- if block.settings.description != blank -%}
                       <div class="addon-item__description">{{ block.settings.description }}</div>
@@ -431,7 +432,7 @@
           {%- for block in section.blocks -%}
             {%- if block.type == 'donation' -%}
               <div class="donation-card" {{ block.shopify_attributes }}>
-                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'Donate' }}</h3>
+                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'DogsTrust donate' }}</h3>
                 <div class="donation-card__inner">
                   {%- if block.settings.image -%}
                     <img
@@ -457,10 +458,21 @@
                           <button
                             class="option-btn"
                             data-donation="{{ clean | times: 100 }}"
+                            data-donation-eur="{{ clean | times: 100 }}"
                             type="button"
-                          >{{ clean | times: 100 | money }}</button>
+                          ></button>
                         {%- endif -%}
                       {%- endfor -%}
+                      <label class="option-btn donation-card__custom">
+                        <input
+                          type="number"
+                          class="donation-card__custom-input"
+                          min="1"
+                          step="1"
+                          placeholder="Custom"
+                          aria-label="Custom donation amount"
+                        >
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -1109,10 +1121,17 @@
 .make-portrait__pet-name-fee {
   display: flex;
   flex-direction: column;
-  margin-top: 6px;
-  font-size: 12px;
+  margin-top: 10px;
+  font-size: 10px;
   color: var(--brown);
-  opacity: 0.7;
+  
+  span{
+    font-weight: 700;
+
+    &#mp-pet-name-fee-amount{
+      font-weight: 500;
+    }
+  }
 }
 
 .make-portrait__pet-name-fee[hidden] {
@@ -1256,37 +1275,25 @@
 
 /* ——— Add-ons ——— */
 .make-portrait__addons {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .make-portrait__addons-title {
   font-size: 14px;
-  font-weight: 700;
-  color: var(--brown, #5a4035);
-  margin: 0 0 12px;
+  font-weight: 500;
+  color: var(--brown);
+  margin: 0 0 10px;
 }
 
 .addon-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  border: 1.5px solid rgba(90, 64, 53, 0.15);
-  border-radius: 12px;
-  margin-bottom: 8px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
+  border: 2px solid transparent;
   transition: border-color 0.2s, background 0.2s;
-  background: #faf7f2;
-}
-
-.addon-item:hover {
-  border-color: rgba(90, 64, 53, 0.35);
   background: var(--cream);
-}
-
-.addon-item:has(.addon-item__check:checked) {
-  border-color: var(--brown, #5a4035);
-  background: var(--cream);
+  display: block;
 }
 
 .addon-item__check {
@@ -1296,39 +1303,41 @@
 .addon-item__body {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
 }
 
 .addon-item__left {
   display: flex;
   flex-direction: column;
-  gap: 2px;
   min-width: 120px;
+  flex: 1;
 }
 
 .addon-item__name {
-  font-family: var(--font-heading--family, "display", serif);
-  font-size: 20px;
-  line-height: 1.15;
-  color: rgba(90, 64, 53, 0.5);
-  transition: color 0.2s;
-}
-
-.addon-item:has(.addon-item__check:checked) .addon-item__name {
-  color: var(--brown, #5a4035);
+  font-family: "display", "Times New Roman", serif;
+  font-size: 21px;
+  opacity: .36;
+  transition: opacity 0.2s;
 }
 
 .addon-item__price {
-  font-size: 12px;
-  color: rgba(90, 64, 53, 0.55);
+  font-size: 10px;
 }
 
 .addon-item__description {
-  font-size: 12px;
-  color: rgba(90, 64, 53, 0.6);
-  line-height: 1.5;
+  font-size: 10px;
+  line-height: 1.2;
   flex: 1;
+  opacity: .63;
+}
+
+.addon-item:hover, .addon-item:has(.addon-item__check:checked){
+  border-color: var(--green);
+
+  .addon-item__name, .addon-item__description{
+    opacity: 1;
+  }
 }
 
 /* ——— Donation card ——— */
@@ -1394,6 +1403,34 @@
   background: #2d2057;
   border-color: #2d2057;
   color: #fff;
+}
+
+.donation-card__custom {
+  cursor: text;
+}
+
+.donation-card__custom-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  font-size: inherit;
+  text-align: center;
+  -moz-appearance: textfield;
+  cursor: text;
+  min-width: 0;
+}
+
+.donation-card__custom-input::-webkit-outer-spin-button,
+.donation-card__custom-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.donation-card__custom-input::placeholder {
+  color: inherit;
+  opacity: 0.5;
 }
 
 /* ——— Subtotal ——— */
@@ -1475,7 +1512,7 @@
 }
 
 .order-summary{
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .order-summary__line {
@@ -1611,13 +1648,13 @@
   var PET_NAME_PRICE  = PET_NAME_USD  * 100;
 
   function resolveExchangeRate() {
-    if (SHOP_CURRENCY === 'USD') return Promise.resolve(1);
-    var cacheKey = 'mp_fx_' + SHOP_CURRENCY;
+    if (SHOP_CURRENCY === 'EUR') return Promise.resolve(1);
+    var cacheKey = 'mp_fx_eur_' + SHOP_CURRENCY;
     try {
-      var cached = sessionStorage.getItem(cacheKey);
-      if (cached) return Promise.resolve(parseFloat(cached));
+      var cached = parseFloat(sessionStorage.getItem(cacheKey));
+      if (cached && cached > 1.01) return Promise.resolve(cached);
     } catch (e) {}
-    return fetch('https://open.er-api.com/v6/latest/USD')
+    return fetch('https://open.er-api.com/v6/latest/EUR')
       .then(function (r) { return r.json(); })
       .then(function (d) {
         var rate = (d.rates && d.rates[SHOP_CURRENCY]) ? d.rates[SHOP_CURRENCY] : 1;
@@ -2055,6 +2092,23 @@
     // Update pet name fee display amount
     var feeAmount = $('mp-pet-name-fee-amount');
     if (feeAmount) feeAmount.textContent = '+ ' + formatMoney(PET_NAME_PRICE);
+  }
+
+  function initStep4Pricing(rate) {
+    // Addon prices
+    document.querySelectorAll('.addon-item__check[data-addon-eur]').forEach(function (check) {
+      var converted = Math.round(parseFloat(check.dataset.addonEur || 0) * rate) * 100;
+      check.dataset.addonPrice = converted / 100;
+      var priceEl = check.closest('.addon-item').querySelector('.addon-item__price');
+      if (priceEl) priceEl.textContent = '+ ' + formatMoney(converted);
+    });
+    // Donation button labels
+    document.querySelectorAll('.donation-card__amounts .option-btn[data-donation-eur]').forEach(function (btn) {
+      var eurUnits = parseInt(btn.dataset.donationEur || 0, 10) / 100;
+      var converted = Math.round(eurUnits * rate) * 100;
+      btn.dataset.donation = converted;
+      btn.textContent = formatMoney(converted);
+    });
   }
 
   function normalizeOptions(rawOptions) {
@@ -2651,11 +2705,12 @@
     initOptionGroup('mp-background-grid', 'background');
     initOptionGroup('mp-pets-grid', 'petCount');
 
-    // Apply images after exchange rate is resolved (so prices show in shop currency)
+    // Apply images + step 4 pricing after exchange rate is resolved
     resolveExchangeRate().then(function (rate) {
       EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
       PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
       initCustomOptionImages();
+      initStep4Pricing(rate);
     });
 
     // Pet name
@@ -2703,16 +2758,22 @@
     });
 
     // Donation amounts
-    document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (btn) {
+    function clearDonationSelection() {
+      document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (b) {
+        b.classList.remove('selected');
+      });
+      var customInput = document.querySelector('.donation-card__custom-input');
+      if (customInput) customInput.value = '';
+      state.donation = 0;
+    }
+
+    document.querySelectorAll('.donation-card__amounts .option-btn:not(.donation-card__custom)').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var val = parseInt(btn.dataset.donation, 10);
         if (btn.classList.contains('selected')) {
-          btn.classList.remove('selected');
-          state.donation = 0;
+          clearDonationSelection();
         } else {
-          document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (b) {
-            b.classList.remove('selected');
-          });
+          clearDonationSelection();
           btn.classList.add('selected');
           state.donation = val;
         }
@@ -2720,10 +2781,48 @@
       });
     });
 
-    // DEV: skip to step 3 on reload — remove before going live
+    // Custom donation input
+    var customDonationInput = document.querySelector('.donation-card__custom-input');
+    var customDonationLabel = document.querySelector('.donation-card__custom');
+    if (customDonationInput && customDonationLabel) {
+      customDonationInput.addEventListener('focus', function () {
+        document.querySelectorAll('.donation-card__amounts .option-btn:not(.donation-card__custom)').forEach(function (b) {
+          b.classList.remove('selected');
+        });
+        customDonationLabel.classList.add('selected');
+      });
+
+      customDonationInput.addEventListener('input', function () {
+        var raw = parseFloat(customDonationInput.value);
+        if (!isFinite(raw) || raw < 1) {
+          state.donation = 0;
+          customDonationLabel.classList.remove('selected');
+          updateSubtotals();
+          return;
+        }
+        var cents = Math.round(Math.abs(raw)) * 100;
+        state.donation = cents;
+        customDonationLabel.classList.add('selected');
+        updateSubtotals();
+      });
+
+      customDonationInput.addEventListener('blur', function () {
+        var raw = parseFloat(customDonationInput.value);
+        if (!isFinite(raw) || raw < 1) {
+          customDonationInput.value = '';
+          customDonationLabel.classList.remove('selected');
+          state.donation = 0;
+          updateSubtotals();
+        } else {
+          customDonationInput.value = Math.round(Math.abs(raw));
+        }
+      });
+    }
+
+    // DEV: skip to step 4 on reload — remove before going live
     state.productCategory = 'canvas';
     buildCanvasFrameUI();
-    goToStep(3);
+    goToStep(4);
     // END DEV
   }
 
@@ -2806,13 +2905,13 @@
     {
       "type": "number",
       "id": "extra_pet_price",
-      "label": "Extra pet price (per additional pet, in store currency)",
+      "label": "Extra pet price per additional pet (in EUR)",
       "default": 9
     },
     {
       "type": "number",
       "id": "pet_name_price",
-      "label": "Pet name fee (in store currency)",
+      "label": "Pet name fee (in EUR)",
       "default": 5
     }
   ],
@@ -2904,7 +3003,7 @@
           "type": "text",
           "id": "title",
           "label": "Section title",
-          "default": "Donate"
+          "default": "DogsTrust donate"
         },
         {
           "type": "image_picker",
@@ -2920,13 +3019,13 @@
         {
           "type": "text",
           "id": "description",
-          "label": "Description"
+          "label": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization."
         },
         {
           "type": "text",
           "id": "amounts",
           "label": "Donation amounts",
-          "default": "10, 50, 100, 5",
+          "default": "10, 50, 100",
           "info": "Comma-separated whole numbers (e.g. 10, 50, 100)"
         }
       ]

@@ -4,7 +4,8 @@
       "Bash(shopify version:*)",
       "Bash(shopify theme:*)",
       "Bash(theme check *)",
-      "Bash(python3)"
+      "Bash(python3)",
+      "Bash(grep -n \"var feeAmount = \\\\$\\('mp-pet-name-fee-amount'\\)\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
     ]
   }
 }
