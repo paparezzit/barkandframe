@@ -54,9 +54,12 @@
     unframed: {{ section.settings.paper_unframed_handle | default: '' | json }},
     framed:   {{ section.settings.paper_framed_handle   | default: '' | json }}
   };
-  window.MakePortraitExtraPetUSD = {{ section.settings.extra_pet_price | default: 9 }};
-  window.MakePortraitPetNameUSD  = {{ section.settings.pet_name_price  | default: 5 }};
-  window.MakePortraitShopCurrency = {{ localization.country.currency.iso_code | json }};
+  window.MakePortraitExtraPetUSD    = {{ section.settings.extra_pet_price   | default: 9 }};
+  window.MakePortraitPetNameUSD     = {{ section.settings.pet_name_price    | default: 5 }};
+  {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
+  window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
+  window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
+  window.MakePortraitShopCurrency   = {{ localization.country.currency.iso_code | json }};
 
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
@@ -395,7 +398,7 @@
         {%- assign has_addons = false -%}
         {%- assign has_donation = false -%}
         {%- for block in section.blocks -%}
-          {%- if block.type == 'addon' -%}{%- assign has_addons = true -%}{%- endif -%}
+          {%- if block.type == 'addon' or block.type == 'prints' -%}{%- assign has_addons = true -%}{%- endif -%}
           {%- if block.type == 'donation' -%}{%- assign has_donation = true -%}{%- endif -%}
         {%- endfor -%}
 
@@ -423,6 +426,47 @@
                     {%- endif -%}
                   </div>
                 </label>
+              {%- elsif block.type == 'prints' -%}
+                <div class="addon-item addon-item--prints" {{ block.shopify_attributes }}>
+                  <label class="addon-item__header">
+                    <input
+                      type="checkbox"
+                      class="addon-item__check addon-item__check--prints"
+                      id="mp-prints-check"
+                      aria-label="Add prints"
+                    >
+                    <div class="addon-item__body">
+                      <div class="addon-item__left">
+                        <span class="addon-item__name">Add prints</span>
+                        <span class="addon-item__price" id="mp-prints-price"></span>
+                      </div>
+                      {%- if block.settings.description != blank -%}
+                        <div class="addon-item__description">{{ block.settings.description }}</div>
+                      {%- endif -%}
+                    </div>
+                  </label>
+                  <div class="make-portrait__prints-options" id="mp-prints-options" hidden>
+                    <div class="option-btn-grid" id="mp-prints-grid">
+                      <button class="option-btn option-btn--small selected" data-prints="1" type="button"></button>
+                      <button class="option-btn option-btn--small" data-prints="2" type="button"></button>
+                      <button class="option-btn option-btn--small" data-prints="3" type="button"></button>
+                      <button class="option-btn option-btn--small" data-prints="4" type="button"></button>
+                      <label class="option-btn option-btn--small make-portrait__prints-custom">
+                        <input
+                          type="number"
+                          class="make-portrait__prints-custom-input"
+                          min="1"
+                          step="1"
+                          placeholder="5pcs"
+                          aria-label="Custom number of prints"
+                        >
+                        <span class="make-portrait__prints-custom-price">
+                          
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               {%- endif -%}
             {%- endfor -%}
           </div>
@@ -432,7 +476,7 @@
           {%- for block in section.blocks -%}
             {%- if block.type == 'donation' -%}
               <div class="donation-card" {{ block.shopify_attributes }}>
-                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'DogsTrust donate' }}</h3>
+                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'DogsTrust' }}</h3>
                 <div class="donation-card__inner">
                   {%- if block.settings.image -%}
                     <img
@@ -1273,6 +1317,115 @@
   margin: 0 0 20px;
 }
 
+/* ——— Add prints ——— */
+.addon-item--prints {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.addon-item--prints .addon-item__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.make-portrait__prints-options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 15px 20px;
+  background-color: var(--cream);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+
+  .option-btn{
+    text-align: center;
+    width: auto;
+
+    .option-btn__count{
+      padding: 4px 7px;
+      background-color: var(--beige);
+      display: inline-block;
+      font-size: 14px;
+      font-family: "display", serif;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      height: 25px;
+      transition: background .2s, color .2s;
+    }
+
+    &.selected{
+      .option-btn__count{
+        background-color: var(--brown);
+        color: var(--beige);
+      }
+    }
+  }
+
+  .make-portrait__prints-custom{
+    .make-portrait__prints-custom-input{
+      width: 42px;
+      display: block;
+      background-color: var(--beige);
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: "display", serif;
+      height: 25px;
+      padding: 0;
+      margin-bottom: 5px;
+    }
+
+    .make-portrait__prints-custom-price{
+      font-size: 10px;
+    }
+  }
+}
+
+.make-portrait__prints-options[hidden] {
+  display: none;
+}
+
+.make-portrait__prints-custom {
+  cursor: text;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.make-portrait__prints-custom-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  font-size: inherit;
+  text-align: center;
+  -moz-appearance: textfield;
+  cursor: text;
+  min-width: 0;
+}
+
+.make-portrait__prints-custom-input::-webkit-outer-spin-button,
+.make-portrait__prints-custom-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.make-portrait__prints-custom-input::placeholder {
+  color: inherit;
+  opacity: 0.5;
+}
+
+.make-portrait__prints-custom-price {
+  font-size: var(--font-size--xs);
+  opacity: 0.7;
+}
+
 /* ——— Add-ons ——— */
 .make-portrait__addons {
   margin-bottom: 40px;
@@ -1282,7 +1435,7 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--brown);
-  margin: 0 0 10px;
+  margin: 0 0 1em;
 }
 
 .addon-item {
@@ -1319,6 +1472,7 @@
   font-size: 21px;
   opacity: .36;
   transition: opacity 0.2s;
+  line-height: 1;
 }
 
 .addon-item__price {
@@ -1347,69 +1501,73 @@
 
 .donation-card__inner {
   display: flex;
-  gap: 16px;
-  background: #e8e4f5;
-  border-radius: 16px;
-  padding: 20px;
-  align-items: center;
+  gap: 0;
+  background: var(--purple);
+  border-radius: 10px;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 .donation-card__image {
-  width: 100px;
-  height: 100px;
+  width: 30%;
   object-fit: cover;
-  border-radius: 10px;
-  flex-shrink: 0;
+  object-position: center right;
 }
 
 .donation-card__content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  padding: 20px;
 }
 
 .donation-card__heading {
-  font-family: var(--font-heading--family, "display", serif);
-  font-size: 22px;
+  font-family: "display", serif;
+  font-size: 21px;
   line-height: 1.2;
-  color: #2d2057;
   margin: 0;
 }
 
 .donation-card__description {
-  font-size: 12px;
-  color: rgba(45, 32, 87, 0.7);
-  line-height: 1.4;
+  font-size: 10px;
+  line-height: 1.2;
   margin: 0;
+  opacity: .63;
 }
 
-.donation-card__amounts {
-  margin-top: 4px;
+.donation-card__amounts{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 .donation-card__amounts .option-btn {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(45, 32, 87, 0.2);
-  color: #2d2057;
+  background: var(--beige);
+  border: 2px solid transparent;
+  color: var(--brown);
+  border-radius: 10px;
+  font-family: "display", serif;
+  font-size: 14px;
+  padding: 5px 8px;
+  width: auto;
+  text-align: center;
+  transition: border .2s;
+  white-space: nowrap;
 }
 
-.donation-card__amounts .option-btn:hover {
-  border-color: rgba(45, 32, 87, 0.5);
-  background: rgba(255, 255, 255, 0.9);
+.donation-card__amounts .option-btn:hover, .donation-card__amounts .option-btn.selected{
+  border-color: var(--green);
 }
 
-.donation-card__amounts .option-btn.selected {
-  background: #2d2057;
-  border-color: #2d2057;
-  color: #fff;
-}
-
-.donation-card__custom {
+.donation-card__amounts .donation-card__custom {
   cursor: text;
+  padding: 0 5px;
+  height: 100%;
 }
 
-.donation-card__custom-input {
+.donation-card__custom-input, .donation-card__custom-input:hover {
   width: 100%;
   background: transparent;
   border: none;
@@ -1421,6 +1579,8 @@
   -moz-appearance: textfield;
   cursor: text;
   min-width: 0;
+  padding: 0;
+  height: 100%;
 }
 
 .donation-card__custom-input::-webkit-outer-spin-button,
@@ -1521,26 +1681,26 @@
   line-height: 1.5;
 }
 
+.order-summary__line--donation{
+  margin-top: 1em;
+}
+
 .order-summary__line strong {
   font-weight: 700;
 }
 
 .order-summary__section {
-  margin-top: 6px;
+  margin-top: 1em;
+  font-size: 10px;
 }
 
 .order-summary__section-label {
-  font-size: 11px;
-  color: rgba(90, 64, 53, 0.5);
-  margin: 0 0 1px;
+  margin: 0;
 }
 
 .order-summary__section-value {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--brown, #5a4035);
+  font-weight: 700;
   margin: 0;
-  line-height: 1.5;
 }
 
 /* ——— CTA button ——— */
@@ -1585,7 +1745,8 @@
   .step-label--short { display: none; }
 
   .make-portrait__layout{
-    gap: 100px;
+    grid-template-columns: 3fr 410px;
+    gap: 120px;
   }
 
   .make-portrait_artist-badge{
@@ -1602,6 +1763,11 @@
         font-size: 10px;
       }
     }
+  }
+
+  .donation-card__amounts{
+    display: flex;
+    flex-wrap: nowrap;
   }
 }
 
@@ -1632,6 +1798,7 @@
     background: 'classic',
     addonTotal: 0,   // in cents
     donation: 0,     // in cents
+    prints: 0,       // number of copies (0 = none)
     files: [],
     photoUrls: [],
     pendingUploads: 0
@@ -1641,11 +1808,15 @@
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
   var PAPER_HANDLES  = window.MakePortraitPaperHandles  || {};
-  var EXTRA_PET_USD   = window.MakePortraitExtraPetUSD || 9;
-  var PET_NAME_USD    = window.MakePortraitPetNameUSD  || 5;
-  var SHOP_CURRENCY   = window.MakePortraitShopCurrency || 'USD';
-  var EXTRA_PET_PRICE = EXTRA_PET_USD * 100;
-  var PET_NAME_PRICE  = PET_NAME_USD  * 100;
+  var EXTRA_PET_USD    = window.MakePortraitExtraPetUSD    || 9;
+  var PET_NAME_USD     = window.MakePortraitPetNameUSD     || 5;
+  var PRINTS_BASE_EUR  = window.MakePortraitPrintsBaseEUR  || 30;
+  var PRINTS_EXTRA_EUR = window.MakePortraitPrintsExtraEUR || 20;
+  var SHOP_CURRENCY    = window.MakePortraitShopCurrency   || 'USD';
+  var EXTRA_PET_PRICE  = EXTRA_PET_USD * 100;
+  var PET_NAME_PRICE   = PET_NAME_USD  * 100;
+  var PRINTS_BASE_PRICE  = PRINTS_BASE_EUR  * 100;
+  var PRINTS_EXTRA_PRICE = PRINTS_EXTRA_EUR * 100;
 
   function resolveExchangeRate() {
     if (SHOP_CURRENCY === 'EUR') return Promise.resolve(1);
@@ -1672,9 +1843,9 @@
     var amount = Math.round(cents) / 100;
     var intAmount = Math.round(amount);
     return format
-      .replace('{{amount}}', amount % 1 === 0 ? intAmount : amount.toFixed(2))
+      .replace('{{amount}}', intAmount)
       .replace('{{amount_no_decimals}}', intAmount)
-      .replace('{{amount_with_comma_separator}}', amount.toFixed(2).replace('.', ','))
+      .replace('{{amount_with_comma_separator}}', intAmount)
       .replace('{{amount_no_decimals_with_comma_separator}}', intAmount);
   }
 
@@ -1720,8 +1891,13 @@
     return extraPets * EXTRA_PET_PRICE + (state.petName ? PET_NAME_PRICE : 0);
   }
 
+  function getPrintsPrice() {
+    if (!state.prints || state.prints < 1) return 0;
+    return PRINTS_BASE_PRICE + (state.prints - 1) * PRINTS_EXTRA_PRICE;
+  }
+
   function updateSubtotals() {
-    var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation;
+    var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice();
     var formatted = total > 0 ? formatMoney(total) : '—';
     var priceEl = $('mp-subtotal-price');
     if (priceEl) priceEl.textContent = formatted;
@@ -2095,6 +2271,34 @@
   }
 
   function initStep4Pricing(rate) {
+    PRINTS_BASE_PRICE  = Math.round(PRINTS_BASE_EUR  * rate) * 100;
+    PRINTS_EXTRA_PRICE = Math.round(PRINTS_EXTRA_EUR * rate) * 100;
+
+    // Prints buttons
+    for (var i = 1; i <= 4; i++) {
+      var printsBtn = document.querySelector('.option-btn[data-prints="' + i + '"]');
+      if (!printsBtn) continue;
+      var price = PRINTS_BASE_PRICE + (i - 1) * PRINTS_EXTRA_PRICE;
+      printsBtn.innerHTML = '';
+      var countSpan = document.createElement('span');
+      countSpan.textContent = i + ' pc' + (i > 1 ? 's' : '');
+      countSpan.className = 'option-btn__count';
+      var priceSpan = document.createElement('span');
+      priceSpan.className = 'option-btn__extra-price';
+      priceSpan.textContent = '+ ' + formatMoney(price);
+      printsBtn.appendChild(countSpan);
+      printsBtn.appendChild(priceSpan);
+    }
+
+    // Prints price label (shown in addon header when grid visible)
+    var printsPriceEl = $('mp-prints-price');
+    if (printsPriceEl) printsPriceEl.textContent = '+ ' + formatMoney(PRINTS_BASE_PRICE);
+    var printCustomPriceDefault = document.querySelector('.make-portrait__prints-custom-price');
+    if (printCustomPriceDefault) {
+      var defaultPrice = PRINTS_BASE_PRICE + 4 * PRINTS_EXTRA_PRICE;
+      printCustomPriceDefault.textContent = '+ ' + formatMoney(defaultPrice);
+    }
+
     // Addon prices
     document.querySelectorAll('.addon-item__check[data-addon-eur]').forEach(function (check) {
       var converted = Math.round(parseFloat(check.dataset.addonEur || 0) * rate) * 100;
@@ -2301,9 +2505,12 @@
     if (!container) return;
     container.innerHTML = '';
 
-    function addLine(label, value) {
+    function addLine(label, value, elementClass) {
       var p = document.createElement('p');
       p.className = 'order-summary__line';
+      if(elementClass){
+        p.className += " "+elementClass;
+      }
       p.innerHTML = label + ' \u2013 <strong>' + value + '</strong>';
       container.appendChild(p);
     }
@@ -2353,9 +2560,12 @@
 
     var addonNames = [];
     document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
-      addonNames.push(c.dataset.addonName);
+      if (c.dataset.addonName) addonNames.push(c.dataset.addonName);
     });
-    if (addonNames.length) {
+    var customizeItems = addonNames.slice();
+    if (state.prints > 0) customizeItems.unshift('Add ' + state.prints + ' cop' + (state.prints === 1 ? 'y' : 'ies'));
+
+    if (customizeItems.length) {
       var section = document.createElement('div');
       section.className = 'order-summary__section';
       var lbl = document.createElement('p');
@@ -2363,14 +2573,14 @@
       lbl.textContent = 'Customize order';
       var val = document.createElement('p');
       val.className = 'order-summary__section-value';
-      val.textContent = addonNames.join(' | ');
+      val.textContent = customizeItems.join(' | ');
       section.appendChild(lbl);
       section.appendChild(val);
       container.appendChild(section);
     }
 
     if (state.donation > 0) {
-      addLine(window.MakePortraitDonationTitle || 'Donation', formatMoney(state.donation));
+      addLine(window.MakePortraitDonationTitle || 'Donation', formatMoney(state.donation), "order-summary__line--donation");
     }
   }
 
@@ -2534,9 +2744,11 @@
 
     var checkedAddons = [];
     document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
-      checkedAddons.push(c.dataset.addonName);
+      if (c.dataset.addonName) checkedAddons.push(c.dataset.addonName);
     });
-    if (checkedAddons.length) properties['Customize order'] = checkedAddons.join(' | ');
+    var customizeCart = checkedAddons.slice();
+    if (state.prints > 0) customizeCart.unshift('Add ' + state.prints + ' cop' + (state.prints === 1 ? 'y' : 'ies'));
+    if (customizeCart.length) properties['Customize order'] = customizeCart.join(' | ');
 
     if (state.donation > 0) {
       properties[window.MakePortraitDonationTitle || 'Donation'] = formatMoney(state.donation);
@@ -2819,6 +3031,97 @@
       });
     }
 
+    // Add prints (checkbox → expand grid)
+    var printsCheck = $('mp-prints-check');
+    var printOptions = $('mp-prints-options');
+
+    function selectPrintsBtn(btn) {
+      clearPrintsSelection();
+      btn.classList.add('selected');
+      state.prints = parseInt(btn.dataset.prints, 10);
+    }
+
+    function clearPrintsSelection() {
+      document.querySelectorAll('#mp-prints-grid .option-btn').forEach(function (b) { b.classList.remove('selected'); });
+      var ci = document.querySelector('.make-portrait__prints-custom-input');
+      if (ci) ci.value = '';
+      state.prints = 0;
+    }
+
+    function deselectPrints() {
+      var addonItem = printsCheck && printsCheck.closest('.addon-item--prints');
+      clearPrintsSelection();
+      var cp = document.querySelector('.make-portrait__prints-custom-price');
+      if (cp) cp.textContent = '+ ' + formatMoney(PRINTS_BASE_PRICE + 4 * PRINTS_EXTRA_PRICE);
+      if (printOptions) printOptions.hidden = true;
+      if (printsCheck) printsCheck.checked = false;
+      if (addonItem) addonItem.classList.remove('selected');
+    }
+
+    if (printsCheck && printOptions) {
+      printsCheck.addEventListener('change', function () {
+        var addonItem = printsCheck.closest('.addon-item--prints');
+        if (printsCheck.checked) {
+          printOptions.hidden = false;
+          if (addonItem) addonItem.classList.add('selected');
+          var firstBtn = document.querySelector('#mp-prints-grid .option-btn[data-prints="1"]');
+          if (firstBtn) selectPrintsBtn(firstBtn);
+        } else {
+          deselectPrints();
+        }
+        updateSubtotals();
+      });
+    }
+
+    document.querySelectorAll('#mp-prints-grid .option-btn[data-prints]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.classList.contains('selected')) {
+          deselectPrints();
+        } else {
+          selectPrintsBtn(btn);
+        }
+        updateSubtotals();
+      });
+    });
+
+    var printCustomInput = document.querySelector('.make-portrait__prints-custom-input');
+    var printCustomLabel = document.querySelector('.make-portrait__prints-custom');
+    var printCustomPrice = document.querySelector('.make-portrait__prints-custom-price');
+    if (printCustomInput && printCustomLabel) {
+      printCustomInput.addEventListener('focus', function () {
+        document.querySelectorAll('#mp-prints-grid .option-btn:not(.make-portrait__prints-custom)').forEach(function (b) { b.classList.remove('selected'); });
+        printCustomLabel.classList.add('selected');
+      });
+
+      printCustomInput.addEventListener('input', function () {
+        var raw = parseFloat(printCustomInput.value);
+        if (!isFinite(raw) || raw < 1) {
+          state.prints = 0;
+          printCustomLabel.classList.remove('selected');
+          if (printCustomPrice) printCustomPrice.textContent = '';
+          updateSubtotals();
+          return;
+        }
+        state.prints = Math.round(Math.abs(raw));
+        printCustomLabel.classList.add('selected');
+        if (printCustomPrice) printCustomPrice.textContent = '+ ' + formatMoney(getPrintsPrice());
+        updateSubtotals();
+      });
+
+      printCustomInput.addEventListener('blur', function () {
+        var raw = parseFloat(printCustomInput.value);
+        if (!isFinite(raw) || raw < 1) {
+          printCustomInput.value = '';
+          printCustomLabel.classList.remove('selected');
+          if (printCustomPrice) printCustomPrice.textContent = '';
+          state.prints = 0;
+          updateSubtotals();
+        } else {
+          printCustomInput.value = Math.round(Math.abs(raw));
+        }
+      });
+    }
+
     // DEV: skip to step 4 on reload — remove before going live
     state.productCategory = 'canvas';
     buildCanvasFrameUI();
@@ -2913,7 +3216,7 @@
       "id": "pet_name_price",
       "label": "Pet name fee (in EUR)",
       "default": 5
-    }
+    },
   ],
   "blocks": [
     {
@@ -2973,6 +3276,30 @@
       ]
     },
     {
+      "type": "prints",
+      "name": "Add Prints",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "number",
+          "id": "base_price",
+          "label": "Base price for 1 copy (in EUR)",
+          "default": 30
+        },
+        {
+          "type": "number",
+          "id": "extra_price",
+          "label": "Price per additional copy (in EUR)",
+          "default": 20
+        }
+      ]
+    },
+    {
       "type": "addon",
       "name": "Add-on Service",
       "settings": [
@@ -3003,7 +3330,7 @@
           "type": "text",
           "id": "title",
           "label": "Section title",
-          "default": "DogsTrust donate"
+          "default": "DogsTrust"
         },
         {
           "type": "image_picker",
@@ -3019,7 +3346,7 @@
         {
           "type": "text",
           "id": "description",
-          "label": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization."
+          "label": "Description"
         },
         {
           "type": "text",

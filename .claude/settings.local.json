@@ -5,7 +5,9 @@
       "Bash(shopify theme:*)",
       "Bash(theme check *)",
       "Bash(python3)",
-      "Bash(grep -n \"var feeAmount = \\\\$\\('mp-pet-name-fee-amount'\\)\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
+      "Bash(grep -n \"var feeAmount = \\\\$\\('mp-pet-name-fee-amount'\\)\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(awk 'NR>=532 && NR<=1608' /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(awk 'NR>=1611 && NR<=2837' /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
     ]
   }
 }

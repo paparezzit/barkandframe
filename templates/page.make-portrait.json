@@ -28,12 +28,12 @@
             "price": 30
           }
         },
-        "addon_jUPjRt": {
-          "type": "addon",
+        "prints_LRmCfz": {
+          "type": "prints",
           "settings": {
-            "name": "Add prints",
-            "description": "<p>Want to share the artwork with others around you? Enter the number of additional copies you need.</p>",
-            "price": 30
+            "description": "Want to share the artwork with others around you? Enter the number of additional copies you need.",
+            "base_price": 30,
+            "extra_price": 20
           }
         },
         "addon_BFcPdG": {
@@ -47,8 +47,8 @@
         "donation_enNYcj": {
           "type": "donation",
           "settings": {
-            "title": "DogsTrust donate",
-            "image": "shopify://shop_images/28d40fd9b67164816fd95f9a47352f3792df7335.png",
+            "title": "DogsTrust",
+            "image": "shopify://shop_images/dogstrust.png",
             "heading": "Spread the love",
             "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
             "amounts": "10, 50, 100"
@@ -141,7 +141,7 @@
       "block_order": [
         "addon_JAeLG7",
         "addon_QTcjeX",
-        "addon_jUPjRt",
+        "prints_LRmCfz",
         "addon_BFcPdG",
         "donation_enNYcj",
         "style_fWfEFh",
