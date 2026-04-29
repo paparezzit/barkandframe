@@ -1,0 +1,5 @@
+# Shopify theme settings data — contains API keys and live store values
+config/settings_data.json
+
+# OS
+.DS_Store

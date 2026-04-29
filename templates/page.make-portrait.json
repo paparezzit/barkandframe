@@ -128,9 +128,8 @@
         "paper_framed_handle": "framed-poster",
         "canvas_unframed_handle": "unframed-canvas",
         "canvas_framed_handle": "framed-canvas",
-        "gcs_signing_endpoint": "",
-        "gcs_bucket_name": "",
-        "gcs_folder": "uploads",
+        "bark_api_url": "https://bark-api-handler-dev-vfrni4hyya-ey.a.run.app",
+        "bark_api_key": "bf27ce2c262038275cef0a5858a905cc02a9329a4e27305fab2ed72e2993f4b4",
         "extra_pet_price": 9,
         "pet_name_price": 5
       }

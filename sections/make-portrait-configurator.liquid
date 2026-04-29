@@ -24,10 +24,9 @@
   ].filter(s => s.name);
 
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
-  window.MakePortraitGCS = {
-    signingEndpoint: {{ section.settings.gcs_signing_endpoint | default: '' | json }},
-    bucketName: {{ section.settings.gcs_bucket_name | default: '' | json }},
-    folder: {{ section.settings.gcs_folder | default: 'uploads' | json }}
+  window.BARK_CONFIG = {
+    apiUrl: {{ section.settings.bark_api_url | default: '' | json }},
+    apiKey: {{ section.settings.bark_api_key | default: '' | json }}
   };
 
   {%- assign _donation_block = section.blocks | where: "type", "donation" | first -%}
@@ -3311,8 +3310,8 @@
   }
 
   function uploadToGCS(file, previewEl) {
-    var cfg = window.MakePortraitGCS;
-    if (!cfg || !cfg.signingEndpoint || !cfg.bucketName) return;
+    var cfg = window.BARK_CONFIG;
+    if (!cfg || !cfg.apiUrl || !cfg.apiKey) return;
 
     state.pendingUploads++;
     updateOrderButton();
@@ -3321,28 +3320,50 @@
     spinner.className = 'photo-preview__spinner';
     previewEl.appendChild(spinner);
 
-    var filename = cfg.folder + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-
-    fetch(cfg.signingEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename: filename, contentType: file.type })
-    })
+    // 1. Fetch cart token
+    fetch('/cart.js', { credentials: 'same-origin' })
       .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (!data.signedUrl) throw new Error('No signed URL');
-        return fetch(data.signedUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type },
-          body: file
-        }).then(function () { return data.publicUrl; });
+      .then(function (cart) {
+        if (!cart.token) throw new Error('Cart token not available');
+
+        // 2. Request pre-signed URL
+        return fetch(cfg.apiUrl + '/v1/uploads/customer-photo/signed-url', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': cfg.apiKey
+          },
+          body: JSON.stringify({
+            cartToken: cart.token,
+            fileName: file.name,
+            contentType: file.type
+          })
+        }).then(function (r) {
+          if (!r.ok) throw new Error('Upload handshake failed: ' + r.status);
+          return r.json();
+        });
       })
-      .then(function (publicUrl) {
-        state.photoUrls.push(publicUrl);
-        previewEl.dataset.photoUrl = publicUrl;
+      .then(function (data) {
+        // 3. PUT directly to GCS — x-goog-content-length-range is required
+        return fetch(data.uploadUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': file.type,
+            'x-goog-content-length-range': '0,' + data.maxFileSize
+          },
+          body: file
+        }).then(function (r) {
+          if (!r.ok) throw new Error('GCS upload failed: ' + r.status);
+          return data.gcsPath;
+        });
+      })
+      .then(function (gcsPath) {
+        state.photoUrls.push(gcsPath);
+        previewEl.dataset.photoUrl = gcsPath;
         spinner.remove();
       })
-      .catch(function () {
+      .catch(function (err) {
+        console.error('Photo upload error:', err);
         spinner.classList.add('photo-preview__spinner--error');
         spinner.title = 'Upload failed';
       })
@@ -3442,6 +3463,12 @@
 
     if (state.donation > 0) {
       properties[window.MakePortraitDonationTitle || 'Donation'] = formatMoney(state.donation);
+    }
+
+    if (state.photoUrls.length > 0) {
+      state.photoUrls.forEach(function (url, i) {
+        properties[i === 0 ? '_photo_url' : '_photo_url_' + (i + 1)] = url;
+      });
     }
 
     properties['_configuration'] = JSON.stringify({
@@ -3924,26 +3951,19 @@
     },
     {
       "type": "header",
-      "content": "Photo upload (Google Cloud Storage)"
+      "content": "Photo upload (Bark API)"
     },
     {
       "type": "text",
-      "id": "gcs_signing_endpoint",
-      "label": "Signing endpoint URL",
-      "info": "URL of your Cloud Function that generates signed upload URLs"
+      "id": "bark_api_url",
+      "label": "API URL",
+      "info": "e.g. https://bark-api-handler-dev-vfrni4hyya-ey.a.run.app"
     },
     {
       "type": "text",
-      "id": "gcs_bucket_name",
-      "label": "GCS bucket name",
-      "info": "Name of your Google Cloud Storage bucket (e.g. barkandframe-uploads)"
-    },
-    {
-      "type": "text",
-      "id": "gcs_folder",
-      "label": "Upload folder",
-      "default": "uploads",
-      "info": "Folder prefix inside the bucket (e.g. uploads or orders/photos)"
+      "id": "bark_api_key",
+      "label": "API key",
+      "info": "Scoped storefront key — do not commit to git"
     },
     {
       "type": "header",
