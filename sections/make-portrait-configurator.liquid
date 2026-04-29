@@ -370,6 +370,7 @@
             >
           </div>
           <div class="photo-upload__previews" id="mp-photo-previews" aria-live="polite"></div>
+          <p id="mp-upload-error" class="make-portrait__error" hidden></p>
         </div>
 
         <div class="mp-image-guidelines">
@@ -1721,6 +1722,12 @@
   font-size: 18px;
   font-weight: 700;
   color: #c0392b;
+}
+
+.photo-preview--error {
+  outline: 2px solid var(--color-error);
+  border-radius: 8px;
+  opacity: 0.6;
 }
 
 @keyframes mp-spin {
@@ -3303,15 +3310,35 @@
     if (state.pendingUploads > 0) {
       btn.disabled = true;
       btn.textContent = 'Uploading photo…';
+    } else if (state.files.length > 0 && state.photoUrls.length === 0) {
+      btn.disabled = true;
+      btn.textContent = 'Upload failed — retry photo';
     } else {
       btn.disabled = false;
       btn.textContent = 'Order portrait';
     }
   }
 
+  function showUploadError(msg) {
+    var el = $('mp-upload-error');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+  }
+
+  function clearUploadError() {
+    var el = $('mp-upload-error');
+    if (el) { el.hidden = true; el.textContent = ''; }
+  }
+
   function uploadToGCS(file, previewEl) {
     var cfg = window.BARK_CONFIG;
-    if (!cfg || !cfg.apiUrl || !cfg.apiKey) return;
+    if (!cfg || !cfg.apiUrl || !cfg.apiKey) {
+      showUploadError('Upload is not configured. Please contact support.');
+      return;
+    }
+
+    clearUploadError();
 
     state.pendingUploads++;
     updateOrderButton();
@@ -3363,9 +3390,23 @@
         spinner.remove();
       })
       .catch(function (err) {
-        console.error('Photo upload error:', err);
-        spinner.classList.add('photo-preview__spinner--error');
-        spinner.title = 'Upload failed';
+        console.error('[Bark upload] error:', err.message, err);
+        spinner.remove();
+        previewEl.classList.add('photo-preview--error');
+        var msg = err.message || 'unknown error';
+        if (msg.includes('Cart token')) {
+          showUploadError('Could not connect your session. Please refresh the page and try again.');
+        } else if (msg.includes('handshake failed: 401') || msg.includes('handshake failed: 403')) {
+          showUploadError('Upload configuration error (auth). Please contact support.');
+        } else if (msg.includes('handshake failed: 429')) {
+          showUploadError('Too many upload attempts. Please wait a moment and try again.');
+        } else if (msg.includes('handshake failed')) {
+          showUploadError('Upload service unavailable. (' + msg + ')');
+        } else if (msg.includes('GCS upload failed')) {
+          showUploadError('Photo could not be saved. (' + msg + ')');
+        } else {
+          showUploadError('Upload failed: ' + msg);
+        }
       })
       .finally(function () {
         state.pendingUploads = Math.max(0, state.pendingUploads - 1);
