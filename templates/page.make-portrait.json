@@ -109,34 +109,6 @@
             "base_price": 74
           }
         },
-        "tab-overview": {
-          "type": "tab",
-          "settings": {
-            "tab_id": "overview",
-            "content": "<p>Each portrait begins with a photo. We use it as the foundation for everything that follows — gesture, expression, presence. The style you choose determines how far we take it from there.</p>"
-          }
-        },
-        "tab-artist": {
-          "type": "tab",
-          "settings": {
-            "tab_id": "artist",
-            "content": "<p>Our portraits are created by a curated selection of independent artists, each with a distinct visual language. When you choose a style, you're choosing an artist — and everything that comes with their approach.</p>"
-          }
-        },
-        "tab-product": {
-          "type": "tab",
-          "settings": {
-            "tab_id": "product",
-            "content": "<p>Available in multiple formats and sizes. All prints are produced on premium materials with archival inks. Frames are hand-assembled and shipped ready to hang.</p>"
-          }
-        },
-        "tab-contact": {
-          "type": "tab",
-          "settings": {
-            "tab_id": "contact",
-            "content": "<p>Questions about your order? Reach us at <a href=\"mailto:hello@barkandframe.com\">hello@barkandframe.com</a>. We typically reply within one business day.</p>"
-          }
-        }
       },
       "block_order": [
         "addon_JAeLG7",
@@ -148,11 +120,7 @@
         "style_CBAeCJ",
         "style_EYWg6x",
         "style_QqBaBD",
-        "style_JFaB7b",
-        "tab-overview",
-        "tab-artist",
-        "tab-product",
-        "tab-contact"
+        "style_JFaB7b"
       ],
       "settings": {
         "products_collection": "make-portrait",
