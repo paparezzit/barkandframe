@@ -14,6 +14,7 @@
           "imageUrl": "{{ block.settings.image | image_url: width: 900 }}",
           "artistName": {%- if artist != blank -%}{{ artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
           "artistPhotoUrl": "{%- if artist != blank -%}{{ artist.photo.value | image_url: width: 200 }}{%- endif -%}",
+          "artistId": {%- if artist != blank -%}{{ artist.system.handle | json }}{%- else -%}null{%- endif -%},
           "description": {{ block.settings.description | default: '' | json }},
           "tag": {{ block.settings.tag | default: '' | json }},
           "basePrice": {{ block.settings.base_price | default: 0 }}
@@ -196,19 +197,6 @@
           <div class="make-portrait__style-description" id="mp-style-description"></div>
         </div>
 
-        {%- comment -%} Shared subtotal panel – moved before active CTA by JS {%- endcomment -%}
-        <div class="make-portrait__subtotal" id="mp-subtotal-panel">
-          <p class="subtotal__label__title">Subtotal</p>
-          <div id="mp-order-summary" class="order-summary"></div>
-          <div class="subtotal__row subtotal__row--total">
-            <span class="subtotal__label__note">Free shipping over $100</span>
-            <span class="subtotal__price">
-              <span id="mp-subtotal-prefix">from </span><span class="subtotal__price__amount" id="mp-subtotal-price">—</span>
-            </span>
-          </div>
-        </div>
-
-        <button class="button make-portrait__cta" id="mp-cta-step1">Go to product</button>
       </div>
 
       {%- comment -%}——— STEP 2: Choose Product ———{%- endcomment -%}
@@ -221,19 +209,20 @@
             {%- comment -%} === Prints on Canvas + Paper (side by side, each with own label) === {%- endcomment -%}
             <div class="product-picker__print-group">
               <p class="product-picker__category-label">Print on canvas</p>
+              {%- assign _cu = all_products[section.settings.canvas_unframed_handle] -%}
+              {%- assign _cf = all_products[section.settings.canvas_framed_handle] -%}
+              {%- assign _canvas_img = _cu.featured_image | default: _cf.featured_image -%}
+              {%- assign _canvas_min_price = _cu.price_min -%}
+              {%- if _cf != blank and _cf.price_min < _canvas_min_price -%}
+                {%- assign _canvas_min_price = _cf.price_min -%}
+              {%- endif -%}
               <button
                 class="product-picker__item product-picker__item--category"
                 data-category="canvas"
+                data-min-price="{{ _canvas_min_price }}"
                 role="option"
                 aria-selected="false"
               >
-                {%- assign _cu = all_products[section.settings.canvas_unframed_handle] -%}
-                {%- assign _cf = all_products[section.settings.canvas_framed_handle] -%}
-                {%- assign _canvas_img = _cu.featured_image | default: _cf.featured_image -%}
-                {%- assign _canvas_min_price = _cu.price_min -%}
-                {%- if _cf != blank and _cf.price_min < _canvas_min_price -%}
-                  {%- assign _canvas_min_price = _cf.price_min -%}
-                {%- endif -%}
                 {%- if _canvas_img -%}
                   <img src="{{ _canvas_img | image_url: width: 200 }}" width="200" height="200" alt="Print on Canvas" loading="lazy">
                 {%- else -%}
@@ -247,19 +236,20 @@
             {%- comment -%} === Prints on Paper (category – product loaded in step 3) === {%- endcomment -%}
             <div class="product-picker__print-group">
               <p class="product-picker__category-label">Print on paper</p>
+              {%- assign _pu = all_products[section.settings.paper_unframed_handle] -%}
+              {%- assign _pf = all_products[section.settings.paper_framed_handle] -%}
+              {%- assign _paper_img = _pu.featured_image | default: _pf.featured_image -%}
+              {%- assign _paper_min_price = _pu.price_min -%}
+              {%- if _pf != blank and _pf.price_min < _paper_min_price -%}
+                {%- assign _paper_min_price = _pf.price_min -%}
+              {%- endif -%}
               <button
                 class="product-picker__item product-picker__item--category"
                 data-category="paper"
+                data-min-price="{{ _paper_min_price }}"
                 role="option"
                 aria-selected="false"
               >
-                {%- assign _pu = all_products[section.settings.paper_unframed_handle] -%}
-                {%- assign _pf = all_products[section.settings.paper_framed_handle] -%}
-                {%- assign _paper_img = _pu.featured_image | default: _pf.featured_image -%}
-                {%- assign _paper_min_price = _pu.price_min -%}
-                {%- if _pf != blank and _pf.price_min < _paper_min_price -%}
-                  {%- assign _paper_min_price = _pf.price_min -%}
-                {%- endif -%}
                 {%- if _paper_img -%}
                   <img src="{{ _paper_img | image_url: width: 200 }}" width="200" height="200" alt="Print on paper" loading="lazy">
                 {%- else -%}
@@ -306,7 +296,6 @@
           {%- endif -%}
         </div>
 
-        <button class="button make-portrait__cta" id="mp-cta-step2" disabled>Choose options</button>
         <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1">Change a style</button>
       </div>
 
@@ -362,7 +351,6 @@
           </div>
         </div>
 
-        <button class="button make-portrait__cta" id="mp-cta-step3">Go to last step</button>
       </div>
 
       {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
@@ -560,9 +548,25 @@
           {%- endfor -%}
         {%- endif -%}
 
-        <button class="button make-portrait__cta" id="mp-cta-order">Order portrait</button>
 
         <p id="mp-cart-error" class="make-portrait__error" hidden></p>
+      </div>
+
+      <div class="make-portrait__action-bar" id="mp-action-bar">
+        <div class="make-portrait__subtotal" id="mp-subtotal-panel">
+          <p class="subtotal__label__title">Subtotal</p>
+          <div id="mp-order-summary" class="order-summary"></div>
+          <div class="subtotal__row subtotal__row--total">
+            <span class="subtotal__label__note">Free shipping over $100</span>
+            <span class="subtotal__price">
+              <span id="mp-subtotal-prefix">from </span><span class="subtotal__price__amount" id="mp-subtotal-price">—</span>
+            </span>
+          </div>
+        </div>
+        <button class="button make-portrait__cta" id="mp-cta-step1">Go to product</button>
+        <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Choose options</button>
+        <button class="button make-portrait__cta" id="mp-cta-step3" hidden>Go to last step</button>
+        <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
       </div>
 
       <p class="make-portrait__availability">
@@ -575,6 +579,8 @@
         <span class="mp-delivery__label">Estimated delivery to</span>
         <span id="mp-delivery"></span>
       </p>
+
+      
 
     </div>{%- comment -%} end .make-portrait__right {%- endcomment -%}
 
@@ -604,7 +610,50 @@
           </div>
         </div>
 
-        <div class="tab-panel" id="tab-artist" data-tab="artist" role="tabpanel" hidden></div>
+        <div class="tab-panel" id="tab-artist" data-tab="artist" role="tabpanel" hidden>
+          {%- assign rendered_artist_handles = '' -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'style' and block.settings.artist != blank -%}
+              {%- assign a = block.settings.artist -%}
+              {%- assign a_handle = a.system.handle -%}
+              {%- unless rendered_artist_handles contains a_handle -%}
+                {%- assign rendered_artist_handles = rendered_artist_handles | append: a_handle | append: ',' -%}
+                <div class="tab-artist-panel" data-artist="{{ a_handle }}" hidden>
+
+                  <div class="artist-card">
+                    {%- if a.photo.value != blank -%}
+                      <img class="artist-card__photo" src="{{ a.photo.value | image_url: width: 200 }}" alt="{{ a.name.value }}" width="72" height="72" loading="lazy">
+                    {%- endif -%}
+                    <div class="artist-card__body">
+                      <strong class="artist-card__name">{{ a.name.value }}</strong>
+                      {%- if a.about.value != blank -%}
+                        <p class="artist-card__description">{{ a.about.value }}</p>
+                      {%- endif -%}
+                    </div>
+                    {%- if a.signature.value != blank -%}
+                      <img class="artist-card__signature" src="{{ a.signature.value | image_url: width: 160 }}" alt="" loading="lazy">
+                    {%- endif -%}
+                  </div>
+
+                  {%- if a.description != blank -%}
+                    <div class="artist-bio">{{ a.description | metafield_tag }}</div>
+                  {%- endif -%}
+
+                  {%- if a.description_image.value != blank -%}
+                    <div class="description-image">
+                      <img src="{{ a.description_image.value | image_url: width: 800 }}" alt="{{ a.name.value }}" loading="lazy">
+                    </div>
+                  {%- endif -%}
+
+                  {%- if a.hero.value != blank -%}
+                    <p class="artist-hero">{{ a.hero.value }}</p>
+                  {%- endif -%}
+
+                </div>
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
 
         <div class="tab-panel" id="tab-product" data-tab="product" role="tabpanel" hidden>
           <div class="tab-product" id="tab-product-accordions">
@@ -695,6 +744,40 @@
         </div>
 
       </div>
+
+      <div class="mp-reviews">
+        <h2 class="reviews__heading">What do dog owners say?</h2>
+        <div class="reviews__outer">
+          <div class="reviews__grid">
+            {%- for r in shop.metaobjects['review'].values limit: 9 -%}
+              <div class="review-card">
+                {%- if r.photo.value != blank -%}
+                  <div class="review-card__img">
+                    <img
+                      src="{{ r.photo.value | image_url: width: 600 }}"
+                      alt="{{ r.heading.value | escape }}"
+                      loading="lazy"
+                      width="600"
+                      height="400"
+                    >
+                  </div>
+                {%- endif -%}
+                {%- if r.heading.value != blank -%}
+                  <h3 class="review-card__heading">{{ r.heading.value }}</h3>
+                {%- endif -%}
+                {%- if r.body.value != blank -%}
+                  <p class="review-card__body">{{ r.body.value | newline_to_br }}</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          <div class="reviews__fade" aria-hidden="true"></div>
+        </div>
+        <div class="reviews__cta">
+          <a href="/pages/reviews" class="button">All reviews</a>
+        </div>
+      </div>
+
     </div>
 
   </div>{%- comment -%} end .make-portrait__layout {%- endcomment -%}
@@ -816,8 +899,6 @@
 
 /* ——— Tabs ——— */
 .make-portrait__tabs {
-  max-width: 520px;
-  margin: 0 auto;
   width: 100%;
 }
 
@@ -851,6 +932,8 @@
 
 .make-portrait__tab-panels {
   padding: 20px 0;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .tab-panel {
@@ -2015,7 +2098,7 @@
 
 /* ——— Subtotal ——— */
 .make-portrait__subtotal {
-  margin: 60px 0 20px;
+  margin: 20px 0 20px;
   background-color: var(--cream);
   border-radius: 10px;
   padding: 15px 20px;
@@ -2143,6 +2226,162 @@
   padding: 16px 0;
 }
 
+.tab-artist-panel {
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.tab-artist-panel:not([hidden]) {
+  display: flex;
+}
+
+.artist-card {
+  background: var(--purple);
+  border-radius: 1000px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-body--family);
+  font-size: 14px;
+  color: var(--brown);
+}
+
+.artist-card__photo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.artist-card__body {
+  flex: 1;
+  min-width: 0;
+  max-width: calc(80% - 110px);
+}
+
+.artist-card__name {
+  display: block;
+  font-weight: 700;
+  margin-bottom: .5em;
+}
+
+.artist-card__description {
+  margin: 0;
+}
+
+.artist-card__signature {
+  position: absolute;
+  bottom: 10px;
+  right: 60px;
+  width: 70px;
+}
+
+.artist-bio {
+  font-size: 14px;
+  color: var(--brown);
+  line-height: 1.3;
+  margin: 1em 0;
+}
+
+.artist-bio p { margin: 0 0 1em; }
+.artist-bio p:last-child { margin-bottom: 0; }
+
+.artist-portrait img {
+  width: 100%;
+  border-radius: 1rem;
+  display: block;
+}
+
+.artist-hero {
+  font-family: "display";
+  font-size: 21px;
+  margin: 0;
+}
+
+/* ——— Reviews grid ——— */
+.mp-reviews{
+  text-align: left;
+  border-top: 2px solid var(--cream);
+  padding: 100px 0 0;
+  margin: 120px 0 0;
+}
+
+.reviews__heading {
+  font-family: var(--font-heading--family);
+  font-size: 36px;
+  margin: 0 0 1em;
+}
+
+.reviews__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.reviews__outer {
+  position: relative;
+  max-height: 900px;
+  overflow: hidden;
+}
+
+.reviews__grid {
+  columns: 2;
+  column-gap: 20px;
+}
+
+.reviews__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: linear-gradient(to bottom, transparent, var(--beige));
+  pointer-events: none;
+}
+
+.review-card {
+  background: var(--cream);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  break-inside: avoid;
+  margin-bottom: 20px;
+}
+
+.review-card__img {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.review-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.review-card:hover .review-card__img img {
+  transform: scale(1.04);
+}
+
+.review-card__heading {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 1em 0 .3em;
+}
+
+.review-card__body {
+  font-size: 14px;
+  margin: 0;
+}
+
 @media (min-width: 800px) {
   .make-portrait__layout {
     display: grid;
@@ -2156,8 +2395,14 @@
   }
 
   .make-portrait__left  { grid-area: left; }
-  .make-portrait__right { grid-area: right; position: sticky; top: 20px; }
+  .make-portrait__right { grid-area: right; position: sticky; top: 94px; padding-bottom: 40px;}
   .make-portrait__tabs  { grid-area: tabs; align-self: start; }
+
+  .make-portrait__action-bar {
+    position: sticky;
+    bottom: 40px;
+    z-index: 10;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -2189,6 +2434,10 @@
     display: flex;
     flex-wrap: nowrap;
   }
+
+  .reviews__grid {
+    columns: 3;
+  }
 }
 
 {% endstylesheet %}
@@ -2206,6 +2455,7 @@
     styleId: null,
     style: null,
     productCategory: null,   // 'canvas' | null
+    categoryMinPrice: 0,     // in local currency cents
     canvasFrameChoice: null, // 'unframed' | 'framed'
     productHandle: null,
     product: null,
@@ -2233,6 +2483,7 @@
   var PRINTS_BASE_EUR  = window.MakePortraitPrintsBaseEUR  || 30;
   var PRINTS_EXTRA_EUR = window.MakePortraitPrintsExtraEUR || 20;
   var SHOP_CURRENCY    = window.MakePortraitShopCurrency   || 'USD';
+  var FX_RATE          = 1;
   var EXTRA_PET_PRICE  = EXTRA_PET_USD * 100;
   var PET_NAME_PRICE   = PET_NAME_USD  * 100;
   var PRINTS_BASE_PRICE  = PRINTS_BASE_EUR  * 100;
@@ -2300,8 +2551,11 @@
     if (state.product && state.product.variants && state.product.variants.length) {
       return state.product.variants[0].price;
     }
+    if (state.categoryMinPrice) {
+      return state.categoryMinPrice; // already in local currency cents from Shopify
+    }
     if (state.style && state.style.basePrice) {
-      return state.style.basePrice * 100;
+      return Math.round(state.style.basePrice * FX_RATE) * 100;
     }
     return 0;
   }
@@ -2362,15 +2616,15 @@
       if (state.style) previewName.textContent = state.style.name || '';
     }
 
-    // Move shared subtotal panel before the active step's CTA button
+    // Show only the CTA for the active step
     var ctaMap = { 1: 'mp-cta-step1', 2: 'mp-cta-step2', 3: 'mp-cta-step3', 4: 'mp-cta-order' };
-    var panel = $('mp-subtotal-panel');
-    var cta = $(ctaMap[step]);
-    if (panel && cta && cta.parentNode) cta.parentNode.insertBefore(panel, cta);
+    Object.keys(ctaMap).forEach(function (s) {
+      var el = $(ctaMap[s]);
+      if (el) el.hidden = parseInt(s) !== step;
+    });
 
-    // Scroll right panel to top on mobile
-    var right = document.querySelector('.make-portrait__right');
-    if (right) right.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to top of page on every step change
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /* ————————————————————————————————————————
@@ -2404,6 +2658,13 @@
       artistPhoto.src = state.style.artistPhotoUrl || '';
       artistPhoto.alt = state.style.artistName || '';
       artistPhoto.hidden = !state.style.artistName;
+    }
+
+    // Artist tab panel
+    document.querySelectorAll('.tab-artist-panel').forEach(function (p) { p.hidden = true; });
+    if (state.style.artistId) {
+      var activeArtist = document.querySelector('.tab-artist-panel[data-artist="' + state.style.artistId + '"]');
+      if (activeArtist) activeArtist.hidden = false;
     }
 
     // Style info
@@ -2483,6 +2744,8 @@
     state.product = null;
     state.variantId = null;
     state.variant = null;
+    var btn = document.querySelector('.product-picker__item--category[data-category="' + category + '"]');
+    state.categoryMinPrice = btn ? parseInt(btn.dataset.minPrice, 10) || 0 : 0;
 
     document.querySelectorAll('.product-picker__item, .product-picker__item--category').forEach(function (btn) {
       var selected = btn.dataset.category === category;
@@ -3269,6 +3532,7 @@
   function init() {
     updateDeliveryDates();
     initTabs();
+    initSmartSticky();
 
     // Auto-select first style
     if (STYLES.length > 0) {
@@ -3346,10 +3610,12 @@
 
     // Apply images + step 4 pricing after exchange rate is resolved
     resolveExchangeRate().then(function (rate) {
+      FX_RATE         = rate;
       EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
       PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
       initCustomOptionImages();
       initStep4Pricing(rate);
+      updateSubtotals();
     });
 
     // Pet name
@@ -3561,11 +3827,50 @@
       });
     });
 
-    // DEV: skip to step 4 on reload — remove before going live
-    state.productCategory = 'canvas';
-    buildCanvasFrameUI();
-    goToStep(4);
-    // END DEV
+  }
+
+  /* ————————————————————————————————————————
+     Smart sticky right column
+  ———————————————————————————————————————— */
+  function initSmartSticky() {
+    var el = document.querySelector('.make-portrait__right');
+    if (!el) return;
+
+    var TOP_OFFSET = 94;
+    var lastScrollY = window.scrollY;
+    var currentTop = TOP_OFFSET;
+
+    function update() {
+      if (window.innerWidth < 800) {
+        el.style.top = '';
+        return;
+      }
+
+      var scrollY = window.scrollY;
+      var delta = scrollY - lastScrollY;
+      lastScrollY = scrollY;
+
+      var elHeight = el.offsetHeight;
+      var viewportHeight = window.innerHeight;
+
+      if (elHeight <= viewportHeight - TOP_OFFSET) {
+        // Content fits — stick to top as normal
+        currentTop = TOP_OFFSET;
+      } else {
+        // Content taller than viewport — clamp between top and bottom edge
+        var minTop = viewportHeight - elHeight;
+        currentTop = Math.min(TOP_OFFSET, Math.max(minTop, currentTop - delta));
+      }
+
+      el.style.top = currentTop + 'px';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', function () {
+      currentTop = TOP_OFFSET;
+      lastScrollY = window.scrollY;
+      update();
+    });
   }
 
   if (document.readyState === 'loading') {
