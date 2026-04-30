@@ -8,7 +8,11 @@
       "Bash(grep -n \"var feeAmount = \\\\$\\('mp-pet-name-fee-amount'\\)\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
       "Bash(awk 'NR>=532 && NR<=1608' /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
       "Bash(awk 'NR>=1611 && NR<=2837' /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
-      "Bash(grep -n \"endjavascript\\\\|^\\\\s*}\\\\s*\\\\n*\\\\s*}\\\\s*\\\\n*}\\\\s*$\\\\|\\\\/\\\\/ end\\\\|init\\\\b\\\\|DOMContentLoaded\\\\|window\\\\.on\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
+      "Bash(grep -n \"endjavascript\\\\|^\\\\s*}\\\\s*\\\\n*\\\\s*}\\\\s*\\\\n*}\\\\s*$\\\\|\\\\/\\\\/ end\\\\|init\\\\b\\\\|DOMContentLoaded\\\\|window\\\\.on\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(git -C /Users/martinres/Desktop/barkandframe log --oneline -10)",
+      "Bash(git -C /Users/martinres/Desktop/barkandframe show 5d35666:sections/make-portrait-configurator.liquid)",
+      "Bash(git -C /Users/martinres/Desktop/barkandframe log --all --oneline)",
+      "Bash(git -C /Users/martinres/Desktop/barkandframe show 106ff27:sections/make-portrait-configurator.liquid)"
     ]
   }
 }

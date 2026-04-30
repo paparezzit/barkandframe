@@ -24,9 +24,9 @@
   ].filter(s => s.name);
 
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
-  window.BARK_CONFIG = {
-    apiUrl: {{ section.settings.bark_api_url | default: '' | json }},
-    apiKey: {{ section.settings.bark_api_key | default: '' | json }}
+  window.MakePortraitCloudinary = {
+    cloudName: {{ section.settings.cloudinary_cloud_name | default: '' | json }},
+    uploadPreset: {{ section.settings.cloudinary_upload_preset | default: '' | json }}
   };
 
   {%- assign _donation_block = section.blocks | where: "type", "donation" | first -%}
@@ -3319,26 +3319,9 @@
     }
   }
 
-  function showUploadError(msg) {
-    var el = $('mp-upload-error');
-    if (!el) return;
-    el.textContent = msg;
-    el.hidden = false;
-  }
-
-  function clearUploadError() {
-    var el = $('mp-upload-error');
-    if (el) { el.hidden = true; el.textContent = ''; }
-  }
-
-  function uploadToGCS(file, previewEl) {
-    var cfg = window.BARK_CONFIG;
-    if (!cfg || !cfg.apiUrl || !cfg.apiKey) {
-      showUploadError('Upload is not configured. Please contact support.');
-      return;
-    }
-
-    clearUploadError();
+  function uploadToCloudinary(file, previewEl) {
+    var cfg = window.MakePortraitCloudinary;
+    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
 
     state.pendingUploads++;
     updateOrderButton();
@@ -3347,66 +3330,28 @@
     spinner.className = 'photo-preview__spinner';
     previewEl.appendChild(spinner);
 
-    // 1. Fetch cart token
-    fetch('/cart.js', { credentials: 'same-origin' })
-      .then(function (r) { return r.json(); })
-      .then(function (cart) {
-        if (!cart.token) throw new Error('Cart token not available');
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', cfg.uploadPreset);
 
-        // 2. Request pre-signed URL
-        return fetch(cfg.apiUrl + '/v1/uploads/customer-photo/signed-url', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': cfg.apiKey
-          },
-          body: JSON.stringify({
-            cartToken: cart.token,
-            fileName: file.name,
-            contentType: file.type
-          })
-        }).then(function (r) {
-          if (!r.ok) throw new Error('Upload handshake failed: ' + r.status);
-          return r.json();
-        });
-      })
+    fetch('https://api.cloudinary.com/v1_1/' + cfg.cloudName + '/image/upload', {
+      method: 'POST',
+      body: formData
+    })
+      .then(function (r) { return r.json(); })
       .then(function (data) {
-        // 3. PUT directly to GCS — x-goog-content-length-range is required
-        return fetch(data.uploadUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': file.type,
-            'x-goog-content-length-range': '0,' + data.maxFileSize
-          },
-          body: file
-        }).then(function (r) {
-          if (!r.ok) throw new Error('GCS upload failed: ' + r.status);
-          return data.gcsPath;
-        });
-      })
-      .then(function (gcsPath) {
-        state.photoUrls.push(gcsPath);
-        previewEl.dataset.photoUrl = gcsPath;
-        spinner.remove();
-      })
-      .catch(function (err) {
-        console.error('[Bark upload] error:', err.message, err);
-        spinner.remove();
-        previewEl.classList.add('photo-preview--error');
-        var msg = err.message || 'unknown error';
-        if (msg.includes('Cart token')) {
-          showUploadError('Could not connect your session. Please refresh the page and try again.');
-        } else if (msg.includes('handshake failed: 401') || msg.includes('handshake failed: 403')) {
-          showUploadError('Upload configuration error (auth). Please contact support.');
-        } else if (msg.includes('handshake failed: 429')) {
-          showUploadError('Too many upload attempts. Please wait a moment and try again.');
-        } else if (msg.includes('handshake failed')) {
-          showUploadError('Upload service unavailable. (' + msg + ')');
-        } else if (msg.includes('GCS upload failed')) {
-          showUploadError('Photo could not be saved. (' + msg + ')');
+        if (data.secure_url) {
+          state.photoUrls.push(data.secure_url);
+          previewEl.dataset.photoUrl = data.secure_url;
+          spinner.remove();
         } else {
-          showUploadError('Upload failed: ' + msg);
+          spinner.classList.add('photo-preview__spinner--error');
+          spinner.title = data.error ? data.error.message : 'Upload failed';
         }
+      })
+      .catch(function () {
+        spinner.classList.add('photo-preview__spinner--error');
+        spinner.title = 'Upload failed';
       })
       .finally(function () {
         state.pendingUploads = Math.max(0, state.pendingUploads - 1);
@@ -3458,7 +3403,7 @@
           mainImg.src = e.target.result;
         }
 
-        uploadToGCS(file, preview);
+        uploadToCloudinary(file, preview);
       };
       reader.readAsDataURL(file);
     });
@@ -3504,12 +3449,6 @@
 
     if (state.donation > 0) {
       properties[window.MakePortraitDonationTitle || 'Donation'] = formatMoney(state.donation);
-    }
-
-    if (state.photoUrls.length > 0) {
-      state.photoUrls.forEach(function (url, i) {
-        properties[i === 0 ? '_photo_url' : '_photo_url_' + (i + 1)] = url;
-      });
     }
 
     properties['_configuration'] = JSON.stringify({
@@ -3992,19 +3931,19 @@
     },
     {
       "type": "header",
-      "content": "Photo upload (Bark API)"
+      "content": "Photo upload (Cloudinary)"
     },
     {
       "type": "text",
-      "id": "bark_api_url",
-      "label": "API URL",
-      "info": "e.g. https://bark-api-handler-dev-vfrni4hyya-ey.a.run.app"
+      "id": "cloudinary_cloud_name",
+      "label": "Cloudinary cloud name",
+      "info": "Found in your Cloudinary dashboard (e.g. my-store)"
     },
     {
       "type": "text",
-      "id": "bark_api_key",
-      "label": "API key",
-      "info": "Scoped storefront key — do not commit to git"
+      "id": "cloudinary_upload_preset",
+      "label": "Cloudinary upload preset",
+      "info": "Create an unsigned upload preset in Cloudinary Settings → Upload"
     },
     {
       "type": "header",
