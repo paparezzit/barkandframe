@@ -128,6 +128,7 @@
         "paper_framed_handle": "framed-poster",
         "canvas_unframed_handle": "unframed-canvas",
         "canvas_framed_handle": "framed-canvas",
+        "addons_product_handle": "portrait-add-ons",
         "cloudinary_cloud_name": "dpkilh6fx",
         "cloudinary_upload_preset": "Unsigned",
         "extra_pet_price": 9,

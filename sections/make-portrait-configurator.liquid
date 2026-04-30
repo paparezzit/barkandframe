@@ -60,6 +60,8 @@
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
   window.MakePortraitShopCurrency   = {{ localization.country.currency.iso_code | json }};
+  {%- assign _addons_product = all_products[section.settings.addons_product_handle] -%}
+  window.MakePortraitAddonsVariantId = {{ _addons_product.variants.first.id | default: 0 | json }};
 
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
@@ -3475,30 +3477,51 @@
       photos: state.photoUrls
     });
 
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: state.variantId,
-        quantity: 1,
-        properties: properties
+    // Extras quantity must be in EUR so Shopify Markets converts it correctly
+    var addonEurTotal = 0;
+    document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
+      addonEurTotal += parseFloat(c.dataset.addonEur || 0);
+    });
+    var extraPetsEur = Math.max(0, state.petCount - 1) * EXTRA_PET_USD + (state.petName ? PET_NAME_USD : 0);
+    var printsEur = state.prints > 0 ? (PRINTS_BASE_EUR + (state.prints - 1) * PRINTS_EXTRA_EUR) : 0;
+    var donationEur = (FX_RATE > 0 && state.donation > 0) ? Math.round(state.donation / (FX_RATE * 100)) : 0;
+    var extrasQty = Math.round(extraPetsEur + addonEurTotal + printsEur + donationEur);
+    var addonsVariantId = window.MakePortraitAddonsVariantId;
+
+    var doRedirect = function () {
+      document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true }));
+      window.location.href = '/cart';
+    };
+    var doError = function (msg) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
+      showError(msg || 'An error occurred. Please try again.');
+    };
+
+    // Add addons first so main product appears on top in cart
+    var addAddon = (extrasQty > 0 && addonsVariantId)
+      ? fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: addonsVariantId, quantity: extrasQty, properties: { '_addon': '1' } })
+        })
+      : Promise.resolve({ ok: true });
+
+    addAddon
+      .then(function () {
+        return fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
+        }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); });
       })
-    })
-      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
       .then(function (result) {
         if (result.ok) {
-          // Trigger cart:update so cart drawer can react
-          document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true }));
-          window.location.href = '/cart';
+          doRedirect();
         } else {
-          if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
-          showError(result.data.description || result.data.message || 'An error occurred. Please try again.');
+          doError(result.data.description || result.data.message);
         }
       })
-      .catch(function () {
-        if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
-        showError('An error occurred. Please try again.');
-      });
+      .catch(function () { doError(); });
   }
 
   function showError(msg) {
@@ -3928,6 +3951,16 @@
       "type": "product",
       "id": "canvas_framed_handle",
       "label": "Framed Canvas"
+    },
+    {
+      "type": "header",
+      "content": "Add-ons pricing product"
+    },
+    {
+      "type": "product",
+      "id": "addons_product_handle",
+      "label": "Add-ons product",
+      "info": "Product priced at exactly 1 (store currency). Must be published to Online Store."
     },
     {
       "type": "header",
