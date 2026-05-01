@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "page-reviews": {
+      "type": "page-reviews",
+      "settings": {
+        "title": "What do dog owners say?",
+        "button_text": "Next reviews"
+      }
+    }
+  },
+  "order": [
+    "page-reviews"
+  ]
+}

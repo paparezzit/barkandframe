@@ -1,0 +1,199 @@
+{%- assign reviews = shop.metaobjects['review'].values -%}
+
+<section class="page-reviews section section--page-width">
+  <div class="page-reviews__inner ">
+    <h1 class="page-reviews__title">{{ section.settings.title }}</h1>
+
+    <div class="page-reviews__container" id="reviews-container">
+      <div class="page-reviews__grid">
+        {%- for r in reviews -%}
+          <div class="page-review-card">
+            {%- if r.photo.value != blank -%}
+              <div class="page-review-card__img">
+                <img
+                  src="{{ r.photo.value | image_url: width: 800 }}"
+                  alt="{{ r.heading.value | escape }}"
+                  loading="lazy"
+                  width="800"
+                >
+              </div>
+            {%- endif -%}
+            {%- if r.heading.value != blank -%}
+              <h3 class="page-review-card__heading">{{ r.heading.value }}</h3>
+            {%- endif -%}
+            {%- if r.body.value != blank -%}
+              <p class="page-review-card__body">{{ r.body.value | newline_to_br }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="page-reviews__fade" id="reviews-fade" aria-hidden="true"></div>
+    </div>
+
+    <div class="page-reviews__actions" id="reviews-actions">
+      <button class="button page-reviews__btn" id="reviews-btn" type="button">
+        {{ section.settings.button_text }}
+      </button>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.page-reviews {
+  padding: 80px 0 100px;
+  color: var(--brown);
+}
+
+.page-reviews__title {
+  font-size: 36px;
+  text-align: center;
+  margin: 0 auto 70px;
+  max-width: 280px;
+  font-family: "display", sans-serif;
+}
+
+.page-reviews__container {
+  position: relative;
+  max-height: 120dvh;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-reviews__grid {
+  columns: 2;
+  column-gap: 16px;
+}
+
+.page-review-card {
+  break-inside: avoid;
+  background-color: var(--cream);
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.page-review-card__img {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+.page-review-card__heading {
+  color: var(--brown);
+  font-size: var(--font-size--lg);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.page-review-card__body {
+  color: var(--brown);
+  font-size: var(--font-size--sm);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.page-reviews__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(to top, var(--beige, #fffaf1), transparent);
+  pointer-events: none;
+}
+
+.page-reviews__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+@media (min-width: 750px) {
+  .page-reviews {
+    padding: 240px 0 200px;
+  }
+
+  .page-reviews__title {
+    font-size: 96px;
+    margin-bottom: 200px;
+    max-width: 540px;
+  }
+
+  .page-reviews__grid {
+    columns: 3;
+  }
+
+  .page-review-card{
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  
+
+  .page-reviews__grid {
+    columns: 4;
+  }
+
+  
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var container = document.getElementById('reviews-container');
+  var btn = document.getElementById('reviews-btn');
+  var fade = document.getElementById('reviews-fade');
+  var actions = document.getElementById('reviews-actions');
+
+  if (!container || !btn) return;
+
+  var step = 1;
+
+  function checkFullyVisible() {
+    if (container.scrollHeight <= container.clientHeight + 2) {
+      if (fade) fade.style.display = 'none';
+      if (actions) actions.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('load', checkFullyVisible);
+
+  btn.addEventListener('click', function () {
+    step++;
+    container.style.maxHeight = (step * 120) + 'dvh';
+    setTimeout(checkFullyVisible, 650);
+  });
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Reviews Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "What do dog owners say?"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Next reviews"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews Page"
+    }
+  ]
+}
+{% endschema %}

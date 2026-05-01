@@ -12,7 +12,9 @@
       "Bash(git -C /Users/martinres/Desktop/barkandframe log --oneline -10)",
       "Bash(git -C /Users/martinres/Desktop/barkandframe show 5d35666:sections/make-portrait-configurator.liquid)",
       "Bash(git -C /Users/martinres/Desktop/barkandframe log --all --oneline)",
-      "Bash(git -C /Users/martinres/Desktop/barkandframe show 106ff27:sections/make-portrait-configurator.liquid)"
+      "Bash(git -C /Users/martinres/Desktop/barkandframe show 106ff27:sections/make-portrait-configurator.liquid)",
+      "Bash(awk '{print $NF}')",
+      "Bash(grep -E \"--font-size\" /Users/martinres/Desktop/barkandframe/assets/base.css)"
     ]
   }
 }
