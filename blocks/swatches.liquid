@@ -5,7 +5,8 @@
   for product_option in closest.product.options_with_values
     assign swatch_count = product_option.values | map: 'swatch' | compact | size
 
-    if swatch_count > 0
+    assign option_name_lower = product_option.name | downcase
+    if swatch_count > 0 or option_name_lower == 'color'
       assign product_has_swatches = true
     endif
   endfor

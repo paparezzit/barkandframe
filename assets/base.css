@@ -985,6 +985,7 @@ summary::-webkit-details-marker {
 
 .product-grid__item {
   border: var(--product-card-border-width) solid rgb(var(--color-border-rgb) / var(--product-card-border-opacity));
+  margin-bottom: 40px;
 }
 
 .product-grid--organic[product-grid-view='default'] .product-grid__item {
@@ -3909,7 +3910,7 @@ slideshow-arrows .slideshow-control.slideshow-control--style-none {
     grid-template-columns: repeat(var(--resource-list-columns-per-row), 1fr);
 
     &:has(.resource-list__item:first-child:nth-last-child(n + 9)) {
-      --resource-list-columns-per-row: 5;
+      --resource-list-columns-per-row: 4;
     }
 
     &:has(.resource-list__item:first-child:nth-last-child(n + 7):nth-last-child(-n + 8)) {
@@ -4384,10 +4385,33 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.products-menu{
+  .details-content{
+    text-align: center;
+    
+    ul{
+      li{
+        display: inline-block;
+        margin: .2em .5em;
+        
+        
+        a{
+          font-family: "display", serif;
+          font-size: 21px;
+        }
+
+        &:not(.menu__item--active){
+          opacity: .45;
+        }
+      }
+    }
+  }
+}
+
 .product-card{
   slideshow-component{
-    background-color: var(--beige) !important;
-    border-radius: 80px;
+    background-color: var(--cream) !important;
+    border-radius: 40px;
     overflow: hidden;
 
     slideshow-arrows{
@@ -4400,6 +4424,8 @@ slideshow-component.slideshow--homepage{
 
     .card-gallery{
       width: 100%;
+      border-radius: 40px;
+      background-color: var(--cream);
 
       quick-add-component{
         display: none;
@@ -4408,7 +4434,7 @@ slideshow-component.slideshow--homepage{
       .product-badges{
         &.product-badges--top-left{
           top: 30px;
-          left: 50px;
+          left: 30px;
         }
 
         .product-badges__badge{
@@ -4417,53 +4443,37 @@ slideshow-component.slideshow--homepage{
       }
     }
 
-    .product-title{
-      p{
-        font-weight: 600;
-        font-size: 18px;
-        font-family: var(--font-h5--family) !important;
+    product-swatches{
+      margin-top: -30px;
+
+      .variant-option__swatch{
+        
+        .variant-option__button-label{
+          background-color: transparent;
+
+          &:has(:checked), &:hover{
+            outline: none;
+          }
+        }
+        
+        .swatch{
+          width: 10px;
+          height: 10px;
+          border-radius: 100%;
+        }
       }
     }
 
     .group-block{
-      width: 60%;
-      margin-top: 20px;
-
-      product-price{
-        .price{
-          font-size: 14px;
-        }
-      }
+      padding: 20px 10px;
+      font-size: 14px;
     }
 
-    .buy-buttons-block{
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: fit-content;
-
-      add-to-cart-component{
-        button{
-          font-size: 14px;
-          padding: 10px 16px;
-          height: auto;
-        }
-      }
-
-      .add-to-cart-icon{
-        display: none;
-      }
-    }
-  }
-
-  @media(min-width: 1200px){
-    .product-card__content {
-      .group-block{
-        margin-left: 30px;
-      }
-
-      .buy-buttons-block{
-        right: 30px;
+    .product-title{
+      p{
+        font-weight: 700;
+        font-size: 18px;
+        font-family: var(--font-h5--family) !important;
       }
     }
   }

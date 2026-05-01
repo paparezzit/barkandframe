@@ -19,7 +19,8 @@
         assign swatch_count = product_option.values | map: 'swatch' | compact | size
       -%}
 
-      {% if swatch_count == 0 %}
+      {%- assign option_name_lower = product_option.name | downcase -%}
+      {% if swatch_count == 0 and option_name_lower != 'color' %}
         {% continue %}
       {% endif %}
 
@@ -133,6 +134,7 @@
                 {% render 'swatch',
                   swatch: product_option_value.swatch,
                   variant_image: featured_media,
+                  color_name: product_option_value.name,
                 %}
                 {% render 'strikethrough-variant', product_option: product_option_value %}
               </label>

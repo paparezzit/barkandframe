@@ -18,7 +18,7 @@
     {% case section.settings.layout_type %}
       {% when 'grid' %}
         .product-grid--{{ section.id }}:is(.product-grid--grid) {
-          --product-grid-columns-desktop: repeat(auto-fill, minmax({{ product_card_size }}, 1fr));
+          --product-grid-columns-desktop: repeat(auto-fill, minmax(max({{ product_card_size }}, calc(25% - {{ section.settings.columns_gap_horizontal | times: 3 | divided_by: 4 }}px)), 1fr));
         }
       {% when 'organic' %}
         {% assign large_span = 2 %}
