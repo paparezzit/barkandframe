@@ -156,19 +156,25 @@
 
   var step = 1;
 
-  function checkFullyVisible() {
-    if (container.scrollHeight <= container.clientHeight + 2) {
-      if (fade) fade.style.display = 'none';
-      if (actions) actions.style.display = 'none';
-    }
+  function updateVisibility() {
+    var fullyVisible = container.scrollHeight <= container.clientHeight + 2;
+    if (fade) fade.style.display = fullyVisible ? 'none' : '';
+    if (actions) actions.style.display = fullyVisible ? 'none' : '';
   }
 
-  window.addEventListener('load', checkFullyVisible);
+  var resizeTimer;
+  function onResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(updateVisibility, 150);
+  }
+
+  window.addEventListener('load', updateVisibility);
+  window.addEventListener('resize', onResize);
 
   btn.addEventListener('click', function () {
     step++;
     container.style.maxHeight = (step * 120) + 'dvh';
-    setTimeout(checkFullyVisible, 650);
+    setTimeout(updateVisibility, 650);
   });
 })();
 {% endjavascript %}

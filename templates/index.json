@@ -19,7 +19,7 @@
             "title": "Personalized dog portraits from your photo.",
             "text": "Gallery-worthy art created from your dog’s photo",
             "button_text": "Create portrait",
-            "button_link": "shopify://products/custom-pet-portrait"
+            "button_link": "shopify://pages/make-portrait"
           }
         },
         "slide_PebWGF": {
@@ -29,7 +29,7 @@
             "title": "Your dog. Recognizable. Refined.",
             "text": "We turn your photo into a portrait that still feels like them.",
             "button_text": "See your dog",
-            "button_link": "shopify://products/custom-pet-portrait"
+            "button_link": "shopify://pages/make-portrait"
           }
         },
         "slide_Mr3tKr": {
@@ -39,7 +39,7 @@
             "title": "More than wall art. Still with you.",
             "text": "A portrait that keeps them close – every day.",
             "button_text": "Keep him close",
-            "button_link": "shopify://products/custom-pet-portrait"
+            "button_link": "shopify://pages/make-portrait"
           }
         }
       },
@@ -58,10 +58,10 @@
       "type": "results",
       "name": "Results",
       "settings": {
-        "main-text": "From photo to portrait.<br>Still your dog.",
+        "main-text": "From photo to portrait.Still your dog.",
         "text": "Recognizable at first glance",
         "button_text": "Create portrait",
-        "button_link": "shopify://products/custom-pet-portrait"
+        "button_link": "shopify://pages/make-portrait"
       }
     },
     "section_portrait-styles": {
@@ -80,7 +80,7 @@
       "settings": {
         "main-text": "It’s that simple",
         "button_text": "Start your portrait",
-        "button_link": "shopify://products/custom-pet-portrait"
+        "button_link": "shopify://pages/make-portrait"
       }
     },
     "section_portrait-formats": {
@@ -1483,7 +1483,7 @@
       "settings": {
         "main-text": "What do dog owners say?",
         "button_text": "All reviews",
-        "button_link": ""
+        "button_link": "shopify://pages/reviews"
       }
     },
     "section_floating-images": {
@@ -2182,7 +2182,7 @@
       "settings": {
         "main-text": "Bring what matters most into your home",
         "button_text": "Create portrait",
-        "button_link": "shopify://products/custom-pet-portrait"
+        "button_link": "shopify://pages/make-portrait"
       }
     },
     "section_insta-feed": {
