@@ -84,6 +84,64 @@
         {{ details }}
       {% endif %}
     {% endfor %}
+
+    {%- assign size_chart_url = closest.product.metafields.custom.size_chart_image.value | image_url: width: 1200 -%}
+    {%- assign materials = closest.product.metafields.custom.materials.value -%}
+    {%- assign print_tech = closest.product.metafields.custom.print_technology.value -%}
+
+    <div class="product-information__tabs">
+      {%- if closest.product.description != blank -%}
+        <div class="product-information__tabs-description rte">
+          {{ closest.product.description }}
+        </div>
+      {%- endif -%}
+
+      <div class="prod-accordion-section__accordions" id="prod-accordions">
+
+        {%- if size_chart_url != blank -%}
+          <accordion-custom>
+            <details class="details tab-accordion">
+              <summary class="tab-accordion__summary">
+                <span>Size Chart</span>
+                <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+              </summary>
+              <div class="details-content tab-accordion__body">
+                <img src="{{ size_chart_url }}" alt="Size Chart" loading="lazy" width="1200" height="auto">
+              </div>
+            </details>
+          </accordion-custom>
+        {%- endif -%}
+
+        {%- if materials != blank -%}
+          <accordion-custom>
+            <details class="details tab-accordion">
+              <summary class="tab-accordion__summary">
+                <span>Materials</span>
+                <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+              </summary>
+              <div class="details-content tab-accordion__body">
+                {{ materials | newline_to_br }}
+              </div>
+            </details>
+          </accordion-custom>
+        {%- endif -%}
+
+        {%- if print_tech != blank -%}
+          <accordion-custom>
+            <details class="details tab-accordion">
+              <summary class="tab-accordion__summary">
+                <span>Print technology</span>
+                <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+              </summary>
+              <div class="details-content tab-accordion__body">
+                {{ print_tech | newline_to_br }}
+              </div>
+            </details>
+          </accordion-custom>
+        {%- endif -%}
+
+      </div>
+    </div>
   </div>
 
   {% content_for 'blocks' %}
@@ -104,6 +162,120 @@
   /* Default column positions */
   .product-details {
     order: 1;
+    margin: 60px 0;
+
+    product-price{
+      margin: 0 0 60px;
+
+      .price{
+        font-size: var(--font-h2--size);
+        font-family: "display", "Times New Roman", serif !important;
+        opacity: .63;
+      }
+    }
+
+    variant-picker{
+      margin: 0 0 60px;
+
+      .variant-picker__form{
+        gap: 60px;
+
+        legend{
+          margin-bottom: 1em;
+        }
+
+        .variant-option__button-label{
+          display: block;
+          background-color: transparent;
+
+          &:not(.variant-option__button-label--has-swatch){
+            width: 42px !important;
+            height: 42px !important;
+            background: var(--cream);
+            color: var(--brown);
+            padding: 0;
+            display: flex;
+            border-radius: 10px;
+            border: 2px solid transparent;
+
+            .variant-option__button-label__text{
+              font-family: "display", serif;
+              font-size: 21px;
+              margin: auto;
+            }
+
+            &:has(:checked), &:hover{
+              border-color: var(--green);
+            }
+          }
+          
+          
+          .swatch{
+            width: 64px;
+            height: 64px;
+            display: block;
+            border-radius: 10px;
+            border: 2px solid transparent;
+          }
+
+          .variant-option__swatch-name{
+            font-weight: 700;
+            opacity: .63;
+          }
+
+          &:has(:checked), &:hover {
+            outline: none;
+
+            .swatch{
+              border-color: var(--green);
+            }
+
+            .variant-option__swatch-name{
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .product-form-buttons{
+    display: block !important;
+  }
+
+  .quantity-selector{
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: var(--cream);
+
+    &:hover{
+      background-color: var(--cream);
+    }
+
+    button{
+      height: 100% !important;
+      opacity: .36;
+      transition: opacity .2s;
+
+      &:hover, &:focus{
+        background-color: transparent;
+        opacity: 1;
+      }
+    }
+  }
+
+  .add-to-cart-button{
+    .add-to-cart-icon{
+      display: none;
+    }
+  }
+
+  .product-availability{
+    margin: 30px 0 5px !important;
+  }
+
+  .product-availability__delivery-date{
+    margin-left: 0 !important;
   }
 
   .product-information__media {
@@ -129,6 +301,12 @@
       grid-column: 2;
     }
 
+    .product-details{
+      .product-title p, product-price .price{
+        font-size: 36px !important;
+      }
+    }
+
     /* Position when there is no media */
     .product-information__grid.product-information--media-none,
     .product-information__grid:has(.product-information__media:empty) {
@@ -142,14 +320,11 @@
     .product-information__grid:not(:has(.product-information__media:empty)) {
       /* Media on the left side */
       &.product-information--media-left {
-        grid-template-columns: 1fr min(50vw, var(--sidebar-width));
-
-        .product-information__media {
-          padding-right: calc(var(--gap, 0) / 2);
-        }
+        grid-template-columns: 3fr 2fr;
+        gap: 40px;
 
         .product-details {
-          padding-left: calc(var(--gap, 0) / 2);
+          margin: 30px 0 40px;
         }
 
         &:has(.media-gallery--extend) {
@@ -277,11 +452,88 @@
     max-width: var(--sidebar-width);
   }
 
+  .product-information slideshow-arrows {
+    display: none;
+  }
+
   /* If the header is sticky, make product details content stick underneath the header */
   body:has(#header-group #header-component[data-sticky-state='active']) .product-details.sticky-content--desktop {
     --sticky-header-offset: var(--header-height);
   }
+
+  /* Tabs area: description + accordion */
+  .product-information__tabs {
+    max-width: 520px;
+    padding-bottom: 80px;
+    margin: 0 auto;
+  }
+
+  @media screen and (max-width: 799px) {
+    .product-information__tabs {
+      grid-column: 2 / 3;
+      order: 2;
+      max-width: none;
+      padding-top: 20px;
+    }
+  }
+
+  .product-information__tabs-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--brown);
+    margin-bottom: 40px;
+  }
+
+  /* Three-area grid: left (media) | right (details sticky) / tabs (description+accordion) */
+  @media screen and (min-width: 750px) {
+    .product-information__grid.product-information--media-left {
+      grid-template-columns: 3fr 2fr;
+      grid-template-areas: "left right" "tabs right";
+      gap: 40px;
+      align-items: start;
+    }
+
+    .product-information__grid.product-information--media-left .product-information__media {
+      grid-area: left;
+      padding-right: 0;
+    }
+
+    .product-information__grid.product-information--media-left .product-details {
+      grid-area: right;
+      position: sticky;
+      top: 94px;
+      padding-left: 0;
+      padding-bottom: 40px;
+    }
+
+    .product-information__tabs {
+      grid-area: tabs;
+      align-self: start;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .product-information__grid.product-information--media-left {
+      grid-template-columns: 3fr 420px;
+      gap: 60px 120px !important;
+    }
+  }
 {% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var accordions = document.querySelectorAll('#prod-accordions .tab-accordion');
+  accordions.forEach(function (details) {
+    details.addEventListener('toggle', function () {
+      if (details.open) {
+        accordions.forEach(function (other) {
+          if (other !== details && other.open) other.open = false;
+        });
+      }
+    });
+  });
+})();
+{% endjavascript %}
 
 {% schema %}
 {

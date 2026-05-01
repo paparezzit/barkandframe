@@ -37,8 +37,16 @@
         {%- liquid
           assign swatch_count = product_option.values | map: 'swatch' | compact | size
           assign variant_style = block_settings.variant_style
+          assign option_name_lower = product_option.name | downcase
+          assign treat_as_swatch = false
+          if swatch_count > 0
+            assign treat_as_swatch = true
+          endif
+          if option_name_lower == 'color'
+            assign treat_as_swatch = true
+          endif
 
-          if swatch_count > 0 and block_settings.show_swatches
+          if treat_as_swatch and block_settings.show_swatches
             if block_settings.variant_style == 'dropdown'
               assign variant_style = 'swatch_dropdown'
             else
@@ -59,10 +67,7 @@
             {{ option_id_attribute }}
           >
             <legend>
-              {{ product_option.name | escape -}}
-              {%- if variant_style == 'swatch' -%}
-                <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
-              {%- endif %}
+              {{ product_option.name | escape }}
             </legend>
             {%- for product_option_value in product_option.values -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
@@ -102,8 +107,10 @@
                   {% render 'swatch',
                     swatch: product_option_value.swatch,
                     variant_image: featured_media,
-                    mode: 'unscaled'
+                    mode: 'unscaled',
+                    color_name: product_option_value.name,
                   %}
+                  <span class="variant-option__swatch-name">{{ product_option_value.name }}</span>
                 {% else %}
                   <span class="variant-option__button-label__text">{{ product_option_value | escape }}</span>
                 {% endif %}
@@ -315,9 +322,20 @@
 
     padding: 0;
     border: none;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
     flex-basis: auto;
     min-height: auto;
+  }
+
+  .variant-option__swatch-name {
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--brown);
+    white-space: nowrap;
   }
 
   .variant-option__button-label:has(:checked) {

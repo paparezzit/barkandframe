@@ -1,0 +1,165 @@
+<div class="prod-accordion-section section section--page-width">
+  <div class="prod-accordion-section__inner">
+
+    {%- if product.description != blank -%}
+      <div class="prod-accordion-section__description rte">
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+
+    {%- assign size_chart_url = product.metafields.custom.size_chart_image.value | image_url: width: 1200 -%}
+    {%- assign materials = product.metafields.custom.materials.value -%}
+    {%- assign print_tech = product.metafields.custom.print_technology.value -%}
+
+    <div class="prod-accordion-section__accordions" id="prod-accordions">
+
+      {%- if size_chart_url != blank -%}
+        <accordion-custom>
+          <details class="details prod-accordion">
+            <summary class="prod-accordion__summary">
+              <span>Size Chart</span>
+              <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+            </summary>
+            <div class="details-content prod-accordion__body">
+              <img src="{{ size_chart_url }}" alt="Size Chart" loading="lazy" width="1200">
+            </div>
+          </details>
+        </accordion-custom>
+      {%- endif -%}
+
+      {%- if materials != blank -%}
+        <accordion-custom>
+          <details class="details prod-accordion">
+            <summary class="prod-accordion__summary">
+              <span>Materials</span>
+              <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+            </summary>
+            <div class="details-content prod-accordion__body">
+              {{ materials | newline_to_br }}
+            </div>
+          </details>
+        </accordion-custom>
+      {%- endif -%}
+
+      {%- if print_tech != blank -%}
+        <accordion-custom>
+          <details class="details prod-accordion">
+            <summary class="prod-accordion__summary">
+              <span>Print technology</span>
+              <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+            </summary>
+            <div class="details-content prod-accordion__body">
+              {{ print_tech | newline_to_br }}
+            </div>
+          </details>
+        </accordion-custom>
+      {%- endif -%}
+
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+.prod-accordion-section {
+  padding: 60px 0 80px;
+}
+
+.prod-accordion-section__inner {
+  max-width: 520px;
+}
+
+.prod-accordion-section__description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--brown);
+  margin-bottom: 40px;
+}
+
+.prod-accordion__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--brown);
+  cursor: pointer;
+  list-style: none;
+  border-bottom: 2px solid var(--beige);
+}
+
+.prod-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+.prod-accordion__summary .svg-wrapper {
+  width: 22px;
+  height: 22px;
+  background-color: var(--beige);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.prod-accordion__summary .svg-wrapper svg {
+  width: 12px;
+  height: 12px;
+}
+
+.prod-accordion .svg-wrapper.icon-plus {
+  transition: transform 0.2s ease;
+}
+
+.prod-accordion[open] .svg-wrapper.icon-plus {
+  transform: rotate(45deg);
+}
+
+.prod-accordion__body {
+  padding: 20px 0 40px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--brown);
+}
+
+.prod-accordion__body p {
+  margin: 0 0 1em;
+}
+
+.prod-accordion__body img {
+  margin: 2em 0;
+  vertical-align: top;
+  max-width: 100%;
+}
+
+@media (min-width: 750px) {
+  .prod-accordion-section {
+    padding: 80px 0 100px;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var accordions = document.querySelectorAll('#prod-accordions .prod-accordion');
+  accordions.forEach(function (details) {
+    details.addEventListener('toggle', function () {
+      if (details.open) {
+        accordions.forEach(function (other) {
+          if (other !== details && other.open) other.open = false;
+        });
+      }
+    });
+  });
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Description + accordion",
+  "presets": [
+    {
+      "name": "Description + accordion"
+    }
+  ]
+}
+{% endschema %}

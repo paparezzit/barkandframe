@@ -690,6 +690,60 @@
     /* Make the height match the height of the model-viewer */
     height: 100vh;
   }
+
+  media-gallery{
+    slideshow-container{
+      background-color: var(--cream);
+      border-radius: 80px !important;
+      overflow: hidden;
+    }
+  }
+
+  slideshow-controls{
+    mix-blend-mode: normal !important;
+
+    .slideshow-controls__dots {
+      display: flex;
+      width: 80%;
+      max-width: 520px;
+      gap: 10px;
+
+      li{
+        flex: 1;
+        padding: 20px 0;
+      }
+
+      button{
+        height: 2px !important;
+        width: 100%;
+        padding: 20px 0;
+        display: block;
+
+        &::after{
+          height: 2px !important;
+          content: "";
+          width: 100%;
+          background-color: var(--brown);
+          border-radius: 1000px;
+          opacity: .27;
+        }
+
+        &:hover, &[aria-selected="true"]{
+          background-color: transparent;
+
+          &::after{
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  @media(min-width: 750px){
+    media-gallery{
+      padding: 0 !important;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

@@ -1,0 +1,170 @@
+
+<section class="more-from section section--page-width">
+  <h2 class="more-from__title">{{ section.settings.title }}</h2>
+
+  <div class="more-from__grid">
+
+    <a href="{{ section.settings.cta_link }}" class="more-from__cta">
+      {%- if section.settings.cta_image != blank -%}
+        <div class="more-from__cta-img">
+          <img
+            src="{{ section.settings.cta_image | image_url: width: 800 }}"
+            alt="{{ section.settings.cta_label | escape }}"
+            loading="lazy"
+            width="800"
+          >
+        </div>
+      {%- endif -%}
+      <div class="more-from__cta-body">
+        <span class="more-from__cta-label">{{ section.settings.cta_label }}</span>
+      </div>
+    </a>
+
+    {%- for product in section.settings.collection.products limit: 3 -%}
+      <div class="more-from__product-card">
+        {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
+      </div>
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+.more-from {
+  padding: 80px 0 100px;
+  color: var(--brown);
+}
+
+.more-from__title {
+  font-size: 36px;
+  margin: 0 0 40px;
+  font-family: "display", sans-serif;
+}
+
+.more-from__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px 20px;
+  align-items: start;
+}
+
+.more-from__cta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--brown);
+  transition: opacity 0.2s ease;
+  height: 100%;
+}
+
+.more-from__cta-img img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background-color: var(--cream);
+  border-radius: 40px;
+}
+
+.more-from__cta-label {
+  font-size: 14px;
+  color: var(--beige);
+  padding: 16px 20px;
+  border-radius: 1000px;
+  background-color: var(--brown);
+  margin-top: 20px;
+  display: block;
+  text-align: center;
+  transition: background .2s, color .2s;
+}
+
+.more-from__cta:hover {
+  .more-from__cta-label{
+    background-color: var(--purple);
+    color: var(--brown);
+  }
+}
+
+@media (min-width: 750px) {
+  .more-from__title {
+    font-size: 36px;
+    margin-bottom: 48px;
+  }
+
+  .more-from__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+.more-from{
+  .product-title{
+    margin-top: 20px;
+    display: block;
+    padding: 0 10px;
+  }
+
+  product-price{
+    padding: 0 10px;
+    margin-top: 10px;
+    .price{
+      font-size: 14px;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .more-from {
+    padding: 100px 0 120px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "More from Bark&Frame",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "More from Bark&Frame"
+    },
+    {
+      "type": "header",
+      "content": "CTA card"
+    },
+    {
+      "type": "image_picker",
+      "id": "cta_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "More from Bark&Frame"
+    }
+  ]
+}
+{% endschema %}
