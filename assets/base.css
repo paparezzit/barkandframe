@@ -1219,9 +1219,8 @@ results-list[initialized] {
 }
 
 .dialog-modal::backdrop {
-  transition: backdrop-filter var(--animation-speed) var(--animation-easing);
-  backdrop-filter: brightness(1);
-  background: rgb(var(--backdrop-color-rgb) / var(--backdrop-opacity));
+  transition: background var(--animation-speed) var(--animation-easing);
+  background: rgba(255, 255, 255, .45);
 }
 
 .dialog-modal[open] {

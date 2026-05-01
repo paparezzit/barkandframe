@@ -174,34 +174,66 @@
                     or item.properties.size != 0
                     or item.selling_plan_allocation != null
                   -%}
+                    {%- assign vl = 0 -%}
                     <dl class="cart-items__variants">
                       {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
                         {%- for option in item.options_with_values -%}
-                          <div class="cart-items__variant">
-                            <dt class="visually-hidden">{{ option.name }}:</dt>
-                            <dd>
-                              {{- option.value -}}
-                              {%- if forloop.last != true %},&nbsp;{% endif -%}
-                            </dd>
-                          </div>
+                          {%- assign vl = vl | plus: 1 -%}
+                          {%- if vl <= 3 -%}
+                            <div class="cart-items__variant">
+                              <dt class="visually-hidden">{{ option.name }}:</dt>
+                              <dd>{{- option.value -}}</dd>
+                            </div>
+                          {%- endif -%}
                         {%- endfor -%}
                       {%- endif -%}
 
                       {%- for property in item.properties -%}
                         {%- assign property_first_char = property.first | slice: 0 -%}
                         {%- if property.last != blank and property_first_char != '_' -%}
-                          <div class="cart-items__properties">
-                            <dt>{{ property.first }}:</dt>
-                            <dd>
-                              {%- if property.last contains '/uploads/' -%}
-                                <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
-                              {%- else -%}
-                                {{ property.last }}
-                              {%- endif -%}
-                            </dd>
-                          </div>
+                          {%- assign vl = vl | plus: 1 -%}
+                          {%- if vl <= 3 -%}
+                            <div class="cart-items__properties">
+                              <dt>{{ property.first }}:</dt>
+                              <dd>
+                                {%- if property.last contains '/uploads/' -%}
+                                  <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
+                                {%- else -%}
+                                  {{ property.last }}
+                                {%- endif -%}
+                              </dd>
+                            </div>
+                          {%- endif -%}
                         {%- endif -%}
                       {%- endfor -%}
+
+                      {%- if vl > 3 -%}
+                        <div class="cart-items__variants-overflow">
+                          <button class="cart-items__variants-info" type="button" aria-label="Show more properties" aria-expanded="false">
+                            {{- 'icon-info.svg' | inline_asset_content -}}
+                          </button>
+                          <div class="cart-items__variants-tooltip" role="tooltip">
+                            {%- assign vl2 = 0 -%}
+                            {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
+                              {%- for option in item.options_with_values -%}
+                                {%- assign vl2 = vl2 | plus: 1 -%}
+                                {%- if vl2 > 3 -%}
+                                  <p>{{ option.name }}: {{ option.value }}</p>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            {%- endif -%}
+                            {%- for property in item.properties -%}
+                              {%- assign prop_char2 = property.first | slice: 0 -%}
+                              {%- if property.last != blank and prop_char2 != '_' -%}
+                                {%- assign vl2 = vl2 | plus: 1 -%}
+                                {%- if vl2 > 3 -%}
+                                  <p>{{ property.first }}: {{ property.last }}</p>
+                                {%- endif -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
                     </dl>
 
                     {% if item.selling_plan_allocation %}
@@ -220,33 +252,19 @@
                     </ul>
                   {% endif %}
 
-                  <div>
-                    {% if item.original_price != item.final_price %}
-                      <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
-                      <span>{{ item.final_price | money }}</span>
-                      <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
-                      <s class="compare-at-price">
-                        {% if item.variant.compare_at_price > item.original_price %}
-                          {{ item.variant.compare_at_price | money }}
-                        {% else %}
-                          {{ item.original_price | money }}
-                        {% endif %}
-                      </s>
-                    {% else %}
-                      {% if item.variant.compare_at_price > item.original_price %}
-                        <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
-                      {% else %}
-                        <span class="visually-hidden">{{ 'content.price' | t }}</span>
-                      {% endif %}
-
-                      <span>{{ item.original_price | money }}</span>
-
-                      {% if item.variant.compare_at_price > item.original_price %}
-                        <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
-                        <s class="compare-at-price">{{ item.variant.compare_at_price | money }}</s>
-                      {% endif %}
+                  <button
+                    class="button button--tertiary cart-items__remove"
+                    type="button"
+                    aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
+                    on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
+                    {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
+                    {% if can_remove == false %}
+                      hidden
                     {% endif %}
-                  </div>
+                  >
+                    {{- 'icon-close.svg' | inline_asset_content -}}
+                    <span class="visually-hidden">Remove</span>
+                  </button>
                 </td>
                 <td
                   class="cart-items__quantity"
@@ -265,20 +283,6 @@
                     class: 'cart-primary-typography',
                     can_update_quantity: can_update_quantity
                   %}
-
-                  <button
-                    class="button button--tertiary cart-items__remove"
-                    type="button"
-                    aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
-                    on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
-                    {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
-                    {% if can_remove == false %}
-                      hidden
-                    {% endif %}
-                  >
-                    {{- 'icon-delete.svg' | inline_asset_content -}}
-                    <span class="visually-hidden">Remove</span>
-                  </button>
                 </td>
                 <td
                   class="cart-items__error hidden"
@@ -352,23 +356,15 @@
   }
 
   .cart-items__table-row {
-    --cart-item-price-width: 6rem;
-
     display: grid;
-    grid-template-columns: clamp(2.5rem, 15cqi, 7.5rem) minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
     grid-template-areas:
-      'media details price'
-      'media quantity price'
-      'media error error';
-    column-gap: var(--gap-md);
+      'media details details'
+      'media error error'
+      'media quantity quantity'
+      'media price price';
+    column-gap: 20px;
+    grid-template-columns: 130px 1fr 1fr;
     align-items: start;
-    padding-bottom: var(--cart-items-gap);
-    margin-bottom: var(--margin-lg);
-  }
-
-  .cart-items__table-row.cart-items__nested-line td:first-child {
-    width: 60%;
-    justify-self: right;
   }
 
   html:active-view-transition-type(page-navigation) .cart-items__table-row {
@@ -396,29 +392,56 @@
     }
   }
 
-  .cart-items__table-row:last-child {
-    padding-bottom: 0;
-  }
+  .cart-items__media{
+    width: 130px;
+    aspect-ratio: 13/16;
 
-  .cart-items--dividers .cart-items__table-row {
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--cart-items-gap);
-  }
-
-  .cart-items--dividers .cart-items__table-row:has(+ .cart-items__nested-line) {
-    border-bottom: none;
-    margin-bottom: 0;
-  }
-
-  .cart-items--dividers .cart-items__table-row:last-child {
-    border-block-end: none;
-    padding-block-end: 0;
-    margin-bottom: 0;
+    .cart-items__media-container{
+      border-radius: 20px;
+      overflow: hidden;
+      background-color: var(--cream);
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .cart-items__details {
     grid-area: details;
-    color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+    position: relative;
+
+    p{
+      font-size: 14px;
+    }
+
+    .cart-items__variants{
+      margin-top: 5px;
+
+      .cart-items__variant{
+        display: block;
+        opacity: .45;
+      }
+
+      .cart-items__properties{
+        margin-top: 0;
+        opacity: .45;
+      }
+    }
+  }
+
+  .cart-items__details .cart-items__remove {
+    position: absolute;
+    top: 6px;
+    right: 0;
+    margin-block-start: 0;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: var(--cream);
+
+    svg{
+      width: 8px;
+      height: 8px;
+    }
   }
 
   .cart-items__details > * + *,
@@ -446,11 +469,9 @@
 
   .cart-items__quantity {
     grid-area: quantity;
-    margin-block-start: var(--margin-xs);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: var(--gap-xs);
+    justify-content: flex-end;
     width: fit-content;
   }
 
@@ -459,6 +480,19 @@
     flex: 0 1 var(--quantity-selector-width);
     font-size: var(--cart-font-size--sm);
     height: auto;
+    background-color: var(--cream);
+    border-radius: 1000px;
+
+    .button{
+      padding: 0 5px !important;
+      margin: 0 !important;
+      width: auto !important;
+    }
+
+    input[type='number']{
+      max-width: 30px !important;
+      padding: 0;
+    }
   }
 
   .cart-items__remove {
@@ -480,9 +514,12 @@
     grid-area: price;
     min-height: unset;
     min-width: var(--cart-item-price-width);
-    text-align: end;
+    text-align: start;
     display: block;
-    font-size: var(--cart-font-size--md);
+    font-size: 18px;
+    white-space: nowrap;
+    font-family: "display", serif !important;
+    margin-top: 5px;
   }
 
   .cart-items__price-unit {
@@ -506,9 +543,12 @@
   }
 
   .cart-items__empty-button {
-    margin-top: var(--margin-md);
-    padding-inline: var(--padding-4xl);
-    padding-block: var(--padding-lg);
+    padding: 16px 20px !important;
+    display: inline-block;
+
+    &:hover, &:focus{
+      background-color: var(--purple) !important;
+    }
   }
 
   /* Error message */
@@ -546,16 +586,7 @@
     margin-block-start: var(--margin-3xs);
   }
 
-  @container cart-items (min-width: 720px) {
-    .cart-items__table-row {
-      --cart-item-price-width: 6rem;
-
-      grid-template-columns: 7.5rem 1fr 1fr minmax(var(--cart-item-price-width), auto);
-      grid-template-rows: min-content 1fr;
-      grid-template-areas:
-        'media details quantity price'
-        'media details error error';
-    }
+  @container cart-items (min-width: 750px) {
 
     .cart-items__quantity,
     .cart-items__price {
@@ -653,13 +684,16 @@
 
   .cart__ctas .cart__checkout-button {
     width: 100%;
-    height: clamp(25px, var(--height-buy-buttons), 55px);
-    padding-inline: var(--padding-4xl);
-  }
+    padding: 16px 20px;
+    display: block;
 
-  shopify-accelerated-checkout-cart {
-    --shopify-accelerated-checkout-inline-alignment: center;
-    --shopify-accelerated-checkout-button-border-radius: var(--style-border-radius-buttons-primary);
+    &:hover, &:focus{
+      background-color: var(--purple);
+    }
+
+    text-component{
+      display: inline;
+    }
   }
 
   .cart-note {
@@ -761,4 +795,102 @@
   .cart-items__properties dd {
     display: inline;
   }
+
+  .cart-items__variants-overflow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-block-start: var(--margin-2xs);
+  }
+
+  .cart-items__variants-info {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .cart-items__variants-info:hover,
+  .cart-items__variants-overflow.open .cart-items__variants-info {
+    opacity: 1;
+  }
+
+  .cart-items__variants-tooltip {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background-color: var(--cream);
+    color: var(--brown);
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 10px;
+    line-height: 1.3;
+    z-index: 100;
+    width: 240px;
+  }
+
+  .cart-items__variants-tooltip p {
+    margin: 0;
+  }
+
+  .cart-items__variants-tooltip p + p {
+    margin-top: 10px;
+  }
+
+  .cart-items__variants-overflow.open .cart-items__variants-tooltip {
+    display: block;
+  }
+
+  @media(min-width: 750px){
+    .cart-items__table-row{
+      grid-template-areas:
+        'media details details'
+        'media error error'
+        'media quantity price';
+    }
+
+    .cart-items__price{
+      margin-top: 0;
+    }
+  }
 {% endstylesheet %}
+
+{% javascript %}
+(function () {
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.cart-items__variants-info');
+    var overflows = document.querySelectorAll('.cart-items__variants-overflow');
+
+    if (btn) {
+      var overflow = btn.closest('.cart-items__variants-overflow');
+      var isOpen = overflow.classList.contains('open');
+      overflows.forEach(function (el) {
+        el.classList.remove('open');
+        var b = el.querySelector('.cart-items__variants-info');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        overflow.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      e.stopPropagation();
+    } else if (!e.target.closest('.cart-items__variants-tooltip')) {
+      overflows.forEach(function (el) {
+        el.classList.remove('open');
+        var b = el.querySelector('.cart-items__variants-info');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+})();
+{% endjavascript %}
