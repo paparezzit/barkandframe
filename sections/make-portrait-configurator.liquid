@@ -56,6 +56,37 @@
   };
   window.MakePortraitExtraPetUSD    = {{ section.settings.extra_pet_price   | default: 9 }};
   window.MakePortraitPetNameUSD     = {{ section.settings.pet_name_price    | default: 5 }};
+
+  {%- comment -%} Map of variantId → "WxH" minimum resolution string from metafield custom.min_resolution {%- endcomment -%}
+  window.MakePortraitMinResolutions = {
+    {%- assign _mp_res_handles = '' -%}
+    {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
+    {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+    {%- if section.settings.paper_unframed_handle  != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.paper_unframed_handle  | append: ',' -%}{%- endif -%}
+    {%- if section.settings.paper_framed_handle    != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.paper_framed_handle    | append: ',' -%}{%- endif -%}
+    {%- assign _mp_res_list = _mp_res_handles | split: ',' -%}
+    {%- for _mp_rh in _mp_res_list -%}
+      {%- unless _mp_rh == blank -%}
+        {%- assign _mp_rp = all_products[_mp_rh] -%}
+        {%- for _mp_rv in _mp_rp.variants -%}
+          {%- assign _mp_rmf = _mp_rv.metafields.custom.min_resolution -%}
+          {%- if _mp_rmf != blank -%}
+            {{ _mp_rv.id }}: {{ _mp_rmf.value | json }},
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if products_collection != blank -%}
+      {%- for _mp_rp2 in products_collection.products -%}
+        {%- for _mp_rv2 in _mp_rp2.variants -%}
+          {%- assign _mp_rmf2 = _mp_rv2.metafields.custom.min_resolution -%}
+          {%- if _mp_rmf2 != blank -%}
+            {{ _mp_rv2.id }}: {{ _mp_rmf2.value | json }},
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
+  };
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
@@ -296,7 +327,6 @@
           {%- endif -%}
         </div>
 
-        <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1">Change a style</button>
       </div>
 
       {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
@@ -360,17 +390,22 @@
         <div class="photo-upload" id="mp-upload-area">
           <div class="photo-upload__zone" id="mp-upload-zone" role="button" tabindex="0" aria-label="Upload photo – click or drag and drop">
             <p class="photo-upload__instruction">Drop your photo here</p>
-            <p class="photo-upload__sub">JPG / PNG / HEIC – Max 5 Mb</p>
+            <p class="photo-upload__sub">JPG / PNG / HEIC / WebP – Max 10 MB</p>
             <label class="button button--secondary photo-upload__browse" for="mp-file-input">Browse files</label>
             <input
               type="file"
               id="mp-file-input"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png,.heic,.heif,.webp,image/jpeg,image/png,image/heic,image/heif,image/webp"
               class="photo-upload__input"
               aria-label="Upload pet photo"
             >
           </div>
           <div class="photo-upload__previews" id="mp-photo-previews" aria-live="polite"></div>
+          <div id="mp-resolution-alert" class="photo-upload__resolution-alert" hidden>
+            <span class="photo-upload__resolution-alert__icon">⚠</span>
+            <p id="mp-resolution-alert-text" class="photo-upload__resolution-alert__text"></p>
+          </div>
+          <p id="mp-upload-counter" class="photo-upload__counter" hidden></p>
           <p id="mp-upload-error" class="make-portrait__error" hidden></p>
         </div>
 
@@ -566,6 +601,7 @@
         </div>
         <button class="button make-portrait__cta" id="mp-cta-step1">Go to product</button>
         <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Choose options</button>
+        <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1" hidden>Change a style</button>
         <button class="button make-portrait__cta" id="mp-cta-step3" hidden>Go to last step</button>
         <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
       </div>
@@ -1674,10 +1710,48 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  
+
   .photo-preview{
     margin-top: 15px;
   }
+}
+
+
+.photo-upload__resolution-alert {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: rgba(180, 120, 0, 0.08);
+  border: 1px solid rgba(180, 120, 0, 0.25);
+  border-radius: 8px;
+}
+
+.photo-upload__resolution-alert[hidden] {
+  display: none;
+}
+
+.photo-upload__resolution-alert__icon {
+  font-size: 16px;
+  line-height: 1.4;
+  flex-shrink: 0;
+  color: #b47800;
+}
+
+.photo-upload__resolution-alert__text {
+  font-size: var(--font-size--sm, 13px);
+  color: var(--brown);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.photo-upload__counter {
+  text-align: right;
+  font-size: var(--font-size--sm, 13px);
+  color: var(--brown);
+  margin-top: 6px;
+  margin-bottom: 0;
 }
 
 .photo-preview {
@@ -2218,6 +2292,13 @@
   width: 100%;
 }
 
+.make-portrait__cta:disabled {
+  background: #9D9895 !important;
+  border-color: #9D9895 !important;
+  opacity: 1 !important;
+  cursor: not-allowed;
+}
+
 .make-portrait__error {
   color: #c0392b;
   font-size: 13px;
@@ -2478,7 +2559,8 @@
     prints: 0,       // number of copies (0 = none)
     files: [],
     photoUrls: [],
-    pendingUploads: 0
+    pendingUploads: 0,
+    fileDimensions: new Map()
   };
 
   var STYLES = window.MakePortraitStyles || [];
@@ -2611,6 +2693,8 @@
       var el = $(ctaMap[s]);
       if (el) el.hidden = parseInt(s) !== step;
     });
+    var backBtn = $('mp-back-step1');
+    if (backBtn) backBtn.hidden = step !== 2;
 
     // Scroll to top of page on every step change
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3140,6 +3224,7 @@
     if (variant) {
       state.variantId = variant.id;
       state.variant = variant;
+      updateQualityIndicator();
 
       // Update preview with selected size (cm first, then inches)
       var previewName = $('mp-preview-style-name');
@@ -3276,6 +3361,8 @@
         var val = btn.dataset[stateKey];
         if (stateKey === 'petCount') {
           state.petCount = parseInt(val, 10);
+          updateUploadCounter();
+          updateOrderButton();
         } else {
           state[stateKey] = val;
         }
@@ -3287,15 +3374,64 @@
   /* ————————————————————————————————————————
      File upload
   ———————————————————————————————————————— */
+  function updateQualityIndicator() {
+    var alertEl = $('mp-resolution-alert');
+    var alertText = $('mp-resolution-alert-text');
+    if (!alertEl) return;
+
+    if (state.fileDimensions.size === 0) {
+      alertEl.hidden = true;
+      return;
+    }
+
+    var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
+    if (!minResStr) {
+      alertEl.hidden = true;
+      return;
+    }
+
+    var parts = minResStr.split('x');
+    var minW = parseInt(parts[0], 10);
+    var minH = parseInt(parts[1], 10);
+
+    var allPass = true;
+    state.fileDimensions.forEach(function (dims) {
+      var pass = Math.max(dims.w, dims.h) >= Math.max(minW, minH) &&
+                 Math.min(dims.w, dims.h) >= Math.min(minW, minH);
+      if (!pass) allPass = false;
+    });
+
+    alertEl.hidden = allPass;
+    if (!allPass && alertText) {
+      alertText.textContent = 'Uploaded photo resolution is too low. To achieve optimal print quality, use a photo with resolution at least ' + minW + ' × ' + minH + ' px.';
+    }
+  }
+
+  function updateUploadCounter() {
+    var el = $('mp-upload-counter');
+    if (!el) return;
+    var required = state.petCount;
+    if (state.files.length === 0 && state.pendingUploads === 0) {
+      el.hidden = true;
+      return;
+    }
+    el.hidden = false;
+    el.textContent = state.photoUrls.length + ' / ' + required;
+  }
+
   function updateOrderButton() {
     var btn = $('mp-cta-order');
     if (!btn) return;
+    var required = state.petCount;
     if (state.pendingUploads > 0) {
       btn.disabled = true;
       btn.textContent = 'Uploading photo…';
     } else if (state.files.length > 0 && state.photoUrls.length === 0) {
       btn.disabled = true;
       btn.textContent = 'Upload failed — retry photo';
+    } else if (state.photoUrls.length < required) {
+      btn.disabled = true;
+      btn.textContent = required === 1 ? 'Upload a photo first' : 'Upload ' + required + ' photos first';
     } else {
       btn.disabled = false;
       btn.textContent = 'Order portrait';
@@ -3338,8 +3474,20 @@
       })
       .finally(function () {
         state.pendingUploads = Math.max(0, state.pendingUploads - 1);
+        updateUploadCounter();
         updateOrderButton();
       });
+  }
+
+  var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp'];
+  var MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+  function showUploadError(msg) {
+    var el = $('mp-upload-error');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    setTimeout(function () { el.hidden = true; }, 5000);
   }
 
   function handleFiles(files) {
@@ -3347,8 +3495,23 @@
     if (!previews) return;
 
     Array.from(files).forEach(function (file) {
-      if (!file.type.startsWith('image/')) return;
+      if (state.files.length >= state.petCount) {
+        showUploadError('You can only upload ' + state.petCount + ' photo' + (state.petCount > 1 ? 's' : '') + ' for ' + state.petCount + ' pet' + (state.petCount > 1 ? 's' : '') + '.');
+        return;
+      }
+      // HEIC files on iOS/macOS sometimes report empty or generic type — allow by extension
+      var ext = file.name.split('.').pop().toLowerCase();
+      var typeOk = ALLOWED_TYPES.includes(file.type) || ext === 'heic' || ext === 'heif';
+      if (!typeOk) {
+        showUploadError('Unsupported file type: ' + file.name + '. Please use JPG, PNG, HEIC or WebP.');
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        showUploadError(file.name + ' is too large. Maximum file size is 10 MB.');
+        return;
+      }
       state.files.push(file);
+      updateUploadCounter();
 
       var reader = new FileReader();
       reader.onload = function (e) {
@@ -3373,6 +3536,10 @@
             if (urlIdx > -1) state.photoUrls.splice(urlIdx, 1);
           }
           preview.remove();
+          state.fileDimensions.delete(file);
+          updateQualityIndicator();
+          updateUploadCounter();
+          updateOrderButton();
         });
         preview.appendChild(removeBtn);
 
@@ -3387,6 +3554,13 @@
         }
 
         uploadToCloudinary(file, preview);
+
+        var dimImg = new Image();
+        dimImg.onload = function () {
+          state.fileDimensions.set(file, { w: dimImg.naturalWidth, h: dimImg.naturalHeight });
+          updateQualityIndicator();
+        };
+        dimImg.src = e.target.result;
       };
       reader.readAsDataURL(file);
     });
