@@ -309,17 +309,18 @@
                   headers="productTotal"
                 >
                   {%- liquid
-                    assign _cp = item.properties['_custom_price'] | times: 1
-                    if _cp > 0
-                      assign _line_price = _cp | times: item.quantity
+                    assign cp = item.properties['_custom_price'] | times: 1
+                    assign don = item.properties['_donation'] | times: 1
+                    if cp > 0
+                      assign line_price = cp | minus: don | times: item.quantity
                     else
-                      assign _line_price = item.final_line_price
+                      assign line_price = item.final_line_price
                     endif
                     if settings.currency_code_enabled_cart_items
-                      assign price = _line_price | money_with_currency
+                      assign price = line_price | money_with_currency
                       assign unit_price = item.unit_price | money_with_currency
                     else
-                      assign price = _line_price | money
+                      assign price = line_price | money
                       assign unit_price = item.unit_price | money
                     endif
                   -%}
@@ -332,6 +333,29 @@
                 </td>
               </tr>
             {% endfor %}
+            {%- assign total_donation = 0 -%}
+            {%- assign donation_row_title = '' -%}
+            {%- for item in cart.items -%}
+              {%- assign don = item.properties['_donation'] | times: 1 -%}
+              {%- if don > 0 -%}
+                {%- assign total_donation = total_donation | plus: don -%}
+                {%- if donation_row_title == '' -%}
+                  {%- assign donation_row_title = item.properties['_donation_title'] | default: 'Donation' -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if total_donation > 0 -%}
+              <tr class="cart-items__donation-row">
+                <td>{{ donation_row_title }}</td>
+                <td class="cart-items__donation-row__price cart-secondary-typography">
+                  {%- if settings.currency_code_enabled_cart_items -%}
+                    {{ total_donation | money_with_currency }}
+                  {%- else -%}
+                    {{ total_donation | money }}
+                  {%- endif -%}
+                </td>
+              </tr>
+            {%- endif -%}
           </tbody>
         </table>
       </div>
@@ -520,7 +544,7 @@
     grid-area: price;
     min-height: unset;
     min-width: var(--cart-item-price-width);
-    text-align: start;
+    text-align: end;
     display: block;
     font-size: 18px;
     white-space: nowrap;
@@ -607,8 +631,9 @@
       min-height: var(--minimum-touch-target);
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
+      align-items: end;
+      justify-content: end;
+      text-align: end;
     }
   }
 
@@ -868,6 +893,15 @@
     .cart-items__price{
       margin-top: 0;
     }
+  }
+
+  .cart-items__donation-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: color-mix(var(--purple) 45%, transparent);
+    padding: 10px 20px;
+    border-radius: 10px;
   }
 {% endstylesheet %}
 

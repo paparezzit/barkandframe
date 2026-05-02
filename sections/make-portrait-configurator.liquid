@@ -3431,7 +3431,8 @@
     if (customizeCart.length) properties['Customize order'] = customizeCart.join(' | ');
 
     if (state.donation > 0) {
-      properties[window.MakePortraitDonationTitle || 'Donation'] = formatMoney(state.donation);
+      properties['_donation'] = String(state.donation);
+      properties['_donation_title'] = window.MakePortraitDonationTitle || 'Donation';
     }
 
     properties['_configuration'] = JSON.stringify({
