@@ -59,9 +59,8 @@
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
-  window.MakePortraitShopCurrency   = {{ localization.country.currency.iso_code | json }};
   {%- assign _addons_product = all_products[section.settings.addons_product_handle] -%}
-  window.MakePortraitAddonsVariantId = {{ _addons_product.variants.first.id | default: 0 | json }};
+  window.MakePortraitAddonsUnitPrice  = {{ _addons_product.variants.first.price | default: 100 | json }};
 
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
@@ -2490,29 +2489,11 @@
   var PET_NAME_USD     = window.MakePortraitPetNameUSD     || 5;
   var PRINTS_BASE_EUR  = window.MakePortraitPrintsBaseEUR  || 30;
   var PRINTS_EXTRA_EUR = window.MakePortraitPrintsExtraEUR || 20;
-  var SHOP_CURRENCY    = window.MakePortraitShopCurrency   || 'USD';
   var FX_RATE          = 1;
   var EXTRA_PET_PRICE  = EXTRA_PET_USD * 100;
   var PET_NAME_PRICE   = PET_NAME_USD  * 100;
   var PRINTS_BASE_PRICE  = PRINTS_BASE_EUR  * 100;
   var PRINTS_EXTRA_PRICE = PRINTS_EXTRA_EUR * 100;
-
-  function resolveExchangeRate() {
-    if (SHOP_CURRENCY === 'EUR') return Promise.resolve(1);
-    var cacheKey = 'mp_fx_eur_' + SHOP_CURRENCY;
-    try {
-      var cached = parseFloat(sessionStorage.getItem(cacheKey));
-      if (cached && cached > 1.01) return Promise.resolve(cached);
-    } catch (e) {}
-    return fetch('https://open.er-api.com/v6/latest/EUR')
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var rate = (d.rates && d.rates[SHOP_CURRENCY]) ? d.rates[SHOP_CURRENCY] : 1;
-        try { sessionStorage.setItem(cacheKey, rate); } catch (e) {}
-        return rate;
-      })
-      .catch(function () { return 1; });
-  }
 
   /* ————————————————————————————————————————
      Utilities
@@ -3477,43 +3458,33 @@
       photos: state.photoUrls
     });
 
-    // Extras quantity must be in EUR so Shopify Markets converts it correctly
-    var addonEurTotal = 0;
-    document.querySelectorAll('.addon-item__check:checked').forEach(function (c) {
-      addonEurTotal += parseFloat(c.dataset.addonEur || 0);
-    });
-    var extraPetsEur = Math.max(0, state.petCount - 1) * EXTRA_PET_USD + (state.petName ? PET_NAME_USD : 0);
-    var printsEur = state.prints > 0 ? (PRINTS_BASE_EUR + (state.prints - 1) * PRINTS_EXTRA_EUR) : 0;
-    var donationEur = (FX_RATE > 0 && state.donation > 0) ? Math.round(state.donation / (FX_RATE * 100)) : 0;
-    var extrasQty = Math.round(extraPetsEur + addonEurTotal + printsEur + donationEur);
-    var addonsVariantId = window.MakePortraitAddonsVariantId;
+    // Total price in local-currency cents — the Cart Transform function reads
+    // this and sets the line item price to exactly this amount.
+    properties['_custom_price'] = String(Math.round(
+      getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice()
+    ));
 
     var doRedirect = function () {
-      document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true }));
-      window.location.href = '/cart';
+      document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true, detail: { data: {} } }));
+      var drawer = document.querySelector('cart-drawer-component');
+      if (drawer && typeof drawer.open === 'function') {
+        drawer.open();
+      } else {
+        window.location.href = '/cart';
+      }
+      if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
     };
     var doError = function (msg) {
       if (btn) { btn.disabled = false; btn.textContent = 'Order portrait'; }
       showError(msg || 'An error occurred. Please try again.');
     };
 
-    // Add addons first so main product appears on top in cart
-    var addAddon = (extrasQty > 0 && addonsVariantId)
-      ? fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: addonsVariantId, quantity: extrasQty, properties: { '_addon': '1' } })
-        })
-      : Promise.resolve({ ok: true });
-
-    addAddon
-      .then(function () {
-        return fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
-        }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); });
-      })
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
       .then(function (result) {
         if (result.ok) {
           doRedirect();
@@ -3638,15 +3609,15 @@
     initOptionGroup('mp-background-grid', 'background');
     initOptionGroup('mp-pets-grid', 'petCount');
 
-    // Apply images + step 4 pricing after exchange rate is resolved
-    resolveExchangeRate().then(function (rate) {
-      FX_RATE         = rate;
-      EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
-      PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
-      initCustomOptionImages();
-      initStep4Pricing(rate);
-      updateSubtotals();
-    });
+    // FX_RATE derived from the Addon product's price in the customer's market —
+    // ensures displayed extras match cart total exactly (both use Shopify's own rate)
+    var rate = (window.MakePortraitAddonsUnitPrice || 100) / 100;
+    FX_RATE         = rate;
+    EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
+    PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
+    initCustomOptionImages();
+    initStep4Pricing(rate);
+    updateSubtotals();
 
     // Pet name
     var petNameInput = $('mp-pet-name');

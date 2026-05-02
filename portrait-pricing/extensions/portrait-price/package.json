@@ -1,0 +1,9 @@
+{
+  "name": "portrait-price",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@shopify/shopify_function": "^2.0.1"
+  }
+}

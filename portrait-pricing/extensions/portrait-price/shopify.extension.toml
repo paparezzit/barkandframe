@@ -1,0 +1,16 @@
+api_version = "2025-07"
+uid = "7d440b52-c531-9c91-a639-4e85004bb881d0db92c5"
+
+[[extensions]]
+type = "function"
+name = "Portrait Price"
+handle = "portrait-price"
+api_version = "2025-07"
+
+  [extensions.build]
+  typegen_command = "echo skip"
+
+  [[extensions.targeting]]
+  module = "./src/index.js"
+  target = "purchase.cart-transform.run"
+  input_query = "./src/index.graphql"

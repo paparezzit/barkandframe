@@ -14,7 +14,16 @@
       "Bash(git -C /Users/martinres/Desktop/barkandframe log --all --oneline)",
       "Bash(git -C /Users/martinres/Desktop/barkandframe show 106ff27:sections/make-portrait-configurator.liquid)",
       "Bash(awk '{print $NF}')",
-      "Bash(grep -E \"--font-size\" /Users/martinres/Desktop/barkandframe/assets/base.css)"
+      "Bash(grep -E \"--font-size\" /Users/martinres/Desktop/barkandframe/assets/base.css)",
+      "Bash(npm install *)",
+      "Bash(npm show *)",
+      "Bash(shopify app *)",
+      "Bash(grep -n 'async function qMt\\\\|async function $Gr\\\\|async function QGr\\\\|async function ZLt' /Users/martinres/.nvm/versions/node/v20.19.6/lib/node_modules/@shopify/cli/dist/index.js)",
+      "Bash(python3 -c ' *)",
+      "Bash(npx shopify *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Read(//Users/martinres/**)"
     ]
   }
 }

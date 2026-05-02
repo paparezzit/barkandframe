@@ -1,0 +1,12 @@
+{
+  "name": "portrait-pricing",
+  "private": true,
+  "scripts": {
+    "dev": "shopify app dev",
+    "deploy": "shopify app deploy",
+    "build": "shopify app build"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.0.0"
+  }
+}

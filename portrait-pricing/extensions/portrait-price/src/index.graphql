@@ -1,0 +1,10 @@
+query Input {
+  cart {
+    lines {
+      id
+      attribute(key: "_custom_price") {
+        value
+      }
+    }
+  }
+}

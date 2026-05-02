@@ -1,0 +1,22 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "Portrait Pricing"
+client_id = "231562aecf1ab3fea2d45e501d03abc8"
+application_url = "https://shopify.dev/apps/default-app-home"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_cart_transforms"
+
+[auth]
+redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth", "http://localhost:3000/callback" ]
+
+[webhooks]
+api_version = "2026-07"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
