@@ -8,6 +8,8 @@
   @param {string} [menu_content_type] - The type of content to render, options: ['featured_products', 'featured_collections', 'collection_images', 'text'] (default: 'text')
   @param {number} [content_aspect_ratio] - The aspect ratio to display the content if applicable
   @param {number} [image_border_radius] - The border radius used for the content images
+  @param {string} [cta_label] - Optional CTA button label shown below the menu links
+  @param {string} [cta_url] - Optional CTA button URL
 {%- enddoc -%}
 
 <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
@@ -27,4 +29,9 @@
       image_border_radius: image_border_radius
     %}
   </div>
+  {%- if cta_label != blank and cta_url != blank -%}
+    <div class="mega-menu__cta">
+      <a href="{{ cta_url }}" class="button button-secondary">{{ cta_label }}</a>
+    </div>
+  {%- endif -%}
 </div>

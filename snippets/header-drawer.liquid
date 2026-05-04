@@ -6,6 +6,8 @@
   @param {string} [data_header_drawer_type] - The type of header drawer to render
   @param {object} [block] - The block that can be used to provide settings
   @param {object} [section] - The section that can be used to provide settings
+  @param {string} [cta_label] - Optional CTA button label shown at the bottom of the drawer
+  @param {string} [cta_url] - Optional CTA button URL
 
   @example
   {% render 'header-drawer', linklist: section.settings.menu, class: 'header-drawer--mobile' %}
@@ -242,6 +244,11 @@
                   </a>
                 {% endif %}
               </li>
+              {%- if forloop.index == 2 and cta_label != blank and cta_url != blank -%}
+                <li class="menu-drawer__cta" style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};">
+                  <a href="{{ cta_url }}" class="button">{{ cta_label }}</a>
+                </li>
+              {%- endif -%}
             {%- endfor -%}
           {% else %}
             {%- comment -%}

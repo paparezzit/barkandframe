@@ -30,7 +30,9 @@
       {% render 'header-drawer',
         class: 'header__drawer--mobile',
         linklist: block_settings.menu,
-        data_header_drawer_type: 'mobile-drawer'
+        data_header_drawer_type: 'mobile-drawer',
+        cta_label: block_settings.cta_label,
+        cta_url: block_settings.cta_url
       %}
     </div>
 
@@ -74,6 +76,8 @@
       <div class="header-menu__inner">
         {%- render 'header-menu' %}
       </div>
+
+      <div class="header-menu__backdrop"></div>
 
       <script
         src="{{ 'header-menu.js' | asset_url }}"
@@ -183,6 +187,7 @@
     flex-shrink: 0;
     white-space: nowrap;
   }
+
 
   .menu-list__list-item[aria-hidden='true'] {
     visibility: hidden;
@@ -411,7 +416,7 @@
     font-family: var(--menu-child-font-family);
     font-style: var(--menu-child-font-style);
     font-weight: var(--menu-child-font-weight);
-    font-size: var(--menu-child-font-size);
+    font-size: 14px;
     line-height: var(--menu-child-font-line-height);
     text-transform: var(--menu-child-font-case);
     color: var(--menu-child-font-color);
@@ -422,7 +427,66 @@
     transition: color var(--animation-speed) var(--animation-easing);
 
     &:hover {
-      color: var(--menu-child-active-font-color);
+      font-weight: bold;
+    }
+  }
+
+  .mega-menu__link--active {
+    font-weight: bold;
+  }
+
+  .mega-menu__link--parent.mega-menu__link--active {
+    color: var(--menu-parent-active-font-color);
+    font-weight: bold;
+  }
+
+  .header-menu__backdrop {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100dvh - var(--header-height));
+    backdrop-filter: brightness(0.75);
+    z-index: var(--layer-heightened);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--submenu-animation-speed) var(--ease-out-cubic);
+  }
+
+  header-menu[aria-expanded='true'] .header-menu__backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mega-menu__cta {
+    padding: 30px 0 20px;
+
+    .button{
+      background: transparent;
+      border-radius: 1000px;
+      border: 1px solid var(--brown);
+      margin-left: 10px;
+
+      &:hover, &:focus{
+        color: var(--beige);
+        background: var(--brown);
+      }
+    }
+  }
+
+  .menu-drawer__cta {
+    margin-bottom: 30px;;
+
+    .button {
+      color: var(--brown);
+      background: transparent;
+      border-radius: 1000px;
+      border: 1px solid var(--brown);
+
+      &:hover, &:focus {
+        color: var(--beige);
+        background: var(--brown);
+      }
     }
   }
 
@@ -502,6 +566,7 @@
 
   .mega-menu__column {
     grid-column: span 1;
+    padding-left: 10px;
   }
 
   .mega-menu__column--span-2 {
@@ -998,6 +1063,20 @@
       "id": "drawer_dividers",
       "label": "t:settings.dividers",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "CTA button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
     }
   ]
 }

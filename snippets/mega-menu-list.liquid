@@ -110,7 +110,7 @@
     <div>
       <a
         href="{{ link.url }}"
-        class="mega-menu__link {% if link.links != blank %}mega-menu__link--parent{% endif %}"
+        class="mega-menu__link {% if link.links != blank %}mega-menu__link--parent{% endif %}{% if link.active %} mega-menu__link--active{% endif %}"
       >
         {% if menu_content_type == 'collection_images' %}
           {%- capture collection_image_sizes -%}
@@ -154,7 +154,7 @@
             >
               <a
                 href="{{ childLink.url }}"
-                class="mega-menu__link"
+                class="mega-menu__link{% if childLink.active %} mega-menu__link--active{% endif %}"
               >
                 <span class="mega-menu__link-title">{{- childLink.title -}}</span>
               </a>

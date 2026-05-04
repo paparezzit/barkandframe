@@ -117,6 +117,19 @@ class HeaderMenu extends Component {
       submenu = this.overflowMenu;
     }
 
+    if (submenu) {
+      const megaMenuGrid = submenu.querySelector('.mega-menu__grid');
+      const megaMenuCta = submenu.querySelector('.mega-menu__cta');
+      if (megaMenuGrid) {
+        megaMenuGrid.style.paddingInlineStart = '';
+        const gridLeft = megaMenuGrid.getBoundingClientRect().left;
+        const linkLeft = item.getBoundingClientRect().left;
+        const offset = Math.max(0, linkLeft - gridLeft);
+        megaMenuGrid.style.paddingInlineStart = `${offset}px`;
+        if (megaMenuCta) megaMenuCta.style.paddingInlineStart = `${offset}px`;
+      }
+    }
+
     const submenuHeight = submenu ? Math.max(submenu.offsetHeight, overflowMenuHeight) : 0;
 
     this.style.setProperty('--submenu-height', `${submenuHeight}px`);
