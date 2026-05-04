@@ -82,7 +82,6 @@
       <script
         src="{{ 'header-menu.js' | asset_url }}"
         type="module"
-        fetchpriority="low"
       ></script>
     </header-menu>
 {% endcase %}
@@ -446,7 +445,7 @@
     left: 0;
     width: 100vw;
     height: calc(100dvh - var(--header-height));
-    backdrop-filter: brightness(0.75);
+    background-color: #fff;
     z-index: var(--layer-heightened);
     opacity: 0;
     pointer-events: none;
@@ -454,7 +453,7 @@
   }
 
   header-menu[aria-expanded='true'] .header-menu__backdrop {
-    opacity: 1;
+    opacity: .45;
     pointer-events: auto;
   }
 

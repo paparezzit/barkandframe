@@ -30,6 +30,20 @@ class HeaderMenu extends Component {
     });
 
     onDocumentLoaded(this.#preloadImages);
+
+    // overflow-list with defer initializes asynchronously via requestIdleCallback.
+    // When it runs #reflowItems(), item positions change — re-measure the active item's offset.
+    const overflowListEl = this.refs.overflowMenu;
+    if (overflowListEl?.hasAttribute('defer')) {
+      const mo = new MutationObserver(() => {
+        if (!overflowListEl.hasAttribute('defer')) {
+          mo.disconnect();
+          // MutationObserver fires as microtask — after #reflowItems() has run synchronously
+          this.#updateActivePadding();
+        }
+      });
+      mo.observe(overflowListEl, { attributes: true, attributeFilter: ['defer'] });
+    }
   }
 
   disconnectedCallback() {
@@ -121,7 +135,6 @@ class HeaderMenu extends Component {
       const megaMenuGrid = submenu.querySelector('.mega-menu__grid');
       const megaMenuCta = submenu.querySelector('.mega-menu__cta');
       if (megaMenuGrid) {
-        megaMenuGrid.style.paddingInlineStart = '';
         const gridLeft = megaMenuGrid.getBoundingClientRect().left;
         const linkLeft = item.getBoundingClientRect().left;
         const offset = Math.max(0, linkLeft - gridLeft);
@@ -137,6 +150,28 @@ class HeaderMenu extends Component {
   };
 
   #debouncedActivateHandler = debounce(this.#activateHandler, ACTIVATE_DELAY);
+
+  /**
+   * Re-measure and re-apply padding offset for the currently active item.
+   * Called after overflow-list finishes its deferred initialization.
+   */
+  #updateActivePadding() {
+    const item = this.#state.activeItem;
+    if (!item) return;
+
+    let submenu = findSubmenu(item);
+    if (!submenu) return;
+
+    const megaMenuGrid = submenu.querySelector('.mega-menu__grid');
+    const megaMenuCta = submenu.querySelector('.mega-menu__cta');
+    if (!megaMenuGrid) return;
+
+    const gridLeft = megaMenuGrid.getBoundingClientRect().left;
+    const linkLeft = item.getBoundingClientRect().left;
+    const offset = Math.max(0, linkLeft - gridLeft);
+    megaMenuGrid.style.paddingInlineStart = `${offset}px`;
+    if (megaMenuCta) megaMenuCta.style.paddingInlineStart = `${offset}px`;
+  }
 
   /**
    * Deactivate the active item after a delay
