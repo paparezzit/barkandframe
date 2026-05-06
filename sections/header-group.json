@@ -118,7 +118,11 @@
         "enable_transparent_header_product": false,
         "product_color_scheme": "default",
         "enable_transparent_header_collection": false,
-        "collection_color_scheme": "default"
+        "collection_color_scheme": "default",
+        "cart_upsell_product_1": "t-shirt-powered-by-dogs",
+        "cart_upsell_product_2": "mug-fella-dog",
+        "cart_upsell_product_3": "cap-dogs-make-me-happy",
+        "cart_upsell_product_4": ""
       }
     }
   },
