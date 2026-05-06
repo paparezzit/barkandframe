@@ -243,16 +243,24 @@
       btn.disabled = true;
 
       try {
+        const sectionId = document.querySelector('cart-items-component')?.dataset.sectionId;
+        const body = { id: Number(variantId), quantity: 1 };
+        if (sectionId) body.sections = sectionId;
+
         const res = await fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: Number(variantId), quantity: 1 }),
+          body: JSON.stringify(body),
         });
 
         if (!res.ok) throw new Error('add failed');
 
-        document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
-        document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+        const data = await res.json();
+
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { data: { sections: data.sections ?? null } },
+        }));
       } catch (err) {
         console.error('Upsell add to cart error:', err);
         btn.disabled = false;
