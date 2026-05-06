@@ -1,0 +1,87 @@
+{%- doc -%}
+  Renders the artist "bubble" card used in the configurator and on the Artist page.
+  @param {object} artist - Artist metaobject
+{%- enddoc -%}
+<div class="artist-card">
+  {%- if artist.photo.value != blank -%}
+    <img
+      class="artist-card__photo"
+      src="{{ artist.photo.value | image_url: width: 200 }}"
+      alt="{{ artist.name.value }}"
+      width="72"
+      height="72"
+      loading="lazy"
+    >
+  {%- endif -%}
+  <div class="artist-card__body">
+    <strong class="artist-card__name">{{ artist.name.value }}</strong>
+    {%- if artist.role.value != blank -%}
+      <span class="artist-card__role">{{ artist.role.value }}</span>
+    {%- endif -%}
+    {%- if artist['about-long'].value != blank -%}
+      <p class="artist-card__description">{{ artist['about-long'].value | newline_to_br }}</p>
+    {%- endif -%}
+  </div>
+  {%- if artist.signature.value != blank -%}
+    <img
+      class="artist-card__signature"
+      src="{{ artist.signature.value | image_url: width: 160 }}"
+      alt=""
+      loading="lazy"
+    >
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .artist-card {
+    background: var(--purple);
+    border-radius: 1000px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: var(--brown);
+  }
+
+  .artist-card__photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .artist-card__body {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(80% - 110px);
+  }
+
+  .artist-card__name {
+    display: block;
+    font-weight: 700;
+    margin-bottom: .5em;
+  }
+
+  .artist-card__role {
+    display: block;
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: .5em;
+  }
+
+  .artist-card__description {
+    margin: 0;
+  }
+
+  .artist-card__signature {
+    position: absolute;
+    bottom: 10px;
+    right: 60px;
+    width: 70px;
+  }
+{% endstylesheet %}

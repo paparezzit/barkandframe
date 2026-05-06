@@ -1,0 +1,163 @@
+{%- assign all_artists = shop.metaobjects['artist'].values -%}
+
+<div class="artist-page">
+
+  <div class="about-hero">
+    <h1 class="about-hero__title">{{ section.settings.hero_title }}</h1>
+  </div>
+
+  {%- if section.settings.intro_image != blank or section.settings.intro_text != blank -%}
+  <div class="about-split artist-page__intro">
+    <div class="artist-page__intro-image">
+      {%- if section.settings.intro_image != blank -%}
+        {{- section.settings.intro_image | image_url: width: 900 | image_tag: loading: 'eager', widths: '450, 600, 900' -}}
+      {%- endif -%}
+    </div>
+    <div class="about-split__content">
+      {%- if section.settings.intro_text != blank -%}
+        <div class="about-split__body rte">{{ section.settings.intro_text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- unless all_artists == empty -%}
+  <div class="artist-page__list section section--page-width">
+    {%- for artist in all_artists -%}
+      <div class="artist-page__item">
+        {%- render 'artist-card', artist: artist -%}
+
+        {%- assign artist_handle = artist.system.handle -%}
+        {%- assign has_styles = false -%}
+        {%- for style in shop.metaobjects['style'].values -%}
+          {%- if style.artist.value.system.handle == artist_handle -%}
+            {%- assign has_styles = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_styles -%}
+          <div class="artist-page__styles">
+            {%- for style in shop.metaobjects['style'].values -%}
+              {%- if style.artist.value.system.handle == artist_handle -%}
+                <div class="artist-page__style-card">
+                  {%- if style.image.value != blank -%}
+                    <div class="artist-page__style-img">
+                      {{- style.image.value | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400' -}}
+                    </div>
+                  {%- endif -%}
+                  {%- if style.name.value != blank -%}
+                    <span class="artist-page__style-name">{{ style.name.value }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- endunless -%}
+
+</div>
+
+{% stylesheet %}
+  .artist-page__intro-image {
+    overflow: hidden;
+    border-radius: 40px;
+    width: 100%;
+  }
+
+  .artist-page__intro-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .artist-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    padding-top: 60px;
+    padding-bottom: 100px;
+  }
+
+  .artist-page__item {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .artist-page__styles {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .artist-page__style-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(50% - 8px);
+  }
+
+  .artist-page__style-img {
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+  }
+
+  .artist-page__style-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .artist-page__style-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--brown);
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .artist-page__intro-image {
+      border-radius: 60px;
+    }
+
+    .artist-page__style-card {
+      width: 160px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Artist Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero – nadpis",
+      "default": "Our Artists"
+    },
+    {
+      "type": "header",
+      "content": "Intro sekce"
+    },
+    {
+      "type": "image_picker",
+      "id": "intro_image",
+      "label": "Obrázek vlevo"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Text vpravo",
+      "default": "<p>Zde napište text o umělcích.</p>"
+    }
+  ]
+}
+{% endschema %}

@@ -657,20 +657,7 @@
                 {%- assign rendered_artist_handles = rendered_artist_handles | append: a_handle | append: ',' -%}
                 <div class="tab-artist-panel" data-artist="{{ a_handle }}" hidden>
 
-                  <div class="artist-card">
-                    {%- if a.photo.value != blank -%}
-                      <img class="artist-card__photo" src="{{ a.photo.value | image_url: width: 200 }}" alt="{{ a.name.value }}" width="72" height="72" loading="lazy">
-                    {%- endif -%}
-                    <div class="artist-card__body">
-                      <strong class="artist-card__name">{{ a.name.value }}</strong>
-                      {%- if a.about.value != blank -%}
-                        <p class="artist-card__description">{{ a.about.value }}</p>
-                      {%- endif -%}
-                    </div>
-                    {%- if a.signature.value != blank -%}
-                      <img class="artist-card__signature" src="{{ a.signature.value | image_url: width: 160 }}" alt="" loading="lazy">
-                    {%- endif -%}
-                  </div>
+                  {%- render 'artist-card', artist: a -%}
 
                   {%- if a.description != blank -%}
                     <div class="artist-bio">{{ a.description | metafield_tag }}</div>
@@ -783,7 +770,7 @@
       </div>
 
       <div class="mp-reviews">
-        <h2 class="reviews__heading">What do dog owners say?</h2>
+        <h2 class="reviews__heading">What dog people say</h2>
         <div class="reviews__outer">
           <div class="reviews__grid">
             {%- for r in shop.metaobjects['review'].values limit: 9 -%}
@@ -2325,50 +2312,6 @@
   display: flex;
 }
 
-.artist-card {
-  background: var(--purple);
-  border-radius: 1000px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-  overflow: hidden;
-  font-family: var(--font-body--family);
-  font-size: 14px;
-  color: var(--brown);
-}
-
-.artist-card__photo {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.artist-card__body {
-  flex: 1;
-  min-width: 0;
-  max-width: calc(80% - 110px);
-}
-
-.artist-card__name {
-  display: block;
-  font-weight: 700;
-  margin-bottom: .5em;
-}
-
-.artist-card__description {
-  margin: 0;
-}
-
-.artist-card__signature {
-  position: absolute;
-  bottom: 10px;
-  right: 60px;
-  width: 70px;
-}
 
 .artist-bio {
   font-size: 14px;

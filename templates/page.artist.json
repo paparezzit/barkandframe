@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page-artist": {
+      "type": "page-artist",
+      "settings": {
+        "hero_title": "Meet the artists",
+        "intro_image": "shopify://shop_images/Vector.svg",
+        "intro_text": "<p>Styles are not variations, but distinct approaches.In collaboration with Bark & Frame, artists define not just how a portrait looks, but what it expresses — deciding what to preserve, what to simplify, and what gives it lasting presence.</p><p>A style is not a fixed method, but a deliberate interpretation of a moment and the relationship between a person and their dog.</p><p>What you see here are not options, but perspectives — each shaped with its own logic and intent.</p>"
+      }
+    },
+    "more-from": {
+      "type": "more-from-barkandframe",
+      "blocks": {
+        "static-product-card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {
+            "product_card_gap": 16,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "settings": {
+        "title": "Discover Bark&Frame",
+        "cta_image": "shopify://shop_images/make-portrait.png",
+        "cta_label": "Make a Portrait",
+        "cta_link": "shopify://pages/make-portrait",
+        "collection": "apparel"
+      }
+    }
+  },
+  "order": [
+    "page-artist",
+    "more-from"
+  ]
+}
