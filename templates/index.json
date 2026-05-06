@@ -251,7 +251,7 @@
       ],
       "name": "Portrait formats",
       "settings": {
-        "main-text": "The portrait becomes an object.  Different forms, same presence.",
+        "main-text": "The portrait becomes an object. Different forms, same presence.",
         "button_text": "View all formats",
         "button_link": "shopify://products/custom-pet-portrait"
       }
@@ -1481,7 +1481,7 @@
       ],
       "name": "Reviews",
       "settings": {
-        "main-text": "What do dog owners say?",
+        "main-text": "What dog<br>people say",
         "button_text": "All reviews",
         "button_link": "shopify://pages/reviews"
       }

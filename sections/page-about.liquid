@@ -1,0 +1,402 @@
+<div class="about-page">
+
+  <div class="about-hero">
+    <h1 class="about-hero__title">{{ section.settings.hero_title }}</h1>
+  </div>
+
+  {%- if section.settings.s1_photo_1 != blank or section.settings.s1_heading != blank or section.settings.s1_text != blank -%}
+  <div class="about-split">
+    <div class="about-split__photos">
+      <div class="about-photo-grid">
+        {%- if section.settings.s1_photo_1 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--main">
+            {{- section.settings.s1_photo_1 | image_url: width: 800 | image_tag: loading: 'eager', widths: '400, 600, 800' -}}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.s1_photo_2 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--medium" data-parallax>
+            {{- section.settings.s1_photo_2 | image_url: width: 450 | image_tag: loading: 'eager', widths: '220, 300, 450' -}}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.s1_photo_3 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--small" data-parallax="-10dvh">
+            {{- section.settings.s1_photo_3 | image_url: width: 400 | image_tag: loading: 'eager', widths: '220, 300, 400' -}}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="about-split__content">
+      {%- if section.settings.s1_heading != blank -%}
+        <h2 class="about-split__heading">{{ section.settings.s1_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.s1_text != blank -%}
+        <div class="about-split__body rte">{{ section.settings.s1_text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- if section.settings.s2_heading != blank or section.settings.s2_text != blank -%}
+  <div class="about-split about-split--text-only">
+    <div class="about-split__content">
+      {%- if section.settings.s2_heading != blank -%}
+        <h2 class="about-split__heading">{{ section.settings.s2_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.s2_text != blank -%}
+        <div class="about-split__body rte">{{ section.settings.s2_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.s2_button_text != blank -%}
+        <a href="{{ section.settings.s2_button_link }}" class="button about-split__btn">{{ section.settings.s2_button_text }}</a>
+      {%- endif -%}
+    </div>
+    <div class="about-split__side-image">
+      {%- if section.settings.s2_side_image != blank -%}
+        {{- section.settings.s2_side_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 600, 900' -}}
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- if section.settings.s3_photo_1 != blank or section.settings.s3_heading != blank or section.settings.s3_text != blank -%}
+  <div class="about-split">
+    <div class="about-split__photos">
+      <div class="about-photo-grid">
+        {%- if section.settings.s3_photo_1 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--main">
+            {{- section.settings.s3_photo_1 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 600, 900' -}}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.s3_photo_2 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--medium" data-parallax>
+            {{- section.settings.s3_photo_2 | image_url: width: 450 | image_tag: loading: 'lazy', widths: '220, 300, 450' -}}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.s3_photo_3 != blank -%}
+          <div class="about-photo-grid__item about-photo-grid__item--small" data-parallax="-10dvh">
+            {{- section.settings.s3_photo_3 | image_url: width: 450 | image_tag: loading: 'lazy', widths: '220, 300, 450' -}}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="about-split__content">
+      {%- if section.settings.s3_heading != blank -%}
+        <h2 class="about-split__heading">{{ section.settings.s3_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.s3_text != blank -%}
+        <div class="about-split__body rte">{{ section.settings.s3_text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+  .about-page {
+    color: var(--brown);
+    padding-bottom: 80px;
+  }
+
+  .about-hero {
+    padding: 80px var(--page-margin) 70px;
+    text-align: center;
+  }
+
+  .about-hero__title {
+    font-family: "display", serif;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1;
+    color: var(--brown);
+    margin: 0 auto;
+    font-weight: 400;
+    max-width: 520px;
+  }
+
+  .about-split {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px var(--page-margin);
+    max-width: calc(1060px + (2 * var(--page-margin)));
+    margin: 0 auto;
+  }
+
+  .about-split__photos {
+    width: 100%;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .about-photo-grid {
+    min-height: 380px;
+    width: 70%;
+    margin: 0 auto 80px;
+    max-width: 400px;
+  }
+
+  .about-photo-grid__item {
+    overflow: hidden;
+  }
+
+  .about-photo-grid__item--main {
+    border-radius: 60px;
+  }
+
+  .about-photo-grid__item--medium {
+    border-radius: 40px;
+    position: absolute;
+    width: 35%;
+    left: 0%;
+    top: 50%;
+  }
+
+  .about-photo-grid__item--small {
+    border-radius: 20px;
+    position: absolute;
+    width: 25%;
+    left: 45%;
+    top: 80%;
+  }
+
+  .about-photo-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .about-split__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .about-split__heading {
+    font-family: "display", serif;
+    font-size: clamp(28px, 4vw, 54px);
+    font-weight: 400;
+    line-height: 1;
+    margin: 0 auto 1em;
+    width: 100%;
+  }
+
+  .about-split__body {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 auto;
+  }
+
+  .about-split__body p + p {
+    margin-top: 1em;
+  }
+
+  .about-split__btn {
+    margin-top: 32px;
+    width: fit-content;
+    background-color: transparent;
+    color: var(--brown);
+    border: 1px solid var(--brown);
+  }
+
+  .about-split__side-empty {
+    display: none;
+  }
+
+  .about-split__side-image {
+    overflow: hidden;
+    border-radius: 60px;
+    max-width: 300px;
+    width: 70%;
+    margin: 0 auto 20px;
+  }
+
+  .about-split--text-only .about-split__side-image {
+    order: -1;
+  }
+
+  @media screen and (min-width: 750px) {
+    .about-split--text-only .about-split__side-image {
+      order: 0;
+    }
+  }
+
+  .about-split__side-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .about-split:last-child {
+    .about-photo-grid__item--medium{
+      top: 60%;
+      right: 10%;
+    }
+
+    .about-photo-grid__item--small{
+      top: 20%;
+      right: 10%;
+      left: auto;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .about-split {
+      flex-direction: row;
+      align-items: center;
+      padding: 100px var(--page-margin);
+    }
+
+    .about-split > * {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .about-photo-grid {
+      min-height: 460px;
+      margin: 0 0 200px;
+      width: 80%;
+    }
+
+    .about-split--text-only .about-split__content {
+      flex: 1;
+    }
+
+    .about-split__content{
+      margin: 0;
+    }
+
+    .about-split__photos{
+      margin: 0;
+      max-width: none;
+    }
+
+    .about-photo-grid__item--medium{
+      left: -20%;
+      width: 40%;
+      top: 60%;
+    }
+
+    .about-photo-grid__item--small{
+      left: 40%;
+      top: 90%;
+    }
+
+    .about-split__side-image{
+      margin: 0 0 0 auto;
+      max-width: 400px;
+    }
+
+    .about-split__heading {
+      margin: 0 0 1em;
+      max-width: 360px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero – nadpis",
+      "default": "Bark&Frame brand"
+    },
+    {
+      "type": "header",
+      "content": "Sekce 1 – Fotografie a text"
+    },
+    {
+      "type": "image_picker",
+      "id": "s1_photo_1",
+      "label": "Hlavní fotografie (vlevo, velká)"
+    },
+    {
+      "type": "image_picker",
+      "id": "s1_photo_2",
+      "label": "Fotografie 2 (vpravo nahoře)"
+    },
+    {
+      "type": "image_picker",
+      "id": "s1_photo_3",
+      "label": "Fotografie 3 (vpravo dole)"
+    },
+    {
+      "type": "text",
+      "id": "s1_heading",
+      "label": "Nadpis"
+    },
+    {
+      "type": "richtext",
+      "id": "s1_text",
+      "label": "Text",
+      "default": "<p>Zde napište text sekce.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Sekce 2 – Text a tlačítko"
+    },
+    {
+      "type": "text",
+      "id": "s2_heading",
+      "label": "Nadpis"
+    },
+    {
+      "type": "richtext",
+      "id": "s2_text",
+      "label": "Text",
+      "default": "<p>Zde napište text sekce.</p>"
+    },
+    {
+      "type": "text",
+      "id": "s2_button_text",
+      "label": "Text tlačítka"
+    },
+    {
+      "type": "url",
+      "id": "s2_button_link",
+      "label": "Odkaz tlačítka"
+    },
+    {
+      "type": "image_picker",
+      "id": "s2_side_image",
+      "label": "Obrázek vpravo"
+    },
+    {
+      "type": "header",
+      "content": "Sekce 3 – Fotografie a text"
+    },
+    {
+      "type": "image_picker",
+      "id": "s3_photo_1",
+      "label": "Hlavní fotografie (vlevo, velká)"
+    },
+    {
+      "type": "image_picker",
+      "id": "s3_photo_2",
+      "label": "Fotografie 2 (vpravo nahoře)"
+    },
+    {
+      "type": "image_picker",
+      "id": "s3_photo_3",
+      "label": "Fotografie 3 (vpravo dole)"
+    },
+    {
+      "type": "text",
+      "id": "s3_heading",
+      "label": "Nadpis"
+    },
+    {
+      "type": "richtext",
+      "id": "s3_text",
+      "label": "Text",
+      "default": "<p>Zde napište text sekce.</p>"
+    }
+  ]
+}
+{% endschema %}

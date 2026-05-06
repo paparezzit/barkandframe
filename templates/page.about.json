@@ -1,0 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page-about": {
+      "type": "page-about",
+      "settings": {
+        "hero_title": "Bark&Frame brand",
+        "s1_photo_1": "shopify://shop_images/brand01.jpg",
+        "s1_photo_2": "shopify://shop_images/brnad02.png",
+        "s1_photo_3": "shopify://shop_images/brand03.jpg",
+        "s1_heading": "Most days look the same",
+        "s1_text": "<p>Morning, coffee, a short walk. A small white terrier runs around me. Finn. He brings joy, energy, and calm into every day at once. Nothing extraordinary is happening. Quite the opposite — these are ordinary moments. And that’s exactly the point. The relationship isn’t built on big moments, but on the fact that Finn is simply there. Every day.</p><p>Over time, you realize it’s not something to take for granted. When you try to capture it, you find that you don’t really know how. A photo isn’t enough. Emotions are hard to hold onto, and memories can fade. I wanted something that reflects that relationship the way I feel it. For moments with Finn, for moments without him, and for the time that will inevitably come.</p><p>Bark&Frame, the bark, the voice, the presence — placed into a frame so it stays captured, preserved, and endures over time.</p><p>That’s why, together with my friend Petr, we started looking for a way.A way to capture that relationship without losing its strength. We began working with artists. We started selecting styles with real character. We approached the result as a whole.</p><p>Not as a product.<br/>But as a way to give that relationship a form that lasts.</p><p><br/></p><p><strong>Patrik Skala</strong><br/>Founder, Bark&Frame</p>",
+        "s2_heading": "Curatorial Approach",
+        "s2_text": "<p>Every style is carefully selected.</p><p>We don’t offer an open catalog of looks, but a curated set of artistic approaches that meet our standards for quality and consistency. The selection is intentional — every approach is evaluated by how well it holds its character and how clearly it conveys what matters.</p><p>All work is developed in collaboration with real artists. It’s not about applying a fixed method, but about finding a way together to capture a moment and a relationship that cannot be easily described. The result is an approach with its own rules and a clearly defined expression.</p><p>What you choose is not just a visual direction, but the result of a curated collaboration that translates the relationship with your pet into a result that endures over time and becomes part of your space.</p>",
+        "s2_button_text": "Show artists",
+        "s2_button_link": "shopify://pages/artist-collection",
+        "s2_side_image": "shopify://shop_images/brand04.png",
+        "s3_photo_1": "shopify://shop_images/brand05.jpg",
+        "s3_photo_2": "shopify://shop_images/brand06.png",
+        "s3_photo_3": "shopify://shop_images/brand07.jpg",
+        "s3_heading": "Materials & Craft",
+        "s3_text": "<p>Material and craft are not an extra technical step for us. They are decisions that determine how the artwork will actually function beyond the screen.</p><p>We work with a limited selection of materials where we have control over the outcome. For print, we use gallery-grade paper with a smooth surface that holds fine detail and tonal depth without distraction, and canvas with a textured surface that interacts with light, adds depth, and reduces glare. Each gives the artwork a different character, but both follow the same requirement for a compelling result.</p><p>For these qualities to hold in the final piece, the artwork needs to be resolved as a whole. The frame is therefore not an addition, but a component that fixes the work and defines how it will exist in space.Premium materials are available in the form of light-toned oak and dark walnut. The natural color and grain of the wood carry into the result and influence how the artwork sits in its environment.</p><p>We also offer the artwork across other products. The same level of execution is applied there as well. The result is always a finished object, ready to hang or use.</p>"
+      }
+    }
+  },
+  "order": [
+    "page-about"
+  ]
+}
