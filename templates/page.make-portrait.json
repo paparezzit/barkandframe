@@ -53,61 +53,6 @@
             "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
             "amounts": "10, 50, 100"
           }
-        },
-        "style_fWfEFh": {
-          "type": "style",
-          "settings": {
-            "name": "Pure Portrait",
-            "image": "shopify://shop_images/pure-portrait.jpg",
-            "description": "",
-            "artist": "petr-dokoupil",
-            "tag": "",
-            "base_price": 74
-          }
-        },
-        "style_CBAeCJ": {
-          "type": "style",
-          "settings": {
-            "name": "Atelier Sketch",
-            "image": "shopify://shop_images/atelier-sketch.jpg",
-            "description": "<p>A clean and emotional portrait with soft tones and gentle brushwork. Contemporary and timeless.</p>",
-            "artist": "anna-pospisilova",
-            "tag": "limited",
-            "base_price": 77
-          }
-        },
-        "style_EYWg6x": {
-          "type": "style",
-          "settings": {
-            "name": "Pastel Sketch",
-            "image": "shopify://shop_images/pastel-sketch.png",
-            "description": "",
-            "artist": "petr-dokoupil",
-            "tag": "new",
-            "base_price": 73
-          }
-        },
-        "style_QqBaBD": {
-          "type": "style",
-          "settings": {
-            "name": "Classic Outline",
-            "image": "shopify://shop_images/classic-outline.jpg",
-            "description": "",
-            "artist": "anna-pospisilova",
-            "tag": "",
-            "base_price": 80
-          }
-        },
-        "style_JFaB7b": {
-          "type": "style",
-          "settings": {
-            "name": "Modern Illustration",
-            "image": "shopify://shop_images/modern-illustration.jpg",
-            "description": "",
-            "artist": "petr-dokoupil",
-            "tag": "sold-out",
-            "base_price": 74
-          }
         }
       },
       "block_order": [
@@ -115,12 +60,7 @@
         "addon_QTcjeX",
         "prints_LRmCfz",
         "addon_BFcPdG",
-        "donation_enNYcj",
-        "style_fWfEFh",
-        "style_CBAeCJ",
-        "style_EYWg6x",
-        "style_QqBaBD",
-        "style_JFaB7b"
+        "donation_enNYcj"
       ],
       "settings": {
         "products_collection": "make-portrait",

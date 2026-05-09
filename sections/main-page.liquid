@@ -1,7 +1,7 @@
 
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section page-width-content color-{{ section.settings.color_scheme }}">
+<div class="section {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.custom-class != blank %} {{ section.settings.custom-class }}{% endif %}">
   <div
     class="
       spacing-style
@@ -38,6 +38,22 @@
     "groups": ["header"]
   },
   "settings": [
+    {
+      "type": "text",
+      "id": "custom-class",
+      "label": "Custom CSS class"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width-content", "label": "Content (narrow)" },
+        { "value": "page-width-narrow",  "label": "Narrow" },
+        { "value": "page-width-normal",  "label": "Normal" }
+      ],
+      "default": "page-width-content"
+    },
     {
       "type": "select",
       "id": "content_direction",

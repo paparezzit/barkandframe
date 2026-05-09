@@ -1,25 +1,24 @@
 {% liquid
   assign products_collection = collections[section.settings.products_collection]
+  assign _first_portrait_style = shop.metaobjects.portrait_style.values | first
 %}
 
 {%- comment -%} Embedded style data for JS {%- endcomment -%}
 <script>
   window.MakePortraitStyles = [
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'style' -%}
-        {%- assign artist = block.settings.artist -%}
-        {
-          "id": {{ block.id | json }},
-          "name": {{ block.settings.name | default: '' | json }},
-          "imageUrl": "{{ block.settings.image | image_url: width: 900 }}",
-          "artistName": {%- if artist != blank -%}{{ artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
-          "artistPhotoUrl": "{%- if artist != blank -%}{{ artist.photo.value | image_url: width: 200 }}{%- endif -%}",
-          "artistId": {%- if artist != blank -%}{{ artist.system.handle | json }}{%- else -%}null{%- endif -%},
-          "description": {{ block.settings.description | default: '' | json }},
-          "tag": {{ block.settings.tag | default: '' | json }},
-          "basePrice": {{ block.settings.base_price | default: 0 }}
-        }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endif -%}
+    {%- for style in shop.metaobjects.portrait_style.values -%}
+      {%- assign artist = style.artist.value -%}
+      {
+        "id": {{ style.style_id.value | json }},
+        "name": {{ style.name.value | default: '' | json }},
+        "imageUrl": "{{ style.preview_image.value | image_url: width: 900 }}",
+        "artistName": {%- if artist != blank -%}{{ artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
+        "artistPhotoUrl": "{%- if artist != blank -%}{{ artist.photo.value | image_url: width: 200 }}{%- endif -%}",
+        "artistId": {%- if artist != blank -%}{{ artist.system.handle | json }}{%- else -%}null{%- endif -%},
+        "description": {{ style.description.value | default: '' | json }},
+        "tag": {{ style.tags.value | first | downcase | strip | default: '' | json }},
+        "basePrice": {{ style.base_price.value | default: 0 }}
+      }{%- unless forloop.last -%},{%- endunless -%}
     {%- endfor -%}
   ].filter(s => s.name);
 
@@ -141,7 +140,7 @@
         <img
           class="make-portrait__preview-img"
           id="mp-preview-img"
-          src="{% if section.blocks.first.settings.image %}{{ section.blocks.first.settings.image | image_url: width: 900 }}{% endif %}"
+          src="{% if _first_portrait_style.preview_image.value %}{{ _first_portrait_style.preview_image.value | image_url: width: 900 }}{% endif %}"
           width="900"
           height="1125"
           alt=""
@@ -186,40 +185,34 @@
         <h2 class="make-portrait__step-title">Choose a style<br>for your pet</h2>
 
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'style' -%}
-              <button
-                class="style-picker__item{% if forloop.first %} selected{% endif %}{% if block.settings.tag != blank %} style--{{ block.settings.tag }}{% endif %}"
-                data-style-id="{{ block.id }}"
-                role="option"
-                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-                title="{{ block.settings.name }}"
-              >
-                {%- if block.settings.image -%}
-                  <div class="style-picker__item__img">
-                    <img
-                      src="{{ block.settings.image | image_url: width: 120 }}"
-                      width="120"
-                      height="160"
-                      alt="{{ block.settings.name }}"
-                      loading="lazy"
-                    >
-                    {%- if block.settings.tag != blank -%}
-                      {%- case block.settings.tag -%}
-                        {%- when 'new' -%}{%- assign _tag_label = 'New' -%}
-                        {%- when 'limited' -%}{%- assign _tag_label = 'Limited' -%}
-                        {%- when 'sold-out' -%}{%- assign _tag_label = 'Sold out' -%}
-                      {%- endcase -%}
-                      <span class="style-picker__tag">{{ _tag_label }}</span>
-                    {%- endif -%}
-                  </div>
-                {%- else -%}
-                  <div class="style-picker__placeholder"></div>
-                {%- endif -%}
-                
-                <span class="style-picker__name">{{ block.settings.name }}</span>
-              </button>
-            {%- endif -%}
+          {%- for style in shop.metaobjects.portrait_style.values -%}
+            {%- assign _style_tag = style.tags.value | first | downcase | strip -%}
+            <button
+              class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
+              data-style-id="{{ style.style_id.value }}"
+              role="option"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              title="{{ style.name.value }}"
+            >
+              {%- if style.preview_image.value -%}
+                <div class="style-picker__item__img">
+                  <img
+                    src="{{ style.preview_image.value | image_url: width: 120 }}"
+                    width="120"
+                    height="160"
+                    alt="{{ style.name.value }}"
+                    loading="lazy"
+                  >
+                  {%- if _style_tag != blank -%}
+                    <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize }}</span>
+                  {%- endif -%}
+                </div>
+              {%- else -%}
+                <div class="style-picker__placeholder"></div>
+              {%- endif -%}
+
+              <span class="style-picker__name">{{ style.name.value }}</span>
+            </button>
           {%- endfor -%}
         </div>
 
@@ -649,9 +642,9 @@
 
         <div class="tab-panel" id="tab-artist" data-tab="artist" role="tabpanel" hidden>
           {%- assign rendered_artist_handles = '' -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'style' and block.settings.artist != blank -%}
-              {%- assign a = block.settings.artist -%}
+          {%- for style in shop.metaobjects.portrait_style.values -%}
+            {%- assign a = style.artist.value -%}
+            {%- if a != blank -%}
               {%- assign a_handle = a.system.handle -%}
               {%- unless rendered_artist_handles contains a_handle -%}
                 {%- assign rendered_artist_handles = rendered_artist_handles | append: a_handle | append: ',' -%}
@@ -4087,62 +4080,6 @@
     },
   ],
   "blocks": [
-    {
-      "type": "style",
-      "name": "Portrait Style",
-      "settings": [
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Style name",
-          "default": "Pure Portrait"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Preview image"
-        },
-        {
-          "type": "richtext",
-          "id": "description",
-          "label": "Style description",
-          "info": "Shown when the style is selected. Describe the visual approach."
-        },
-        {
-          "type": "header",
-          "content": "Artist"
-        },
-        {
-          "type": "metaobject",
-          "id": "artist",
-          "label": "Artist",
-          "metaobject_type": "artist"
-        },
-        {
-          "type": "select",
-          "id": "tag",
-          "label": "Tag",
-          "options": [
-            { "value": "",          "label": "None" },
-            { "value": "new",       "label": "New" },
-            { "value": "limited",   "label": "Limited" },
-            { "value": "sold-out",  "label": "Sold out" }
-          ],
-          "default": ""
-        },
-        {
-          "type": "header",
-          "content": "Pricing"
-        },
-        {
-          "type": "number",
-          "id": "base_price",
-          "label": "Base price (USD)",
-          "default": 74,
-          "info": "Starting price shown before a product is selected."
-        }
-      ]
-    },
     {
       "type": "prints",
       "name": "Add Prints",

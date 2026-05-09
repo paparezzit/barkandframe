@@ -1,5 +1,10 @@
+{%- liquid
+  assign portrait_styles = shop.metaobjects.portrait_style.values
+  assign portrait_categories = shop.metaobjects.portrait_category.values
+-%}
+
 <div class="portrait-styles section section--page-width">
-  <div class=portrait-styles__inner>
+  <div class="portrait-styles__inner">
     <div class="portrait-styles__wrapper">
       <h2 class="portrait-styles__title">
         {{ section.settings.main-title }}
@@ -7,113 +12,21 @@
 
       <div class="portrait-styles__content">
         <div class="portrait-grid">
-          <a href="{{ routes.root_url }}" class="portrait" data-style="defined-persona">
-            <span class="portrait__image">
-              <img src="{{ 'styles/10.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Expressive Line
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="pure-identity">
-            <span class="portrait__image">
-              <img src="{{ 'styles/01.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Pure portrait
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="pure-identity">
-            <span class="portrait__image">
-              <img src="{{ 'styles/02.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Atelier Sketch
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="pure-identity">
-            <span class="portrait__image">
-              <img src="{{ 'styles/03.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Classic Outline
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="graphic-presence">
-            <span class="portrait__image">
-              <img src="{{ 'styles/11.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Art Decco
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="graphic-presence">
-            <span class="portrait__image">
-              <img src="{{ 'styles/04.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Modern Illustration
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="graphic-presence defined-persona">
-            <span class="portrait__image">
-              <img src="{{ 'styles/05.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Signature Line
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="defined-persona">
-            <span class="portrait__image">
-              <img src="{{ 'styles/06.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              La Parisienne
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="pure-identity">
-            <span class="portrait__image">
-              <img src="{{ 'styles/12.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Pastel Sketch
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="defined-persona">
-            <span class="portrait__image">
-              <img src="{{ 'styles/07.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Regal Duchess
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="grand-scene">
-            <span class="portrait__image">
-              <img src="{{ 'styles/08.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Heritage Lounge
-            </span>
-          </a>
-
-          <a href="{{ routes.root_url }}" class="portrait" data-style="grand-scene">
-            <span class="portrait__image">
-              <img src="{{ 'styles/09.jpg' | asset_url }}" alt="" width="800" height="1000">
-            </span>
-            <span class="portrait__label">
-              Royal Chamber
-            </span>
-          </a>
+          {%- for style in portrait_styles -%}
+            {%- assign cat_handles = '' -%}
+            {%- for cat in style.categories.value -%}
+              {%- unless forloop.first -%}{%- assign cat_handles = cat_handles | append: ' ' -%}{%- endunless -%}
+              {%- assign cat_handles = cat_handles | append: cat.system.handle -%}
+            {%- endfor -%}
+            <a href="{{ routes.root_url }}" class="portrait" data-style="{{ cat_handles }}">
+              <span class="portrait__image">
+                {%- if style.preview_image.value -%}
+                  <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
+                {%- endif -%}
+              </span>
+              <span class="portrait__label">{{ style.name.value }}</span>
+            </a>
+          {%- endfor -%}
         </div>
 
         <div class="portrait-selector">
@@ -122,61 +35,28 @@
           </p>
 
           <div class="accordion">
-
-            <div class="accordion-item">
-              <button class="accordion-header" data-key="pure-identity">Pure Identity</button>
-
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  Portraits focused on resemblance. Chosen when the goal is to preserve how your dog actually looks, including proportions, gaze and familiar expression. These styles keep intervention minimal so the result works almost like a memory, simple, calm and immediately recognizable.
+            {%- for cat in portrait_categories -%}
+              <div class="accordion-item">
+                <button class="accordion-header" data-key="{{ cat.system.handle }}">{{ cat.name.value }}</button>
+                <div class="accordion-content">
+                  <div class="accordion-inner">{{ cat.description.value }}</div>
                 </div>
               </div>
-            </div>
-
-            <div class="accordion-item">
-              <button class="accordion-header" data-key="graphic-presence">Graphic Presence</button>
-
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  Portraits reduced into visual language. Instead of realism the dog becomes a clear form built from shape, contour and contrast. Suitable when the image should function as a visual object rather than a sentimental piece.
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <button class="accordion-header" data-key="defined-persona">Defined Persona</button>
-
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  Portraits that keep the dog recognizable but add interpretation. Clothing, pose or stylization introduces character without replacing the dog itself. Chosen when likeness matters but personality matters more.
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <button class="accordion-header" data-key="grand-scene">Grand Scene</button>
-
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  Portraits where the dog becomes part of a setting. Furniture, interior and composition create atmosphere and narrative. Selected when the image should behave like a decorative artwork and shape the space it hangs in.
-                </div>
-              </div>
-            </div>
-
+            {%- endfor -%}
           </div>
         </div>
       </div>
-        
+
     </div>
 
-    {% if section.settings.button_text != blank %}
+    {%- if section.settings.button_text != blank -%}
       <div class="portrait-styles__button">
         <a href="{{ section.settings.button_link }}" class="button">
           {{ section.settings.button_text }}
         </a>
       </div>
-    {% endif %}
-    
+    {%- endif -%}
+
   </div>
 </div>
 

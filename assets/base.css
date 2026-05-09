@@ -4586,6 +4586,65 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.page-contact{
+  h1{
+    font-family: "display", serif;
+    margin: 50px auto 0 !important;
+  }
+
+  h2{
+    margin: 0 0 .5em !important;
+  }
+
+  h3{
+    font-family: "display", serif;
+    margin: 0 0 .5em !important;
+  }
+
+  & > *{
+    gap: 80px;
+  }
+
+  .image-block{
+    display: none;
+  }
+}
+
+.contact-form-section{
+  margin: 80px 0 40px;
+}
+
+@media(min-width: 750px){
+  .page-contact {
+    & > *{
+      gap: 120px !important;
+    }
+    .image-block{
+      display: block;
+      padding-top: 50px;
+
+      img{
+        max-width: 250px;
+        width: 60%;
+        margin: auto;
+      }
+    }
+
+    h1{
+      font-size: 96px;
+      margin: 200px 0 140px !important;
+    }
+
+    h2{
+      max-width: 660px;
+    }
+
+    h3{
+      font-size: 36px;
+    }
+  }
+}
+
 
 
 
