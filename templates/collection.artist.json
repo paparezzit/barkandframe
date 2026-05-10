@@ -1,0 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection-artist": {
+      "type": "collection-artist",
+      "settings": {
+        "collection_nav": "artist-collections",
+        "collection_text": "<p>It began with a quiet moment.</p><p>A dog resting in the grass, held by soft morning light under a clear blue sky. Nothing dramatic — just a sense of calm that stayed. This is what stays.</p><p>Not the scene itself, but the feeling it leaves behind — something clear, still, and lasting.</p>",
+        "collection_claim": "A quiet moment, carried forward."
+      }
+    }
+  },
+  "order": [
+    "collection-artist"
+  ]
+}

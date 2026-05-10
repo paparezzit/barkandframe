@@ -1,0 +1,131 @@
+{{ 'collection-artist.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign artist = collection.metafields.custom.artist.value
+  assign nav_links = linklists[section.settings.collection_nav].links
+
+  assign col_text  = collection.metafields.custom.collection_text.value
+  assign col_claim = collection.metafields.custom.collection_claim.value
+  assign col_desc_title = section.settings.collection_desc_title | default: 'About the collection'
+-%}
+
+<div class="artist-collection">
+
+  {%- if nav_links.size > 0 -%}
+    <nav class="artist-collection__nav section section--page-width">
+      {%- for link in nav_links -%}
+        <a
+          href="{{ link.url }}"
+          class="artist-collection__nav-link{% if link.active %} is-active{% endif %}"
+          {% if link.active %}aria-current="page"{% endif %}
+        >
+          {{- link.title -}}
+        </a>
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
+
+  <div class="artist-collection__hero section section--page-width">
+    <h1 class="artist-collection__title">{{ collection.title }}</h1>
+    {%- if artist and artist.signature.value != blank -%}
+      <div class="artist-collection__signature">
+        <img
+          src="{{ artist.signature.value | image_url: width: 400 }}"
+          alt=""
+          width="400"
+          height="100"
+          loading="eager"
+        >
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="artist-collection__products">
+    {%- for product in collection.products -%}
+      <a href="{{ product.url }}" class="artist-collection__product-card">
+        <div class="artist-collection__product-image">
+          {%- if product.featured_image -%}
+            <img
+              src="{{ product.featured_image | image_url: width: 600 }}"
+              alt="{{ product.featured_image.alt | default: product.title }}"
+              width="{{ product.featured_image.width }}"
+              height="{{ product.featured_image.height }}"
+              loading="lazy"
+            >
+          {%- endif -%}
+          <span class="artist-collection__product-name">{{ product.title }}</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+
+  <div class="artist-collection__info section section--page-width">
+
+    <div class="artist-collection__artist-bio">
+      {%- if artist -%}
+        {%- if artist.photo.value != blank -%}
+          <div class="artist-collection__artist-photo">
+            <img
+              src="{{ artist.photo.value | image_url: width: 600 }}"
+              alt="{{ artist.name.value }}"
+              width="600"
+              height="750"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+        <div class="artist-collection__artist-text">
+          {%- if artist.name.value != blank -%}
+            <p class="artist-collection__artist-name">{{ artist.name.value }}</p>
+          {%- endif -%}
+          {%- if artist['about-long'].value != blank -%}
+            <div class="rte artist-collection__artist-about">{{ artist['about-long'].value | newline_to_br }}</div>
+          {%- endif -%}
+          {%- if artist.signature.value != blank -%}
+            <div class="artist-collection__artist-signature">
+              <img
+                src="{{ artist.signature.value | image_url: width: 240 }}"
+                alt=""
+                width="240"
+                height="60"
+                loading="lazy"
+              >
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="artist-collection__collection-desc">
+      <h2 class="artist-collection__desc-title">{{ col_desc_title }}</h2>
+      {%- if col_text != blank -%}
+        <div class="artist-collection__desc-text rte">{{ col_text | newline_to_br }}</div>
+      {%- endif -%}
+      {%- if col_claim != blank -%}
+        <p class="artist-collection__desc-claim">{{ col_claim }}</p>
+      {%- endif -%}
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Artist Collection",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "collection_nav",
+      "label": "Collection navigation",
+      "info": "Shared across all collections using this template"
+    },
+    {
+      "type": "text",
+      "id": "collection_desc_title",
+      "label": "Description heading",
+      "default": "About the collection"
+    }
+  ]
+}
+{% endschema %}
