@@ -1,170 +1,486 @@
 {%- doc -%}
-  Renders a contact form with name, email, phone, and comment fields.
-
-  @param {object} settings - Block settings, required for the 'spacing-style' and 'size-style' snippets.
-  @param {string} submit_button - HTML for the submit button, rendered via a `content_for` block.
-
-  @example
-  {% render 'contact-form', settings: block.settings, submit_button: content_for_submit_button %}
+  Renders a contact form with radio-based type switching, conditional fields, and photo upload.
 {%- enddoc -%}
 
+{%- assign form_id = block.id | default: section.id | prepend: 'ContactForm-' -%}
+
+<script>
+  window.ContactFormCloudinary = {
+    cloudName: {{ settings.cloudinary_cloud_name | default: '' | json }},
+    uploadPreset: {{ settings.cloudinary_upload_preset | default: '' | json }}
+  };
+</script>
+
 <div
-  class="
-    contact-form
-    spacing-style size-style
-    {% if settings.inherit_color_scheme == false %}color-{{ settings.color_scheme }}{% endif %}
-  "
-  style="
-    {% render 'spacing-style', settings: settings %}
-    {% render 'size-style', settings: settings %}
-  "
+  class="contact-form spacing-style size-style{% if settings.inherit_color_scheme == false %} color-{{ settings.color_scheme }}{% endif %}"
+  style="{% render 'spacing-style', settings: settings %}{% render 'size-style', settings: settings %}"
   {{ block.shopify_attributes }}
 >
-  {% assign form_id = block.id | default: section.id | prepend: 'ContactForm-' %}
-
   {%- form 'contact', id: form_id, class: 'contact-form__form' -%}
-    {%- if form.errors -%}
-      <div
-        class="contact-form__error"
-        tabindex="-1"
-        autofocus
-      >
-        {{- 'icon-error.svg' | inline_asset_content -}}
-
-        {{- form.errors.translated_fields.email | capitalize }}
-        {{ form.errors.messages.email -}}
-      </div>
-    {%- endif -%}
 
     {%- if form.posted_successfully? -%}
-      <div
-        class="contact-form__success"
-        tabindex="-1"
-        autofocus
-      >
-        {{- 'icon-checkmark.svg' | inline_asset_content -}}
-        {{- 'blocks.contact_form.post_success' | t -}}
+      <div class="contact-form__success" tabindex="-1" autofocus>
+        <h4>
+          Request received
+        </h4>
+        <div class="content">
+          <p>Thank you. We’ve received your request and will review it shortly.</p>
+          <p>Our team goes through each submission carefully. If we need anything else, we’ll reach out. Otherwise, you can expect a response within the next few days.</p>
+        </div>
+      </div>
+    {%- else -%}
+
+    {%- if form.errors -%}
+      <div class="contact-form__error" tabindex="-1" autofocus>
+        {{- 'icon-error.svg' | inline_asset_content -}}
+        {{- form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email -}}
       </div>
     {%- endif -%}
 
-    <div class="contact-form__form-row">
-      <label
-        class="visually-hidden"
-        for="ContactForm-name"
-      >
-        {{- 'blocks.contact_form.name' | t -}}
+    <!-- ——— Radio type selector ——— -->
+    <div class="cf-type-selector" role="group" aria-label="Request type">
+      <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="order-issue">
+        <span class="cf-type-label">Order Issue</span>
       </label>
-      <input
-        type="text"
-        id="ContactForm-name"
-        class="contact-form__input"
-        autocomplete="name"
-        name="contact[name]"
-        value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
-        placeholder="{{ 'blocks.contact_form.name' | t }}"
-      >
-
-      <label
-        class="visually-hidden"
-        for="ContactForm-email"
-      >
-        {{- 'blocks.contact_form.email' | t -}}
-        <span aria-hidden="true">*</span></label
-      >
-      <input
-        type="email"
-        id="ContactForm-email"
-        class="contact-form__input"
-        autocomplete="email"
-        name="contact[email]"
-        spellcheck="false"
-        autocapitalize="off"
-        value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
-        aria-required="true"
-        {% if form.errors contains 'email' %}
-          aria-invalid="true"
-          aria-describedby="ContactForm-email-error"
-        {% endif %}
-        placeholder="{{ 'blocks.contact_form.email' | t }}"
-      >
+      <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="return-refund">
+        <span class="cf-type-label">Return &amp; Refund</span>
+      </label>
+      <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="order-change">
+        <span class="cf-type-label">Order Change</span>
+      </label>
+      <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="general-inquiry">
+        <span class="cf-type-label">General Inquiry</span>
+      </label>
     </div>
 
-    <label
-      class="visually-hidden"
-      for="ContactForm-phone"
-    >
-      {{- 'blocks.contact_form.phone' | t -}}
-    </label>
-    <input
-      type="tel"
-      id="ContactForm-phone"
-      class="contact-form__input"
-      autocomplete="tel"
-      name="contact[phone]"
-      pattern="[0-9\-]*"
-      value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-      placeholder="{{ 'blocks.contact_form.phone' | t }}"
-    >
+    <!-- ——— Two-column layout ——— -->
+    <div class="cf-columns" id="cf-columns" {%- unless form.errors -%}hidden{%- endunless -%}>
 
-    <label
-      class="visually-hidden"
-      for="ContactForm-body"
-    >
-      {{- 'blocks.contact_form.comment' | t -}}
-    </label>
-    <textarea
-      rows="10"
-      id="ContactForm-body"
-      class="contact-form__input contact-form__input--textarea"
-      name="contact[body]"
-      placeholder="{{ 'blocks.contact_form.comment' | t }}"
-    >
-      {{- form.body -}}
-    </textarea>
+      <!-- Left column -->
+      <div class="cf-col cf-col--left">
 
-    {{ submit_button }}
+        <!-- Dynamic select -->
+        <select id="cf-select" name="contact[topic]" class="contact-form__input cf-select" aria-label="Topic">
+          <option value="" disabled selected>Select Issue Type</option>
+          <option value="Damaged on arrival">Damaged on arrival</option>
+          <option value="Artwork issue (not as expected)">Artwork issue (not as expected)</option>
+          <option value="Wrong item received">Wrong item received</option>
+        </select>
+
+        <!-- Order Number (hidden for General Inquiry) -->
+        <div class="cf-field cf-field--labeled" id="cf-field-order-number">
+          <input
+            type="text"
+            id="cf-order-number"
+            name="contact[order_number]"
+            class="contact-form__input"
+            placeholder=" "
+          >
+          <label class="cf-label" for="cf-order-number">Order Number <span class="cf-req">*</span></label>
+        </div>
+
+        <!-- Email -->
+        <div class="cf-field cf-field--labeled">
+          <input
+            type="email"
+            id="cf-email"
+            name="contact[email]"
+            class="contact-form__input"
+            autocomplete="email"
+            spellcheck="false"
+            autocapitalize="off"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            placeholder=" "
+            required
+            aria-required="true"
+          >
+          <label class="cf-label" for="cf-email">Email <span class="cf-req">*</span></label>
+        </div>
+
+        <!-- Reason (Return & Refund only) -->
+        <div class="cf-field" id="cf-field-reason" hidden>
+          <select id="cf-reason" name="contact[reason]" class="contact-form__input">
+            <option value="" disabled selected>Reason</option>
+            <option value="Changed my mind">Changed my mind</option>
+            <option value="Not as expected">Not as expected</option>
+            <option value="Arrived damaged">Arrived damaged</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Textarea -->
+        <div class="cf-field cf-field--labeled">
+          <textarea
+            id="cf-textarea"
+            name="contact[body]"
+            class="contact-form__input contact-form__input--textarea"
+            rows="6"
+            placeholder=" "
+          >{{- form.body -}}</textarea>
+          <label class="cf-label" for="cf-textarea" id="cf-textarea-label">Tell us what happened</label>
+        </div>
+
+      </div>
+
+      <!-- Right column -->
+      <div class="cf-col cf-col--right">
+
+        <!-- Photo upload (first 3 types only) -->
+        <div id="cf-field-upload">
+          <div class="photo-upload">
+            <div
+              class="photo-upload__zone"
+              id="cf-upload-zone"
+              role="button"
+              tabindex="0"
+              aria-label="Upload photos – click or drag and drop"
+            >
+              <p class="photo-upload__instruction">Upload photos</p>
+              <p class="photo-upload__sub">JPG / PNG / HEIC / WebP – Max 10 MB per file</p>
+              <label class="button button--secondary photo-upload__browse" for="cf-file-input">Browse files</label>
+              <input
+                type="file"
+                id="cf-file-input"
+                accept=".jpg,.jpeg,.png,.heic,.heif,.webp,image/jpeg,image/png,image/heic,image/heif,image/webp"
+                multiple
+                class="photo-upload__input"
+                aria-label="Upload photos"
+              >
+            </div>
+            <div class="photo-upload__previews" id="cf-photo-previews" aria-live="polite"></div>
+            <p id="cf-upload-error" class="cf-upload-error" hidden></p>
+          </div>
+        </div>
+
+        <!-- Notices -->
+        <p class="cf-notice cf-notice--warning">Fields marked with <span class="cf-req">*</span> are required.</p>
+
+        <p class="cf-notice cf-notice--warning" id="cf-notice-change" hidden>
+          Changes are only possible within 30 minutes of placing the order.
+        </p>
+
+        <!-- Submit -->
+        <button type="submit" class="button cf-submit">Submit request</button>
+
+      </div>
+    </div>
+
+    {%- endif -%}
+
   {%- endform -%}
+
 </div>
 
-{% stylesheet %}
-  .contact-form__form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-  }
 
-  .contact-form__form-row {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
+<script>
+(function () {
+  var CF_CONFIG = {
+    'order-issue': {
+      selectPlaceholder: 'Select Issue Type',
+      options: ['Damaged on arrival','Artwork issue (not as expected)','Wrong item received'],
+      textareaPlaceholder: 'Tell us what happened',
+      textareaRequired: false,
+      showOrderNumber: true,
+      showReason: false,
+      showUpload: true,
+      showChangeNotice: false
+    },
+    'return-refund': {
+      selectPlaceholder: 'Select Request',
+      options: ['Return request','Refund request','Replacement request'],
+      textareaPlaceholder: 'Additional details',
+      textareaRequired: false,
+      showOrderNumber: true,
+      showReason: true,
+      showUpload: true,
+      showChangeNotice: false
+    },
+    'order-change': {
+      selectPlaceholder: 'Select Changes',
+      options: ['Cancel order','Change photo','Change size / product','Update shipping details'],
+      textareaPlaceholder: 'Description of changes *',
+      textareaRequired: true,
+      showOrderNumber: true,
+      showReason: false,
+      showUpload: true,
+      showChangeNotice: true
+    },
+    'general-inquiry': {
+      selectPlaceholder: 'Select Topic',
+      options: ['Before ordering','Product details','Shipping & delivery','Collaboration / other'],
+      textareaPlaceholder: 'Message *',
+      textareaRequired: true,
+      showOrderNumber: false,
+      showReason: false,
+      showUpload: false,
+      showChangeNotice: false
+    }
+  };
 
-    @media screen and (min-width: 750px) {
-      flex-direction: row;
-      align-items: center;
+  var photoUrls = [];
+  var pendingUploads = 0;
+  var failedUploads = 0;
+
+  function updateSubmitButton() {
+    var btn = document.querySelector('.cf-submit');
+    if (!btn) return;
+    if (pendingUploads > 0) {
+      btn.disabled = true;
+      btn.textContent = 'Uploading photos…';
+    } else if (failedUploads > 0) {
+      btn.disabled = true;
+      btn.textContent = 'Remove failed photos to continue';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit request';
     }
   }
 
-  .contact-form__input {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--color-input-text);
-    background-color: var(--color-input-background);
-    padding: var(--padding-lg) var(--padding-xl);
-    border-radius: var(--style-border-radius-inputs);
-    border: var(--style-border-width-inputs) solid var(--color-input-border);
-    -webkit-font-smoothing: antialiased;
+  function updateForm(type) {
+    var cfg = CF_CONFIG[type];
+    if (!cfg) return;
+
+    var columns = document.getElementById('cf-columns');
+    if (columns) columns.hidden = false;
+
+    // Update select options
+    var sel = document.getElementById('cf-select');
+    if (sel) {
+      sel.innerHTML = '<option value="" disabled selected>' + cfg.selectPlaceholder + '</option>';
+      cfg.options.forEach(function (opt) {
+        var o = document.createElement('option');
+        o.value = opt;
+        o.textContent = opt;
+        sel.appendChild(o);
+      });
+    }
+
+    // Toggle order number
+    var orderField = document.getElementById('cf-field-order-number');
+    var orderInput = document.getElementById('cf-order-number');
+    if (orderField) {
+      orderField.hidden = !cfg.showOrderNumber;
+      if (orderInput) orderInput.required = cfg.showOrderNumber;
+    }
+
+    // Toggle reason
+    var reasonField = document.getElementById('cf-field-reason');
+    if (reasonField) reasonField.hidden = !cfg.showReason;
+
+    // Update textarea
+    var ta = document.getElementById('cf-textarea');
+    var taLabel = document.getElementById('cf-textarea-label');
+    if (ta) {
+      ta.required = cfg.textareaRequired;
+    }
+    if (taLabel) {
+      var labelText = cfg.textareaPlaceholder.replace(' *', '');
+      taLabel.innerHTML = cfg.textareaRequired
+        ? labelText + ' <span class="cf-req">*</span>'
+        : labelText;
+    }
+
+    // Toggle upload
+    var uploadField = document.getElementById('cf-field-upload');
+    if (uploadField) uploadField.hidden = !cfg.showUpload;
+
+    // Toggle change notice
+    var changeNotice = document.getElementById('cf-notice-change');
+    if (changeNotice) changeNotice.hidden = !cfg.showChangeNotice;
   }
 
-  .contact-form__input--textarea {
-    resize: vertical;
-    min-height: var(--input-textarea-min-height);
+  // ——— Cloudinary upload ———
+  var ALLOWED_TYPES = ['image/jpeg','image/png','image/heic','image/heif','image/webp'];
+  var MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+  function showUploadError(msg) {
+    var el = document.getElementById('cf-upload-error');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    setTimeout(function () { el.hidden = true; }, 5000);
   }
 
-  .contact-form__error,
-  .contact-form__success {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-xs);
+
+
+  function markUploadFailed(previewEl, spinner) {
+    spinner.classList.add('photo-preview__spinner--error');
+    previewEl.classList.add('photo-preview--failed');
+    failedUploads++;
+    updateSubmitButton();
+
+    var errMsg = document.createElement('p');
+    errMsg.className = 'cf-upload-error cf-upload-error--inline';
+    errMsg.textContent = 'Upload failed. Remove this photo and try again.';
+    previewEl.insertAdjacentElement('afterend', errMsg);
+    previewEl.dataset.errorEl = 'true';
+    previewEl._errorEl = errMsg;
   }
-{% endstylesheet %}
+
+  function uploadToCloudinary(file, previewEl) {
+    var cfg = window.ContactFormCloudinary;
+    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
+
+    pendingUploads++;
+    updateSubmitButton();
+
+    var spinner = document.createElement('div');
+    spinner.className = 'photo-preview__spinner';
+    previewEl.appendChild(spinner);
+
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', cfg.uploadPreset);
+
+    fetch('https://api.cloudinary.com/v1_1/' + cfg.cloudName + '/image/upload', {
+      method: 'POST',
+      body: fd
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.secure_url) {
+          photoUrls.push(data.secure_url);
+          previewEl.dataset.photoUrl = data.secure_url;
+          spinner.remove();
+        } else {
+          markUploadFailed(previewEl, spinner);
+        }
+      })
+      .catch(function () {
+        markUploadFailed(previewEl, spinner);
+      })
+      .finally(function () {
+        pendingUploads = Math.max(0, pendingUploads - 1);
+        updateSubmitButton();
+      });
+  }
+
+  function handleFiles(files) {
+    var previews = document.getElementById('cf-photo-previews');
+    if (!previews) return;
+
+    Array.from(files).forEach(function (file) {
+      var ext = file.name.split('.').pop().toLowerCase();
+      var typeOk = ALLOWED_TYPES.includes(file.type) || ext === 'heic' || ext === 'heif';
+      if (!typeOk) {
+        showUploadError('Unsupported file: ' + file.name + '. Use JPG, PNG, HEIC or WebP.');
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        showUploadError(file.name + ' exceeds 10 MB limit.');
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var preview = document.createElement('div');
+        preview.className = 'photo-preview';
+
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = '';
+        preview.appendChild(img);
+
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'photo-preview__remove';
+        removeBtn.textContent = '×';
+        removeBtn.setAttribute('aria-label', 'Remove photo');
+        removeBtn.addEventListener('click', function () {
+          if (preview.dataset.photoUrl) {
+            var idx = photoUrls.indexOf(preview.dataset.photoUrl);
+            if (idx > -1) photoUrls.splice(idx, 1);
+          }
+          if (preview.classList.contains('photo-preview--failed')) {
+            failedUploads = Math.max(0, failedUploads - 1);
+          }
+          if (preview._errorEl) preview._errorEl.remove();
+          preview.remove();
+          updateSubmitButton();
+        });
+        preview.appendChild(removeBtn);
+        previews.appendChild(preview);
+
+        uploadToCloudinary(file, preview);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ——— Init ———
+  function init() {
+
+    // Radio change
+    document.querySelectorAll('.cf-type-radio').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        if (this.checked) updateForm(this.value);
+      });
+    });
+
+    // Set initial state if a radio is pre-selected (e.g. after form error)
+    var checked = document.querySelector('.cf-type-radio:checked');
+    if (checked) updateForm(checked.value);
+
+    // File input
+    var fileInput = document.getElementById('cf-file-input');
+    if (fileInput) {
+      fileInput.addEventListener('change', function () {
+        handleFiles(this.files);
+        this.value = '';
+      });
+    }
+
+    // On submit: append photo URLs to body
+    var form = document.getElementById('{{ form_id }}');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (pendingUploads > 0) {
+          e.preventDefault();
+          return;
+        }
+        if (photoUrls.length > 0) {
+          var ta = document.getElementById('cf-textarea');
+          if (ta) {
+            var sep = ta.value.trim() ? '\n\n' : '';
+            ta.value = ta.value + sep + 'Photos:\n' + photoUrls.join('\n');
+          }
+        }
+      });
+    }
+
+    // Drag & drop
+    var zone = document.getElementById('cf-upload-zone');
+    if (zone) {
+      zone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', function () {
+        zone.classList.remove('drag-over');
+      });
+      zone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        handleFiles(e.dataTransfer.files);
+      });
+      zone.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          document.getElementById('cf-file-input').click();
+        }
+      });
+    }
+
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

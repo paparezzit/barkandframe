@@ -23,7 +23,8 @@
       "Bash(npx shopify *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Read(//Users/martinres/**)"
+      "Read(//Users/martinres/**)",
+      "Bash(grep -v \"^--$\")"
     ]
   }
 }

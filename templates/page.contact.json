@@ -1017,6 +1017,8 @@
             "custom_width_mobile": 100,
             "inherit_color_scheme": true,
             "color_scheme": "",
+            "cloudinary_cloud_name": "dpkilh6fx",
+            "cloudinary_upload_preset": "Unsigned",
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
