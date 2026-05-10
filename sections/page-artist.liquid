@@ -42,7 +42,9 @@
             <div class="artists-page__styles">
               {%- for style in shop.metaobjects['portrait_style'].values -%}
                 {%- if style.artist.value.system.handle == artist_handle -%}
-                  <div class="artists-page__style-card">
+                  <div class="artists-page__style-card"
+                    data-image="{%- if style.preview_image.value -%}{{ style.preview_image.value | image_url: width: 400 }}{%- endif -%}"
+                    data-name="{{ style.name.value | escape }}">
                     {%- if style.name.value != blank -%}
                       <span class="artists-page__style-name">{{ style.name.value }}</span>
                     {%- endif -%}
@@ -57,6 +59,12 @@
   </div>
   {%- endunless -%}
 
+</div>
+
+<div class="artists-overlay" id="artists-overlay"></div>
+<div class="artists-cursor-follower" id="artists-cursor-follower" aria-hidden="true">
+  <span class="artists-cursor-follower__image"><img src="" alt="" width="400" height="500" loading="eager"></span>
+  <span class="artists-cursor-follower__label"></span>
 </div>
 
 {% stylesheet %}
@@ -147,6 +155,77 @@
     line-height: 36px;
   }
 
+  @media (hover: hover) {
+    .artists-page__style-card {
+      position: relative;
+    }
+
+    .artists-page__style-card:hover {
+      z-index: 200;
+    }
+
+    .artists-overlay {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      z-index: 100;
+    }
+
+    .artists-overlay.is-active {
+      opacity: .45;
+    }
+
+    .artists-cursor-follower {
+      position: fixed;
+      width: 180px;
+      aspect-ratio: 5/6;
+      pointer-events: none;
+      z-index: 300;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s, visibility .3s;
+      transform: translate(100px, -50%);
+      top: 0;
+      left: 0;
+    }
+
+    .artists-cursor-follower.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .artists-cursor-follower__image {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .artists-cursor-follower__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .artists-cursor-follower__label {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--beige);
+      color: var(--green);
+      white-space: nowrap;
+      border-radius: 1000px;
+      padding: 3px 12px;
+      font-size: 12px;
+    }
+  }
+
   @media screen and (min-width: 750px) {
     .artists-page__intro{
       flex-direction: row;
@@ -198,6 +277,49 @@
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const overlay = document.getElementById('artists-overlay');
+    const follower = document.getElementById('artists-cursor-follower');
+    if (!overlay || !follower) return;
+
+    const followerImg = follower.querySelector('.artists-cursor-follower__image img');
+    const followerLabel = follower.querySelector('.artists-cursor-follower__label');
+
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
+    if (isTouchDevice) return;
+
+    document.addEventListener('mousemove', (e) => {
+      follower.style.left = e.clientX + 'px';
+      follower.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('.artists-page__style-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const imgUrl = card.dataset.image;
+        const name = card.dataset.name;
+
+        followerLabel.textContent = name;
+
+        if (imgUrl) {
+          followerImg.src = imgUrl;
+          follower.querySelector('.artists-cursor-follower__image').style.display = 'block';
+        } else {
+          follower.querySelector('.artists-cursor-follower__image').style.display = 'none';
+        }
+
+        overlay.classList.add('is-active');
+        follower.classList.add('is-active');
+      });
+
+      card.addEventListener('mouseleave', () => {
+        overlay.classList.remove('is-active');
+        follower.classList.remove('is-active');
+      });
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
