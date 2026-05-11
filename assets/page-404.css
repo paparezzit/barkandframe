@@ -1,0 +1,54 @@
+.page-404 {
+  min-height: calc(100dvh - var(--header-height));
+  display: flex;
+  align-items: flex-start;
+  padding: 100px var(--page-margin);
+}
+
+.page-404__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.page-404__code {
+  font-family: "display", serif;
+  font-size: clamp(140px, 18vw, 240px);
+  line-height: 1;
+  color: var(--brown);
+  margin: 0;
+  font-weight: 400;
+  margin-bottom: 40px;
+}
+
+.page-404__heading {
+  font-family: "display", serif;
+  font-size: clamp(28px, 4vw, 54px);
+  font-weight: 400;
+  color: var(--brown);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.page-404__text {
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--brown);
+  margin: 0 0 40px;
+}
+
+.page-404__dog {
+  position: absolute;
+  bottom: var(--page-margin);
+  right: var(--page-margin);
+  width: clamp(140px, 18vw, 220px);
+  color: var(--green);
+  pointer-events: none;
+}
+
+.page-404__dog svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}

@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page-at-home": {
+      "type": "page-at-home",
+      "blocks": {
+        "photo_pprDpi": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/brand04.jpg"
+          }
+        },
+        "photo_iHL3DJ": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/02.jpg"
+          }
+        },
+        "photo_hYryyD": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/03.jpg"
+          }
+        },
+        "photo_nGkVhY": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/04.jpg"
+          }
+        },
+        "photo_9W9rPH": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/05.jpg"
+          }
+        },
+        "photo_ccnKbE": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/06.jpg"
+          }
+        },
+        "photo_UcUXAP": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/07.png"
+          }
+        },
+        "photo_qLjkmD": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/08.jpg"
+          }
+        },
+        "photo_rb6fzn": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/09.jpg"
+          }
+        },
+        "photo_N78gMW": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/10.jpg"
+          }
+        },
+        "photo_MRai83": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/11.jpg"
+          }
+        },
+        "photo_yBgjJ8": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/12.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "photo_pprDpi",
+        "photo_iHL3DJ",
+        "photo_hYryyD",
+        "photo_nGkVhY",
+        "photo_9W9rPH",
+        "photo_ccnKbE",
+        "photo_UcUXAP",
+        "photo_qLjkmD",
+        "photo_rb6fzn",
+        "photo_N78gMW",
+        "photo_MRai83",
+        "photo_yBgjJ8"
+      ],
+      "settings": {
+        "button_url": "shopify://pages/make-portrait",
+        "button_text": "Create your portrait"
+      }
+    }
+  },
+  "order": [
+    "page-at-home"
+  ]
+}

@@ -1,0 +1,260 @@
+.at-home {
+  max-width: calc(1080px + (2 * var(--page-margin)));
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
+}
+
+/* ── Hero (sticky, solid title) ───────────────────── */
+
+.at-home__hero {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100dvh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* ── Outline overlay (sticky, on top of photos) ───── */
+
+.at-home__outline-overlay {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100dvh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: calc(-100dvh + var(--header-height));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── SVG title ────────────────────────────────────── */
+
+.at-home__title-wrap {
+  width: 240px;
+  font-family: "display", serif;
+}
+
+.at-home__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.at-home__svg text {
+  font-family: "display", serif;
+}
+
+/* ── Photo grid ───────────────────────────────────── */
+
+/*
+  Mobile  (2/row): base 3 cols — odd rows 2+1, even rows 1+2
+  Tablet  (3/row): base 6 cols — odd rows 3+2+1, even rows 1+2+3
+  Desktop (4/row): base 6 cols — odd rows 2+1+2+1, even rows 1+2+1+2
+  Row heights alternate via grid-auto-rows: tallA shortB
+*/
+
+.at-home__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 40px var(--page-margin) 60px;
+  position: relative;
+  margin: -20dvh 0 20px;
+}
+
+.at-home__item {
+  display: block;
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 12px;
+  overflow: hidden;
+  grid-column: span 2;
+  background-color: var(--beige);
+}
+
+.at-home__item:nth-child(4n+3) {
+  grid-column: 2 / span 2;
+}
+
+.at-home__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.at-home__item:hover img {
+  transform: scale(1.03);
+}
+
+@media (hover: hover) {
+  .at-home__item img {
+    transition: transform 0.4s ease, opacity 0.3s;
+  }
+
+  .at-home__grid.has-hover .at-home__item:not(.is-hovered) img {
+    opacity: 0.27;
+  }
+}
+
+/* ── CTA ──────────────────────────────────────────── */
+
+.at-home__cta {
+  display: flex;
+  justify-content: center;
+  padding: 20px var(--page-margin) 100px;
+}
+
+/* ── Lightbox ─────────────────────────────────────── */
+
+.at-home-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.at-home-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.at-home-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.81);
+}
+
+.at-home-lightbox__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  color: var(--brown);
+  background-color: var(--cream);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+  padding: 0;
+  border-radius: 100%;
+
+  svg{
+    opacity: .45;
+    transition: opacity 0.2s;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.at-home-lightbox__close:hover {
+  svg{
+    opacity: 1;
+  }
+}
+
+.at-home-lightbox__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 11;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  color: var(--brown);
+  background-color: var(--cream);
+  border-radius: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  svg{
+    opacity: .45;
+    transition: opacity .2s;
+  }
+}
+
+.at-home-lightbox__arrow:hover {
+  svg{
+    opacity: 1;
+  }
+}
+
+.at-home-lightbox__arrow--prev {
+  left: 20px;
+}
+
+.at-home-lightbox__arrow--next {
+  right: 20px;
+}
+
+.at-home-lightbox__stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.at-home-lightbox__img {
+  max-width: 100vw;
+  max-height: 100dvh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Responsive ───────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .at-home__grid{
+    gap: 80px;
+  }
+
+  .at-home__title-wrap {
+    width: 440px;
+  }
+
+  .at-home__svg--stroke text {
+    stroke-width: 0.545;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .at-home{
+    margin-bottom: 120px;
+  }
+
+  .at-home__grid{
+    gap: 120px;
+  }
+
+  .at-home__title-wrap {
+    width: 640px;
+  }
+
+  .at-home__svg--stroke text {
+    stroke-width: 0.375;
+  }
+}
