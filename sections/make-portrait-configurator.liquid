@@ -86,6 +86,37 @@
       {%- endfor -%}
     {%- endif -%}
   };
+  {%- comment -%} Map of variantId → printful_variant_id parsed from SKU (format: PREFIX_PRINTFULID) {%- endcomment -%}
+  window.MakePortraitPrintfulVariants = {
+    {%- assign _mp_pv_handles = '' -%}
+    {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
+    {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+    {%- if section.settings.paper_unframed_handle  != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.paper_unframed_handle  | append: ',' -%}{%- endif -%}
+    {%- if section.settings.paper_framed_handle    != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.paper_framed_handle    | append: ',' -%}{%- endif -%}
+    {%- assign _mp_pv_list = _mp_pv_handles | split: ',' -%}
+    {%- for _mp_pvh in _mp_pv_list -%}
+      {%- unless _mp_pvh == blank -%}
+        {%- assign _mp_pvp = all_products[_mp_pvh] -%}
+        {%- for _mp_pvv in _mp_pvp.variants -%}
+          {%- assign _mp_pvid = _mp_pvv.sku | split: '_' | last | plus: 0 -%}
+          {%- if _mp_pvid != 0 -%}
+            {{ _mp_pvv.id }}: {{ _mp_pvid }},
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if products_collection != blank -%}
+      {%- for _mp_pvp2 in products_collection.products -%}
+        {%- for _mp_pvv2 in _mp_pvp2.variants -%}
+          {%- assign _mp_pvid2 = _mp_pvv2.sku | split: '_' | last | plus: 0 -%}
+          {%- if _mp_pvid2 != 0 -%}
+            {{ _mp_pvv2.id }}: {{ _mp_pvid2 }},
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
+  };
+
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
@@ -152,7 +183,7 @@
         <div class="make-portrait_artist-badge" id="mp-artist-badge">
           <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
           <div class="artist-badge__text">
-            <span class="artist-badge__label">This style was created by</span>
+            <span class="artist-badge__label">Designed by</span>
             <span class="artist-badge__name" id="mp-artist-name"></span>
           </div>
         </div>
@@ -171,22 +202,22 @@
 
       {%- comment -%} Step indicator {%- endcomment -%}
       <nav class="make-portrait__step-indicator" aria-label="Progress">
-        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Choose a style"><span class="step-label--long">Choose a style</span><span class="step-label--short">Style</span></button>
+        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Style">Style</button>
         <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Choose a product"><span class="step-label--long">Choose a product</span><span class="step-label--short">Product</span></button>
+        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Format">Format</button>
         <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Choose a detail"><span class="step-label--long">Choose a detail</span><span class="step-label--short">Detail</span></button>
+        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Details">Details</button>
         <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order a portrait"><span class="step-label--long">Order a portrait</span><span class="step-label--short">Order</span></button>
+        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order">Order</button>
       </nav>
 
       {%- comment -%}——— STEP 1: Choose Style ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="1">
-        <h2 class="make-portrait__step-title">Choose a style<br>for your pet</h2>
+        <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
 
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
           {%- for style in shop.metaobjects.portrait_style.values -%}
-            {%- assign _style_tag = style.tags.value | first | downcase | strip -%}
+            {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
               data-style-id="{{ style.style_id.value }}"
@@ -225,14 +256,13 @@
 
       {%- comment -%}——— STEP 2: Choose Product ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="2" hidden>
-        <h2 class="make-portrait__step-title">Choose a product</h2>
+        <h2 class="make-portrait__step-title">Pick a format</h2>
 
         <div class="product-picker" id="mp-product-picker" role="listbox" aria-label="Product types">
           {%- if products_collection != blank -%}
 
             {%- comment -%} === Prints on Canvas + Paper (side by side, each with own label) === {%- endcomment -%}
             <div class="product-picker__print-group">
-              <p class="product-picker__category-label">Print on canvas</p>
               {%- assign _cu = all_products[section.settings.canvas_unframed_handle] -%}
               {%- assign _cf = all_products[section.settings.canvas_framed_handle] -%}
               {%- assign _canvas_img = _cu.featured_image | default: _cf.featured_image -%}
@@ -259,7 +289,6 @@
 
             {%- comment -%} === Prints on Paper (category – product loaded in step 3) === {%- endcomment -%}
             <div class="product-picker__print-group">
-              <p class="product-picker__category-label">Print on paper</p>
               {%- assign _pu = all_products[section.settings.paper_unframed_handle] -%}
               {%- assign _pf = all_products[section.settings.paper_framed_handle] -%}
               {%- assign _paper_img = _pu.featured_image | default: _pf.featured_image -%}
@@ -294,7 +323,7 @@
               {%- endif -%}
               {%- unless _type contains 'canvas' or _type contains 'paper' or _is_reserved_handle -%}
                 {%- unless _group_started -%}
-                  <p class="product-picker__category-label">Other products</p>
+                  <p class="product-picker__category-label">Your portrait. Beyond the wall.</p>
                   {%- assign _group_started = true -%}
                 {%- endunless -%}
                 <button
@@ -324,7 +353,7 @@
 
       {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="3" hidden>
-        <h2 class="make-portrait__step-title">Choose a detail</h2>
+        <h2 class="make-portrait__step-title">Now the details</h2>
 
         <div id="mp-options-container">
           {%- comment -%} Populated dynamically by JS after product is fetched {%- endcomment -%}
@@ -339,6 +368,7 @@
           </div>
         </div>
 
+        {%- comment -%}
         <div class="make-portrait__option-group">
           <p class="make-portrait__option-label">Background</p>
           <div class="option-btn-grid" id="mp-background-grid" data-option-name="background">
@@ -350,7 +380,7 @@
         </div>
 
         <div class="make-portrait__option-group">
-          <p class="make-portrait__option-label">Number of pets</p>
+          <p class="make-portrait__option-label">Number of dogs</p>
           <div class="option-btn-grid" id="mp-pets-grid" data-option-name="number-of-pets">
             <button class="option-btn option-btn--small selected" data-pet-count="1" data-value="1" type="button">1 pet</button>
             <button class="option-btn option-btn--small" data-pet-count="2" data-value="2" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 1 }}" type="button">2 pets</button>
@@ -358,9 +388,10 @@
             <button class="option-btn option-btn--small" data-pet-count="4" data-value="4" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 3 }}" type="button">4 pets</button>
           </div>
         </div>
+        {%- endcomment -%}
 
         <div class="make-portrait__option-group">
-          <label class="make-portrait__option-label" for="mp-pet-name">Pet's name</label>
+          <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
           <input
             class="make-portrait__text-input"
             type="text"
@@ -378,7 +409,7 @@
 
       {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
       <div class="make-portrait__step" data-step="4" hidden>
-        <h2 class="make-portrait__step-title">Upload photo</h2>
+        <h2 class="make-portrait__step-title">Upload your dog's photo</h2>
 
         <div class="photo-upload" id="mp-upload-area">
           <div class="photo-upload__zone" id="mp-upload-zone" role="button" tabindex="0" aria-label="Upload photo – click or drag and drop">
@@ -404,10 +435,10 @@
 
         <div class="mp-image-guidelines">
           <h2 class="title">
-            Image guidelines
+            Photo guidelines
           </h2>
           <div class="description">
-            Not sure which photo to pick? No worries — we’ve got you covered. Here’s how to make sure you’re uploading the best possible image.
+            Not sure which photo to pick? No worries. Here's what makes a good one.
           </div>
           <div class="content">
             <div class="column column--good">
@@ -416,9 +447,10 @@
               </h3>
               <img class="image" src="{{ 'good.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
               <ul>
-                <li>Pet facing the camera at eye level</li>
+                <li>Dog facing the camera at eye level</li>
                 <li>Good lighting</li>
-                <li>Face and neck clearly visible</li>
+                <li>Whole body and paws visible</li>
+                <li>Ideally sitting up</li>
               </ul>
             </div>
 
@@ -485,11 +517,11 @@
                       type="checkbox"
                       class="addon-item__check addon-item__check--prints"
                       id="mp-prints-check"
-                      aria-label="Add prints"
+                      aria-label="Add copies"
                     >
                     <div class="addon-item__body">
                       <div class="addon-item__left">
-                        <span class="addon-item__name">Add prints</span>
+                        <span class="addon-item__name">Add copies</span>
                         <span class="addon-item__price" id="mp-prints-price"></span>
                       </div>
                       {%- if block.settings.description != blank -%}
@@ -592,16 +624,16 @@
             </span>
           </div>
         </div>
-        <button class="button make-portrait__cta" id="mp-cta-step1">Go to product</button>
-        <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Choose options</button>
-        <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1" hidden>Change a style</button>
-        <button class="button make-portrait__cta" id="mp-cta-step3" hidden>Go to last step</button>
-        <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
       </div>
+      <button class="button make-portrait__cta" id="mp-cta-step1">Continue to format</button>
+      <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Continue to details</button>
+      <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1" hidden>Change a style</button>
+      <button class="button make-portrait__cta" id="mp-cta-step3" hidden>Last step</button>
+      <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
 
       <p class="make-portrait__availability">
         <span class="make-portrait__availability__indicator"></span>
-        The artist is available
+        Our artists are available
       </p>
       
       <p class="make-portrait__delivery-note">
@@ -622,7 +654,7 @@
         <button class="tab-nav__btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
         <button class="tab-nav__btn" data-tab="artist" role="tab" aria-selected="false">Artist</button>
         <button class="tab-nav__btn" data-tab="product" role="tab" aria-selected="false">Product</button>
-        <button class="tab-nav__btn" data-tab="limited" role="tab" aria-selected="false">Limited</button>
+        {%- comment -%}<button class="tab-nav__btn" data-tab="limited" role="tab" aria-selected="false">Limited</button>{%- endcomment -%}
       </nav>
       <div class="make-portrait__tab-panels">
 
@@ -631,43 +663,35 @@
             <h2 class="tab-overview__heading">It's that simple</h2>
             <img src="{{ 'make-portrait/overview01.png' | asset_url }}" alt="Size" loading="lazy">
             <p>
-              A custom portrait of your pet is not just an addition to your interior. It is a way to give form to a relationship shaped by ordinary, everyday moments.
-            </p>
-            <p>
-              Each portrait is created in collaboration with artists who focus on character, proportion, and expression — a result that endures over time.
+              A portrait of your dog isn't just wall art. It's a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
             <img src="{{ 'make-portrait/overview02.png' | asset_url }}" alt="Size" loading="lazy">
           </div>
         </div>
 
         <div class="tab-panel" id="tab-artist" data-tab="artist" role="tabpanel" hidden>
-          {%- assign rendered_artist_handles = '' -%}
           {%- for style in shop.metaobjects.portrait_style.values -%}
             {%- assign a = style.artist.value -%}
             {%- if a != blank -%}
-              {%- assign a_handle = a.system.handle -%}
-              {%- unless rendered_artist_handles contains a_handle -%}
-                {%- assign rendered_artist_handles = rendered_artist_handles | append: a_handle | append: ',' -%}
-                <div class="tab-artist-panel" data-artist="{{ a_handle }}" hidden>
+              <div class="tab-artist-panel" data-style-id="{{ style.style_id.value }}" hidden>
 
-                  {%- render 'artist-card', artist: a -%}
+                {%- render 'artist-card', artist: a -%}
 
-                  {%- if a.description != blank -%}
-                    <div class="artist-bio">{{ a.description | metafield_tag }}</div>
-                  {%- endif -%}
+                {%- if style.story.value != blank -%}
+                  <div class="artist-bio">{{ style.story.value | metafield_tag }}</div>
+                {%- endif -%}
 
-                  {%- if a.description_image.value != blank -%}
-                    <div class="description-image">
-                      <img src="{{ a.description_image.value | image_url: width: 800 }}" alt="{{ a.name.value }}" loading="lazy">
-                    </div>
-                  {%- endif -%}
+                {%- if a.description_image.value != blank -%}
+                  <div class="description-image">
+                    <img src="{{ a.description_image.value | image_url: width: 800 }}" alt="{{ a.name.value }}" loading="lazy">
+                  </div>
+                {%- endif -%}
 
-                  {%- if a.hero.value != blank -%}
-                    <p class="artist-hero">{{ a.hero.value }}</p>
-                  {%- endif -%}
+                {%- if a.hero.value != blank -%}
+                  <p class="artist-hero">{{ a.hero.value }}</p>
+                {%- endif -%}
 
-                </div>
-              {%- endunless -%}
+              </div>
             {%- endif -%}
           {%- endfor -%}
         </div>
@@ -749,16 +773,17 @@
                 </div>
               </details>
             </accordion-custom>
-            <h2 class="tab-product__footer-heading">Made to hold its place.</h2>
           </div>
         </div>
 
+        {%- comment -%}
         <div class="tab-panel" id="tab-limited" data-tab="limited" role="tabpanel" hidden>
           <div class="tab-limited">
             <p>Some styles are created for a limited time. Once they are gone, they do not return. Each limited release captures a specific moment. A collaboration, an idea, or a direction explored only once.</p>
             <h2 class="tab-limited__heading">Available briefly. Gone permanently.</h2>
           </div>
         </div>
+        {%- endcomment -%}
 
       </div>
 
@@ -813,7 +838,7 @@
 
 .make-portrait {
   padding: 40px 0 100px;
-  font-family: var(--font-paragraph--family);
+  font-family: var(--font-body--family);
   color: var(--brown);
 }
 
@@ -1119,13 +1144,6 @@
   vertical-align: top;
 }
 
-/* ——— Tab: Product ——— */
-.tab-product__footer-heading {
-  font-family: var(--font-heading--family);
-  font-size: 21px;
-  margin: 50px 0 0;
-}
-
 /* ——— Tab: Limited ——— */
 .tab-limited {
   display: flex;
@@ -1172,7 +1190,7 @@
   white-space: nowrap;
   transition: color 0.2s;
   flex-shrink: 0;
-  font-family: var(--font-normal);
+  font-family: var(--font-body--family);
 }
 
 .step-indicator__btn.active {
@@ -1193,8 +1211,6 @@
     stroke: var(--brown);
   }
 }
-
-.step-label--long { display: none; }
 
 /* ——— Step common ——— */
 .make-portrait__step-title {
@@ -1268,9 +1284,12 @@
   white-space: nowrap;
 }
 
-.style--new      .style-picker__tag { background: var(--green); color: var(--beige); }
-.style--limited  .style-picker__tag { background: var(--purple); color: var(--brown); }
-.style--sold-out .style-picker__tag { background: var(--brown); color: var(--beige); bottom: calc(50% - 8px);}
+.style--new .style-picker__tag { background: var(--green); color: var(--beige); }
+.style--limited .style-picker__tag { background: var(--purple); color: var(--brown); }
+.style--sold-out .style-picker__tag {
+  background: var(--brown);
+  color: var(--beige);
+  bottom: calc(50% - 8px);}
 
 .style--sold-out{
   pointer-events: none;
@@ -1367,10 +1386,6 @@
   width: 100%;
 }
 
-.product-picker__print-group .product-picker__category-label {
-  margin-top: 0;
-}
-
 .product-picker__category-label {
   grid-column: 1 / -1;
   font-size: 14px;
@@ -1390,6 +1405,7 @@
   gap: 4px;
   text-align: left;
   transition: border-color 0.2s, background 0.2s;
+  font-family: var(--font-body--family);
 
   &.product-picker__item--category{
     border-color: transparent;
@@ -1474,6 +1490,7 @@
   text-align: left;
   padding: 0;
   width: 128px;
+  font-family: var(--font-body--family);
 }
 
 .option-btn .option-btn__img {
@@ -2426,15 +2443,13 @@
 
   .make-portrait__action-bar {
     position: sticky;
-    bottom: 40px;
+    bottom: 0px;
     z-index: 10;
+    background: var(--beige)
   }
 }
 
 @media (min-width: 1200px) {
-  .step-label--long { display: inline; }
-  .step-label--short { display: none; }
-
   .make-portrait__layout{
     grid-template-columns: 3fr 420px;
     gap: 120px;
@@ -2532,7 +2547,10 @@
   function getDeliveryDate() {
     var d = new Date();
     d.setDate(d.getDate() + 7);
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    var dd = String(d.getDate()).padStart(2, '0');
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var yyyy = d.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
   }
 
   function $(selector) {
@@ -2615,7 +2633,7 @@
     // Step 4: replace preview name with static upload info
     var previewStyleName = $('mp-preview-style-name');
     if (previewStyleName && step === 4) {
-      previewStyleName.innerHTML = '<strong class="make-portrait__upload-info-title">Upload photo</strong><p class="make-portrait__upload-info-text">Your portrait is hand-crafted within 5–7 business days, then produced according to your order.</p>';
+      previewStyleName.innerHTML = '';
     }
 
     // Restore style name in preview when leaving step 4
@@ -2673,8 +2691,8 @@
 
     // Artist tab panel
     document.querySelectorAll('.tab-artist-panel').forEach(function (p) { p.hidden = true; });
-    if (state.style.artistId) {
-      var activeArtist = document.querySelector('.tab-artist-panel[data-artist="' + state.style.artistId + '"]');
+    if (state.style.id) {
+      var activeArtist = document.querySelector('.tab-artist-panel[data-style-id="' + state.style.id + '"]');
       if (activeArtist) activeArtist.hidden = false;
     }
 
@@ -3252,10 +3270,7 @@
         });
       }
       var border = getSelectedLabel('mp-border-grid');
-      var bg = getSelectedLabel('mp-background-grid');
       if (border) details.push(border);
-      if (bg) details.push(bg + ' Background');
-      details.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
       if (state.petName) details.push('Add name');
       if (details.length) addLine('Details', details.join(' | '));
     }
@@ -3522,10 +3537,7 @@
       state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') detailParts.push(o); });
     }
     var borderLabel = getSelectedLabel('mp-border-grid');
-    var bgLabel = getSelectedLabel('mp-background-grid');
     if (borderLabel) detailParts.push(borderLabel);
-    if (bgLabel) detailParts.push(bgLabel + ' Background');
-    detailParts.push(state.petCount + ' pet' + (state.petCount > 1 ? 's' : ''));
     if (state.petName) detailParts.push(state.petName);
 
     var properties = {
@@ -3544,38 +3556,26 @@
 
     if (state.donation > 0) {
       properties['_donation'] = String(state.donation);
-      properties['_donation_title'] = window.MakePortraitDonationTitle || 'Donation';
     }
-
-    properties['_configuration'] = JSON.stringify({
-      style: state.style ? {
-        id: state.styleId,
-        name: state.style.name
-      } : null,
-      product: state.product ? {
-        id: state.product.id,
-        title: state.product.title,
-        handle: state.product.handle
-      } : null,
-      variant: state.variant ? {
-        id: state.variant.id,
-        title: state.variant.title,
-        options: state.variant.options,
-        price: state.variant.price
-      } : null,
-      extras: {
-        petCount: state.petCount,
-        petName: state.petName,
-        addons: checkedAddons
-      },
-      photos: state.photoUrls
-    });
 
     // Total price in local-currency cents — the Cart Transform function reads
     // this and sets the line item price to exactly this amount.
     properties['_custom_price'] = String(Math.round(
       getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice()
     ));
+
+    var newOrderItem = {
+      line_item_id: "",
+      style_id: state.styleId || null,
+      printful_variant_id: (window.MakePortraitPrintfulVariants && state.variantId)
+        ? (window.MakePortraitPrintfulVariants[state.variantId] || null)
+        : null,
+      pasparta: state.border === 'white-border',
+      pet_name: state.petName || '',
+      photos: state.photoUrls,
+      portrait_font: null,
+      quantity: state.prints > 0 ? state.prints + 1 : 1
+    };
 
     var doRedirect = function () {
       document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true, detail: { data: {} } }));
@@ -3592,18 +3592,60 @@
       showError(msg || 'An error occurred. Please try again.');
     };
 
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
-    })
-      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
-      .then(function (result) {
-        if (result.ok) {
-          doRedirect();
-        } else {
-          doError(result.data.description || result.data.message);
+    // Find existing portrait with _order in cart; if found, append to it instead of creating a new one
+    fetch('/cart.js')
+      .then(function (r) { return r.json(); })
+      .then(function (cart) {
+        var firstPortrait = null;
+        for (var i = 0; i < cart.items.length; i++) {
+          if (cart.items[i].properties && cart.items[i].properties['_order']) {
+            firstPortrait = cart.items[i];
+            break;
+          }
         }
+
+        if (!firstPortrait) {
+          // First portrait in cart — attach _order directly
+          properties['_order'] = JSON.stringify({ items: [newOrderItem] });
+          return fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
+          })
+            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+            .then(function (result) {
+              if (result.ok) { doRedirect(); } else { doError(result.data.description || result.data.message); }
+            });
+        }
+
+        // Additional portrait — add line item without _order, then append to first portrait's _order
+        return fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (result) {
+            if (!result.ok) { doError(result.data.description || result.data.message); return; }
+
+            var existingOrder;
+            try { existingOrder = JSON.parse(firstPortrait.properties['_order']); } catch (e) { existingOrder = { items: [] }; }
+            existingOrder.items.push(newOrderItem);
+
+            return fetch('/cart/change.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: firstPortrait.key,
+                quantity: firstPortrait.quantity,
+                properties: Object.assign({}, firstPortrait.properties, { '_order': JSON.stringify(existingOrder) })
+              })
+            })
+              .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+              .then(function (result) {
+                if (result.ok) { doRedirect(); } else { doError('Portrait added, but order data update failed.'); }
+              });
+          });
       })
       .catch(function () { doError(); });
   }
@@ -3719,12 +3761,10 @@
 
     // Option button groups
     initOptionGroup('mp-border-grid', 'border');
-    initOptionGroup('mp-background-grid', 'background');
-    initOptionGroup('mp-pets-grid', 'petCount');
+    // initOptionGroup('mp-background-grid', 'background');  // disabled
+    // initOptionGroup('mp-pets-grid', 'petCount');           // disabled
 
-    // FX_RATE derived from the Addon product's price in the customer's market —
-    // ensures displayed extras match cart total exactly (both use Shopify's own rate)
-    var rate = (window.MakePortraitAddonsUnitPrice || 100) / 100;
+    var rate = parseFloat((Shopify.currency && Shopify.currency.rate) || 1);
     FX_RATE         = rate;
     EXTRA_PET_PRICE = Math.round(EXTRA_PET_USD * rate) * 100;
     PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
@@ -4082,7 +4122,7 @@
   "blocks": [
     {
       "type": "prints",
-      "name": "Add Prints",
+      "name": "Add Copies",
       "limit": 1,
       "settings": [
         {

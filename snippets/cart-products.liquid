@@ -339,9 +339,7 @@
               {%- assign don = item.properties['_donation'] | times: 1 -%}
               {%- if don > 0 -%}
                 {%- assign total_donation = total_donation | plus: don -%}
-                {%- if donation_row_title == '' -%}
-                  {%- assign donation_row_title = item.properties['_donation_title'] | default: 'Donation' -%}
-                {%- endif -%}
+                {%- assign donation_row_title = 'DogsTrust' -%}
               {%- endif -%}
             {%- endfor -%}
             {%- if total_donation > 0 -%}

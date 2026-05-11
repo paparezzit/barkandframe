@@ -12,22 +12,6 @@
     "make-portrait-configurator": {
       "type": "make-portrait-configurator",
       "blocks": {
-        "addon_JAeLG7": {
-          "type": "addon",
-          "settings": {
-            "name": "Preview before print",
-            "description": "<p>Before we print your artwork, we’ll send you a preview for your approval.</p>",
-            "price": 30
-          }
-        },
-        "addon_QTcjeX": {
-          "type": "addon",
-          "settings": {
-            "name": "Send print file",
-            "description": "<p>We will send you the original print file. The file is yours to keep for personal use.</p>",
-            "price": 30
-          }
-        },
         "prints_LRmCfz": {
           "type": "prints",
           "settings": {
@@ -39,7 +23,7 @@
         "addon_BFcPdG": {
           "type": "addon",
           "settings": {
-            "name": "Skip the line",
+            "name": "Skip the queue",
             "description": "<p>Skip the queue for your artwork and cut the waiting time in half.</p>",
             "price": 30
           }
@@ -56,8 +40,6 @@
         }
       },
       "block_order": [
-        "addon_JAeLG7",
-        "addon_QTcjeX",
         "prints_LRmCfz",
         "addon_BFcPdG",
         "donation_enNYcj"
