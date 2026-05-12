@@ -85,7 +85,7 @@
             "drawer_accordion_expand_first": false,
             "drawer_dividers": false,
             "cta_label": "Artist Collection",
-            "cta_url": "shopify://pages/artist-collection"
+            "cta_url": "shopify://collections/swime"
           },
           "blocks": {}
         }
