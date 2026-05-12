@@ -1,6 +1,6 @@
 <p class="product-availability">
   <span class="product-availability__indicator"></span>
-  The artist is available
+  In stock
 </p>
 
 <p class="product-availability__delivery">
@@ -15,7 +15,7 @@
   display: flex;
   gap: 9px;
   align-items: center;
-  margin: 0 0 7px;
+  margin: 30px 0 7px;
 }
 
 .product-availability__indicator {
@@ -41,7 +41,6 @@
 
 .product-availability__delivery-date {
   font-weight: 700;
-  margin-left: 3px;
 }
 {% endstylesheet %}
 
@@ -51,7 +50,10 @@
   if (!dateEl) return;
   var d = new Date();
   d.setDate(d.getDate() + 7);
-  dateEl.textContent = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  var dd = String(d.getDate()).padStart(2, '0');
+  var mm = String(d.getMonth() + 1).padStart(2, '0');
+  var yyyy = d.getFullYear();
+  dateEl.textContent = dd + '/' + mm + '/' + yyyy;
 })();
 {% endjavascript %}
 

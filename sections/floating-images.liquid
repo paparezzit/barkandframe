@@ -6,12 +6,16 @@
       </div>
 
       <h2 class="floating-images__title">
-        <svg class="title__svg" width=240 height="108" viewBox="0 0 240 108">
-          <text x="120" y="30" text-anchor="middle" fill="#4C443F" stroke-width="1">
-            <tspan x="120" dy="0">Bark & Frame</tspan><tspan x="120" dy="35">goes beyond</tspan><tspan x="120" dy="35">portraits</tspan>
+        <svg class="title__svg" width=400 height="90" viewBox="0 0 400 90">
+          <text x="200" y="30" text-anchor="middle" fill="#4C443F" stroke-width="1">
+            <tspan x="200" dy="0">Bark &amp; Frame,</tspan><tspan x="200" dy="35">beyond portraits.</tspan>
           </text>
         </svg>
       </h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="floating-images__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
 
       <div class="floating-images__button">
         <a href="{{ section.settings.button_link }}" class="button">
@@ -22,14 +26,14 @@
   </div>
 
   <div class="floating-images__fake-title" aria-hidden="true">
-    <svg class="fake-title__svg" width=240 height="108" viewBox="0 0 240 108">
-      <text x="120" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
-        <tspan x="120" dy="0">Bark & Frame</tspan><tspan x="120" dy="35">goes beyond</tspan><tspan x="120" dy="35">portraits</tspan>
+    <svg class="fake-title__svg" width=400 height="90" viewBox="0 0 400 90">
+      <text x="200" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
+        <tspan x="200" dy="0">Bark &amp; Frame,</tspan><tspan x="200" dy="35">beyond portraits.</tspan>
       </text>
     </svg>
   </div>
 
-  <div class="floating-images__holder">
+  <div class="floating-images__holder" data-parallax="-20dvh">
     {% content_for 'blocks' %}
   </div>
 </div>
@@ -59,7 +63,7 @@
         padding: 40px 20px;
         border-radius: 80px;
         width: 100%;
-        height: 80dvh;
+        height: 70dvh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -75,8 +79,23 @@
       .floating-images__title{
         line-height: 36px;
         font-size: 36px;
-        margin: 30px auto;
-        max-width: 240px;
+        margin: 30px auto 0;
+        width: min(400px, 80vw);
+
+        svg {
+          width: min(400px, 80vw);
+          height: auto;
+        }
+      }
+
+      .floating-images__subtitle {
+        margin: 0 auto 40px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--brown);
+        text-align: center;
+        max-width: 300px;
+        transition: opacity .3s;
       }
 
       .floating-images__button{
@@ -101,7 +120,12 @@
       margin-top: calc(-100dvh + var(--header-height));
       z-index: 1;
       pointer-events: none;
-      padding-top: 27px;
+      transform: translate(0px, -11px);
+
+      svg {
+        width: min(400px, 80vw);
+        height: auto;
+      }
     }
 
     .floating-images__holder{
@@ -171,8 +195,6 @@
     }
   }
 
-
-
   @media(min-width: 1200px){
     .floating-images{
       .floating-images__content{
@@ -183,7 +205,7 @@
         }
 
         .floating-images__title{
-          margin: 120px 0;
+          margin: 120px 0 50px;
           max-width: 600px;
 
           svg{
@@ -193,6 +215,12 @@
               stroke-width: .333333;
             }
           }
+        }
+
+        .floating-images__subtitle{
+          font-size: 18px;
+          max-width: 400px;
+          margin: 0 auto 68px;
         }
       }
 
@@ -250,6 +278,12 @@
       "id": "main-text",
       "label": "Main Text",
       "default": "Turn your favorite moments into timeless art"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Text pod nadpisem",
+      "default": "A small collection of dog people essentials, designed by our artists."
     },
     {
       "type": "text",

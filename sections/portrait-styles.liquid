@@ -271,10 +271,10 @@
   }
 
   @media(min-width: 1200px){
-    margin: 220px 0; 
+    margin: 90px 0; 
 
     .portrait-styles__inner{
-      padding: 130px 40px 100px
+      padding: 130px 150px 100px
     }
 
     .portrait-styles__title{
@@ -285,11 +285,12 @@
     }
 
     .portrait-styles__content{
-      margin: 90px 0;
+      margin: 90px 0 60px;
+      gap: 40px;
 
       .portrait-grid{
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        flex: 8;
+        flex: 6;
         
         .portrait{
           .portrait__label{
@@ -304,14 +305,14 @@
     .portrait-selector{
       .portrait-selector__text{
         font-size: 18px;
-        margin-bottom: 200px;
+        margin-bottom: 100px;
         color: var(--brown);
       }
 
       .accordion{
         .accordion-header{
           font-size: 36px;
-          padding: 20px 0;
+          padding: 15px 0;
 
           &::before, &::after{
             width: 28px;
