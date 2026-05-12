@@ -1,4 +1,5 @@
 {%- assign all_artists = shop.metaobjects['artist'].values -%}
+{%- assign sorted_names = all_artists | map: 'name' | map: 'value' | sort | reverse -%}
 
 <div class="artists-page">
 
@@ -23,7 +24,15 @@
 
   {%- unless all_artists == empty -%}
   <div class="artists-page__list section section--page-width">
-    {%- for artist in all_artists -%}
+    {%- for artist_name in sorted_names -%}
+      {%- assign artist = nil -%}
+      {%- for a in all_artists -%}
+        {%- if a.name.value == artist_name -%}
+          {%- assign artist = a -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if artist == nil -%}{%- continue -%}{%- endif -%}
       <div class="artists-page__item">
         {%- render 'artist-card', artist: artist -%}
 
@@ -49,6 +58,27 @@
                       <span class="artists-page__style-name">{{ style.name.value }}</span>
                     {%- endif -%}
                   </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- assign has_collections = false -%}
+        {%- for col in collections -%}
+          {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
+            {%- assign has_collections = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_collections -%}
+          <div class="artists-page__styles-section">
+            <h3 class="artists-page__styles-title">Collection by {{ artist.name.value | split: ' ' | first }}</h3>
+            <div class="artists-page__collections">
+              {%- for col in collections -%}
+                {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
+                  <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">{{ col.title }}</a>
                 {%- endif -%}
               {%- endfor -%}
             </div>
@@ -129,14 +159,14 @@
   .artists-page__styles-section {
     display: flex;
     gap: 20px;
-    padding: 20px;
+    padding: 30px 20px;
   }
 
   .artists-page__styles-title {
     font-size: 14px;
     color: var(--brown);
     margin: 0;
-    flex: 1;
+    flex: .7;
     line-height: 36px;
   }
 
@@ -153,6 +183,25 @@
     color: var(--brown);
     font-family: "display", serif;
     line-height: 36px;
+  }
+
+  .artists-page__collections {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .artists-page__collection-btn {
+    color: var(--brown);
+    border: 1px solid var(--brown);
+    border-radius: 1000px;
+    background-color: transparent;
+  }
+
+  .artists-page__collection-btn:hover {
+    background-color: var(--purple);
   }
 
   @media (hover: hover) {

@@ -12,9 +12,9 @@
     "page-artist": {
       "type": "page-artist",
       "settings": {
-        "hero_title": "Meet the artists",
+        "hero_title": "Our artists",
         "intro_image": "shopify://shop_images/Vector.svg",
-        "intro_text": "<p>Styles are not variations, but distinct approaches.<br/>In collaboration with Bark & Frame, artists define not just how a portrait looks, but what it expresses — deciding what to preserve, what to simplify, and what gives it lasting presence.</p><p>A style is not a fixed method, but a deliberate interpretation of a moment and the relationship between a person and their dog.</p><p>What you see here are not options, but perspectives — each shaped with its own logic and intent.</p>"
+        "intro_text": "<p>Styles aren't variations. They're distinct approaches. Each style is designed in collaboration with our artists. Not just how a portrait looks, but what it preserves, what it simplifies, what gives it lasting presence. A style isn't a method. It's an interpretation of a moment. A relationship between a person and their dog. What you see here aren't options. They're perspectives. Each one with its own logic and intent.</p>"
       }
     },
     "more-from": {

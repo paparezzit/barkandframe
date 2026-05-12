@@ -16,12 +16,15 @@
   <div class="artist-card__body">
     <div class="artist-card__heading">
       <strong class="artist-card__name">{{ artist.name.value }}</strong>
-      {%- if artist.role.value != blank -%}
-        <span class="artist-card__role">{{ artist.role.value }}</span>
-      {%- endif -%}
     </div>
+    {%- if artist.hero.value != blank -%}
+      <p class="artist-card__description">{{ artist.hero.value | newline_to_br }}</p>
+    {%- endif -%}
     {%- if artist['about-long'].value != blank -%}
       <p class="artist-card__description">{{ artist['about-long'].value | newline_to_br }}</p>
+    {%- endif -%}
+    {%- if artist.description != blank -%}
+      <div class="artist-card__description">{{ artist.description | metafield_tag }}</div>
     {%- endif -%}
   </div>
   {%- if artist.signature.value != blank -%}
@@ -29,6 +32,8 @@
       class="artist-card__signature"
       src="{{ artist.signature.value | image_url: width: 160 }}"
       alt=""
+      width="160"
+      height="40"
       loading="lazy"
     >
   {%- endif -%}
@@ -73,13 +78,13 @@
     margin-bottom: 1em;
   }
 
-  .artist-card__role {
-    margin-bottom: 1em;
-  }
-
   .artist-card__description {
     margin: 0;
-    padding-bottom: 30px;
+    padding-bottom: 1em;
+
+    &:last-child{
+      padding-bottom: 2em;
+    }
   }
 
   .artist-card__signature {
