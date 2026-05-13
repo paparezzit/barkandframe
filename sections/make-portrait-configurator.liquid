@@ -3697,11 +3697,21 @@
     initSmartSticky();
 
     // Auto-select style from URL param or fall back to first
+    var urlParams = new URLSearchParams(window.location.search);
     if (STYLES.length > 0) {
-      var urlStyle = new URLSearchParams(window.location.search).get('style');
+      var urlStyle = urlParams.get('style');
       var preselect = urlStyle && STYLES.find(function (s) { return s.id === urlStyle; });
       selectStyle(preselect ? preselect.id : STYLES[0].id);
     }
+
+    // Pre-select product and jump to step from URL params
+    var urlProduct = urlParams.get('product');
+    var urlStep = parseInt(urlParams.get('step'), 10);
+    if (urlProduct) {
+      var productBtn = document.querySelector('.product-picker__item[data-product-handle="' + urlProduct + '"]');
+      if (productBtn) selectProduct(urlProduct);
+    }
+    if (urlStep && urlStep > 1) goToStep(urlStep);
 
     // Style picker
     document.querySelectorAll('.style-picker__item').forEach(function (btn) {

@@ -18,7 +18,7 @@
               {%- unless forloop.first -%}{%- assign cat_handles = cat_handles | append: ' ' -%}{%- endunless -%}
               {%- assign cat_handles = cat_handles | append: cat.system.handle -%}
             {%- endfor -%}
-            <a href="{{ routes.root_url }}" class="portrait" data-style="{{ cat_handles }}">
+            <a href="/pages/make-portrait?style={{ style.style_id.value | url_encode }}" class="portrait" data-style="{{ cat_handles }}">
               <span class="portrait__image">
                 {%- if style.preview_image.value -%}
                   <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">

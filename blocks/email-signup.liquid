@@ -292,6 +292,37 @@
   }
 {% endstylesheet %}
 
+{% javascript %}
+(function () {
+  var input = document.getElementById('EmailInput-{{ block.id }}');
+  if (!input) return;
+  var form = input.closest('form');
+  if (!form) return;
+
+  form.addEventListener('submit', function () {
+    var email = input.value.trim();
+    if (!email) return;
+
+    fetch('https://a.klaviyo.com/client/subscriptions/?company_id=V6mwd3', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'revision': '2023-10-15'
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'subscription',
+          attributes: {
+            list_id: 'UFNuwr',
+            email: email
+          }
+        }
+      })
+    });
+  });
+})();
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "t:names.email_signup",
