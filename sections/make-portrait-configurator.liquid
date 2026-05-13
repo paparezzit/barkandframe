@@ -675,7 +675,7 @@
             {%- if a != blank -%}
               <div class="tab-artist-panel" data-style-id="{{ style.style_id.value }}" hidden>
 
-                {%- render 'artist-card', artist: a -%}
+                {%- render 'artist-card', artist: a, about_long_only: true -%}
 
                 {%- if style.story.value != blank -%}
                   <div class="artist-bio">{{ style.story.value | metafield_tag }}</div>
@@ -991,6 +991,10 @@
 }
 
 /* ——— Tab: Overview ——— */
+.tab-overview img {
+  margin-bottom: 60px;
+}
+
 .tab-overview__heading {
   font-family: var(--font-heading--family);
   font-size: var(--font-size--2xl);
@@ -2665,7 +2669,7 @@
   /* ————————————————————————————————————————
      Step 1 – Style
   ———————————————————————————————————————— */
-  function selectStyle(styleId) {
+  function selectStyle(styleId, openTab) {
     state.styleId = styleId;
     state.style = STYLES.filter(function (s) { return s.id === styleId; })[0] || null;
 
@@ -2712,6 +2716,7 @@
     var desc = $('mp-style-description');
     if (desc) desc.innerHTML = state.style.description || '';
 
+    if (openTab) switchTab('artist');
     updateSubtotals();
   }
 
@@ -3671,19 +3676,21 @@
   /* ————————————————————————————————————————
      Tabs (left panel)
   ———————————————————————————————————————— */
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-nav__btn').forEach(function (b) {
+      var active = b.dataset.tab === tabId;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+      p.hidden = p.dataset.tab !== tabId;
+    });
+  }
+
   function initTabs() {
     document.querySelectorAll('.tab-nav__btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var tabId = btn.dataset.tab;
-        document.querySelectorAll('.tab-nav__btn').forEach(function (b) {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        document.querySelectorAll('.tab-panel').forEach(function (p) {
-          p.hidden = p.dataset.tab !== tabId;
-        });
+        switchTab(btn.dataset.tab);
       });
     });
   }
@@ -3709,13 +3716,20 @@
     var urlStep = parseInt(urlParams.get('step'), 10);
     if (urlProduct) {
       var productBtn = document.querySelector('.product-picker__item[data-product-handle="' + urlProduct + '"]');
-      if (productBtn) selectProduct(urlProduct);
+      if (productBtn) {
+        selectProduct(urlProduct);
+      } else {
+        var matchedCategory = ['canvas', 'paper'].find(function (cat) {
+          return urlProduct.indexOf(cat) !== -1;
+        });
+        if (matchedCategory) selectCategory(matchedCategory);
+      }
     }
     if (urlStep && urlStep > 1) goToStep(urlStep);
 
     // Style picker
     document.querySelectorAll('.style-picker__item').forEach(function (btn) {
-      btn.addEventListener('click', function () { selectStyle(btn.dataset.styleId); });
+      btn.addEventListener('click', function () { selectStyle(btn.dataset.styleId, true); });
     });
 
     // Product picker

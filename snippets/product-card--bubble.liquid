@@ -79,6 +79,7 @@
 <product-card--custom
   class="product-card--custom"
   data-product-id="{{ product.id }}"
+  data-product-handle="{{ product.handle }}"
   data-parallax
   data-product-variants-size="{{ product.variants.size }}"
   id="product-card-{{ block.id }}"
@@ -243,7 +244,15 @@
     card.addEventListener("mouseout", () => {
       formatsWrapper.classList.remove("hovered");
     });
-    
+
     card.style.width = card.querySelector(".product-title div p").offsetWidth + 24 + "px";
+
+    const handle = card.dataset.productHandle;
+    if (handle) {
+      const configuratorUrl = "/pages/make-portrait?step=2&product=" + encodeURIComponent(handle);
+      card.querySelectorAll("a.card-gallery__link, a.card-gallery__slide-link, .card-gallery a").forEach(link => {
+        link.href = configuratorUrl;
+      });
+    }
   });
 {% endjavascript %}

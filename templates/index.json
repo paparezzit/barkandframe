@@ -102,7 +102,7 @@
           "type": "product-card--bubble",
           "name": "t:names.product_card",
           "settings": {
-            "product": "mug-fella-dog",
+            "product": "pet-bowl",
             "position_x": 26,
             "position_y": 55
           },
