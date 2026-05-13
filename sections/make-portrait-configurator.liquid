@@ -1430,6 +1430,10 @@
   background: var(--purple);
   color: var(--brown);
   margin-top: 8px;
+
+  &:hover{
+    background-color: color-mix(in srgb, var(--purple) 45%, transparent);
+  }
 }
 
 .make-portrait__error-note {
@@ -2178,7 +2182,7 @@
 
 /* ——— Subtotal ——— */
 .make-portrait__subtotal {
-  margin: 20px 0 20px;
+  margin: 0 0 20px;
   background-color: var(--cream);
   border-radius: 10px;
   padding: 15px 20px;
@@ -2445,7 +2449,9 @@
     position: sticky;
     bottom: 0px;
     z-index: 10;
-    background: var(--beige)
+    background: var(--beige);
+    border-radius: 10px 0 0 10px;
+    margin-top: 20px;
   }
 }
 
@@ -3690,9 +3696,11 @@
     initTabs();
     initSmartSticky();
 
-    // Auto-select first style
+    // Auto-select style from URL param or fall back to first
     if (STYLES.length > 0) {
-      selectStyle(STYLES[0].id);
+      var urlStyle = new URLSearchParams(window.location.search).get('style');
+      var preselect = urlStyle && STYLES.find(function (s) { return s.id === urlStyle; });
+      selectStyle(preselect ? preselect.id : STYLES[0].id);
     }
 
     // Style picker

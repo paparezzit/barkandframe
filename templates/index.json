@@ -1915,7 +1915,7 @@
                 "accordion_row_YdTUdT": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Will it really look like my dog?",
+                    "heading": "Can I use a phone photo?",
                     "open_by_default": false,
                     "icon": "none",
                     "image_upload": "shopify://shop_images/01.svg",
@@ -1925,7 +1925,7 @@
                     "text_VAhHxC": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Our goal is for every customer to be totally satisfied with their purchase. If this isn’t the case, let us know and we’ll do our best to work with you to make it right. </p>",
+                        "text": "<p>Yes. Any phone photo will do. Don't worry about the result. Before we start, our team checks every photo for quality, posture, and detail. If something's off, we'll reach out for a new one. Nothing goes into production until we know it'll give you a portrait worth keeping.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1955,7 +1955,7 @@
                 "accordion_row_TLXgHX": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Is a phone photo enough?",
+                    "heading": "Will it look like my dog?",
                     "open_by_default": false,
                     "icon": "none",
                     "image_upload": "shopify://shop_images/02.svg",
@@ -1965,7 +1965,7 @@
                     "text_iwt9B4": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>We are unable to accept returns on certain items. These will be carefully marked before purchase.</p>",
+                        "text": "<p>Every portrait is reviewed for expression, posture, and the small things only you would notice.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1996,7 +1996,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_dash_row",
                   "settings": {
-                    "heading": "Can I include multiple pets?",
+                    "heading": "How long until I get it?",
                     "open_by_default": false,
                     "icon": "none",
                     "image_upload": "shopify://shop_images/03_f45850b2-d9e1-4fd7-a248-4241d9e0b4a1.svg",
@@ -2007,7 +2007,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>Yes! We create portraits for unique pets around the world. From cute bunnies to pet birds. Odds are, if it's an animal, we will create a portrait for you. Please note: at this time we do not create portraits of humans (no matter how cute you are!).</p>",
+                        "text": "<p>2 to 3 weeks. Need it faster? Skip the queue at checkout.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2038,7 +2038,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_dash_row",
                   "settings": {
-                    "heading": "What if I don’t like the result?",
+                    "heading": "What if I don't love it?",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -2048,7 +2048,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>Our products are manufactured both locally and globally. We carefully select our manufacturing partners to ensure our products are high quality and a fair value. </p>",
+                        "text": "<p>If your portrait arrives damaged or doesn't match your dog, write to us through our returns form. We'll find a solution.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2079,7 +2079,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_dash_row",
                   "settings": {
-                    "heading": "How do I choose the right style?",
+                    "heading": "Can you do a portrait of a dog who has passed?",
                     "open_by_default": false,
                     "icon": "none",
                     "image_upload": "shopify://shop_images/05.svg",
@@ -2090,7 +2090,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>Shipping is calculated based on your location and the items in your order. You will always know the shipping price before you purchase.</p>",
+                        "text": "<p>Yes, with care and respect. Our Dream style was made for exactly this moment.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",

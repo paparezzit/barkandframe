@@ -35,13 +35,27 @@
           </p>
 
           <div class="accordion">
+            {%- for i in (1..20) -%}
+              {%- for cat in portrait_categories -%}
+                {%- if cat.order.value == i -%}
+                  <div class="accordion-item">
+                    <button class="accordion-header" data-key="{{ cat.system.handle }}">{{ cat.name.value }}</button>
+                    <div class="accordion-content">
+                      <div class="accordion-inner">{{ cat.description.value }}</div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
             {%- for cat in portrait_categories -%}
-              <div class="accordion-item">
-                <button class="accordion-header" data-key="{{ cat.system.handle }}">{{ cat.name.value }}</button>
-                <div class="accordion-content">
-                  <div class="accordion-inner">{{ cat.description.value }}</div>
+              {%- if cat.order.value == blank -%}
+                <div class="accordion-item">
+                  <button class="accordion-header" data-key="{{ cat.system.handle }}">{{ cat.name.value }}</button>
+                  <div class="accordion-content">
+                    <div class="accordion-inner">{{ cat.description.value }}</div>
+                  </div>
                 </div>
-              </div>
+              {%- endif -%}
             {%- endfor -%}
           </div>
         </div>

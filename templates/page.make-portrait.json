@@ -15,7 +15,7 @@
         "prints_LRmCfz": {
           "type": "prints",
           "settings": {
-            "description": "Want to share the artwork with others around you? Enter the number of additional copies you need.",
+            "description": "Same portrait, more copies. For friends, family. Because more dog is more dog.",
             "base_price": 30,
             "extra_price": 20
           }
@@ -24,8 +24,8 @@
           "type": "addon",
           "settings": {
             "name": "Skip the queue",
-            "description": "<p>Skip the queue for your artwork and cut the waiting time in half.</p>",
-            "price": 30
+            "description": "<p>Your portrait in 1 to 2 weeks. Standard is 2 to 3.</p>",
+            "price": 20
           }
         },
         "donation_enNYcj": {

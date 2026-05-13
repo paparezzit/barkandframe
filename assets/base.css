@@ -4487,7 +4487,7 @@ slideshow-component.slideshow--homepage{
     font-size: 36px !important;
 
     @media(min-width: 750px){
-      font-size: 96px !important;
+      font-size: clamp(36px, 5vw, 54px) !important;
     }
   }
 
@@ -4645,7 +4645,7 @@ slideshow-component.slideshow--homepage{
   border-radius: 10px;
   border: none;
   font-size: 14px;
-  color: color-mix(var(--brown) 45%, transparent);
+  color: color-mix(in srgb, var(--brown) 45%, transparent);
   background: var(--cream);
   transition: background 0.15s, color 0.15s;
   white-space: nowrap;
@@ -4711,15 +4711,10 @@ slideshow-component.slideshow--homepage{
 
 .cf-field[hidden],
 #cf-field-upload[hidden],
-#cf-notice-change[hidden],
 #cf-columns[hidden] {
   display: none !important;
 }
 
-.cf-select {
-  cursor: pointer;
-  appearance: auto;
-}
 
 /* ——— Contact form: notices ——— */
 .cf-notice {
@@ -4732,7 +4727,7 @@ slideshow-component.slideshow--homepage{
 
 .cf-notice--warning {
   padding: 15px 20px;
-  background: color-mix(var(--purple) 45%, transparent);
+  background: color-mix(in srgb, var(--purple) 45%, transparent);
   border-radius: 10px;
 }
 
@@ -4799,7 +4794,7 @@ slideshow-component.slideshow--homepage{
   flex-direction: column;
   align-items: center;
   gap: var(--gap-xs);
-  background-color: color-mix(var(--purple) 45%, transparent);
+  background-color: color-mix(in srgb, var(--purple) 45%, transparent);
   padding: 80px;
   border-radius: 40px;
 

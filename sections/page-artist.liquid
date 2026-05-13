@@ -51,13 +51,14 @@
             <div class="artists-page__styles">
               {%- for style in shop.metaobjects['portrait_style'].values -%}
                 {%- if style.artist.value.system.handle == artist_handle -%}
-                  <div class="artists-page__style-card"
+                  <a href="/pages/make-portrait?style={{ style.style_id.value | url_encode }}"
+                    class="artists-page__style-card"
                     data-image="{%- if style.preview_image.value -%}{{ style.preview_image.value | image_url: width: 400 }}{%- endif -%}"
                     data-name="{{ style.name.value | escape }}">
                     {%- if style.name.value != blank -%}
                       <span class="artists-page__style-name">{{ style.name.value }}</span>
                     {%- endif -%}
-                  </div>
+                  </a>
                 {%- endif -%}
               {%- endfor -%}
             </div>
@@ -78,7 +79,7 @@
             <div class="artists-page__collections">
               {%- for col in collections -%}
                 {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
-                  <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">{{ col.title }}</a>
+                  <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">Go to collection</a>
                 {%- endif -%}
               {%- endfor -%}
             </div>
@@ -148,7 +149,7 @@
     .artist-card{
       border-radius: 80px;
       align-items: start;
-      background-color: color-mix(var(--purple) 45%);
+      background-color: color-mix(in srgb, var(--purple) 45%, transparent);
     }
 
     .artist-card__body{
@@ -176,6 +177,9 @@
 
   .artists-page__style-card {
     width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
   }
 
   .artists-page__style-name {

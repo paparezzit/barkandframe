@@ -21,11 +21,10 @@
     {%- if form.posted_successfully? -%}
       <div class="contact-form__success" tabindex="-1" autofocus>
         <h4>
-          Request received
+          Thanks for reaching out.
         </h4>
         <div class="content">
-          <p>Thank you. We’ve received your request and will review it shortly.</p>
-          <p>Our team goes through each submission carefully. If we need anything else, we’ll reach out. Otherwise, you can expect a response within the next few days.</p>
+          <p>We’ve got your message and our team is on it. We’ll get back to you as soon as we can.</p>
         </div>
       </div>
     {%- else -%}
@@ -40,36 +39,20 @@
     <!-- ——— Radio type selector ——— -->
     <div class="cf-type-selector" role="group" aria-label="Request type">
       <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="general-inquiry" checked>
+        <span class="cf-type-label">General Inquiry</span>
+      </label>
+      <label class="cf-type-option">
         <input class="cf-type-radio" type="radio" name="contact[request_type]" value="order-issue">
         <span class="cf-type-label">Order Issue</span>
-      </label>
-      <label class="cf-type-option">
-        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="return-refund">
-        <span class="cf-type-label">Return &amp; Refund</span>
-      </label>
-      <label class="cf-type-option">
-        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="order-change">
-        <span class="cf-type-label">Order Change</span>
-      </label>
-      <label class="cf-type-option">
-        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="general-inquiry">
-        <span class="cf-type-label">General Inquiry</span>
       </label>
     </div>
 
     <!-- ——— Two-column layout ——— -->
-    <div class="cf-columns" id="cf-columns" {%- unless form.errors -%}hidden{%- endunless -%}>
+    <div class="cf-columns" id="cf-columns">
 
       <!-- Left column -->
       <div class="cf-col cf-col--left">
-
-        <!-- Dynamic select -->
-        <select id="cf-select" name="contact[topic]" class="contact-form__input cf-select" aria-label="Topic">
-          <option value="" disabled selected>Select Issue Type</option>
-          <option value="Damaged on arrival">Damaged on arrival</option>
-          <option value="Artwork issue (not as expected)">Artwork issue (not as expected)</option>
-          <option value="Wrong item received">Wrong item received</option>
-        </select>
 
         <!-- Order Number (hidden for General Inquiry) -->
         <div class="cf-field cf-field--labeled" id="cf-field-order-number">
@@ -99,17 +82,6 @@
             aria-required="true"
           >
           <label class="cf-label" for="cf-email">Email <span class="cf-req">*</span></label>
-        </div>
-
-        <!-- Reason (Return & Refund only) -->
-        <div class="cf-field" id="cf-field-reason" hidden>
-          <select id="cf-reason" name="contact[reason]" class="contact-form__input">
-            <option value="" disabled selected>Reason</option>
-            <option value="Changed my mind">Changed my mind</option>
-            <option value="Not as expected">Not as expected</option>
-            <option value="Arrived damaged">Arrived damaged</option>
-            <option value="Other">Other</option>
-          </select>
         </div>
 
         <!-- Textarea -->
@@ -159,10 +131,6 @@
         <!-- Notices -->
         <p class="cf-notice cf-notice--warning">Fields marked with <span class="cf-req">*</span> are required.</p>
 
-        <p class="cf-notice cf-notice--warning" id="cf-notice-change" hidden>
-          Changes are only possible within 30 minutes of placing the order.
-        </p>
-
         <!-- Submit -->
         <button type="submit" class="button cf-submit">Submit request</button>
 
@@ -180,44 +148,16 @@
 (function () {
   var CF_CONFIG = {
     'order-issue': {
-      selectPlaceholder: 'Select Issue Type',
-      options: ['Damaged on arrival','Artwork issue (not as expected)','Wrong item received'],
       textareaPlaceholder: 'Tell us what happened',
       textareaRequired: false,
       showOrderNumber: true,
-      showReason: false,
-      showUpload: true,
-      showChangeNotice: false
-    },
-    'return-refund': {
-      selectPlaceholder: 'Select Request',
-      options: ['Return request','Refund request','Replacement request'],
-      textareaPlaceholder: 'Additional details',
-      textareaRequired: false,
-      showOrderNumber: true,
-      showReason: true,
-      showUpload: true,
-      showChangeNotice: false
-    },
-    'order-change': {
-      selectPlaceholder: 'Select Changes',
-      options: ['Cancel order','Change photo','Change size / product','Update shipping details'],
-      textareaPlaceholder: 'Description of changes *',
-      textareaRequired: true,
-      showOrderNumber: true,
-      showReason: false,
-      showUpload: true,
-      showChangeNotice: true
+      showUpload: true
     },
     'general-inquiry': {
-      selectPlaceholder: 'Select Topic',
-      options: ['Before ordering','Product details','Shipping & delivery','Collaboration / other'],
       textareaPlaceholder: 'Message *',
       textareaRequired: true,
       showOrderNumber: false,
-      showReason: false,
-      showUpload: false,
-      showChangeNotice: false
+      showUpload: false
     }
   };
 
@@ -247,18 +187,6 @@
     var columns = document.getElementById('cf-columns');
     if (columns) columns.hidden = false;
 
-    // Update select options
-    var sel = document.getElementById('cf-select');
-    if (sel) {
-      sel.innerHTML = '<option value="" disabled selected>' + cfg.selectPlaceholder + '</option>';
-      cfg.options.forEach(function (opt) {
-        var o = document.createElement('option');
-        o.value = opt;
-        o.textContent = opt;
-        sel.appendChild(o);
-      });
-    }
-
     // Toggle order number
     var orderField = document.getElementById('cf-field-order-number');
     var orderInput = document.getElementById('cf-order-number');
@@ -266,10 +194,6 @@
       orderField.hidden = !cfg.showOrderNumber;
       if (orderInput) orderInput.required = cfg.showOrderNumber;
     }
-
-    // Toggle reason
-    var reasonField = document.getElementById('cf-field-reason');
-    if (reasonField) reasonField.hidden = !cfg.showReason;
 
     // Update textarea
     var ta = document.getElementById('cf-textarea');
@@ -288,9 +212,6 @@
     var uploadField = document.getElementById('cf-field-upload');
     if (uploadField) uploadField.hidden = !cfg.showUpload;
 
-    // Toggle change notice
-    var changeNotice = document.getElementById('cf-notice-change');
-    if (changeNotice) changeNotice.hidden = !cfg.showChangeNotice;
   }
 
   // ——— Cloudinary upload ———
