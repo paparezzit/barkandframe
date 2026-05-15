@@ -888,6 +888,14 @@
   box-shadow: 0px 4px 27px 5px #00000026;
 }
 
+.make-portrait__preview-img--square {
+  height: 70%;
+  width: 70%;
+  aspect-ratio: 1/1;
+  margin: 15% auto;
+  box-shadow: none;
+}
+
 /* Artist badge */
 .make-portrait_artist-badge {
   position: absolute;
@@ -2708,6 +2716,10 @@
 
     state.step = step;
     updateSubtotals();
+
+    // Square preview image for steps 3 and 4
+    var previewImg = $('mp-preview-img');
+    if (previewImg) previewImg.classList.toggle('make-portrait__preview-img--square', step >= 3);
 
     // Show/hide artist badge and product label
     var artistBadge = $('mp-artist-badge');
