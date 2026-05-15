@@ -47,11 +47,10 @@
       "settings": {
         "products_collection": "make-portrait",
         "framed_poster_handle": "framed-poster",
-        "paper_unframed_handle": "unframed-poster",
-        "paper_framed_handle": "framed-poster",
+        "poster_picker_image": "shopify://shop_images/Group_377.png",
         "canvas_unframed_handle": "unframed-canvas",
         "canvas_framed_handle": "framed-canvas-1",
-        "addons_product_handle": "portrait-add-ons",
+        "canvas_picker_image": "shopify://shop_images/Group_378.png",
         "cloudinary_cloud_name": "dpkilh6fx",
         "cloudinary_upload_preset": "Unsigned",
         "extra_pet_price": 9,

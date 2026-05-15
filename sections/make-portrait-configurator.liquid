@@ -50,6 +50,19 @@
     unframed: {{ section.settings.canvas_unframed_handle | default: '' | json }},
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
+  window.MakePortraitFramedPosterHandle = {{ section.settings.framed_poster_handle | default: '' | json }};
+  {%- comment -%} Map of variantId → white-border preview image URL (metafield custom.preview_image_white_border) {%- endcomment -%}
+  window.MakePortraitWhiteBorderImages = {
+    {%- assign _fp_wb = all_products[section.settings.framed_poster_handle] -%}
+    {%- if _fp_wb != blank -%}
+      {%- for _v_wb in _fp_wb.variants -%}
+        {%- assign _v_wb_img = _v_wb.metafields.custom.preview_image_white_border -%}
+        {%- if _v_wb_img != blank -%}
+          {{ _v_wb.id }}: {{ _v_wb_img.value | image_url: width: 800 | json }},
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  };
   window.MakePortraitExtraPetUSD    = {{ section.settings.extra_pet_price   | default: 9 }};
   window.MakePortraitPetNameUSD     = {{ section.settings.pet_name_price    | default: 5 }};
 
@@ -117,6 +130,7 @@
   {%- assign _mp_img_handles = '' -%}
   {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
   {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+  {%- if section.settings.framed_poster_handle   != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.framed_poster_handle   | append: ',' -%}{%- endif -%}
   window.MakePortraitOptionImages = {
     "frame-unframed": {{ 'make-portrait/frame-unframed.png' | asset_url | json }},
     "frame-framed":   {{ 'make-portrait/frame-framed.png'   | asset_url | json }},
@@ -254,7 +268,7 @@
             <div class="product-picker__print-group">
               {%- assign _cu = all_products[section.settings.canvas_unframed_handle] -%}
               {%- assign _cf = all_products[section.settings.canvas_framed_handle] -%}
-              {%- assign _canvas_img = _cu.featured_image | default: _cf.featured_image -%}
+              {%- assign _canvas_img = section.settings.canvas_picker_image | default: _cu.featured_image | default: _cf.featured_image -%}
               {%- assign _canvas_min_price = _cu.price_min -%}
               {%- if _cf != blank and _cf.price_min < _canvas_min_price -%}
                 {%- assign _canvas_min_price = _cf.price_min -%}
@@ -279,6 +293,7 @@
             {%- comment -%} === Framed Poster (direct product) === {%- endcomment -%}
             {%- assign _fp = all_products[section.settings.framed_poster_handle] -%}
             {%- if _fp != blank -%}
+            {%- assign _fp_img = section.settings.poster_picker_image | default: _fp.featured_image -%}
             <div class="product-picker__print-group">
               <button
                 class="product-picker__item product-picker__item--category"
@@ -287,8 +302,8 @@
                 role="option"
                 aria-selected="false"
               >
-                {%- if _fp.featured_image -%}
-                  <img src="{{ _fp.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ _fp.title }}" loading="lazy">
+                {%- if _fp_img -%}
+                  <img src="{{ _fp_img | image_url: width: 200 }}" width="200" height="200" alt="{{ _fp.title }}" loading="lazy">
                 {%- else -%}
                   <div class="product-picker__placeholder"></div>
                 {%- endif -%}
@@ -345,7 +360,7 @@
           <p class="make-portrait__loading" id="mp-options-loading">Loading options…</p>
         </div>
 
-        <div class="make-portrait__option-group">
+        <div class="make-portrait__option-group" id="mp-border-group">
           <p class="make-portrait__option-label">Border</p>
           <div class="option-btn-grid" id="mp-border-grid" data-option-name="border">
             <button class="option-btn selected" data-border="no-border" data-value="no-border" type="button">No Border</button>
@@ -375,7 +390,7 @@
         </div>
         {%- endcomment -%}
 
-        <div class="make-portrait__option-group">
+        <div class="make-portrait__option-group" id="mp-pet-name-group">
           <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
           <input
             class="make-portrait__text-input"
@@ -389,6 +404,8 @@
             <span id="mp-pet-name-fee-amount"></span>
           </div>
         </div>
+
+        <div id="mp-options-container-2"></div>
 
       </div>
 
@@ -596,6 +613,15 @@
 
 
         <p id="mp-cart-error" class="make-portrait__error" hidden></p>
+      </div>
+
+      <div class="make-portrait__resume-backdrop" id="mp-resume-backdrop" hidden></div>
+      <div class="make-portrait__resume-banner" id="mp-resume-banner" hidden>
+        <p class="make-portrait__resume-banner__text">You have an unfinished portrait. Continue where you left off?</p>
+        <div class="make-portrait__resume-banner__actions">
+          <button class="button button--secondary" id="mp-resume-yes" type="button">Resume</button>
+          <button class="button button--ghost" id="mp-resume-no" type="button">Start fresh</button>
+        </div>
       </div>
 
       <div class="make-portrait__action-bar" id="mp-action-bar">
@@ -1506,6 +1532,13 @@
   margin: 1em 0 0;
   display: block;
   opacity: .45;
+  transition: opacity .2s;
+}
+
+.option-btn .option-btn__color-delta {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
   transition: opacity .2s;
 }
 
@@ -2436,6 +2469,51 @@
   .make-portrait__right { grid-area: right; position: sticky; top: 94px; padding-bottom: 40px;}
   .make-portrait__tabs  { grid-area: tabs; align-self: start; }
 
+  .make-portrait__resume-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 900;
+  }
+  .make-portrait__resume-backdrop[hidden] { display: none; }
+
+  .make-portrait__resume-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 901;
+    background: var(--brown);
+    color: var(--cream);
+    border-radius: 16px;
+    padding: 32px 28px;
+    width: min(420px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.32);
+  }
+  .make-portrait__resume-banner__text {
+    font-size: var(--font-size--md);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .make-portrait__resume-banner__actions {
+    display: flex;
+    gap: 10px;
+  }
+  .make-portrait__resume-banner .button--secondary {
+    background: var(--cream);
+    color: var(--brown);
+    border-color: var(--cream);
+  }
+  .make-portrait__resume-banner .button--ghost {
+    color: var(--cream);
+    border-color: rgba(255,255,255,0.35);
+  }
+  .make-portrait__resume-banner[hidden] { display: none; }
+
   .make-portrait__action-bar {
     position: sticky;
     bottom: 0px;
@@ -2514,6 +2592,8 @@
   };
 
   var STYLES = window.MakePortraitStyles || [];
+  var FRAMED_POSTER_HANDLE = window.MakePortraitFramedPosterHandle || '';
+  var COLOR_DISPLAY_NAMES = { 'oak': 'Premium Oak', 'brown': 'Premium Walnut' };
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
   var EXTRA_PET_USD    = window.MakePortraitExtraPetUSD    || 9;
@@ -2592,6 +2672,14 @@
     return PRINTS_BASE_PRICE + (state.prints - 1) * PRINTS_EXTRA_PRICE;
   }
 
+  function updatePetNameVisibility() {
+    var group = $('mp-pet-name-group');
+    if (!group) return;
+    var isDream = state.style && state.style.name && state.style.name.toLowerCase() === 'dream';
+    var isWhiteBorder = state.border === 'white-border';
+    group.hidden = isDream && !isWhiteBorder;
+  }
+
   function updateSubtotals() {
     var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice();
     var formatted = total > 0 ? formatMoney(total) : '—';
@@ -2599,7 +2687,9 @@
     if (priceEl) priceEl.textContent = formatted;
     var prefix = $('mp-subtotal-prefix');
     if (prefix) prefix.hidden = !!state.variant;
+    updatePetNameVisibility();
     buildSummary();
+    saveDraft();
   }
 
   /* ————————————————————————————————————————
@@ -2754,7 +2844,21 @@
         }
         var ctaStep2 = $('mp-cta-step2');
         if (ctaStep2) ctaStep2.disabled = false;
-        updateSubtotals();
+
+        if (_pendingRestore && _pendingRestore.productHandle === handle) {
+          var r = _pendingRestore;
+          _pendingRestore = null;
+          if (r.selectedOptions) state.selectedOptions = r.selectedOptions;
+          if (r.step >= 3) {
+            buildOptionsUI(product);
+            goToStep(3);
+          } else {
+            goToStep(r.step || 2);
+          }
+          applyRestoredStatics(r);
+        } else {
+          updateSubtotals();
+        }
       })
       .catch(function (err) {
         console.error('Failed to fetch product:', err);
@@ -2795,20 +2899,31 @@
   /* ————————————————————————————————————————
      Step 3 – Canvas frame toggle
   ———————————————————————————————————————— */
-  // Thin wrappers – canvas and paper share the same frame UI logic
+  function resetOptionsLayout() {
+    var c2 = $('mp-options-container-2');
+    var borderGroup  = $('mp-border-group');
+    var petNameGroup = $('mp-pet-name-group');
+    if (c2) c2.innerHTML = '';
+    if (borderGroup)  borderGroup.hidden  = false;
+    if (petNameGroup) petNameGroup.hidden = false;
+  }
+
   function buildCanvasFrameUI() { buildFrameUI(CANVAS_HANDLES); }
 
-
   /* ————————————————————————————————————————
-     Step 3 – Shared frame toggle (canvas + paper)
+     Step 3 – Canvas frame toggle
   ———————————————————————————————————————— */
   function buildFrameUI(handles) {
     var container = $('mp-options-container');
     var loading = $('mp-options-loading');
     if (!container) return;
 
+    resetOptionsLayout();
     container.innerHTML = '<p class="make-portrait__loading">Loading…</p>';
     if (loading) loading.remove();
+
+    var borderGroup = $('mp-border-group');
+    if (borderGroup) borderGroup.hidden = true;
 
     state.canvasFrameChoice = 'unframed';
     state.product = null;
@@ -2867,6 +2982,8 @@
     var container = $('mp-options-container');
     if (!container) return;
     container.innerHTML = '';
+    var container2 = $('mp-options-container-2');
+    if (container2) container2.innerHTML = '';
 
     var opts = normalizeOptions(product.options);
     var sizeOpts  = opts.filter(function (o) { return o.name.toLowerCase() === 'size'; });
@@ -2905,8 +3022,9 @@
     group.appendChild(grid);
     container.appendChild(group);
 
-    // 3. Other options
-    otherOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections); });
+    // 3. Frame Color and other options go after Dogs Name
+    var container2 = $('mp-options-container-2');
+    otherOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, previousSelections); });
 
     matchVariant(product);
   }
@@ -3111,6 +3229,28 @@
           sLabel.appendChild(sPrice);
         }
         btn.appendChild(sLabel);
+      } else if (opt.name.toLowerCase() === 'color') {
+        var displayName = COLOR_DISPLAY_NAMES[value.toLowerCase()] || value;
+        var globalMinPrice = Math.min.apply(null, product.variants.map(function (v) { return v.price; }));
+        var colorMinPrice = null;
+        product.variants.forEach(function (v) {
+          if (v.options[opt.position] === value && (colorMinPrice === null || v.price < colorMinPrice)) colorMinPrice = v.price;
+        });
+        var delta = colorMinPrice !== null ? colorMinPrice - globalMinPrice : 0;
+        if (imgUrl) {
+          applyImageToBtn(btn, imgUrl, displayName);
+        } else {
+          var cLabel = document.createElement('span');
+          cLabel.className = 'option-btn__label';
+          cLabel.textContent = displayName;
+          btn.appendChild(cLabel);
+        }
+        if (delta > 0) {
+          var cDelta = document.createElement('span');
+          cDelta.className = 'option-btn__color-delta';
+          cDelta.textContent = '+ ' + formatMoney(delta);
+          btn.appendChild(cDelta);
+        }
       } else if (imgUrl) {
         applyImageToBtn(btn, imgUrl, value);
       } else {
@@ -3141,11 +3281,26 @@
     container.innerHTML = '';
     if (loading) loading.remove();
 
+    resetOptionsLayout();
+    var prevSel = {};
+    normalizeOptions(product.options || []).forEach(function (opt) {
+      var val = state.selectedOptions[opt.position];
+      if (val !== undefined) prevSel[opt.name.toLowerCase()] = val;
+    });
     state.selectedOptions = {};
-    buildVariantOptions(product, container);
+
+    if (FRAMED_POSTER_HANDLE && product.handle === FRAMED_POSTER_HANDLE) {
+      buildPosterUI(product, container);
+    } else {
+      var borderGroup  = $('mp-border-group');
+      var petNameGroup = $('mp-pet-name-group');
+      if (borderGroup)  borderGroup.hidden  = true;
+      if (petNameGroup) petNameGroup.hidden = true;
+      buildVariantOptions(product, container, prevSel);
+    }
   }
 
-  function buildVariantOptions(product, container) {
+  function buildVariantOptions(product, container, previousSelections) {
     if (!product.options || product.options.length === 0) {
       if (product.variants && product.variants.length) {
         state.variantId = product.variants[0].id;
@@ -3153,13 +3308,55 @@
       }
       return;
     }
-
     var opts = normalizeOptions(product.options);
     opts.sort(function (a, b) {
       return (a.name.toLowerCase() === 'size' ? 0 : 1) - (b.name.toLowerCase() === 'size' ? 0 : 1) || a.position - b.position;
     });
-    opts.forEach(function (opt) { appendOptionGroup(opt, product, container); });
+    opts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections); });
     matchVariant(product);
+  }
+
+  function buildPosterUI(product, container) {
+    var container2 = $('mp-options-container-2');
+    var opts = normalizeOptions(product.options);
+    var sizeOpts  = opts.filter(function (o) { return o.name.toLowerCase() === 'size'; });
+    var colorOpts = opts.filter(function (o) { return o.name.toLowerCase() === 'color'; });
+
+    // 1. Size
+    sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, {}); });
+
+    // 2. Framing – always "Framed", display only (no choice)
+    var framingGroup = document.createElement('div');
+    framingGroup.className = 'make-portrait__option-group';
+    var framingLabel = document.createElement('p');
+    framingLabel.className = 'make-portrait__option-label';
+    framingLabel.textContent = 'Framing';
+    framingGroup.appendChild(framingLabel);
+    var framingGrid = document.createElement('div');
+    framingGrid.className = 'option-btn-grid';
+    var framedBtn = document.createElement('button');
+    framedBtn.className = 'option-btn selected';
+    framedBtn.type = 'button';
+    var frameImgUrl = optionImageUrl('frame', 'framed');
+    if (frameImgUrl) {
+      applyImageToBtn(framedBtn, frameImgUrl, 'Framed');
+    } else {
+      framedBtn.textContent = 'Framed';
+    }
+    framingGrid.appendChild(framedBtn);
+    framingGroup.appendChild(framingGrid);
+    container.appendChild(framingGroup);
+
+    // 3. Border (static built-in – shown via resetOptionsLayout)
+    // 4. Dogs Name (static built-in – shown via resetOptionsLayout)
+
+    // 5. Frame Color in container-2
+    colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, {}); });
+
+    matchVariant(product);
+    var ctaStep3 = $('mp-cta-step3');
+    if (ctaStep3) ctaStep3.disabled = false;
+    updateSubtotals();
   }
 
   function matchVariant(product) {
@@ -3198,13 +3395,16 @@
         }
       }
 
-      // Update preview if variant has image
-      if (variant.featured_image && variant.featured_image.src) {
+      // Update preview image: white-border metafield takes priority over variant.featured_image
+      var _wbImages = window.MakePortraitWhiteBorderImages || {};
+      var _wbUrl = state.border === 'white-border' ? _wbImages[variant.id] : null;
+      var _previewUrl = _wbUrl || (variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
+      if (_previewUrl) {
         var img = $('mp-preview-img');
         if (img) {
           img.style.opacity = '0';
           img.onload = function () { img.style.opacity = '1'; };
-          img.src = variant.featured_image.src;
+          img.src = _previewUrl;
         }
       }
     }
@@ -3266,7 +3466,7 @@
         state.variant.options.forEach(function (o) {
           if (!o || o === 'Default Title') return;
           if (o === sizeValue) return; // already shown above
-          details.push(o);
+          details.push(COLOR_DISPLAY_NAMES[o.toLowerCase()] || o);
         });
       }
       var border = getSelectedLabel('mp-border-grid');
@@ -3578,6 +3778,7 @@
     };
 
     var doRedirect = function () {
+      clearDraft();
       document.dispatchEvent(new CustomEvent('cart:update', { bubbles: true, detail: { data: {} } }));
       var drawer = document.querySelector('cart-drawer-component');
       if (drawer && typeof drawer.open === 'function') {
@@ -3685,6 +3886,103 @@
   }
 
   /* ————————————————————————————————————————
+     Draft save / restore
+  ———————————————————————————————————————— */
+  var DRAFT_KEY    = 'mp_draft';
+  var DRAFT_EXPIRY = 30 * 24 * 60 * 60 * 1000;
+  var _pendingRestore = null;
+
+  function saveDraft() {
+    if (!state.styleId) return;
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({
+        ts:                Date.now(),
+        styleId:           state.styleId,
+        productHandle:     state.productHandle,
+        productCategory:   state.productCategory,
+        canvasFrameChoice: state.canvasFrameChoice,
+        selectedOptions:   state.selectedOptions,
+        border:            state.border,
+        petName:           state.petName,
+        photoUrls:         state.photoUrls,
+        step:              state.step
+      }));
+    } catch (e) {}
+  }
+
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (!d || !d.styleId || Date.now() - d.ts > DRAFT_EXPIRY) {
+        localStorage.removeItem(DRAFT_KEY);
+        return null;
+      }
+      return d;
+    } catch (e) { return null; }
+  }
+
+  function clearDraft() {
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  }
+
+  function applyRestoredStatics(saved) {
+    if (saved.border) {
+      var grid = $('mp-border-grid');
+      if (grid) {
+        grid.querySelectorAll('.option-btn').forEach(function (b) {
+          b.classList.toggle('selected', b.dataset.border === saved.border);
+        });
+        state.border = saved.border;
+      }
+    }
+    if (saved.petName) {
+      var inp = $('mp-pet-name');
+      if (inp) inp.value = saved.petName;
+      state.petName = saved.petName;
+    }
+    if (saved.photoUrls && saved.photoUrls.length) {
+      state.photoUrls = saved.photoUrls.slice();
+      var previews = $('mp-photo-previews');
+      var counter  = $('mp-upload-counter');
+      if (previews) {
+        previews.innerHTML = '';
+        saved.photoUrls.forEach(function (url) {
+          var wrap = document.createElement('div');
+          wrap.className = 'photo-upload__preview';
+          var img = document.createElement('img');
+          img.src = url;
+          img.className = 'photo-upload__thumb';
+          wrap.appendChild(img);
+          previews.appendChild(wrap);
+        });
+      }
+      if (counter) {
+        counter.textContent = saved.photoUrls.length + ' photo' + (saved.photoUrls.length !== 1 ? 's' : '') + ' uploaded';
+        counter.hidden = false;
+      }
+    }
+    updateSubtotals();
+  }
+
+  function restoreDraft(saved) {
+    _pendingRestore = saved;
+    if (saved.styleId) selectStyle(saved.styleId);
+    if (saved.productHandle) {
+      selectProduct(saved.productHandle);
+    } else if (saved.productCategory === 'canvas') {
+      selectCategory('canvas');
+      _pendingRestore = null;
+      goToStep(Math.min(saved.step || 2, 2));
+      applyRestoredStatics(saved);
+    } else {
+      _pendingRestore = null;
+      applyRestoredStatics(saved);
+    }
+  }
+
+  /* ————————————————————————————————————————
      Init
   ———————————————————————————————————————— */
   function init() {
@@ -3692,8 +3990,40 @@
     initTabs();
     initSmartSticky();
 
-    // Auto-select style from URL param or fall back to first
+    // Resume banner
     var urlParams = new URLSearchParams(window.location.search);
+    var hasFreshStart = urlParams.get('style') || urlParams.get('product');
+    var savedDraft = !hasFreshStart && loadDraft();
+    if (savedDraft && (savedDraft.step || 1) <= 1) {
+      clearDraft();
+      savedDraft = null;
+    }
+    if (savedDraft) {
+      var banner   = $('mp-resume-banner');
+      var backdrop = $('mp-resume-backdrop');
+      function closeBanner() {
+        if (banner)   banner.hidden   = true;
+        if (backdrop) backdrop.hidden = true;
+      }
+      if (banner)   banner.hidden   = false;
+      if (backdrop) backdrop.hidden = false;
+      var resumeYes = $('mp-resume-yes');
+      var resumeNo  = $('mp-resume-no');
+      if (resumeYes) resumeYes.addEventListener('click', function () {
+        closeBanner();
+        restoreDraft(savedDraft);
+      });
+      if (resumeNo) resumeNo.addEventListener('click', function () {
+        closeBanner();
+        clearDraft();
+      });
+      if (backdrop) backdrop.addEventListener('click', function () {
+        closeBanner();
+        clearDraft();
+      });
+    }
+
+    // Auto-select style from URL param or fall back to first
     if (STYLES.length > 0) {
       var urlStyle = urlParams.get('style');
       var preselect = urlStyle && STYLES.find(function (s) { return s.id === urlStyle; });
@@ -3736,6 +4066,7 @@
       ctaStep1.addEventListener('click', function () {
         if (!state.styleId) return;
         goToStep(2);
+        if (!state.productHandle && !state.productCategory) selectCategory('canvas');
       });
     }
 
@@ -3788,6 +4119,15 @@
 
     // Option button groups
     initOptionGroup('mp-border-grid', 'border');
+    // Re-match variant (and update preview image) when border changes
+    var _borderGrid = $('mp-border-grid');
+    if (_borderGrid) {
+      _borderGrid.querySelectorAll('.option-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (state.product) matchVariant(state.product);
+        });
+      });
+    }
     // initOptionGroup('mp-background-grid', 'background');  // disabled
     // initOptionGroup('mp-pets-grid', 'petCount');           // disabled
 
@@ -4085,6 +4425,11 @@
       "label": "Framed Poster"
     },
     {
+      "type": "image_picker",
+      "id": "poster_picker_image",
+      "label": "Poster – obrázek v kroku 2"
+    },
+    {
       "type": "header",
       "content": "Canvas products"
     },
@@ -4097,6 +4442,11 @@
       "type": "product",
       "id": "canvas_framed_handle",
       "label": "Framed Canvas"
+    },
+    {
+      "type": "image_picker",
+      "id": "canvas_picker_image",
+      "label": "Canvas – obrázek v kroku 2"
     },
     {
       "type": "header",
