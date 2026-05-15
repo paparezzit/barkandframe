@@ -1,5 +1,6 @@
 {%- assign all_artists = shop.metaobjects['artist'].values -%}
 {%- assign sorted_names = all_artists | map: 'name' | map: 'value' | sort | reverse -%}
+{%- assign _portrait_styles = shop.metaobjects['portrait_style'].values | sort: 'order' -%}
 
 <div class="artists-page">
 
@@ -38,7 +39,7 @@
 
         {%- assign artist_handle = artist.system.handle -%}
         {%- assign has_styles = false -%}
-        {%- for style in shop.metaobjects['portrait_style'].values -%}
+        {%- for style in _portrait_styles -%}
           {%- if style.artist.value.system.handle == artist_handle -%}
             {%- assign has_styles = true -%}
             {%- break -%}
@@ -49,7 +50,7 @@
           <div class="artists-page__styles-section">
             <h3 class="artists-page__styles-title">Styles by {{ artist.name.value | split: ' ' | first }}</h3>
             <div class="artists-page__styles">
-              {%- for style in shop.metaobjects['portrait_style'].values -%}
+              {%- for style in _portrait_styles -%}
                 {%- if style.artist.value.system.handle == artist_handle -%}
                   <a href="/pages/make-portrait?style={{ style.style_id.value | url_encode }}"
                     class="artists-page__style-card"

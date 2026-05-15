@@ -112,12 +112,12 @@
               aria-label="Upload photos – click or drag and drop"
             >
               <p class="photo-upload__instruction">Upload photos</p>
-              <p class="photo-upload__sub">JPG / PNG / HEIC / WebP – Max 10 MB per file</p>
+              <p class="photo-upload__sub">JPG / PNG / HEIC – Max 10 MB per file</p>
               <label class="button button--secondary photo-upload__browse" for="cf-file-input">Browse files</label>
               <input
                 type="file"
                 id="cf-file-input"
-                accept=".jpg,.jpeg,.png,.heic,.heif,.webp,image/jpeg,image/png,image/heic,image/heif,image/webp"
+                accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif"
                 multiple
                 class="photo-upload__input"
                 aria-label="Upload photos"
@@ -215,7 +215,7 @@
   }
 
   // ——— Cloudinary upload ———
-  var ALLOWED_TYPES = ['image/jpeg','image/png','image/heic','image/heif','image/webp'];
+  var ALLOWED_TYPES = ['image/jpeg','image/png','image/heic','image/heif'];
   var MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   function showUploadError(msg) {

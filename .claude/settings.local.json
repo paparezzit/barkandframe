@@ -29,7 +29,8 @@
       "Bash(node -e ' *)",
       "Bash(xxd /Users/martinres/Desktop/barkandframe/sections/collection-artist.liquid)",
       "Bash(python3 -c \"import sys,re,json; c=sys.stdin.read\\(\\); print\\(json.dumps\\(json.loads\\(re.sub\\(r'/\\\\*.*?\\\\*/','',c,flags=re.DOTALL\\)\\), indent=2\\)\\)\")",
-      "Bash(grep -E \"\\\\.\\(liquid|json|css|js\\)$\")"
+      "Bash(grep -E \"\\\\.\\(liquid|json|css|js\\)$\")",
+      "Bash(grep -E \"\\\\.\\(liquid|js|json|css\\)$\")"
     ]
   }
 }

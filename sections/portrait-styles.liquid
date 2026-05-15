@@ -1,5 +1,5 @@
 {%- liquid
-  assign portrait_styles = shop.metaobjects.portrait_style.values
+  assign portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
   assign portrait_categories = shop.metaobjects.portrait_category.values
 -%}
 

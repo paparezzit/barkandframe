@@ -1,12 +1,13 @@
 {% liquid
   assign products_collection = collections[section.settings.products_collection]
-  assign _first_portrait_style = shop.metaobjects.portrait_style.values | first
+  assign _portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
+  assign _first_portrait_style = _portrait_styles | first
 %}
 
 {%- comment -%} Embedded style data for JS {%- endcomment -%}
 <script>
   window.MakePortraitStyles = [
-    {%- for style in shop.metaobjects.portrait_style.values -%}
+    {%- for style in _portrait_styles -%}
       {%- assign artist = style.artist.value -%}
       {
         "id": {{ style.style_id.value | json }},
@@ -17,10 +18,10 @@
         "artistId": {%- if artist != blank -%}{{ artist.system.handle | json }}{%- else -%}null{%- endif -%},
         "description": {{ style.description.value | default: '' | json }},
         "tag": {{ style.tags.value | first | downcase | strip | default: '' | json }},
-        "basePrice": {{ style.base_price.value | default: 0 }}
+        "order": {{ style.order.value | default: 999 }}
       }{%- unless forloop.last -%},{%- endunless -%}
     {%- endfor -%}
-  ].filter(s => s.name);
+  ].filter(s => s.name).sort((a, b) => a.order - b.order);
 
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
   window.MakePortraitCloudinary = {
@@ -49,10 +50,6 @@
     unframed: {{ section.settings.canvas_unframed_handle | default: '' | json }},
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
-  window.MakePortraitPaperHandles = {
-    unframed: {{ section.settings.paper_unframed_handle | default: '' | json }},
-    framed:   {{ section.settings.paper_framed_handle   | default: '' | json }}
-  };
   window.MakePortraitExtraPetUSD    = {{ section.settings.extra_pet_price   | default: 9 }};
   window.MakePortraitPetNameUSD     = {{ section.settings.pet_name_price    | default: 5 }};
 
@@ -61,8 +58,6 @@
     {%- assign _mp_res_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
     {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
-    {%- if section.settings.paper_unframed_handle  != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.paper_unframed_handle  | append: ',' -%}{%- endif -%}
-    {%- if section.settings.paper_framed_handle    != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.paper_framed_handle    | append: ',' -%}{%- endif -%}
     {%- assign _mp_res_list = _mp_res_handles | split: ',' -%}
     {%- for _mp_rh in _mp_res_list -%}
       {%- unless _mp_rh == blank -%}
@@ -91,8 +86,6 @@
     {%- assign _mp_pv_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
     {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
-    {%- if section.settings.paper_unframed_handle  != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.paper_unframed_handle  | append: ',' -%}{%- endif -%}
-    {%- if section.settings.paper_framed_handle    != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.paper_framed_handle    | append: ',' -%}{%- endif -%}
     {%- assign _mp_pv_list = _mp_pv_handles | split: ',' -%}
     {%- for _mp_pvh in _mp_pv_list -%}
       {%- unless _mp_pvh == blank -%}
@@ -120,15 +113,10 @@
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
-  {%- assign _addons_product = all_products[section.settings.addons_product_handle] -%}
-  window.MakePortraitAddonsUnitPrice  = {{ _addons_product.variants.first.price | default: 100 | json }};
-
   {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
   {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
   {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
-  {%- if section.settings.paper_unframed_handle  != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.paper_unframed_handle  | append: ',' -%}{%- endif -%}
-  {%- if section.settings.paper_framed_handle    != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.paper_framed_handle    | append: ',' -%}{%- endif -%}
   window.MakePortraitOptionImages = {
     "frame-unframed": {{ 'make-portrait/frame-unframed.png' | asset_url | json }},
     "frame-framed":   {{ 'make-portrait/frame-framed.png'   | asset_url | json }},
@@ -216,7 +204,7 @@
         <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
 
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
-          {%- for style in shop.metaobjects.portrait_style.values -%}
+          {%- for style in _portrait_styles -%}
             {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
@@ -225,10 +213,11 @@
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
               title="{{ style.name.value }}"
             >
-              {%- if style.preview_image.value -%}
+              {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
+              {%- if _btn_img -%}
                 <div class="style-picker__item__img">
                   <img
-                    src="{{ style.preview_image.value | image_url: width: 120 }}"
+                    src="{{ _btn_img | image_url: width: 120 }}"
                     width="120"
                     height="160"
                     alt="{{ style.name.value }}"
@@ -287,38 +276,34 @@
               </button>
             </div>
 
-            {%- comment -%} === Prints on Paper (category – product loaded in step 3) === {%- endcomment -%}
+            {%- comment -%} === Framed Poster (direct product) === {%- endcomment -%}
+            {%- assign _fp = all_products[section.settings.framed_poster_handle] -%}
+            {%- if _fp != blank -%}
             <div class="product-picker__print-group">
-              {%- assign _pu = all_products[section.settings.paper_unframed_handle] -%}
-              {%- assign _pf = all_products[section.settings.paper_framed_handle] -%}
-              {%- assign _paper_img = _pu.featured_image | default: _pf.featured_image -%}
-              {%- assign _paper_min_price = _pu.price_min -%}
-              {%- if _pf != blank and _pf.price_min < _paper_min_price -%}
-                {%- assign _paper_min_price = _pf.price_min -%}
-              {%- endif -%}
               <button
                 class="product-picker__item product-picker__item--category"
-                data-category="paper"
-                data-min-price="{{ _paper_min_price }}"
+                data-product-handle="{{ _fp.handle }}"
+                data-product-id="{{ _fp.id }}"
                 role="option"
                 aria-selected="false"
               >
-                {%- if _paper_img -%}
-                  <img src="{{ _paper_img | image_url: width: 200 }}" width="200" height="200" alt="Print on paper" loading="lazy">
+                {%- if _fp.featured_image -%}
+                  <img src="{{ _fp.featured_image | image_url: width: 200 }}" width="200" height="200" alt="{{ _fp.title }}" loading="lazy">
                 {%- else -%}
                   <div class="product-picker__placeholder"></div>
                 {%- endif -%}
-                <span class="product-picker__name">Paper</span>
-                <span class="product-picker__sub">from {{ _paper_min_price | money }}</span>
+                <span class="product-picker__name">{{ _fp.title }}</span>
+                <span class="product-picker__sub">from {{ _fp.price_min | money }}</span>
               </button>
             </div>
+            {%- endif -%}
 
             {%- comment -%} === Other items === {%- endcomment -%}
             {%- assign _group_started = false -%}
             {%- for product in products_collection.products -%}
               {%- assign _type = product.type | downcase -%}
               {%- assign _is_reserved_handle = false -%}
-              {%- if product.handle == section.settings.canvas_unframed_handle or product.handle == section.settings.canvas_framed_handle or product.handle == section.settings.paper_unframed_handle or product.handle == section.settings.paper_framed_handle -%}
+              {%- if product.handle == section.settings.canvas_unframed_handle or product.handle == section.settings.canvas_framed_handle or product.handle == section.settings.framed_poster_handle -%}
                 {%- assign _is_reserved_handle = true -%}
               {%- endif -%}
               {%- unless _type contains 'canvas' or _type contains 'paper' or _is_reserved_handle -%}
@@ -339,7 +324,7 @@
                     <div class="product-picker__placeholder"></div>
                   {%- endif -%}
                   <span class="product-picker__name">{{ product.title }}</span>
-                  <span class="product-picker__price">{{ product.price_min | money }}</span>
+                  <span class="product-picker__sub">from {{ product.price_min | money }}</span>
                 </button>
               {%- endunless -%}
             {%- endfor -%}
@@ -414,12 +399,12 @@
         <div class="photo-upload" id="mp-upload-area">
           <div class="photo-upload__zone" id="mp-upload-zone" role="button" tabindex="0" aria-label="Upload photo – click or drag and drop">
             <p class="photo-upload__instruction">Drop your photo here</p>
-            <p class="photo-upload__sub">JPG / PNG / HEIC / WebP – Max 10 MB</p>
+            <p class="photo-upload__sub">JPG / PNG / HEIC – Max 10 MB</p>
             <label class="button button--secondary photo-upload__browse" for="mp-file-input">Browse files</label>
             <input
               type="file"
               id="mp-file-input"
-              accept=".jpg,.jpeg,.png,.heic,.heif,.webp,image/jpeg,image/png,image/heic,image/heif,image/webp"
+              accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif"
               class="photo-upload__input"
               aria-label="Upload pet photo"
             >
@@ -629,7 +614,9 @@
       <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Continue to details</button>
       <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1" hidden>Change a style</button>
       <button class="button make-portrait__cta" id="mp-cta-step3" hidden>Last step</button>
+      <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step2" hidden>Change a format</button>
       <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
+      <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step3" hidden>Change details</button>
 
       <p class="make-portrait__availability">
         <span class="make-portrait__availability__indicator"></span>
@@ -670,7 +657,7 @@
         </div>
 
         <div class="tab-panel" id="tab-artist" data-tab="artist" role="tabpanel" hidden>
-          {%- for style in shop.metaobjects.portrait_style.values -%}
+          {%- for style in _portrait_styles -%}
             {%- assign a = style.artist.value -%}
             {%- if a != blank -%}
               <div class="tab-artist-panel" data-style-id="{{ style.style_id.value }}" hidden>
@@ -2454,7 +2441,7 @@
     bottom: 0px;
     z-index: 10;
     background: var(--beige);
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px 10px 0 0;
     margin-top: 20px;
   }
 }
@@ -2529,7 +2516,6 @@
   var STYLES = window.MakePortraitStyles || [];
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
-  var PAPER_HANDLES  = window.MakePortraitPaperHandles  || {};
   var EXTRA_PET_USD    = window.MakePortraitExtraPetUSD    || 9;
   var PET_NAME_USD     = window.MakePortraitPetNameUSD     || 5;
   var PRINTS_BASE_EUR  = window.MakePortraitPrintsBaseEUR  || 30;
@@ -2591,9 +2577,8 @@
     if (state.categoryMinPrice) {
       return state.categoryMinPrice; // already in local currency cents from Shopify
     }
-    if (state.style && state.style.basePrice) {
-      return Math.round(state.style.basePrice * FX_RATE) * 100;
-    }
+    var prices = window.MakePortraitProducts.map(function(p) { return p.price; });
+    if (prices.length) return Math.min.apply(null, prices);
     return 0;
   }
 
@@ -2661,6 +2646,10 @@
     });
     var backBtn = $('mp-back-step1');
     if (backBtn) backBtn.hidden = step !== 2;
+    var backBtn2 = $('mp-back-step2');
+    if (backBtn2) backBtn2.hidden = step !== 3;
+    var backBtn3 = $('mp-back-step3');
+    if (backBtn3) backBtn3.hidden = step !== 4;
 
     // Scroll to top of page on every step change
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2808,7 +2797,7 @@
   ———————————————————————————————————————— */
   // Thin wrappers – canvas and paper share the same frame UI logic
   function buildCanvasFrameUI() { buildFrameUI(CANVAS_HANDLES); }
-  function buildPaperFrameUI()  { buildFrameUI(PAPER_HANDLES); }
+
 
   /* ————————————————————————————————————————
      Step 3 – Shared frame toggle (canvas + paper)
@@ -3443,7 +3432,7 @@
       });
   }
 
-  var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp'];
+  var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
   var MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
   function showUploadError(msg) {
@@ -3467,7 +3456,7 @@
       var ext = file.name.split('.').pop().toLowerCase();
       var typeOk = ALLOWED_TYPES.includes(file.type) || ext === 'heic' || ext === 'heif';
       if (!typeOk) {
-        showUploadError('Unsupported file type: ' + file.name + '. Please use JPG, PNG, HEIC or WebP.');
+        showUploadError('Unsupported file type: ' + file.name + '. Please use JPG, PNG or HEIC.');
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
@@ -3754,6 +3743,14 @@
     var backStep1 = $('mp-back-step1');
     if (backStep1) backStep1.addEventListener('click', function () { goToStep(1); });
 
+    // Back to step 2
+    var backStep2 = $('mp-back-step2');
+    if (backStep2) backStep2.addEventListener('click', function () { goToStep(2); });
+
+    // Back to step 3
+    var backStep3 = $('mp-back-step3');
+    if (backStep3) backStep3.addEventListener('click', function () { goToStep(3); });
+
     // CTA step 2
     var ctaStep2 = $('mp-cta-step2');
     if (ctaStep2) {
@@ -3761,8 +3758,6 @@
         if (!state.productHandle && !state.productCategory) return;
         if (state.productCategory === 'canvas') {
           buildCanvasFrameUI();
-        } else if (state.productCategory === 'paper') {
-          buildPaperFrameUI();
         } else {
           buildOptionsUI(state.product);
         }
@@ -4082,17 +4077,12 @@
     },
     {
       "type": "header",
-      "content": "Paper products"
+      "content": "Framed Poster product"
     },
     {
       "type": "product",
-      "id": "paper_unframed_handle",
-      "label": "Unframed Paper"
-    },
-    {
-      "type": "product",
-      "id": "paper_framed_handle",
-      "label": "Framed Paper"
+      "id": "framed_poster_handle",
+      "label": "Framed Poster"
     },
     {
       "type": "header",
@@ -4107,16 +4097,6 @@
       "type": "product",
       "id": "canvas_framed_handle",
       "label": "Framed Canvas"
-    },
-    {
-      "type": "header",
-      "content": "Add-ons pricing product"
-    },
-    {
-      "type": "product",
-      "id": "addons_product_handle",
-      "label": "Add-ons product",
-      "info": "Product priced at exactly 1 (store currency). Must be published to Online Store."
     },
     {
       "type": "header",
