@@ -51,6 +51,19 @@
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
   window.MakePortraitFramedPosterHandle = {{ section.settings.framed_poster_handle | default: '' | json }};
+  {%- comment -%} Category preview variant IDs — canvas framed last variant, paper (framed poster) last variant {%- endcomment -%}
+  window.MakePortraitCategoryPreviewVariants = {
+    {%- assign _cpv_cf = all_products[section.settings.canvas_framed_handle] -%}
+    {%- assign _cpv_fp = all_products[section.settings.framed_poster_handle] -%}
+    {%- if _cpv_cf != blank -%}
+      {%- assign _cpv_cv = _cpv_cf.variants | last -%}
+      "canvas": {{ _cpv_cv.id }},
+    {%- endif -%}
+    {%- if _cpv_fp != blank -%}
+      {%- assign _cpv_pv = _cpv_fp.variants | last -%}
+      "paper": {{ _cpv_pv.id }}
+    {%- endif -%}
+  };
   {%- comment -%} Map of variantId → { styleId: { default: url, white_border: url } } from metafield custom.style_previews {%- endcomment -%}
   window.MakePortraitStylePreviews = {
     {%- assign _sp_handles = '' -%}
@@ -188,7 +201,7 @@
 
       <div class="make-portrait__preview-wrap">
         <img
-          class="make-portrait__preview-img"
+          class="make-portrait__preview-img make-portrait__preview-img--square"
           id="mp-preview-img"
           src="{% if _first_portrait_style.preview_image.value %}{{ _first_portrait_style.preview_image.value | image_url: width: 900 }}{% endif %}"
           width="900"
@@ -234,9 +247,17 @@
       <div class="make-portrait__step" data-step="1">
         <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
 
+        {%- assign _picker_product = all_products[section.settings.canvas_framed_handle] -%}
+        {%- assign _picker_variant = _picker_product.variants | last -%}
+        {%- assign _picker_previews = _picker_variant.metafields.custom.style_previews.value -%}
+
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
           {%- for style in _portrait_styles -%}
             {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
+            {%- assign _style_id = style.style_id.value -%}
+            {%- assign _picker_entry = _picker_previews[_style_id] -%}
+            {%- assign _picker_url = _picker_entry['default'] -%}
+            {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
               data-style-id="{{ style.style_id.value }}"
@@ -244,18 +265,15 @@
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
               title="{{ style.name.value }}"
             >
-              {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
-              {%- if _btn_img -%}
+              {%- if _picker_url != blank or _btn_img -%}
                 <div class="style-picker__item__img">
-                  <img
-                    src="{{ _btn_img | image_url: width: 120 }}"
-                    width="120"
-                    height="160"
-                    alt="{{ style.name.value }}"
-                    loading="lazy"
-                  >
+                  {%- if _picker_url != blank -%}
+                    <img src="{{ _picker_url }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
+                  {%- else -%}
+                    <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
+                  {%- endif -%}
                   {%- if _style_tag != blank -%}
-                    <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize }}</span>
+                    <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize | replace: 'Sold out', 'Soon' }}</span>
                   {%- endif -%}
                 </div>
               {%- else -%}
@@ -407,6 +425,8 @@
         </div>
         {%- endcomment -%}
 
+        <div id="mp-options-container-2"></div>
+
         <div class="make-portrait__option-group" id="mp-pet-name-group">
           <div class="make-portrait__option-label-row">
             <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
@@ -425,8 +445,6 @@
             <span id="mp-pet-name-fee-amount"></span>
           </div>
         </div>
-
-        <div id="mp-options-container-2"></div>
 
       </div>
 
@@ -642,6 +660,24 @@
         <div class="make-portrait__resume-banner__actions">
           <button class="button button--secondary" id="mp-resume-yes" type="button">Resume</button>
           <button class="button button--ghost" id="mp-resume-no" type="button">Start fresh</button>
+        </div>
+      </div>
+
+      <div class="make-portrait__resume-backdrop" id="mp-upload-required-backdrop" hidden></div>
+      <div class="make-portrait__resume-banner" id="mp-upload-required-banner" hidden>
+        <p class="make-portrait__resume-banner__text">Please upload a photo of your pet before ordering.</p>
+        <div class="make-portrait__resume-banner__actions">
+          <button class="button button--secondary" id="mp-upload-required-ok" type="button">Upload photo</button>
+        </div>
+      </div>
+
+      <div class="make-portrait__resume-backdrop" id="mp-quality-backdrop" hidden></div>
+      <div class="make-portrait__resume-banner" id="mp-quality-banner" hidden>
+        <p class="make-portrait__resume-banner__text">Your photo resolution may be too low for the best print quality.</p>
+        <p id="mp-quality-banner-detail" class="make-portrait__resume-banner__detail"></p>
+        <div class="make-portrait__resume-banner__actions">
+          <button class="button button--secondary" id="mp-quality-yes" type="button">Use anyway</button>
+          <button class="button button--ghost" id="mp-quality-no" type="button">Remove photo</button>
         </div>
       </div>
 
@@ -965,22 +1001,14 @@
   background: var(--cream);
 }
 
-.make-portrait__preview-img {
-  height: 70%;
-  width: auto;
-  aspect-ratio: 4/5;
-  margin: 15% auto;
+.make-portrait__preview-img--square {
+  height: 94%;
+  width: 94%;
+  aspect-ratio: 1/1;
+  margin: 3% auto;
   object-fit: cover;
   object-position: center;
   transition: opacity 0.4s ease;
-  box-shadow: 0px 4px 27px 5px #00000026;
-}
-
-.make-portrait__preview-img--square {
-  height: 70%;
-  width: 70%;
-  aspect-ratio: 1/1;
-  margin: 15% auto;
   box-shadow: none;
 }
 
@@ -997,6 +1025,7 @@
   padding: 15px;
   text-align: center;
   transition: opacity 0.3s;
+  width: 120px;
 }
 
 .make-portrait_artist-badge[hidden] {
@@ -1534,7 +1563,7 @@
   position: absolute;
   bottom: 2px;
   left: 2px;
-  font-size: 9.5px;
+  font-size: 10px;
   text-transform: uppercase;
   border-radius: 1000px;
   padding: 2px 6px;
@@ -1549,10 +1578,10 @@
 .style--sold-out .style-picker__tag {
   background: var(--brown);
   color: var(--beige);
-  bottom: calc(50% - 8px);}
-
+  bottom: calc(50% - 8px);
+  left: calc(50% - 20px);
+}
 .style--sold-out{
-  pointer-events: none;
 }
 
 .style--sold-out img,
@@ -1687,12 +1716,34 @@
 }
 
 .make-portrait__cta--secondary {
-  background: var(--purple);
+  background: color-mix(in srgb, var(--purple) 45%, transparent);
   color: var(--brown);
-  margin-top: 8px;
+  margin-top: 10px;
+  font-size: 10px;
+  width: 50% !important;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 6H2M6 2l-4 4 4 4' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 6H2M6 2l-4 4 4 4' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
 
   &:hover{
-    background-color: color-mix(in srgb, var(--purple) 45%, transparent);
+    background-color: color-mix(in srgb, var(--brown) 100%, transparent);
+    color: var(--beige);
   }
 }
 
@@ -2580,6 +2631,18 @@
   cursor: not-allowed;
 }
 
+.make-portrait__cta--upload-required {
+  opacity: 0.72;
+  position: relative;
+}
+.make-portrait__cta--upload-required::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  cursor: not-allowed;
+  border-radius: inherit;
+}
+
 .make-portrait__error {
   color: #c0392b;
   font-size: 13px;
@@ -2761,10 +2824,24 @@
     background: var(--cream);
     color: var(--brown);
     border-color: var(--cream);
+
+    &:hover{
+      background: var(--purple);
+    }
   }
   .make-portrait__resume-banner .button--ghost {
-    color: var(--cream);
-    border-color: rgba(255,255,255,0.35);
+    color: var(--beige);
+    border: 1px solid var(--beige);
+
+    &:hover{
+      color: var(--brown);
+    }
+  }
+  .make-portrait__resume-banner__detail {
+    font-size: var(--font-size--sm);
+    margin: 0;
+    opacity: 0.75;
+    line-height: 1.4;
   }
   .make-portrait__resume-banner[hidden] { display: none; }
 
@@ -2793,6 +2870,7 @@
   .make-portrait_artist-badge{
     padding: 40px;
     gap: 20px;
+    width: 180px;
 
     .artist-badge__photo{
       width: 60px;
@@ -2937,7 +3015,8 @@
     if (!group) return;
     var isDream = state.style && state.style.name && state.style.name.toLowerCase() === 'dream';
     var isWhiteBorder = state.border === 'white-border';
-    group.hidden = isDream && !isWhiteBorder;
+    var isPaper = state.productHandle === (window.MakePortraitFramedPosterHandle || '');
+    group.hidden = isDream && !isWhiteBorder && isPaper;
   }
 
   function updateSubtotals() {
@@ -2969,21 +3048,18 @@
     state.step = step;
     updateSubtotals();
 
-    // Square preview image for steps 3 and 4
-    var previewImg = $('mp-preview-img');
-    if (previewImg) previewImg.classList.toggle('make-portrait__preview-img--square', step >= 3);
-
     // Show/hide artist badge and product label
     var artistBadge = $('mp-artist-badge');
     var productLabel = $('mp-product-label');
     if (artistBadge) artistBadge.hidden = step !== 1;
     if (productLabel) productLabel.hidden = true;
 
-    // Step 4: replace preview name with static upload info
+    // Step 4: replace preview name with static upload info; sync order button state
     var previewStyleName = $('mp-preview-style-name');
     if (previewStyleName && step === 4) {
       previewStyleName.innerHTML = '';
     }
+    if (step === 4) updateOrderButton();
 
     // Restore style name in preview when leaving step 4
     var previewName = $('mp-preview-style-name');
@@ -3009,6 +3085,10 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function scrollToPreview() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function updatePreviewImage() {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
@@ -3025,6 +3105,7 @@
     img.style.opacity = '0';
     img.onload = function () { img.style.opacity = '1'; };
     img.src = url;
+    if (state.initialized) scrollToPreview();
   }
 
   /* ————————————————————————————————————————
@@ -3072,6 +3153,13 @@
     if (desc) desc.innerHTML = state.style.description || '';
 
     if (openTab) switchTab('artist');
+
+    var cta1 = $('mp-cta-step1');
+    if (cta1) {
+      var isSoldOut = state.style && (state.style.tag || '').replace(/ /g, '-') === 'sold-out';
+      cta1.classList.toggle('make-portrait__cta--upload-required', isSoldOut);
+    }
+
     updateSubtotals();
   }
 
@@ -3169,6 +3257,22 @@
     var ctaStep2 = $('mp-cta-step2');
     if (ctaStep2) ctaStep2.disabled = false;
 
+    var _catPreviewId = (window.MakePortraitCategoryPreviewVariants || {})[category];
+    if (_catPreviewId) {
+      var _catPreviews = (window.MakePortraitStylePreviews || {})[_catPreviewId] || {};
+      var _catBucket   = _catPreviews[state.styleId] || {};
+      var _catUrl      = _catBucket['default'] || (state.style && state.style.imageUrl) || null;
+      if (_catUrl) {
+        var _catImg = $('mp-preview-img');
+        if (_catImg) {
+          _catImg.style.opacity = '0';
+          _catImg.onload = function () { _catImg.style.opacity = '1'; };
+          _catImg.src = _catUrl;
+        }
+        scrollToPreview();
+      }
+    }
+
     updateSubtotals();
   }
 
@@ -3201,7 +3305,7 @@
     var borderGroup = $('mp-border-group');
     if (borderGroup) borderGroup.hidden = true;
 
-    state.canvasFrameChoice = 'unframed';
+    state.canvasFrameChoice = 'framed';
     state.product = null;
     state.variantId = null;
     state.variant = null;
@@ -3210,7 +3314,7 @@
     var ctaStep3 = $('mp-cta-step3');
     if (ctaStep3) ctaStep3.disabled = true;
 
-    selectFrameProduct(handles, 'unframed');
+    selectFrameProduct(handles, 'framed');
   }
 
   function selectFrameProduct(handles, choice) {
@@ -3277,7 +3381,7 @@
     group.appendChild(lbl);
     var grid = document.createElement('div');
     grid.className = 'option-btn-grid';
-    ['unframed', 'framed'].forEach(function (choice) {
+    ['framed', 'unframed'].forEach(function (choice) {
       var label = choice === 'unframed' ? 'Unframed' : 'Framed';
       var btn = document.createElement('button');
       btn.className = 'option-btn' + (choice === currentChoice ? ' selected' : '');
@@ -3454,11 +3558,24 @@
       if (!seen[val]) { seen[val] = true; values.push(val); }
     });
 
+    if (opt.name.toLowerCase() === 'color') {
+      values.sort(function (a, b) {
+        var order = function (v) {
+          var l = v.toLowerCase();
+          if (l.includes('black')) return 0;
+          if (l.includes('white')) return 1;
+          return 2;
+        };
+        return order(a) - order(b);
+      });
+    }
+
     var prevValue = previousSelections && previousSelections[opt.name.toLowerCase()];
     var hasPrev = prevValue && values.indexOf(prevValue) !== -1;
 
     values.forEach(function (value, vIdx) {
-      var isSelected = hasPrev ? (value === prevValue) : (vIdx === 0);
+      var _defaultIdx = opt.name.toLowerCase() === 'size' ? Math.floor(values.length / 2) : 0;
+      var isSelected = hasPrev ? (value === prevValue) : (vIdx === _defaultIdx);
       var btn = document.createElement('button');
       var optNameLower = opt.name.toLowerCase();
       btn.className = 'option-btn' +
@@ -3819,6 +3936,7 @@
       if (!pass) allPass = false;
     });
 
+    state.lowResPhoto = !allPass;
     alertEl.hidden = allPass;
     if (!allPass && alertText) {
       alertText.textContent = 'Uploaded photo resolution is too low. To achieve optimal print quality, use a photo with resolution at least ' + minW + ' × ' + minH + ' px.';
@@ -3841,17 +3959,18 @@
     var btn = $('mp-cta-order');
     if (!btn) return;
     var required = state.petCount;
+    var isReady = state.pendingUploads === 0
+      && !(state.files.length > 0 && state.photoUrls.length === 0)
+      && state.photoUrls.length >= required;
+
+    btn.disabled = false;
+    btn.classList.toggle('make-portrait__cta--upload-required', !isReady);
+
     if (state.pendingUploads > 0) {
-      btn.disabled = true;
       btn.textContent = 'Uploading photo…';
     } else if (state.files.length > 0 && state.photoUrls.length === 0) {
-      btn.disabled = true;
       btn.textContent = 'Upload failed — retry photo';
-    } else if (state.photoUrls.length < required) {
-      btn.disabled = true;
-      btn.textContent = required === 1 ? 'Upload a photo first' : 'Upload ' + required + ' photos first';
     } else {
-      btn.disabled = false;
       btn.textContent = 'Order portrait';
     }
   }
@@ -3906,6 +4025,53 @@
     el.textContent = msg;
     el.hidden = false;
     setTimeout(function () { el.hidden = true; }, 5000);
+  }
+
+  function showUploadRequiredPopup() {
+    var backdrop = $('mp-upload-required-backdrop');
+    var banner   = $('mp-upload-required-banner');
+    var okBtn    = $('mp-upload-required-ok');
+    if (!banner) return;
+    if (backdrop) backdrop.hidden = false;
+    banner.hidden = false;
+    function close() {
+      if (backdrop) backdrop.hidden = true;
+      banner.hidden = true;
+      okBtn.removeEventListener('click', close);
+      if (backdrop) backdrop.removeEventListener('click', close);
+    }
+    okBtn.addEventListener('click', close);
+    if (backdrop) backdrop.addEventListener('click', close);
+  }
+
+  function showQualityPopup(minResStr, onConfirm, onCancel) {
+    var backdrop = $('mp-quality-backdrop');
+    var banner   = $('mp-quality-banner');
+    var detail   = $('mp-quality-banner-detail');
+    var yesBtn   = $('mp-quality-yes');
+    var noBtn    = $('mp-quality-no');
+    if (!banner) { onConfirm(); return; }
+
+    if (detail && minResStr) {
+      var rp = minResStr.split('x');
+      detail.textContent = 'For best results, use a photo at least ' + rp[0] + ' × ' + rp[1] + ' px.';
+    }
+    if (backdrop) backdrop.hidden = false;
+    banner.hidden = false;
+
+    function close() {
+      if (backdrop) backdrop.hidden = true;
+      banner.hidden = true;
+      yesBtn.removeEventListener('click', handleYes);
+      noBtn.removeEventListener('click', handleNo);
+      if (backdrop) backdrop.removeEventListener('click', handleNo);
+    }
+    function handleYes() { close(); onConfirm(); }
+    function handleNo()  { close(); onCancel();  }
+
+    yesBtn.addEventListener('click', handleYes);
+    noBtn.addEventListener('click', handleNo);
+    if (backdrop) backdrop.addEventListener('click', handleNo);
   }
 
   function handleFiles(files) {
@@ -3965,18 +4131,52 @@
 
         // Mirror upload in preview area
         var mainImg = $('mp-preview-img');
+        var prevMainSrc = mainImg ? mainImg.src : null;
         if (mainImg) {
           mainImg.style.opacity = '0';
           mainImg.onload = function () { mainImg.style.opacity = '1'; };
           mainImg.src = e.target.result;
         }
 
-        uploadToCloudinary(file, preview);
-
+        // Measure dimensions first; upload only after quality confirmation
         var dimImg = new Image();
         dimImg.onload = function () {
-          state.fileDimensions.set(file, { w: dimImg.naturalWidth, h: dimImg.naturalHeight });
+          var dims = { w: dimImg.naturalWidth, h: dimImg.naturalHeight };
+          state.fileDimensions.set(file, dims);
           updateQualityIndicator();
+
+          var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
+          var qualityOk = true;
+          if (minResStr) {
+            var rp = minResStr.split('x');
+            var minW = parseInt(rp[0], 10);
+            var minH = parseInt(rp[1], 10);
+            qualityOk = Math.max(dims.w, dims.h) >= Math.max(minW, minH) &&
+                        Math.min(dims.w, dims.h) >= Math.min(minW, minH);
+          }
+
+          if (qualityOk) {
+            uploadToCloudinary(file, preview);
+          } else {
+            showQualityPopup(
+              minResStr,
+              function () { uploadToCloudinary(file, preview); },
+              function () {
+                var idx = state.files.indexOf(file);
+                if (idx > -1) state.files.splice(idx, 1);
+                state.fileDimensions.delete(file);
+                preview.remove();
+                if (mainImg && prevMainSrc) {
+                  mainImg.style.opacity = '0';
+                  mainImg.onload = function () { mainImg.style.opacity = '1'; };
+                  mainImg.src = prevMainSrc;
+                }
+                updateQualityIndicator();
+                updateUploadCounter();
+                updateOrderButton();
+              }
+            );
+          }
         };
         dimImg.src = e.target.result;
       };
@@ -3990,6 +4190,13 @@
   function addToCart() {
     if (!state.variantId) {
       showError('Please complete all options before ordering.');
+      return;
+    }
+
+    if (state.photoUrls.length < state.petCount) {
+      var uploadArea = $('mp-upload-area');
+      if (uploadArea) uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showUploadRequiredPopup();
       return;
     }
 
@@ -4039,7 +4246,8 @@
       pet_name: state.petName || '',
       photos: state.photoUrls,
       portrait_font: null,
-      quantity: state.prints > 0 ? state.prints + 1 : 1
+      quantity: state.prints > 0 ? state.prints + 1 : 1,
+      low_resolution: state.lowResPhoto || undefined
     };
 
     var doRedirect = function () {
@@ -4251,6 +4459,15 @@
      Init
   ———————————————————————————————————————— */
   function init() {
+    // Move fixed popups to document.body so they escape any ancestor stacking context
+    ['mp-resume-backdrop', 'mp-resume-banner',
+     'mp-upload-required-backdrop', 'mp-upload-required-banner',
+     'mp-quality-backdrop', 'mp-quality-banner'
+    ].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) document.body.appendChild(el);
+    });
+
     updateDeliveryDates();
     initTabs();
     initSmartSticky();
@@ -4330,6 +4547,7 @@
     if (ctaStep1) {
       ctaStep1.addEventListener('click', function () {
         if (!state.styleId) return;
+        if (state.style && (state.style.tag || '').replace(/ /g, '-') === 'sold-out') return;
         goToStep(2);
         if (!state.productHandle && !state.productCategory) selectCategory('canvas');
       });
@@ -4613,6 +4831,7 @@
       });
     });
 
+    state.initialized = true;
   }
 
   /* ————————————————————————————————————————
