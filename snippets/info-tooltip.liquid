@@ -1,0 +1,95 @@
+<div class="info-tooltip">
+  <button class="info-tooltip__btn" type="button" aria-label="More information" aria-expanded="false">
+    {{- 'icon-info.svg' | inline_asset_content -}}
+  </button>
+  <div class="info-tooltip__content" role="tooltip">
+    {{ tooltip_content }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .info-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .info-tooltip__btn {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .info-tooltip__btn:hover,
+  .info-tooltip.open .info-tooltip__btn {
+    opacity: 1;
+  }
+
+  .info-tooltip__content {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background-color: var(--cream);
+    color: var(--brown);
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 10px;
+    line-height: 1.3;
+    z-index: 100;
+    width: 240px;
+  }
+
+  .info-tooltip__content p {
+    margin: 0;
+  }
+
+  .info-tooltip__content p + p {
+    margin-top: 10px;
+  }
+
+  .info-tooltip.open .info-tooltip__content,
+  .info-tooltip:hover .info-tooltip__content {
+    display: block;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.info-tooltip__btn');
+    var tooltips = document.querySelectorAll('.info-tooltip');
+
+    if (btn) {
+      var tooltip = btn.closest('.info-tooltip');
+      var isOpen = tooltip.classList.contains('open');
+      tooltips.forEach(function (el) {
+        el.classList.remove('open');
+        var b = el.querySelector('.info-tooltip__btn');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        tooltip.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      e.stopPropagation();
+    } else if (!e.target.closest('.info-tooltip__content')) {
+      tooltips.forEach(function (el) {
+        el.classList.remove('open');
+        var b = el.querySelector('.info-tooltip__btn');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+})();
+{% endjavascript %}

@@ -208,31 +208,27 @@
                       {%- endfor -%}
 
                       {%- if vl > 3 -%}
-                        <div class="cart-items__variants-overflow">
-                          <button class="cart-items__variants-info" type="button" aria-label="Show more properties" aria-expanded="false">
-                            {{- 'icon-info.svg' | inline_asset_content -}}
-                          </button>
-                          <div class="cart-items__variants-tooltip" role="tooltip">
-                            {%- assign vl2 = 0 -%}
-                            {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
-                              {%- for option in item.options_with_values -%}
-                                {%- assign vl2 = vl2 | plus: 1 -%}
-                                {%- if vl2 > 3 -%}
-                                  <p>{{ option.name }}: {{ option.value }}</p>
-                                {%- endif -%}
-                              {%- endfor -%}
-                            {%- endif -%}
-                            {%- for property in item.properties -%}
-                              {%- assign prop_char2 = property.first | slice: 0 -%}
-                              {%- if property.last != blank and prop_char2 != '_' -%}
-                                {%- assign vl2 = vl2 | plus: 1 -%}
-                                {%- if vl2 > 3 -%}
-                                  <p>{{ property.first }}: {{ property.last }}</p>
-                                {%- endif -%}
+                        {%- capture tooltip_content -%}
+                          {%- assign vl2 = 0 -%}
+                          {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
+                            {%- for option in item.options_with_values -%}
+                              {%- assign vl2 = vl2 | plus: 1 -%}
+                              {%- if vl2 > 3 -%}
+                                <p>{{ option.name }}: {{ option.value }}</p>
                               {%- endif -%}
                             {%- endfor -%}
-                          </div>
-                        </div>
+                          {%- endif -%}
+                          {%- for property in item.properties -%}
+                            {%- assign prop_char2 = property.first | slice: 0 -%}
+                            {%- if property.last != blank and prop_char2 != '_' -%}
+                              {%- assign vl2 = vl2 | plus: 1 -%}
+                              {%- if vl2 > 3 -%}
+                                <p>{{ property.first }}: {{ property.last }}</p>
+                              {%- endif -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                        {%- endcapture -%}
+                        {%- render 'info-tooltip', tooltip_content: tooltip_content -%}
                       {%- endif -%}
                     </dl>
 
@@ -826,58 +822,7 @@
   }
 
   .cart-items__variants-overflow {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
     margin-block-start: var(--margin-2xs);
-  }
-
-  .cart-items__variants-info {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--brown);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    opacity: 0.5;
-  }
-
-  .cart-items__variants-info:hover,
-  .cart-items__variants-overflow.open .cart-items__variants-info {
-    opacity: 1;
-  }
-
-  .cart-items__variants-tooltip {
-    display: none;
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    background-color: var(--cream);
-    color: var(--brown);
-    border-radius: 20px;
-    padding: 10px;
-    font-size: 10px;
-    line-height: 1.3;
-    z-index: 100;
-    width: 240px;
-  }
-
-  .cart-items__variants-tooltip p {
-    margin: 0;
-  }
-
-  .cart-items__variants-tooltip p + p {
-    margin-top: 10px;
-  }
-
-  .cart-items__variants-overflow.open .cart-items__variants-tooltip {
-    display: block;
   }
 
   @media(min-width: 750px){
@@ -909,32 +854,3 @@
   }
 {% endstylesheet %}
 
-{% javascript %}
-(function () {
-  document.addEventListener('click', function (e) {
-    var btn = e.target.closest('.cart-items__variants-info');
-    var overflows = document.querySelectorAll('.cart-items__variants-overflow');
-
-    if (btn) {
-      var overflow = btn.closest('.cart-items__variants-overflow');
-      var isOpen = overflow.classList.contains('open');
-      overflows.forEach(function (el) {
-        el.classList.remove('open');
-        var b = el.querySelector('.cart-items__variants-info');
-        if (b) b.setAttribute('aria-expanded', 'false');
-      });
-      if (!isOpen) {
-        overflow.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-      e.stopPropagation();
-    } else if (!e.target.closest('.cart-items__variants-tooltip')) {
-      overflows.forEach(function (el) {
-        el.classList.remove('open');
-        var b = el.querySelector('.cart-items__variants-info');
-        if (b) b.setAttribute('aria-expanded', 'false');
-      });
-    }
-  });
-})();
-{% endjavascript %}

@@ -391,7 +391,11 @@
         {%- endcomment -%}
 
         <div class="make-portrait__option-group" id="mp-pet-name-group">
-          <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
+          <div class="make-portrait__option-label-row">
+            <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
+            {%- capture pet_name_tooltip -%}<p>The image shown in the configurator is a preview template only. After you enter your pet's name, it will be carefully integrated into your final custom portrait design.</p>{%- endcapture -%}
+            {%- render 'info-tooltip', tooltip_content: pet_name_tooltip -%}
+          </div>
           <input
             class="make-portrait__text-input"
             type="text"
@@ -718,16 +722,55 @@
                   <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
                 </summary>
                 <div class="details-content tab-accordion__body">
-                  <p>
-                    Each portrait is available in multiple sizes, depending on how you want it to live in your space
-                  </p>
-                  <p>
-                    You can choose the artwork only or a framed piece ready to hang. Frame dimensions are 1.5 cm larger on each side than the artwork itself.
-                  </p>
-                  <img src="{{ 'make-portrait/product-size.png' | asset_url }}" alt="Size" loading="lazy">
-                  <p>
-                    This creates a natural margin and gives the piece more presence without changing its proportions.
-                  </p>
+                  <p>Every portrait comes in multiple sizes, so it can live in your home the way you want it to.</p>
+
+                  <div class="accordion-card">
+                    <h4 class="accordion-card__title">Canvas</h4>
+                    <div class="size-table">
+                      <div class="size-table__header">
+                        <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                        <span class="size-table__badge size-table__badge--green">UNFRAMED</span>
+                        <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                        <div class="size-table__dim"><strong>20 × 25 cm</strong><span>7.9 × 9.8 in</span></div>
+                        <div class="size-table__dim"><strong>23 × 28 cm</strong><span>9.1 × 11.0 in</span></div>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                        <div class="size-table__dim"><strong>30 × 40 cm</strong><span>11.8 × 15.7 in</span></div>
+                        <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                        <div class="size-table__dim"><strong>51 × 71 cm</strong><span>20.1 × 28.0 in</span></div>
+                        <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-card">
+                    <h4 class="accordion-card__title">Paper</h4>
+                    <div class="size-table size-table--2col">
+                      <div class="size-table__header">
+                        <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                        <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                        <div class="size-table__dim"><strong>24 × 33 cm</strong><span>9.4 × 13.0 in</span></div>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                        <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                      </div>
+                      <div class="size-table__row">
+                        <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                        <div class="size-table__dim"><strong>52 × 72 cm</strong><span>20.5 × 28.3 in</span></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </details>
             </accordion-custom>
@@ -759,16 +802,43 @@
                   <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
                 </summary>
                 <div class="details-content tab-accordion__body">
-                  <p>
-                    Frames are solid, minimal, and designed to support the artwork without drawing attention away from it.
-                  </p>
-                  <p>
-                    Premium materials such as oak and walnut are also available.The solid construction with natural grain brings deeper surface structure and a more natural integration of the piece into the space.
-                  </p>
-                  <img src="{{ 'make-portrait/product-framing.png' | asset_url }}" alt="Canvas" loading="lazy">
-                  <p>
-                    Crafted with an emphasis on precise joints and stability, so the piece holds its form over time. The framed portrait is delivered ready to hang, with all components pre-assembled.
-                  </p>
+                  <p>Frames are solid, minimal, and made to support the artwork without competing with it. Four options across two collections, all in real wood.</p>
+
+                  <div class="accordion-card">
+                    <h4 class="accordion-card__title">Standard frames</h4>
+                    <p class="accordion-card__desc">Black or white. Ayous wood for paper portraits, pine for canvas. The wall stays calm, the artwork takes the lead.</p>
+                    <div class="accordion-card__grid">
+                      <div class="accordion-card__item">
+                        <img src="{{ 'make-portrait/framing-black.jpg' | asset_url }}" alt="Black frame" loading="lazy">
+                        <p class="accordion-card__item-name">Black</p>
+                        <p class="accordion-card__item-desc">Defined edge, modern feel.</p>
+                      </div>
+                      <div class="accordion-card__item">
+                        <img src="{{ 'make-portrait/framing-white.jpg' | asset_url }}" alt="White frame" loading="lazy">
+                        <p class="accordion-card__item-name">White</p>
+                        <p class="accordion-card__item-desc">Soft, minimal, blends in.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-card">
+                    <h4 class="accordion-card__title">Premium woods</h4>
+                    <p class="accordion-card__desc">Oak for paper portraits, walnut for canvas. Both have a visible natural grain that gives the piece real surface presence and a quiet weight on the wall.</p>
+                    <div class="accordion-card__grid">
+                      <div class="accordion-card__item">
+                        <img src="{{ 'make-portrait/framing-oak.jpg' | asset_url }}" alt="Premium Oak frame" loading="lazy">
+                        <p class="accordion-card__item-name">Premium Oak</p>
+                        <p class="accordion-card__item-desc">Light, warm, natural grain.<br>For paper portraits.</p>
+                      </div>
+                      <div class="accordion-card__item">
+                        <img src="{{ 'make-portrait/framing-walnut.jpg' | asset_url }}" alt="Walnut frame" loading="lazy">
+                        <p class="accordion-card__item-name">Walnut</p>
+                        <p class="accordion-card__item-desc">Deep, rich, more weight.<br>For canvas portraits.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p>Crafted with precise joints for stability, made to hold its form over time. Each frame arrives fully assembled and ready to hang.</p>
                 </div>
               </details>
             </accordion-custom>
@@ -780,9 +850,10 @@
                 </summary>
                 <div class="details-content tab-accordion__body">
                   <p>
-                    Every portrait is produced as a complete object. No additional adjustments, no extra steps. What you receive is final.
+                    Each portrait arrives complete. Hanging hardware ready. Nothing to adjust, nothing left to do. Just hang it on the wall. Acrylite front protector on paper formats.
                   </p>
                   <img src="{{ 'make-portrait/product-finish.png' | asset_url }}" alt="Canvas" loading="lazy">
+                  <p class="tab-accordion__claim">Made to hold its place.</p>
                 </div>
               </details>
             </accordion-custom>
@@ -1137,6 +1208,153 @@
 
 .tab-accordion__summary::-webkit-details-marker { display: none; }
 
+.tab-accordion__claim {
+  font-family: "display", serif;
+  font-size: 21px;
+  font-weight: 400;
+  margin: 60px 0 0 !important;
+}
+
+.accordion-card {
+  background-color: var(--cream);
+  border-radius: 40px;
+  padding: 40px 20px;
+  margin: 20px 0;
+}
+
+.accordion-card__title {
+  font-family: "display", serif;
+  font-size: 21px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 0 10px !important;
+  text-transform: none;
+}
+
+.accordion-card__desc {
+  font-size: 14px;
+  line-height: 1.25;
+  margin: 0 0 20px;
+}
+
+.accordion-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.accordion-card__item img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+  display: block;
+}
+
+.accordion-card__item-name {
+  font-family: "display", serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 10px 0 5px !important;
+  padding: 0 10px;
+}
+
+.accordion-card__item-desc {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0 !important;
+  padding: 0 10px;
+}
+
+.size-table {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 0;
+}
+
+.size-table--2col {
+  grid-template-columns: 120px 1fr;
+}
+
+.size-table__header {
+  display: contents;
+}
+
+.size-table__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 2px 8px;
+  width: fit-content;
+  margin: 20px 0;
+}
+
+.size-table__badge--dark {
+  background-color: var(--brown);
+  color: var(--cream);
+}
+
+.size-table__badge--green {
+  background-color: var(--green);
+  color: var(--cream);
+  margin: 20px auto;
+}
+
+.size-table__row {
+  display: contents;
+}
+
+.size-table__row > * {
+  padding: 14px 0;
+}
+
+.size-table__label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 10px;
+  justify-content: center;
+
+  strong {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  span {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+}
+
+.size-table__dim {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-left: 1px solid var(--brown);
+  padding: 0 10px;
+  text-align: center;
+  justify-content: center;
+
+  strong {
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 700;
+    opacity: .5;
+    margin-bottom: 10px;
+  }
+}
+
+.size-table__dim:last-child {
+  border-right: 1px solid var(--brown);
+}
+
 .tab-accordion .svg-wrapper.icon-plus {
   transition: transform 0.2s ease;
 }
@@ -1155,13 +1373,13 @@
 }
 
 .tab-accordion__body {
-  padding: 20px 0 60px;
+  padding: 10px 0 60px;
   font-size: 14px;
   line-height: 1.2;
 }
 
 .tab-accordion__body p {
-  margin: 0 0 1em;
+  margin: 2em 0 2em;
 }
 
 .tab-accordion__body img {
@@ -1496,6 +1714,17 @@
   color: var(--brown);
   margin: 0 0 10px;
   display: block;
+}
+
+.make-portrait__option-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+
+  .make-portrait__option-label {
+    margin: 0;
+  }
 }
 
 .make-portrait__optional {
@@ -2529,6 +2758,12 @@
     background: var(--beige);
     border-radius: 10px 10px 0 0;
     margin-top: 20px;
+  }
+}
+
+@media (min-width: 750px) {
+  .accordion-card{
+    padding: 40px;
   }
 }
 
