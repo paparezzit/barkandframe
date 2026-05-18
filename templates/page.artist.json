@@ -13,8 +13,8 @@
       "type": "page-artist",
       "settings": {
         "hero_title": "Our artists",
-        "intro_image": "shopify://shop_images/Vector.svg",
-        "intro_text": "<p>Styles aren't variations. They're distinct approaches. Each style is designed in collaboration with our artists. Not just how a portrait looks, but what it preserves, what it simplifies, what gives it lasting presence. A style isn't a method. It's an interpretation of a moment. A relationship between a person and their dog. What you see here aren't options. They're perspectives. Each one with its own logic and intent.</p>"
+        "intro_image": "shopify://shop_images/image.svg",
+        "intro_text": "<p>Styles aren't variations. They're distinct approaches. Each style is designed in collaboration with our artists. Not just how a portrait looks, but what it preserves, what it simplifies, what gives it lasting presence.</p><p>A style isn't a method. It's an interpretation of a moment. A relationship between a person and their dog.</p><p>What you see here aren't options. They're perspectives. Each one with its own logic and intent.</p>"
       }
     },
     "more-from": {

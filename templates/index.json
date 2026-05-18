@@ -1918,7 +1918,7 @@
                     "heading": "Can I use a phone photo?",
                     "open_by_default": false,
                     "icon": "none",
-                    "image_upload": "shopify://shop_images/01.svg",
+                    "image_upload": "shopify://shop_images/mobil.svg",
                     "width": 20
                   },
                   "blocks": {
@@ -1958,7 +1958,7 @@
                     "heading": "Will it look like my dog?",
                     "open_by_default": false,
                     "icon": "none",
-                    "image_upload": "shopify://shop_images/02.svg",
+                    "image_upload": "shopify://shop_images/Group.svg",
                     "width": 20
                   },
                   "blocks": {
@@ -1999,7 +1999,7 @@
                     "heading": "How long until I get it?",
                     "open_by_default": false,
                     "icon": "none",
-                    "image_upload": "shopify://shop_images/03_f45850b2-d9e1-4fd7-a248-4241d9e0b4a1.svg",
+                    "image_upload": "shopify://shop_images/why.svg",
                     "width": 20
                   },
                   "blocks": {
@@ -2041,6 +2041,7 @@
                     "heading": "What if I don't love it?",
                     "open_by_default": false,
                     "icon": "none",
+                    "image_upload": "shopify://shop_images/quality.svg",
                     "width": 20
                   },
                   "blocks": {
@@ -2130,7 +2131,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/01.svg",
+                "image": "shopify://shop_images/mobil.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",

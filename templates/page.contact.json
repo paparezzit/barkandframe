@@ -398,7 +398,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/portraits.svg",
+                "image": "shopify://shop_images/Group.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -1050,7 +1050,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/portraits.svg",
+                "image": "shopify://shop_images/quality.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -1120,7 +1120,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/returns.svg",
+                "image": "shopify://shop_images/production.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -1662,7 +1662,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/portraits.svg",
+                "image": "shopify://shop_images/materials.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -1732,7 +1732,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/returns.svg",
+                "image": "shopify://shop_images/pricing.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -2194,7 +2194,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/portraits.svg",
+                "image": "shopify://shop_images/special.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -2264,7 +2264,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/returns.svg",
+                "image": "shopify://shop_images/why.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -2609,7 +2609,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/contact_8b6cb23d-fa49-4bf3-a6a4-657005351d4e.svg",
+                "image": "shopify://shop_images/contact_3a4aa205-09e1-48fd-9cc5-ba0dcd820c1a.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",

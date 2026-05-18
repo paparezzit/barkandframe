@@ -51,15 +51,32 @@
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
   window.MakePortraitFramedPosterHandle = {{ section.settings.framed_poster_handle | default: '' | json }};
-  {%- comment -%} Map of variantId → white-border preview image URL (metafield custom.preview_image_white_border) {%- endcomment -%}
-  window.MakePortraitWhiteBorderImages = {
-    {%- assign _fp_wb = all_products[section.settings.framed_poster_handle] -%}
-    {%- if _fp_wb != blank -%}
-      {%- for _v_wb in _fp_wb.variants -%}
-        {%- assign _v_wb_img = _v_wb.metafields.custom.preview_image_white_border -%}
-        {%- if _v_wb_img != blank -%}
-          {{ _v_wb.id }}: {{ _v_wb_img.value | image_url: width: 800 | json }},
-        {%- endif -%}
+  {%- comment -%} Map of variantId → { styleId: { default: url, white_border: url } } from metafield custom.style_previews {%- endcomment -%}
+  window.MakePortraitStylePreviews = {
+    {%- assign _sp_handles = '' -%}
+    {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _sp_handles = _sp_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
+    {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _sp_handles = _sp_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+    {%- if section.settings.framed_poster_handle   != blank -%}{%- assign _sp_handles = _sp_handles | append: section.settings.framed_poster_handle   | append: ',' -%}{%- endif -%}
+    {%- assign _sp_handle_list = _sp_handles | split: ',' -%}
+    {%- for _sp_h in _sp_handle_list -%}
+      {%- unless _sp_h == blank -%}
+        {%- assign _sp_p = all_products[_sp_h] -%}
+        {%- for _sp_v in _sp_p.variants -%}
+          {%- assign _sp_mf = _sp_v.metafields.custom.style_previews -%}
+          {%- if _sp_mf != blank -%}
+            {{ _sp_v.id }}: {{ _sp_mf.value | json }},
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if products_collection != blank -%}
+      {%- for _sp_cp in products_collection.products -%}
+        {%- for _sp_cv in _sp_cp.variants -%}
+          {%- assign _sp_cmf = _sp_cv.metafields.custom.style_previews -%}
+          {%- if _sp_cmf != blank -%}
+            {{ _sp_cv.id }}: {{ _sp_cmf.value | json }},
+          {%- endif -%}
+        {%- endfor -%}
       {%- endfor -%}
     {%- endif -%}
   };
@@ -2992,6 +3009,24 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function updatePreviewImage() {
+    var spMap = window.MakePortraitStylePreviews || {};
+    var variant = state.variant;
+    var variantPreviews = variant ? (spMap[variant.id] || {}) : {};
+    var styleBucket = variantPreviews[state.styleId] || {};
+    var borderKey = state.border === 'white-border' ? 'white_border' : 'default';
+    var url = styleBucket[borderKey]
+              || styleBucket['default']
+              || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
+              || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
+    if (!url) return;
+    var img = $('mp-preview-img');
+    if (!img) return;
+    img.style.opacity = '0';
+    img.onload = function () { img.style.opacity = '1'; };
+    img.src = url;
+  }
+
   /* ————————————————————————————————————————
      Step 1 – Style
   ———————————————————————————————————————— */
@@ -3007,13 +3042,7 @@
 
     if (!state.style) return;
 
-    // Preview image
-    var img = $('mp-preview-img');
-    if (img && state.style.imageUrl) {
-      img.style.opacity = '0';
-      img.onload = function () { img.style.opacity = '1'; };
-      img.src = state.style.imageUrl;
-    }
+    updatePreviewImage();
 
     // Artist badge
     var artistName = $('mp-artist-name');
@@ -3642,18 +3671,7 @@
         }
       }
 
-      // Update preview image: white-border metafield takes priority over variant.featured_image
-      var _wbImages = window.MakePortraitWhiteBorderImages || {};
-      var _wbUrl = state.border === 'white-border' ? _wbImages[variant.id] : null;
-      var _previewUrl = _wbUrl || (variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
-      if (_previewUrl) {
-        var img = $('mp-preview-img');
-        if (img) {
-          img.style.opacity = '0';
-          img.onload = function () { img.style.opacity = '1'; };
-          img.src = _previewUrl;
-        }
-      }
+      updatePreviewImage();
     }
 
     updateSubtotals();
