@@ -51,12 +51,19 @@
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
   window.MakePortraitFramedPosterHandle = {{ section.settings.framed_poster_handle | default: '' | json }};
-  {%- comment -%} Category preview variant IDs — canvas framed last variant, paper (framed poster) last variant {%- endcomment -%}
+  {%- comment -%} Category preview variant IDs — canvas: largest Premium Walnut variant; paper: last variant {%- endcomment -%}
   window.MakePortraitCategoryPreviewVariants = {
     {%- assign _cpv_cf = all_products[section.settings.canvas_framed_handle] -%}
     {%- assign _cpv_fp = all_products[section.settings.framed_poster_handle] -%}
     {%- if _cpv_cf != blank -%}
-      {%- assign _cpv_cv = _cpv_cf.variants | last -%}
+      {%- assign _cpv_cv = null -%}
+      {%- for _v in _cpv_cf.variants -%}
+        {%- assign _v_options_str = _v.options | join: ' ' | downcase -%}
+        {%- if _v_options_str contains 'brown' -%}
+          {%- assign _cpv_cv = _v -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if _cpv_cv == null -%}{%- assign _cpv_cv = _cpv_cf.variants | last -%}{%- endif -%}
       "canvas": {{ _cpv_cv.id }},
     {%- endif -%}
     {%- if _cpv_fp != blank -%}
@@ -247,16 +254,9 @@
       <div class="make-portrait__step" data-step="1">
         <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
 
-        {%- assign _picker_product = all_products[section.settings.canvas_framed_handle] -%}
-        {%- assign _picker_variant = _picker_product.variants | last -%}
-        {%- assign _picker_previews = _picker_variant.metafields.custom.style_previews.value -%}
-
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
           {%- for style in _portrait_styles -%}
             {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
-            {%- assign _style_id = style.style_id.value -%}
-            {%- assign _picker_entry = _picker_previews[_style_id] -%}
-            {%- assign _picker_url = _picker_entry['default'] -%}
             {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
@@ -265,13 +265,9 @@
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
               title="{{ style.name.value }}"
             >
-              {%- if _picker_url != blank or _btn_img -%}
+              {%- if _btn_img -%}
                 <div class="style-picker__item__img">
-                  {%- if _picker_url != blank -%}
-                    <img src="{{ _picker_url }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
-                  {%- else -%}
-                    <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
-                  {%- endif -%}
+                  <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
                   {%- if _style_tag != blank -%}
                     <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize | replace: 'Sold out', 'Soon' }}</span>
                   {%- endif -%}
@@ -3025,7 +3021,7 @@
     var priceEl = $('mp-subtotal-price');
     if (priceEl) priceEl.textContent = formatted;
     var prefix = $('mp-subtotal-prefix');
-    if (prefix) prefix.hidden = !!state.variant;
+    if (prefix) prefix.hidden = !!state.variant && state.step >= 3;
     updatePetNameVisibility();
     buildSummary();
     saveDraft();
@@ -3092,7 +3088,8 @@
   function updatePreviewImage() {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
-    var variantPreviews = variant ? (spMap[variant.id] || {}) : {};
+    var defaultVariantId = !variant && (window.MakePortraitCategoryPreviewVariants || {})['canvas'];
+    var variantPreviews = variant ? (spMap[variant.id] || {}) : (defaultVariantId ? (spMap[defaultVariantId] || {}) : {});
     var styleBucket = variantPreviews[state.styleId] || {};
     var borderKey = state.border === 'white-border' ? 'white_border' : 'default';
     var url = styleBucket[borderKey]
@@ -3187,21 +3184,45 @@
     var previewName = $('mp-preview-style-name');
     if (previewName && matchedProduct) previewName.textContent = matchedProduct.title;
 
-    // Update preview image
-    if (matchedProduct && matchedProduct.featuredImage) {
-      var img = $('mp-preview-img');
-      if (img) {
-        img.style.opacity = '0';
-        img.onload = function () { img.style.opacity = '1'; };
-        img.src = matchedProduct.featuredImage;
-      }
-    }
-
     // Fetch full product data for variants
     fetch('/products/' + handle + '.js')
       .then(function (r) { return r.json(); })
       .then(function (product) {
         state.product = product;
+
+        // Update preview: find brown/oak variant (largest = last match)
+        var spMap = window.MakePortraitStylePreviews || {};
+        var _previewVariantId = null;
+        if (product.variants && product.variants.length) {
+          product.variants.forEach(function (v) {
+            var opts = (v.options || []).join(' ').toLowerCase();
+            if (opts.includes('brown') || opts.includes('oak')) {
+              _previewVariantId = v.id;
+            }
+          });
+        }
+        if (_previewVariantId) {
+          var _pvPreviews = spMap[_previewVariantId] || {};
+          var _pvBucket   = _pvPreviews[state.styleId] || {};
+          var _pvUrl      = _pvBucket['default'] || (state.style && state.style.imageUrl) || null;
+          if (_pvUrl) {
+            var _pvImg = $('mp-preview-img');
+            if (_pvImg) {
+              _pvImg.style.opacity = '0';
+              _pvImg.onload = function () { _pvImg.style.opacity = '1'; };
+              _pvImg.src = _pvUrl;
+            }
+            scrollToPreview();
+          }
+        } else if (matchedProduct && matchedProduct.featuredImage) {
+          var img = $('mp-preview-img');
+          if (img) {
+            img.style.opacity = '0';
+            img.onload = function () { img.style.opacity = '1'; };
+            img.src = matchedProduct.featuredImage;
+          }
+          scrollToPreview();
+        }
         if (product.variants && product.variants.length) {
           state.variantId = product.variants[0].id;
           state.variant = product.variants[0];
