@@ -34,6 +34,11 @@ html[scroll-lock] {
   overflow: hidden;
 }
 
+::selection {
+  background-color: var(--purple);
+  color: var(--brown);
+}
+
 img,
 picture,
 video,

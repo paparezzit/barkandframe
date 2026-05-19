@@ -218,11 +218,10 @@
 }
 
 .at-home-lightbox__img {
-  max-width: 100vw;
-  max-height: 100dvh;
-  width: auto;
-  height: auto;
+  width: 100vw;
+  height: 100dvh;
   object-fit: contain;
+  image-rendering: auto;
 }
 
 /* ── Responsive ───────────────────────────────────── */
