@@ -4293,27 +4293,15 @@
       showError(msg || 'An error occurred. Please try again.');
     };
 
-    // Always attach _order to cart.items[0] (oldest item), regardless of product type
+    // Store _order as a cart attribute (cart-level, not tied to any line item)
     fetch('/cart.js')
       .then(function (r) { return r.json(); })
       .then(function (cart) {
-        var firstItem = cart.items && cart.items.length > 0 ? cart.items[0] : null;
+        var existingOrder;
+        try { existingOrder = JSON.parse(cart.attributes && cart.attributes['_order']); } catch (e) { existingOrder = null; }
+        if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
+        existingOrder.items.push(newOrderItem);
 
-        if (!firstItem) {
-          // Cart is empty — new portrait becomes items[0], attach _order directly
-          properties['_order'] = JSON.stringify({ items: [newOrderItem] });
-          return fetch('/cart/add.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
-          })
-            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
-            .then(function (result) {
-              if (result.ok) { doRedirect(); } else { doError(result.data.description || result.data.message); }
-            });
-        }
-
-        // Cart has items — add portrait without _order, then update items[0] with merged _order
         return fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -4323,19 +4311,10 @@
           .then(function (result) {
             if (!result.ok) { doError(result.data.description || result.data.message); return; }
 
-            var existingOrder;
-            try { existingOrder = JSON.parse(firstItem.properties && firstItem.properties['_order']); } catch (e) { existingOrder = null; }
-            if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
-            existingOrder.items.push(newOrderItem);
-
-            return fetch('/cart/change.js', {
+            return fetch('/cart/update.js', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                id: firstItem.key,
-                quantity: firstItem.quantity,
-                properties: Object.assign({}, firstItem.properties, { '_order': JSON.stringify(existingOrder) })
-              })
+              body: JSON.stringify({ attributes: { '_order': JSON.stringify(existingOrder) } })
             })
               .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
               .then(function (result) {
