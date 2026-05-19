@@ -136,6 +136,7 @@
     {%- assign _mp_pv_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
     {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+    {%- if section.settings.framed_poster_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.framed_poster_handle   | append: ',' -%}{%- endif -%}
     {%- assign _mp_pv_list = _mp_pv_handles | split: ',' -%}
     {%- for _mp_pvh in _mp_pv_list -%}
       {%- unless _mp_pvh == blank -%}
