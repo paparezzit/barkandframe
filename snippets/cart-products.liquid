@@ -96,7 +96,7 @@
           </thead>
 
           <tbody role="rowgroup">
-            {% for item in cart.items %}
+            {% for item in cart.items reversed %}
               <tr
                 role="row"
                 class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}"
@@ -109,7 +109,8 @@
                   role="cell"
                   headers="productImage"
                 >
-                  {% if item.image -%}
+                  {%- assign _preview_url = item.properties['_preview_image'] -%}
+                  {% if _preview_url or item.image -%}
                     {% liquid
                       assign ratio = 1
                       assign border_opacity = settings.cart_thumbnail_border_opacity | divided_by: 100.0
@@ -129,9 +130,20 @@
                       class="cart-items__media-container"
                       style="--ratio:{{ ratio }};"
                     >
-                      {%- liquid
-                        echo item.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style', style: border_override
-                      -%}
+                      {%- if _preview_url -%}
+                        <img
+                          src="{{ _preview_url }}"
+                          alt="{{ item.title | escape }}"
+                          class="cart-items__media-image border-style"
+                          style="{{ border_override }}"
+                          width="250"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        {%- liquid
+                          echo item.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style', style: border_override
+                        -%}
+                      {%- endif -%}
                     </a>
                   {%- endif %}
                 </td>

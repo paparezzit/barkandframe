@@ -10,12 +10,27 @@ class CartDrawerComponent extends DialogComponent {
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener(CartAddEvent.eventName, this.#handleCartAdd);
+    this.addEventListener('wheel', this.#handleWheel, { passive: false });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(CartAddEvent.eventName, this.#handleCartAdd);
+    this.removeEventListener('wheel', this.#handleWheel);
   }
+
+  #handleWheel = (event) => {
+    const scrollable = this.querySelector('.cart-drawer__items');
+    if (!scrollable) return;
+    const { deltaY } = event;
+    const { scrollTop, scrollHeight, clientHeight } = scrollable;
+    const atTop = deltaY < 0 && scrollTop === 0;
+    const atBottom = deltaY > 0 && scrollTop + clientHeight >= scrollHeight;
+    if (!atTop && !atBottom) {
+      event.preventDefault();
+      scrollable.scrollTop += deltaY;
+    }
+  };
 
   #handleCartAdd = () => {
     if (this.hasAttribute('auto-open')) {

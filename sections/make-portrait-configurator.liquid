@@ -4251,6 +4251,11 @@
       properties['_donation'] = String(state.donation);
     }
 
+    var _previewImgEl = $('mp-preview-img');
+    if (_previewImgEl && _previewImgEl.src) {
+      properties['_preview_image'] = _previewImgEl.src;
+    }
+
     // Total price in local-currency cents — the Cart Transform function reads
     // this and sets the line item price to exactly this amount.
     properties['_custom_price'] = String(Math.round(
