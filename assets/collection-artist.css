@@ -38,8 +38,41 @@
 }
 
 .artist-collection__hero {
-  padding: 60px var(--page-margin) 50px;
+  position: sticky;
+  top: var(--header-height);
+  min-height: calc(100dvh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 40px var(--page-margin);
+}
+
+.artist-collection__hero-outline {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100dvh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px var(--page-margin);
+  margin-top: calc(-100dvh + var(--header-height));
+  z-index: 1;
+  pointer-events: none;
+}
+
+.artist-collection__hero-outline .artist-collection__title {
+  -webkit-text-stroke: 1px var(--brown);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.artist-collection__hero-outline .artist-collection__by {
+  -webkit-text-stroke: 1px var(--brown);
+  -webkit-text-fill-color: transparent;
 }
 
 .artist-collection__title {
@@ -54,6 +87,16 @@
 .artist-collection__signature {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.artist-collection__by {
+  font-family: "display", serif;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 1;
+  color: var(--brown);
+  font-weight: 400;
 }
 
 .artist-collection__signature img {
@@ -68,10 +111,13 @@
   column-gap: 16px;
   row-gap: 16px;
   align-items: start;
-  padding: 40px var(--page-margin) 80px;
+  padding: 60px var(--page-margin) 80px;
   max-width: calc(1280px + (2 * var(--page-margin)));
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  z-index: 0;
+  margin-top: -20dvh;
 }
 
 .artist-collection__product-card {
@@ -205,12 +251,17 @@
 
 @media screen and (min-width: 750px) {
   .artist-collection__hero {
-    padding-top: 240px;
-    padding-bottom: 0px;
+    padding: 60px var(--page-margin);
   }
 
   .artist-collection__signature img{
-    width: 270px;
+    width: 320px;
+    margin-left: 20px;
+  }
+
+  .artist-collection__hero-outline .artist-collection__signature img{
+    width: 320px;
+    margin-left: 20px;
   }
 
   .artist-collection__products {

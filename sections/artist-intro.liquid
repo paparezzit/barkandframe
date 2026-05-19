@@ -57,6 +57,7 @@
   .artist-intro__image {
     overflow: hidden;
     padding: 0 30px;
+    mix-blend-mode: darken;
   }
 
   .artist-intro__img {
@@ -103,6 +104,11 @@
       padding: 70px 80px;
     }
 
+    .artist-intro__title{
+      max-width: 540px;
+      margin: 0 auto 30px;
+    }
+
     .artist-intro__inner {
       grid-template-columns: 1fr 1fr;
       gap: 40px;
@@ -122,6 +128,7 @@
     .artist-intro__btn{
       margin: 0;
     }
+    
   }
 
   @media screen and (min-width: 1200px) {
@@ -130,8 +137,7 @@
     }
 
     .artist-intro__title{
-      max-width: 370px;
-      margin: 0 auto 30px;
+      max-width: 660px;
     }
   }
 {% endstylesheet %}

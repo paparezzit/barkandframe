@@ -80,7 +80,7 @@
             <div class="artists-page__collections">
               {%- for col in collections -%}
                 {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
-                  <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">Go to collection</a>
+                  <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">{{ col.title }}</a>
                 {%- endif -%}
               {%- endfor -%}
             </div>

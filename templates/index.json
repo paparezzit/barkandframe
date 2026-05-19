@@ -58,9 +58,9 @@
       "type": "artist-intro",
       "name": "Artist Intro",
       "settings": {
-        "image": "shopify://shop_images/real-artists.svg",
-        "title": "Real artists. Real signatures.",
-        "text": "<p>Every signature style at Bark & Frame is designed by one of our artists. Their signature is part of the work itself — a name behind every portrait.</p>",
+        "image": "shopify://shop_images/ANIM_ARTISTS-ezgif.com-crop.png",
+        "title": "Artist-designed. Turn your dog into a timeless icon.",
+        "text": "<p>Each portrait is created by professional artists and designed to be timeless — a distinctive piece that reflects your dog’s personality and fits naturally into a well-designed home.</p>",
         "button_label": "Meet our artists",
         "button_link": "shopify://pages/our-artists"
       }

@@ -25,38 +25,71 @@
     </nav>
   {%- endif -%}
 
-  <div class="artist-collection__hero section section--page-width">
-    <h1 class="artist-collection__title">{{ collection.title }}</h1>
-    {%- if artist and artist.signature.value != blank -%}
-      <div class="artist-collection__signature">
-        <img
-          src="{{ artist.signature.value | image_url: width: 400 }}"
-          alt=""
-          width="400"
-          height="100"
-          loading="eager"
-        >
-      </div>
-    {%- endif -%}
-  </div>
-
-  <div class="artist-collection__products">
-    {%- for product in collection.products -%}
-      <a href="{{ product.url }}" class="artist-collection__product-card">
-        <div class="artist-collection__product-image">
-          {%- if product.featured_image -%}
-            <img
-              src="{{ product.featured_image | image_url: width: 600 }}"
-              alt="{{ product.featured_image.alt | default: product.title }}"
-              width="{{ product.featured_image.width }}"
-              height="{{ product.featured_image.height }}"
-              loading="lazy"
-            >
-          {%- endif -%}
-          <span class="artist-collection__product-name">{{ product.title }}</span>
+  <div class="artist-collection__wrapper">
+    <div class="artist-collection__hero">
+      <h1 class="artist-collection__title">{{ collection.title }}</h1>
+      {%- if artist and artist.signature.value != blank -%}
+        <div class="artist-collection__signature">
+          <span class="artist-collection__by">by</span>
+          <img
+            src="{{ artist.signature.value | image_url: width: 400 }}"
+            alt=""
+            width="400"
+            height="100"
+            loading="eager"
+          >
         </div>
-      </a>
-    {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <div class="artist-collection__hero-outline" aria-hidden="true">
+      <p class="artist-collection__title">{{ collection.title }}</p>
+      {%- if artist and artist.signature.value != blank -%}
+        <div class="artist-collection__signature">
+          <span class="artist-collection__by">by</span>
+          <img
+            src="{{ artist.signature.value | image_url: width: 400 }}"
+            alt=""
+            width="400"
+            height="100"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="artist-collection__products">
+      {%- for product in collection.products -%}
+        {%- liquid
+          assign collection_img = product.metafields.custom.collection_image.value
+          if collection_img != blank
+            assign display_image = collection_img
+            assign display_image_alt = collection_img.alt | default: product.title
+            assign display_image_width = collection_img.width
+            assign display_image_height = collection_img.height
+          elsif product.featured_image
+            assign display_image = product.featured_image
+            assign display_image_alt = product.featured_image.alt | default: product.title
+            assign display_image_width = product.featured_image.width
+            assign display_image_height = product.featured_image.height
+          endif
+        -%}
+        <a href="{{ product.url }}" class="artist-collection__product-card">
+          <div class="artist-collection__product-image">
+            {%- if display_image -%}
+              <img
+                src="{{ display_image | image_url: width: 600 }}"
+                alt="{{ display_image_alt }}"
+                width="{{ display_image_width }}"
+                height="{{ display_image_height }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+            <span class="artist-collection__product-name">{{ product.title }}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
   </div>
 
   <div class="artist-collection__info section section--page-width">

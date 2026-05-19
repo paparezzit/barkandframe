@@ -33,7 +33,8 @@
       "Bash(grep -E \"\\\\.\\(liquid|js|json|css\\)$\")",
       "Bash(sort -t: -k3 -rn)",
       "Bash(grep -n \"document.addEventListener\\\\|DOMContentLoaded\\\\|window.addEventListener.*load\\\\|}\\)\\(\\);\\\\s*$\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(list\\(d['sections'].keys\\(\\)\\), indent=2\\)\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(list\\(d['sections'].keys\\(\\)\\), indent=2\\)\\)\")",
+      "Bash(xargs cat -n)"
     ]
   }
 }
