@@ -2922,7 +2922,8 @@
     files: [],
     photoUrls: [],
     pendingUploads: 0,
-    fileDimensions: new Map()
+    fileDimensions: new Map(),
+    previewImageUrl: null
   };
 
   var STYLES = window.MakePortraitStyles || [];
@@ -3097,6 +3098,7 @@
               || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
               || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
     if (!url) return;
+    state.previewImageUrl = url;
     var img = $('mp-preview-img');
     if (!img) return;
     img.style.opacity = '0';
@@ -4251,9 +4253,8 @@
       properties['_donation'] = String(state.donation);
     }
 
-    var _previewImgEl = $('mp-preview-img');
-    if (_previewImgEl && _previewImgEl.src) {
-      properties['_preview_image'] = _previewImgEl.src;
+    if (state.previewImageUrl) {
+      properties['_preview_image'] = state.previewImageUrl;
     }
 
     // Total price in local-currency cents — the Cart Transform function reads
@@ -4292,20 +4293,14 @@
       showError(msg || 'An error occurred. Please try again.');
     };
 
-    // Find existing portrait with _order in cart; if found, append to it instead of creating a new one
+    // Always attach _order to cart.items[0] (oldest item), regardless of product type
     fetch('/cart.js')
       .then(function (r) { return r.json(); })
       .then(function (cart) {
-        var firstPortrait = null;
-        for (var i = 0; i < cart.items.length; i++) {
-          if (cart.items[i].properties && cart.items[i].properties['_order']) {
-            firstPortrait = cart.items[i];
-            break;
-          }
-        }
+        var firstItem = cart.items && cart.items.length > 0 ? cart.items[0] : null;
 
-        if (!firstPortrait) {
-          // First portrait in cart — attach _order directly
+        if (!firstItem) {
+          // Cart is empty — new portrait becomes items[0], attach _order directly
           properties['_order'] = JSON.stringify({ items: [newOrderItem] });
           return fetch('/cart/add.js', {
             method: 'POST',
@@ -4318,7 +4313,7 @@
             });
         }
 
-        // Additional portrait — add line item without _order, then append to first portrait's _order
+        // Cart has items — add portrait without _order, then update items[0] with merged _order
         return fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -4329,16 +4324,17 @@
             if (!result.ok) { doError(result.data.description || result.data.message); return; }
 
             var existingOrder;
-            try { existingOrder = JSON.parse(firstPortrait.properties['_order']); } catch (e) { existingOrder = { items: [] }; }
+            try { existingOrder = JSON.parse(firstItem.properties && firstItem.properties['_order']); } catch (e) { existingOrder = null; }
+            if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
             existingOrder.items.push(newOrderItem);
 
             return fetch('/cart/change.js', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                id: firstPortrait.key,
-                quantity: firstPortrait.quantity,
-                properties: Object.assign({}, firstPortrait.properties, { '_order': JSON.stringify(existingOrder) })
+                id: firstItem.key,
+                quantity: firstItem.quantity,
+                properties: Object.assign({}, firstItem.properties, { '_order': JSON.stringify(existingOrder) })
               })
             })
               .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
