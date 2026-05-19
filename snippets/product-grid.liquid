@@ -98,7 +98,7 @@
       container-name: product-grid;
     "
   >
-    {% if products.size == 0 %}
+    {% if products.size == 0 and has_cta != true %}
       <div class="main-collection-grid__empty">
         <h2 class="main-collection-grid__empty-title h2">
           {{ 'content.no_products_found' | t }}

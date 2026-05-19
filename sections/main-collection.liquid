@@ -34,15 +34,41 @@
   <div
     class="collection-wrapper grid gap-style"
   >
+    {% assign _results_size = collection.products_count %}
+    {% assign _has_cta = false %}
+    {% if section.settings.cta_link != blank %}
+      {% assign _results_size = _results_size | plus: 1 %}
+      {% assign _has_cta = true %}
+    {% endif %}
     {% content_for 'block',
       type: 'filters',
       id: 'filters',
       results: collection,
-      results_size: collection.products_count
+      results_size: _results_size
     %}
 
     {% paginate collection.products by 24 %}
       {% capture children %}
+        {%- if section.settings.cta_link != blank -%}
+          <li class="product-grid__item product-grid__item--cta">
+            <a href="{{ section.settings.cta_link }}" class="more-from__cta">
+              {%- if section.settings.cta_image != blank -%}
+                <div class="more-from__cta-img">
+                  <img
+                    src="{{ section.settings.cta_image | image_url: width: 800 }}"
+                    alt="{{ section.settings.cta_label | escape }}"
+                    loading="lazy"
+                    width="800"
+                    height="800"
+                  >
+                </div>
+              {%- endif -%}
+              <div class="more-from__cta-body">
+                <span class="more-from__cta-label">{{ section.settings.cta_label }}</span>
+              </div>
+            </a>
+          </li>
+        {%- endif -%}
         {% for product in collection.products %}
           <li
             id="{{ section.id }}-{{ product.id }}"
@@ -62,11 +88,18 @@
         section: section,
         children: children,
         products: collection.products,
-        paginate: paginate
+        paginate: paginate,
+        has_cta: _has_cta
       %}
     {% endpaginate %}
   </div>
 </results-list>
+
+{%- if section.settings.sticky_button_enabled and section.settings.sticky_button_link != blank -%}
+  <a href="{{ section.settings.sticky_button_link }}" class="collection-sticky-btn button">
+    {{- section.settings.sticky_button_text | default: 'Shop Now' -}}
+  </a>
+{%- endif -%}
 
 {% stylesheet %}
   .main-collection-grid {
@@ -139,6 +172,19 @@
       margin-inline-start: calc(-1 * max(var(--padding-xs), var(--padding-inline-start)));
       margin-inline-end: calc(-1 * max(var(--padding-xs), var(--padding-inline-end)));
     }
+  }
+
+  .collection-sticky-btn {
+    position: sticky;
+    margin-bottom: 60px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    white-space: nowrap;
+    background-color: var(--beige);
+    border: 1px solid var(--brown);
+    color: var(--brown);
   }
 {% endstylesheet %}
 
@@ -302,6 +348,47 @@
       "step": 1,
       "unit": "px",
       "default": 8
+    },
+    {
+      "type": "header",
+      "content": "CTA card"
+    },
+    {
+      "type": "image_picker",
+      "id": "cta_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Sticky button"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_button_enabled",
+      "label": "Show sticky button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "sticky_button_text",
+      "label": "Button text",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "url",
+      "id": "sticky_button_link",
+      "label": "Button link"
     }
   ],
   "presets": []

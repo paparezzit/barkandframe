@@ -77,6 +77,7 @@
   style="--menu-image-border-radius: {{ image_border_radius }}px;"
 >
   {% for link in parent_link.links %}
+    {% if link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}{% continue %}{% endif %}
     {% liquid
       # Decide whether to open a column span, and how many columns of the grid to span
       if forloop.first or open_column_span == false
@@ -183,6 +184,7 @@
       endif
     %}
   {% endfor %}
+  {% if open_column_span %}</li>{% endif %}
 </ul>
 
 {% liquid

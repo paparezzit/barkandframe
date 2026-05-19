@@ -37,13 +37,33 @@ export class MediaGallery extends Component {
    *
    * @param {VariantUpdateEvent} event - The variant update event.
    */
-  #handleVariantUpdate = (event) => {
+  #handleVariantUpdate = async (event) => {
     const source = event.detail.data.html;
 
     if (!source) return;
     const newMediaGallery = source.querySelector('media-gallery');
 
     if (!newMediaGallery) return;
+
+    const featuredMediaId = event.detail.resource?.featured_media?.id;
+    const slideshow = this.slideshow;
+
+    if (featuredMediaId && slideshow?.refs?.slides) {
+      const targetSlide = slideshow.refs.slides.find(
+        (slide) => slide.getAttribute('slide-id') == featuredMediaId
+      );
+
+      if (targetSlide && !slideshow.visibleSlides?.includes(targetSlide)) {
+        slideshow.select({ id: String(featuredMediaId) });
+
+        await new Promise((resolve) => {
+          const scroller = slideshow.refs.scroller;
+          if (!scroller) return resolve();
+          scroller.addEventListener('scrollend', resolve, { once: true });
+          setTimeout(resolve, 600);
+        });
+      }
+    }
 
     this.replaceWith(newMediaGallery);
   };

@@ -55,6 +55,7 @@
         {% if menu %}
           <ul class="list-unstyled">
             {% for link in menu.links %}
+              {% if link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}{% continue %}{% endif %}
               <li class="menu__item {{ block_settings.link_preset }}{% if link.active %} menu__item--active{% endif %}">
                 <a href="{{ link.url }}">
                   {{ link.title }}

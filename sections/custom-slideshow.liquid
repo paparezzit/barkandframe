@@ -15,13 +15,27 @@
       {% for block in section.blocks %}
         <div class="slide {% if forloop.first %}is-active{% endif %}" {{ block.shopify_attributes }}>
 
-          {% if block.settings.image %}
+          {% if block.settings.video != blank %}
             <div class="slide-image">
-              <img 
+              <video
+                autoplay
+                muted
+                loop
+                playsinline
+                class="slide-video"
+              >
+                {% for source in block.settings.video.sources %}
+                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                {% endfor %}
+              </video>
+            </div>
+          {% elsif block.settings.image %}
+            <div class="slide-image">
+              <img
                 src="{{ block.settings.image | image_url: width: 2000 }}"
                 alt=""
                 loading="lazy"
-               width="1200" height="800">
+                width="1200" height="800">
             </div>
           {% endif %}
 
@@ -88,11 +102,12 @@
     height: 100%;
   }
 
-  .custom-slideshow .slide-image img {
+  .custom-slideshow .slide-image img,
+  .custom-slideshow .slide-image video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: left;
+    object-position: right;
   }
 
   .custom-slideshow .slide-content {
@@ -188,10 +203,6 @@
         }
       }
 
-      .slide-image img{
-        object-position: center;
-      }
-
       .slideshow__dots{
         width: 500px;
       }
@@ -203,6 +214,11 @@
       .slideshow__track{
         aspect-ratio: 13/7;
         max-height: calc(95dvh - var(--header-height));
+      }
+
+      .slide-image img,
+      .slide-image video{
+        object-position: center;
       }
 
       .slide-content{
@@ -242,7 +258,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showSlide(i) {
     slides.forEach((slide, idx) => {
-      slide.classList.toggle("is-active", idx === i);
+      const active = idx === i;
+      slide.classList.toggle("is-active", active);
+      const video = slide.querySelector("video");
+      if (video) {
+        if (active) { video.currentTime = 0; video.play(); }
+        else video.pause();
+      }
     });
 
     dots.forEach((dot, idx) => {
@@ -296,9 +318,14 @@ document.addEventListener("DOMContentLoaded", () => {
       "name": "Slide",
       "settings": [
         {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image (fallback if no video)"
         },
         {
           "type": "text",

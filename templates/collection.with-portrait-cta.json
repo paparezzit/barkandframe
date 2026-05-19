@@ -252,8 +252,9 @@
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 60,
+        "cta_image": "shopify://shop_images/The_Gentleman_01_20x28_Canvas_Black.png",
         "cta_label": "Make a Portrait",
-        "cta_link": "",
+        "cta_link": "/pages/make-portrait",
         "sticky_button_enabled": true,
         "sticky_button_text": "Artist Collection",
         "sticky_button_link": "shopify://collections/swime"

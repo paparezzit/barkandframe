@@ -210,7 +210,7 @@ export class Slideshow extends Component {
     const instant = prefersReducedMotion() || !animate;
 
     // If jump is more than 1 or we looped, do the placeholder + reorder trick
-    if (!instant && !isAdjacentSlide && visibleSlides.length === 1) {
+    if (!instant && !isAdjacentSlide) {
       this.#disabled = true;
       await this.#scroll.finished; // ensure we're not mid-scroll
 
@@ -230,7 +230,7 @@ export class Slideshow extends Component {
         currentSlide.after(targetSlide);
       }
 
-      if (current === 0) this.#scroll.to(currentSlide, { instant: true });
+      this.#scroll.to(currentSlide, { instant: true });
 
       // Once that scroll finishes, restore the DOM
       queueMicrotask(async () => {
@@ -619,7 +619,8 @@ export class Slideshow extends Component {
       const next = this.#sync();
 
       const modifier = current !== next || Math.abs(velocity) < 10 || distanceTravelled < 10 ? 0 : direction;
-      let newIndex = next + modifier;
+      const unwrappedIndex = next + modifier;
+      let newIndex = unwrappedIndex;
 
       if (this.infinite) {
         if (newIndex < 0) newIndex = slides.length - 1;
@@ -632,6 +633,51 @@ export class Slideshow extends Component {
       const currentIndex = this.current;
 
       if (!newSlide) throw new Error(`Slide not found at index ${newIndex}`);
+
+      const isWrapping = this.infinite && (unwrappedIndex < 0 || unwrappedIndex > slides.length - 1);
+
+      if (isWrapping && !prefersReducedMotion()) {
+        const referenceSlide = slides[next];
+        if (referenceSlide && referenceSlide !== newSlide) {
+          const placeholder = document.createElement('slideshow-slide');
+          newSlide.before(placeholder);
+
+          if (direction < 0) {
+            referenceSlide.before(newSlide);
+            if (next === 0) this.#scroll.to(referenceSlide, { instant: true });
+          } else {
+            referenceSlide.after(newSlide);
+          }
+
+          this.#scroll.to(newSlide);
+
+          this.removeAttribute('dragging');
+          this.releasePointerCapture(event.pointerId);
+          this.#centerSelectedThumbnail(newIndex);
+          this.dispatchEvent(
+            new SlideshowSelectEvent({
+              index: newIndex,
+              previousIndex: currentIndex,
+              userInitiated: true,
+              trigger: 'drag',
+              slide: newSlide,
+              id: newSlide.getAttribute('slide-id'),
+            })
+          );
+          this.current = newIndex;
+
+          queueMicrotask(async () => {
+            await this.#scroll.finished;
+            placeholder.replaceWith(newSlide);
+            this.#scroll.to(newSlide, { instant: true });
+            if (!this.#dragging) {
+              this.#scroll.snap = true;
+              this.resume();
+            }
+          });
+          return;
+        }
+      }
 
       this.#scroll.to(newSlide);
 
