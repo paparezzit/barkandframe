@@ -2326,5 +2326,26 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Newsletter popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "klaviyo_popup_enabled",
+        "label": "Show newsletter popup",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "klaviyo_popup_delay",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "s",
+        "label": "Delay before popup appears",
+        "default": 3
+      }
+    ]
   }
 ]
