@@ -273,7 +273,12 @@
     "section_dogstrust": {
       "type": "dogstrust",
       "name": "DogsTrust",
-      "settings": {}
+      "settings": {
+        "title": "Every portrait makes a difference",
+        "text": "Dogs are family. For every Bark & Frame portrait, we donate €2 to Dogs Trust. Supporting rescue dogs with care, protection, and a second chance at family. Because celebrating one dog should help another find theirs.",
+        "button_label": "DogsTrust",
+        "button_url": "https://www.dogstrust.org.uk/"
+      }
     },
     "section_reviews": {
       "type": "reviews",
