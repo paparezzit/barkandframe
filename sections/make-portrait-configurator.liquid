@@ -51,7 +51,7 @@
     framed:   {{ section.settings.canvas_framed_handle   | default: '' | json }}
   };
   window.MakePortraitFramedPosterHandle = {{ section.settings.framed_poster_handle | default: '' | json }};
-  {%- comment -%} Category preview variant IDs — canvas: largest Premium Walnut variant; paper: last variant {%- endcomment -%}
+  {%- comment -%} Category preview variant IDs -- canvas: largest Premium Walnut variant; paper: last variant {%- endcomment -%}
   window.MakePortraitCategoryPreviewVariants = {
     {%- assign _cpv_cf = all_products[section.settings.canvas_framed_handle] -%}
     {%- assign _cpv_fp = all_products[section.settings.framed_poster_handle] -%}
@@ -71,7 +71,7 @@
       "paper": {{ _cpv_pv.id }}
     {%- endif -%}
   };
-  {%- comment -%} Map of variantId → { styleId: { default: url, white_border: url } } from metafield custom.style_previews {%- endcomment -%}
+  {%- comment -%} Map of variantId -> { styleId: { default: url, white_border: url } } from metafield custom.style_previews {%- endcomment -%}
   window.MakePortraitStylePreviews = {
     {%- assign _sp_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _sp_handles = _sp_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
@@ -100,10 +100,32 @@
       {%- endfor -%}
     {%- endif -%}
   };
+  window.MakePortraitAvailability = {
+    {%- assign _av_handles = '' -%}
+    {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _av_handles = _av_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
+    {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _av_handles = _av_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
+    {%- if section.settings.framed_poster_handle   != blank -%}{%- assign _av_handles = _av_handles | append: section.settings.framed_poster_handle   | append: ',' -%}{%- endif -%}
+    {%- assign _av_handle_list = _av_handles | split: ',' -%}
+    {%- for _av_h in _av_handle_list -%}
+      {%- unless _av_h == blank -%}
+        {%- assign _av_p = all_products[_av_h] -%}
+        {%- for _av_v in _av_p.variants -%}
+          {{ _av_v.id }}: {{ _av_v.metafields.custom.availability_status.value | default: 'in_stock' | json }},
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- if products_collection != blank -%}
+      {%- for _av_cp in products_collection.products -%}
+        {%- for _av_cv in _av_cp.variants -%}
+          {{ _av_cv.id }}: {{ _av_cv.metafields.custom.availability_status.value | default: 'in_stock' | json }},
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
+  };
   window.MakePortraitExtraPetUSD    = {{ section.settings.extra_pet_price   | default: 9 }};
   window.MakePortraitPetNameUSD     = {{ section.settings.pet_name_price    | default: 5 }};
 
-  {%- comment -%} Map of variantId → "WxH" minimum resolution string from metafield custom.min_resolution {%- endcomment -%}
+  {%- comment -%} Map of variantId -> "WxH" minimum resolution string from metafield custom.min_resolution {%- endcomment -%}
   window.MakePortraitMinResolutions = {
     {%- assign _mp_res_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_res_handles = _mp_res_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
@@ -131,7 +153,7 @@
       {%- endfor -%}
     {%- endif -%}
   };
-  {%- comment -%} Map of variantId → printful_variant_id parsed from SKU (format: PREFIX_PRINTFULID) {%- endcomment -%}
+  {%- comment -%} Map of variantId -> printful_variant_id parsed from SKU (format: PREFIX_PRINTFULID) {%- endcomment -%}
   window.MakePortraitPrintfulVariants = {
     {%- assign _mp_pv_handles = '' -%}
     {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
@@ -164,7 +186,7 @@
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
   window.MakePortraitPrintsBaseEUR  = {{ _prints_block.settings.base_price  | default: 30 }};
   window.MakePortraitPrintsExtraEUR = {{ _prints_block.settings.extra_price | default: 20 }};
-  {%- comment -%} Map of "{opt-slug}-{value-slug}" → asset_url for option images in step 3 {%- endcomment -%}
+  {%- comment -%} Map of "{opt-slug}-{value-slug}" -> asset_url for option images in step 3 {%- endcomment -%}
   {%- assign _mp_img_handles = '' -%}
   {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
   {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_img_handles = _mp_img_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
@@ -202,9 +224,9 @@
 <div class="make-portrait section section--page-width" id="make-portrait-section">
   <div class="make-portrait__layout">
 
-    {%- comment -%}————————————————————————————————————————
-      LEFT PANEL – Preview only
-    ————————————————————————————————————————{%- endcomment -%}
+    {%- comment -%}--------------------------------------------------------------------------------
+      LEFT PANEL - Preview only
+    --------------------------------------------------------------------------------{%- endcomment -%}
     <div class="make-portrait__left">
 
       <div class="make-portrait__preview-wrap">
@@ -219,7 +241,7 @@
 
         <div class="make-portrait__preview-style-name" id="mp-preview-style-name"></div>
 
-        {%- comment -%} Artist badge – visible on step 1 {%- endcomment -%}
+        {%- comment -%} Artist badge - visible on step 1 {%- endcomment -%}
         <div class="make-portrait_artist-badge" id="mp-artist-badge">
           <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
           <div class="artist-badge__text">
@@ -228,16 +250,16 @@
           </div>
         </div>
 
-        {%- comment -%} Product label – visible on step 2+ {%- endcomment -%}
+        {%- comment -%} Product label - visible on step 2+ {%- endcomment -%}
         <div class="make-portrait__product-label" id="mp-product-label" hidden></div>
 
       </div>
 
     </div>
 
-    {%- comment -%}————————————————————————————————————————
-      RIGHT PANEL – Configurator (sticky)
-    ————————————————————————————————————————{%- endcomment -%}
+    {%- comment -%}--------------------------------------------------------------------------------
+      RIGHT PANEL - Configurator (sticky)
+    --------------------------------------------------------------------------------{%- endcomment -%}
     <div class="make-portrait__right">
 
       {%- comment -%} Step indicator {%- endcomment -%}
@@ -251,7 +273,7 @@
         <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order">Order</button>
       </nav>
 
-      {%- comment -%}——— STEP 1: Choose Style ———{%- endcomment -%}
+      {%- comment -%}------ STEP 1: Choose Style ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="1">
         <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
 
@@ -289,7 +311,7 @@
 
       </div>
 
-      {%- comment -%}——— STEP 2: Choose Product ———{%- endcomment -%}
+      {%- comment -%}------ STEP 2: Choose Product ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="2" hidden>
         <h2 class="make-portrait__step-title">Pick a format</h2>
 
@@ -383,7 +405,7 @@
 
       </div>
 
-      {%- comment -%}——— STEP 3: Choose Options ———{%- endcomment -%}
+      {%- comment -%}------ STEP 3: Choose Options ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="3" hidden>
         <h2 class="make-portrait__step-title">Now the details</h2>
 
@@ -445,7 +467,7 @@
 
       </div>
 
-      {%- comment -%}——— STEP 4: Upload Photo ———{%- endcomment -%}
+      {%- comment -%}------ STEP 4: Upload Photo ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="4" hidden>
         <h2 class="make-portrait__step-title">Upload your dog's photo</h2>
 
@@ -668,6 +690,14 @@
         </div>
       </div>
 
+      <div class="make-portrait__resume-backdrop" id="mp-oos-backdrop" hidden></div>
+      <div class="make-portrait__resume-banner" id="mp-oos-banner" hidden>
+        <p class="make-portrait__resume-banner__text">This product is currently out of stock. We&#x2019;re not accepting new orders at this time.</p>
+        <div class="make-portrait__resume-banner__actions">
+          <button class="button button--secondary" id="mp-oos-ok" type="button">OK</button>
+        </div>
+      </div>
+
       <div class="make-portrait__resume-backdrop" id="mp-quality-backdrop" hidden></div>
       <div class="make-portrait__resume-banner" id="mp-quality-banner" hidden>
         <p class="make-portrait__resume-banner__text">Your photo resolution may be too low for the best print quality.</p>
@@ -698,9 +728,9 @@
       <button class="button make-portrait__cta" id="mp-cta-order" hidden>Order portrait</button>
       <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step3" hidden>Change details</button>
 
-      <p class="make-portrait__availability">
+      <p class="make-portrait__availability" id="mp-availability">
         <span class="make-portrait__availability__indicator"></span>
-        Our artists are available
+        <span id="mp-availability-label">Our artists are available</span>
       </p>
       
       <p class="make-portrait__delivery-note">
@@ -715,7 +745,7 @@
 
     
 
-    {%- comment -%} Tabs – third grid child, spans below preview on desktop {%- endcomment -%}
+    {%- comment -%} Tabs - third grid child, spans below preview on desktop {%- endcomment -%}
     <div class="make-portrait__tabs">
       <nav class="make-portrait__tab-nav" role="tablist">
         <button class="tab-nav__btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
@@ -976,14 +1006,14 @@
   color: var(--brown);
 }
 
-/* ——— Layout ——— */
+/* ------ Layout ------ */
 .make-portrait__layout {
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
-/* ——— Left Panel ——— */
+/* ------ Left Panel ------ */
 .make-portrait__left {
   display: flex;
   flex-direction: column;
@@ -1076,7 +1106,7 @@
   font-size: 11px;
 }
 
-/* ——— Tabs ——— */
+/* ------ Tabs ------ */
 .make-portrait__tabs {
   width: 100%;
 }
@@ -1125,7 +1155,7 @@
   display: none;
 }
 
-/* ——— Tab: Overview ——— */
+/* ------ Tab: Overview ------ */
 .tab-overview img {
   margin-bottom: 60px;
 }
@@ -1219,7 +1249,7 @@
   white-space: nowrap;
 }
 
-/* ——— Tab: Product ——— */
+/* ------ Tab: Product ------ */
 .tab-accordion__summary {
   display: flex;
   justify-content: space-between;
@@ -1430,7 +1460,7 @@
   vertical-align: top;
 }
 
-/* ——— Tab: Limited ——— */
+/* ------ Tab: Limited ------ */
 .tab-limited {
   display: flex;
   flex-direction: column;
@@ -1449,7 +1479,7 @@
   margin: 0;
 }
 
-/* ——— Right Panel ——— */
+/* ------ Right Panel ------ */
 .make-portrait__right {
   display: flex;
   flex-direction: column;
@@ -1498,7 +1528,7 @@
   }
 }
 
-/* ——— Step common ——— */
+/* ------ Step common ------ */
 .make-portrait__step-title {
   font-size: 36px;
   line-height: 1.2;
@@ -1508,7 +1538,7 @@
 }
 
 
-/* ——— Style picker ——— */
+/* ------ Style picker ------ */
 .style-picker {
   display: flex;
   flex-wrap: wrap;
@@ -1654,7 +1684,7 @@
   color: var(--brown);
 }
 
-/* ——— Product picker ——— */
+/* ------ Product picker ------ */
 .product-picker {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1769,7 +1799,7 @@
   border-color: var(--green);
 }
 
-/* ——— Options ——— */
+/* ------ Options ------ */
 .make-portrait__option-group {
   margin-bottom: 40px;
 }
@@ -1969,7 +1999,7 @@
   padding: 16px 0;
 }
 
-/* ——— Photo upload ——— */
+/* ------ Photo upload ------ */
 .photo-upload {
   margin-bottom: 16px;
 }
@@ -2225,7 +2255,7 @@
   }
 }
 
-/* ——— Add prints ——— */
+/* ------ Add prints ------ */
 .addon-item--prints {
   display: flex;
   flex-direction: column;
@@ -2343,7 +2373,7 @@
   opacity: 0.7;
 }
 
-/* ——— Add-ons ——— */
+/* ------ Add-ons ------ */
 .make-portrait__addons {
   margin-bottom: 60px;
 }
@@ -2411,7 +2441,7 @@
   }
 }
 
-/* ——— Donation card ——— */
+/* ------ Donation card ------ */
 .donation-card__inner {
   display: flex;
   gap: 0;
@@ -2506,7 +2536,7 @@
   opacity: 0.5;
 }
 
-/* ——— Subtotal ——— */
+/* ------ Subtotal ------ */
 .make-portrait__subtotal {
   margin: 0 0 20px;
   background-color: var(--cream);
@@ -2560,6 +2590,14 @@
   border-radius: 50%;
   background-color: #2DCA7C;
   display: inline-block;
+}
+
+.make-portrait__availability--out_of_stock .make-portrait__availability__indicator {
+  background-color: #E53935;
+}
+
+.make-portrait__availability--low_stock .make-portrait__availability__indicator {
+  background-color: #F4A435;
 }
 
 .make-portrait__delivery-note {
@@ -2616,7 +2654,7 @@
   margin: 0;
 }
 
-/* ——— CTA button ——— */
+/* ------ CTA button ------ */
 .make-portrait__cta {
   width: 100%;
 }
@@ -2687,7 +2725,7 @@
   margin: 0;
 }
 
-/* ——— Reviews grid ——— */
+/* ------ Reviews grid ------ */
 .mp-reviews{
   text-align: left;
   border-top: 2px solid var(--cream);
@@ -2898,9 +2936,9 @@
 
 (function () {
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      State
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   var state = {
     step: 1,
     styleId: null,
@@ -2942,9 +2980,9 @@
   var PRINTS_BASE_PRICE  = PRINTS_BASE_EUR  * 100;
   var PRINTS_EXTRA_PRICE = PRINTS_EXTRA_EUR * 100;
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Utilities
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function formatMoney(cents) {
     var format = window.MakePortraitMoneyFormat || '${{amount}}';
     var amount = Math.round(cents) / 100;
@@ -2969,9 +3007,9 @@
     return document.getElementById(selector);
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Delivery dates
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function updateDeliveryDates() {
     var date = getDeliveryDate();
     ['mp-delivery'].forEach(function (id) {
@@ -2980,9 +3018,9 @@
     });
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Subtotal
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function getBasePrice() {
     if (state.variant && state.variant.price) {
       return state.variant.price; // already in cents
@@ -3019,7 +3057,7 @@
 
   function updateSubtotals() {
     var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice();
-    var formatted = total > 0 ? formatMoney(total) : '—';
+    var formatted = total > 0 ? formatMoney(total) : '\u2014';
     var priceEl = $('mp-subtotal-price');
     if (priceEl) priceEl.textContent = formatted;
     var prefix = $('mp-subtotal-prefix');
@@ -3029,9 +3067,9 @@
     saveDraft();
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Step navigation
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function goToStep(step) {
     document.querySelectorAll('.make-portrait__step').forEach(function (el) {
       el.hidden = parseInt(el.dataset.step, 10) !== step;
@@ -3087,6 +3125,27 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  var MP_AVAILABILITY_LABELS = {
+    in_stock:    'Our artists are available',
+    out_of_stock: 'Our artists are not available',
+    low_stock:   'Our artists are almost fully occupied'
+  };
+
+  function updateAvailability() {
+    var el = $('mp-availability');
+    if (!el) return;
+    var avMap = window.MakePortraitAvailability || {};
+    var status = (state.variantId && avMap[state.variantId]) || 'in_stock';
+    el.className = 'make-portrait__availability make-portrait__availability--' + status;
+    var labelEl = $('mp-availability-label');
+    if (labelEl) labelEl.textContent = MP_AVAILABILITY_LABELS[status] || MP_AVAILABILITY_LABELS.in_stock;
+    var isOos = (status === 'out_of_stock');
+    var step3btn = $('mp-cta-step3');
+    var orderBtn = $('mp-cta-order');
+    if (step3btn) step3btn.classList.toggle('make-portrait__cta--upload-required', isOos);
+    if (orderBtn) orderBtn.classList.toggle('make-portrait__cta--upload-required', isOos);
+  }
+
   function updatePreviewImage() {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
@@ -3111,9 +3170,9 @@
     if (state.initialized) scrollToPreview();
   }
 
-  /* ————————————————————————————————————————
-     Step 1 – Style
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 1 - Style
+  -------------------------------------------------------------------------------- */
   function selectStyle(styleId, openTab) {
     state.styleId = styleId;
     state.style = STYLES.filter(function (s) { return s.id === styleId; })[0] || null;
@@ -3166,9 +3225,9 @@
     updateSubtotals();
   }
 
-  /* ————————————————————————————————————————
-     Step 2 – Product
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 2 - Product
+  -------------------------------------------------------------------------------- */
   function selectProduct(handle) {
     state.productCategory = null;
     state.canvasFrameChoice = null;
@@ -3232,6 +3291,7 @@
         if (product.variants && product.variants.length) {
           state.variantId = product.variants[0].id;
           state.variant = product.variants[0];
+          updateAvailability();
         }
         var ctaStep2 = $('mp-cta-step2');
         if (ctaStep2) ctaStep2.disabled = false;
@@ -3258,9 +3318,9 @@
     updateSubtotals();
   }
 
-  /* ————————————————————————————————————————
-     Step 2 – Canvas category selection
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 2 - Canvas category selection
+  -------------------------------------------------------------------------------- */
   function selectCategory(category) {
     state.productCategory = category;
     state.canvasFrameChoice = null;
@@ -3303,9 +3363,9 @@
     updateSubtotals();
   }
 
-  /* ————————————————————————————————————————
-     Step 3 – Canvas frame toggle
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 3 - Canvas frame toggle
+  -------------------------------------------------------------------------------- */
   function resetOptionsLayout() {
     var c2 = $('mp-options-container-2');
     var borderGroup  = $('mp-border-group');
@@ -3317,16 +3377,16 @@
 
   function buildCanvasFrameUI() { buildFrameUI(CANVAS_HANDLES); }
 
-  /* ————————————————————————————————————————
-     Step 3 – Canvas frame toggle
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 3 - Canvas frame toggle
+  -------------------------------------------------------------------------------- */
   function buildFrameUI(handles) {
     var container = $('mp-options-container');
     var loading = $('mp-options-loading');
     if (!container) return;
 
     resetOptionsLayout();
-    container.innerHTML = '<p class="make-portrait__loading">Loading…</p>';
+    container.innerHTML = '<p class="make-portrait__loading">Loading\u2026</p>';
     if (loading) loading.remove();
 
     var borderGroup = $('mp-border-group');
@@ -3440,8 +3500,8 @@
     var map = window.MakePortraitOptionImages || {};
     function slug(s) {
       return String(s).toLowerCase()
-        .replace(/×/g, 'x')
-        .replace(/[″"']/g, '')
+        .replace(/\u00D7/g, 'x')
+        .replace(/[\u2033"']/g, '')
         .replace(/ /g, '-');
     }
     var key = slug(optName) + '-' + slug(value);
@@ -3449,7 +3509,7 @@
   }
 
   function getSizeDimensions(value) {
-    var s = String(value).replace(/×/g, 'x').replace(/[″"']/g, '').trim();
+    var s = String(value).replace(/\u00D7/g, 'x').replace(/[\u2033"']/g, '').trim();
     var isCm = /cm/i.test(s);
     var parts = s.split('x');
     if (parts.length !== 2) return null;
@@ -3458,11 +3518,11 @@
     if (isNaN(a) || isNaN(b)) return null;
     var inchStr, cmStr;
     if (isCm) {
-      cmStr = Math.round(a) + '×' + Math.round(b) + ' cm';
-      inchStr = Math.round(a / 2.54) + '×' + Math.round(b / 2.54) + '″';
+      cmStr = Math.round(a) + '\u00D7' + Math.round(b) + ' cm';
+      inchStr = Math.round(a / 2.54) + '\u00D7' + Math.round(b / 2.54) + '\u2033';
     } else {
-      inchStr = Math.round(a) + '×' + Math.round(b) + '″';
-      cmStr = Math.round(a * 2.54) + '×' + Math.round(b * 2.54) + ' cm';
+      inchStr = Math.round(a) + '\u00D7' + Math.round(b) + '\u2033';
+      cmStr = Math.round(a * 2.54) + '\u00D7' + Math.round(b * 2.54) + ' cm';
     }
     return { inches: inchStr, cm: cmStr };
   }
@@ -3690,9 +3750,9 @@
     container.appendChild(group);
   }
 
-  /* ————————————————————————————————————————
-     Step 3 – Options
-  ———————————————————————————————————————— */
+  /* --------------------------------------------------------------------------------
+     Step 3 - Options
+  -------------------------------------------------------------------------------- */
   function buildOptionsUI(product) {
     var container = $('mp-options-container');
     var loading = $('mp-options-loading');
@@ -3725,6 +3785,7 @@
       if (product.variants && product.variants.length) {
         state.variantId = product.variants[0].id;
         state.variant = product.variants[0];
+        updateAvailability();
       }
       return;
     }
@@ -3745,7 +3806,7 @@
     // 1. Size
     sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, {}); });
 
-    // 2. Framing – always "Framed", display only (no choice)
+    // 2. Framing - always "Framed", display only (no choice)
     var framingGroup = document.createElement('div');
     framingGroup.className = 'make-portrait__option-group';
     var framingLabel = document.createElement('p');
@@ -3767,8 +3828,8 @@
     framingGroup.appendChild(framingGrid);
     container.appendChild(framingGroup);
 
-    // 3. Border (static built-in – shown via resetOptionsLayout)
-    // 4. Dogs Name (static built-in – shown via resetOptionsLayout)
+    // 3. Border (static built-in - shown via resetOptionsLayout)
+    // 4. Dogs Name (static built-in - shown via resetOptionsLayout)
 
     // 5. Frame Color in container-2
     colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, {}); });
@@ -3816,14 +3877,15 @@
       }
 
       updatePreviewImage();
+      updateAvailability();
     }
 
     updateSubtotals();
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Order summary (step 4)
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function getSelectedLabel(gridId) {
     var btn = document.querySelector('#' + gridId + ' .option-btn.selected');
     return btn ? btn.textContent.trim() : '';
@@ -3856,7 +3918,7 @@
     if (state.step >= 3) {
       var details = [];
 
-      // Size first — cm + inches with reduced opacity
+      // Size first -- cm + inches with reduced opacity
       var sizeValue = null;
       if (state.product) {
         var sizeOpts = normalizeOptions(state.product.options)
@@ -3910,9 +3972,9 @@
     }
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Option button groups (border, background, pet count)
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function initOptionGroup(gridId, stateKey) {
     var grid = $(gridId);
     if (!grid) return;
@@ -3933,9 +3995,9 @@
     });
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      File upload
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function updateQualityIndicator() {
     var alertEl = $('mp-resolution-alert');
     var alertText = $('mp-resolution-alert-text');
@@ -3966,7 +4028,7 @@
     state.lowResPhoto = !allPass;
     alertEl.hidden = allPass;
     if (!allPass && alertText) {
-      alertText.textContent = 'Uploaded photo resolution is too low. To achieve optimal print quality, use a photo with resolution at least ' + minW + ' × ' + minH + ' px.';
+      alertText.textContent = 'Uploaded photo resolution is too low. To achieve optimal print quality, use a photo with resolution at least ' + minW + ' \u00D7 ' + minH + ' px.';
     }
   }
 
@@ -3994,9 +4056,9 @@
     btn.classList.toggle('make-portrait__cta--upload-required', !isReady);
 
     if (state.pendingUploads > 0) {
-      btn.textContent = 'Uploading photo…';
+      btn.textContent = 'Uploading photo\u2026';
     } else if (state.files.length > 0 && state.photoUrls.length === 0) {
-      btn.textContent = 'Upload failed — retry photo';
+      btn.textContent = 'Upload failed \u2014 retry photo';
     } else {
       btn.textContent = 'Order portrait';
     }
@@ -4071,6 +4133,23 @@
     if (backdrop) backdrop.addEventListener('click', close);
   }
 
+  function showOutOfStockPopup() {
+    var backdrop = $('mp-oos-backdrop');
+    var banner   = $('mp-oos-banner');
+    var okBtn    = $('mp-oos-ok');
+    if (!banner) return;
+    if (backdrop) backdrop.hidden = false;
+    banner.hidden = false;
+    function close() {
+      if (backdrop) backdrop.hidden = true;
+      banner.hidden = true;
+      okBtn.removeEventListener('click', close);
+      if (backdrop) backdrop.removeEventListener('click', close);
+    }
+    okBtn.addEventListener('click', close);
+    if (backdrop) backdrop.addEventListener('click', close);
+  }
+
   function showQualityPopup(minResStr, onConfirm, onCancel) {
     var backdrop = $('mp-quality-backdrop');
     var banner   = $('mp-quality-banner');
@@ -4081,7 +4160,7 @@
 
     if (detail && minResStr) {
       var rp = minResStr.split('x');
-      detail.textContent = 'For best results, use a photo at least ' + rp[0] + ' × ' + rp[1] + ' px.';
+      detail.textContent = 'For best results, use a photo at least ' + rp[0] + ' \u00D7 ' + rp[1] + ' px.';
     }
     if (backdrop) backdrop.hidden = false;
     banner.hidden = false;
@@ -4110,7 +4189,7 @@
         showUploadError('You can only upload ' + state.petCount + ' photo' + (state.petCount > 1 ? 's' : '') + ' for ' + state.petCount + ' pet' + (state.petCount > 1 ? 's' : '') + '.');
         return;
       }
-      // HEIC files on iOS/macOS sometimes report empty or generic type — allow by extension
+      // HEIC files on iOS/macOS sometimes report empty or generic type -- allow by extension
       var ext = file.name.split('.').pop().toLowerCase();
       var typeOk = ALLOWED_TYPES.includes(file.type) || ext === 'heic' || ext === 'heif';
       if (!typeOk) {
@@ -4137,7 +4216,7 @@
         var removeBtn = document.createElement('button');
         removeBtn.className = 'photo-preview__remove';
         removeBtn.type = 'button';
-        removeBtn.textContent = '×';
+        removeBtn.textContent = '\u00D7';
         removeBtn.setAttribute('aria-label', 'Remove photo');
         removeBtn.addEventListener('click', function () {
           var idx = state.files.indexOf(file);
@@ -4211,14 +4290,18 @@
     });
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Add to cart
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function addToCart() {
     if (!state.variantId) {
       showError('Please complete all options before ordering.');
       return;
     }
+
+    var _avMap = window.MakePortraitAvailability || {};
+    var _avStatus = (state.variantId && _avMap[state.variantId]) || 'in_stock';
+    if (_avStatus === 'out_of_stock') { showOutOfStockPopup(); return; }
 
     if (state.photoUrls.length < state.petCount) {
       var uploadArea = $('mp-upload-area');
@@ -4228,7 +4311,7 @@
     }
 
     var btn = $('mp-cta-order');
-    if (btn) { btn.disabled = true; btn.textContent = 'Adding to cart…'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Adding to cart\u2026'; }
     hideError();
 
     var detailParts = [];
@@ -4261,7 +4344,7 @@
       properties['_preview_image'] = state.previewImageUrl;
     }
 
-    // Total price in local-currency cents — the Cart Transform function reads
+    // Total price in local-currency cents -- the Cart Transform function reads
     // this and sets the line item price to exactly this amount.
     properties['_custom_price'] = String(Math.round(
       getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice()
@@ -4341,9 +4424,9 @@
     if (el) el.hidden = true;
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Tabs (left panel)
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function switchTab(tabId) {
     document.querySelectorAll('.tab-nav__btn').forEach(function (b) {
       var active = b.dataset.tab === tabId;
@@ -4363,9 +4446,9 @@
     });
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Draft save / restore
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   var DRAFT_KEY    = 'mp_draft';
   var DRAFT_EXPIRY = 30 * 24 * 60 * 60 * 1000;
   var _pendingRestore = null;
@@ -4460,13 +4543,14 @@
     }
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Init
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function init() {
     // Move fixed popups to document.body so they escape any ancestor stacking context
     ['mp-resume-backdrop', 'mp-resume-banner',
      'mp-upload-required-backdrop', 'mp-upload-required-banner',
+     'mp-oos-backdrop', 'mp-oos-banner',
      'mp-quality-backdrop', 'mp-quality-banner'
     ].forEach(function (id) {
       var el = document.getElementById(id);
@@ -4588,6 +4672,9 @@
     var ctaStep3 = $('mp-cta-step3');
     if (ctaStep3) {
       ctaStep3.addEventListener('click', function () {
+        var _avMap = window.MakePortraitAvailability || {};
+        var _avStatus = (state.variantId && _avMap[state.variantId]) || 'in_stock';
+        if (_avStatus === 'out_of_stock') { showOutOfStockPopup(); return; }
         state.petName = ($('mp-pet-name') || {}).value || '';
         goToStep(4);
       });
@@ -4734,7 +4821,7 @@
       });
     }
 
-    // Add prints (checkbox → expand grid)
+    // Add prints (checkbox -> expand grid)
     var printsCheck = $('mp-prints-check');
     var printOptions = $('mp-prints-options');
 
@@ -4825,7 +4912,7 @@
       });
     }
 
-    // Tab product accordions — exclusive (opening one closes others)
+    // Tab product accordions -- exclusive (opening one closes others)
     var productAccordions = document.querySelectorAll('#tab-product-accordions .tab-accordion');
     productAccordions.forEach(function (details) {
       details.addEventListener('toggle', function () {
@@ -4840,9 +4927,9 @@
     state.initialized = true;
   }
 
-  /* ————————————————————————————————————————
+  /* --------------------------------------------------------------------------------
      Smart sticky right column
-  ———————————————————————————————————————— */
+  -------------------------------------------------------------------------------- */
   function initSmartSticky() {
     var el = document.querySelector('.make-portrait__right');
     if (!el) return;
@@ -4865,10 +4952,10 @@
       var viewportHeight = window.innerHeight;
 
       if (elHeight <= viewportHeight - TOP_OFFSET) {
-        // Content fits — stick to top as normal
+        // Content fits -- stick to top as normal
         currentTop = TOP_OFFSET;
       } else {
-        // Content taller than viewport — clamp between top and bottom edge
+        // Content taller than viewport -- clamp between top and bottom edge
         var minTop = viewportHeight - elHeight;
         currentTop = Math.min(TOP_OFFSET, Math.max(minTop, currentTop - delta));
       }
@@ -4917,7 +5004,7 @@
     {
       "type": "image_picker",
       "id": "poster_picker_image",
-      "label": "Poster – obrázek v kroku 2"
+      "label": "Poster - obrazek v kroku 2"
     },
     {
       "type": "header",
@@ -4936,7 +5023,7 @@
     {
       "type": "image_picker",
       "id": "canvas_picker_image",
-      "label": "Canvas – obrázek v kroku 2"
+      "label": "Canvas - obrazek v kroku 2"
     },
     {
       "type": "header",
@@ -4952,7 +5039,7 @@
       "type": "text",
       "id": "cloudinary_upload_preset",
       "label": "Cloudinary upload preset",
-      "info": "Create an unsigned upload preset in Cloudinary Settings → Upload"
+      "info": "Create an unsigned upload preset in Cloudinary Settings -> Upload"
     },
     {
       "type": "header",

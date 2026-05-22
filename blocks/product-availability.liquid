@@ -1,6 +1,16 @@
-<p class="product-availability">
+{%- liquid
+  assign _avail_status = product.selected_or_first_available_variant.metafields.custom.availability_status.value | default: 'in_stock'
+-%}
+
+<p class="product-availability product-availability--{{ _avail_status }}" id="product-availability-indicator">
   <span class="product-availability__indicator"></span>
-  In stock
+  <span class="product-availability__label">
+    {%- case _avail_status -%}
+      {%- when 'out_of_stock' -%}Out of stock
+      {%- when 'low_stock' -%}Last few products available
+      {%- else -%}In stock
+    {%- endcase -%}
+  </span>
 </p>
 
 <p class="product-availability__delivery">
@@ -27,6 +37,14 @@
   flex-shrink: 0;
 }
 
+.product-availability--out_of_stock .product-availability__indicator {
+  background-color: #E53935;
+}
+
+.product-availability--low_stock .product-availability__indicator {
+  background-color: #F4A435;
+}
+
 .product-availability__delivery {
   display: flex;
   align-items: center;
@@ -42,18 +60,152 @@
 .product-availability__delivery-date {
   font-weight: 700;
 }
+
+.product-atc--oos {
+  opacity: 0.72;
+  position: relative;
+}
+.product-atc--oos::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  cursor: not-allowed;
+  border-radius: inherit;
+}
+
+.product-oos-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 900;
+}
+.product-oos-backdrop[hidden] { display: none; }
+
+.product-oos-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 901;
+  background: var(--brown);
+  color: var(--cream);
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: min(420px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.32);
+}
+.product-oos-banner[hidden] { display: none; }
+
+.product-oos-banner__text {
+  font-size: var(--font-size--md);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.product-oos-banner__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.product-oos-banner .button--secondary {
+  background: var(--cream);
+  color: var(--brown);
+  border-color: var(--cream);
+}
+.product-oos-banner .button--secondary:hover {
+  background: var(--purple);
+}
 {% endstylesheet %}
 
 {% javascript %}
 (function () {
+  // Delivery date
   var dateEl = document.querySelector('.product-availability__delivery-date');
-  if (!dateEl) return;
-  var d = new Date();
-  d.setDate(d.getDate() + 7);
-  var dd = String(d.getDate()).padStart(2, '0');
-  var mm = String(d.getMonth() + 1).padStart(2, '0');
-  var yyyy = d.getFullYear();
-  dateEl.textContent = dd + '/' + mm + '/' + yyyy;
+  if (dateEl) {
+    var d = new Date();
+    d.setDate(d.getDate() + 7);
+    dateEl.textContent = String(d.getDate()).padStart(2, '0') + '/' +
+      String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+  }
+
+  var el = document.getElementById('product-availability-indicator');
+  if (!el) return;
+
+  var section = el.closest('.shopify-section, dialog');
+  if (!section) return;
+
+  // Create OOS popup once per page and append to body (escapes stacking contexts)
+  if (!document.getElementById('product-oos-backdrop')) {
+    var _bd = document.createElement('div');
+    _bd.className = 'product-oos-backdrop';
+    _bd.id = 'product-oos-backdrop';
+    _bd.hidden = true;
+    var _bn = document.createElement('div');
+    _bn.className = 'product-oos-banner';
+    _bn.id = 'product-oos-banner';
+    _bn.hidden = true;
+    _bn.innerHTML =
+      '<p class="product-oos-banner__text">This product is currently out of stock. We&#x27;re not accepting new orders at this time.</p>' +
+      '<div class="product-oos-banner__actions">' +
+      '<button class="button button--secondary" id="product-oos-ok" type="button">OK</button>' +
+      '</div>';
+    document.body.appendChild(_bd);
+    document.body.appendChild(_bn);
+  }
+
+  function showOosPopup() {
+    var bd = document.getElementById('product-oos-backdrop');
+    var bn = document.getElementById('product-oos-banner');
+    var ok = document.getElementById('product-oos-ok');
+    if (!bn || !ok) return;
+    if (bd) bd.hidden = false;
+    bn.hidden = false;
+    function close() {
+      if (bd) bd.hidden = true;
+      bn.hidden = true;
+      ok.removeEventListener('click', close);
+      if (bd) bd.removeEventListener('click', close);
+    }
+    ok.addEventListener('click', close);
+    if (bd) bd.addEventListener('click', close);
+  }
+
+  function applyOosState(status) {
+    var atcBtn = section.querySelector('button[name="add"]');
+    if (!atcBtn) return;
+    atcBtn.classList.toggle('product-atc--oos', status === 'out_of_stock');
+  }
+
+  // window capture fires before document capture (where the theme component system lives)
+  window.addEventListener('click', function (e) {
+    var atcBtn = section.querySelector('button[name="add"]');
+    if (!atcBtn || !atcBtn.classList.contains('product-atc--oos')) return;
+    if (e.target !== atcBtn && !atcBtn.contains(e.target)) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    showOosPopup();
+  }, true);
+
+  // Apply initial state
+  var initialMatch = el.className.match(/product-availability--(\S+)/);
+  applyOosState(initialMatch ? initialMatch[1] : 'in_stock');
+
+  section.addEventListener('variant:update', function (e) {
+    var newHtml = e.detail && e.detail.data && e.detail.data.html;
+    if (!newHtml) return;
+    var newEl = newHtml.querySelector('#product-availability-indicator');
+    if (!newEl) return;
+    el.className = newEl.className;
+    var oldLabel = el.querySelector('.product-availability__label');
+    var newLabel = newEl.querySelector('.product-availability__label');
+    if (oldLabel && newLabel) oldLabel.textContent = newLabel.textContent;
+    var statusMatch = newEl.className.match(/product-availability--(\S+)/);
+    applyOosState(statusMatch ? statusMatch[1] : 'in_stock');
+  });
 })();
 {% endjavascript %}
 

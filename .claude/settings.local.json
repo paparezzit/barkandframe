@@ -34,7 +34,11 @@
       "Bash(sort -t: -k3 -rn)",
       "Bash(grep -n \"document.addEventListener\\\\|DOMContentLoaded\\\\|window.addEventListener.*load\\\\|}\\)\\(\\);\\\\s*$\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(list\\(d['sections'].keys\\(\\)\\), indent=2\\)\\)\")",
-      "Bash(xargs cat -n)"
+      "Bash(xargs cat -n)",
+      "Bash(git stash *)",
+      "Bash(grep -n \"updateAvailability\\\\|function \\\\$\\\\b\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(grep -n \"\\\\bvar \\\\$\\\\b\\\\|\\\\$\\('\\\\|function \\\\$\\(\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(grep -n \"getElementById\\\\|var \\\\$ \" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
     ]
   }
 }
