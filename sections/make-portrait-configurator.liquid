@@ -703,7 +703,7 @@
         <p class="make-portrait__resume-banner__text">Your photo resolution may be too low for the best print quality.</p>
         <p id="mp-quality-banner-detail" class="make-portrait__resume-banner__detail"></p>
         <div class="make-portrait__resume-banner__actions">
-          <button class="button button--secondary" id="mp-quality-yes" type="button">Use anyway</button>
+          <button class="button button--secondary" id="mp-quality-yes" type="button">I agree to use photo with low resolution</button>
           <button class="button button--ghost" id="mp-quality-no" type="button">Remove photo</button>
         </div>
       </div>
@@ -3052,7 +3052,9 @@
     var isDream = state.style && state.style.name && state.style.name.toLowerCase() === 'dream';
     var isWhiteBorder = state.border === 'white-border';
     var isPaper = state.productHandle === (window.MakePortraitFramedPosterHandle || '');
-    group.hidden = isDream && !isWhiteBorder && isPaper;
+    var canvasHandles = window.MakePortraitCanvasHandles || {};
+    var isCanvas = state.productHandle === canvasHandles.unframed || state.productHandle === canvasHandles.framed;
+    group.hidden = isDream && (isCanvas || (!isWhiteBorder && isPaper));
   }
 
   function updateSubtotals() {
@@ -3090,6 +3092,10 @@
     if (artistBadge) artistBadge.hidden = step !== 1;
     if (productLabel) productLabel.hidden = true;
 
+    // Step 4: dim preview image; restore when leaving
+    var previewImg = $('mp-preview-img');
+    if (previewImg) previewImg.style.opacity = step === 4 ? '0.27' : '1';
+
     // Step 4: replace preview name with static upload info; sync order button state
     var previewStyleName = $('mp-preview-style-name');
     if (previewStyleName && step === 4) {
@@ -3117,7 +3123,6 @@
     var backBtn3 = $('mp-back-step3');
     if (backBtn3) backBtn3.hidden = step !== 4;
 
-    // Scroll to top of page on every step change
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -4014,7 +4019,7 @@
       return;
     }
 
-    var parts = minResStr.split('x');
+    var parts = minResStr.split(/x/i);
     var minW = parseInt(parts[0], 10);
     var minH = parseInt(parts[1], 10);
 
@@ -4159,7 +4164,7 @@
     if (!banner) { onConfirm(); return; }
 
     if (detail && minResStr) {
-      var rp = minResStr.split('x');
+      var rp = minResStr.split(/x/i);
       detail.textContent = 'For best results, use a photo at least ' + rp[0] + ' \u00D7 ' + rp[1] + ' px.';
     }
     if (backdrop) backdrop.hidden = false;
@@ -4235,14 +4240,6 @@
 
         previews.appendChild(preview);
 
-        // Mirror upload in preview area
-        var mainImg = $('mp-preview-img');
-        var prevMainSrc = mainImg ? mainImg.src : null;
-        if (mainImg) {
-          mainImg.style.opacity = '0';
-          mainImg.onload = function () { mainImg.style.opacity = '1'; };
-          mainImg.src = e.target.result;
-        }
 
         // Measure dimensions first; upload only after quality confirmation
         var dimImg = new Image();
@@ -4254,7 +4251,7 @@
           var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
           var qualityOk = true;
           if (minResStr) {
-            var rp = minResStr.split('x');
+            var rp = minResStr.split(/x/i);
             var minW = parseInt(rp[0], 10);
             var minH = parseInt(rp[1], 10);
             qualityOk = Math.max(dims.w, dims.h) >= Math.max(minW, minH) &&
@@ -4272,11 +4269,6 @@
                 if (idx > -1) state.files.splice(idx, 1);
                 state.fileDimensions.delete(file);
                 preview.remove();
-                if (mainImg && prevMainSrc) {
-                  mainImg.style.opacity = '0';
-                  mainImg.onload = function () { mainImg.style.opacity = '1'; };
-                  mainImg.src = prevMainSrc;
-                }
                 updateQualityIndicator();
                 updateUploadCounter();
                 updateOrderButton();

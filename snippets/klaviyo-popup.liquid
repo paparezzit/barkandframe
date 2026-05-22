@@ -330,12 +330,17 @@
   align-items: center;
   gap: 0.25rem;
   background: var(--purple);
-  transition: padding-left 0.2s ease;
   border-radius: 0 1000px 1000px 0;
   padding: 15px 20px;
+  transform: translateX(0);
+  transition: transform 0.4s ease, padding-left 0.2s ease;
 }
 
 .klav-sticky[hidden] { display: none; }
+
+.klav-sticky--out {
+  transform: translateX(calc(-100% - 2px));
+}
 
 .klav-sticky__open {
   
@@ -428,24 +433,39 @@
     el.hidden = false;
   }
 
+  function stickySlideOut() {
+    if (sticky.hidden) return;
+    sticky.classList.add('klav-sticky--out');
+  }
+
+  function stickySlideIn() {
+    sticky.classList.add('klav-sticky--out');
+    sticky.hidden = false;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        sticky.classList.remove('klav-sticky--out');
+      });
+    });
+  }
+
   function openPopup() {
     showStep(step1);
     popup.showModal();
-    sticky.hidden = true;
+    stickySlideOut();
   }
 
   function closePopup(newState) {
     popup.close();
     if (newState) setState(newState);
     if (newState !== 'subscribed' && newState !== 'hidden') {
-      sticky.hidden = false;
+      stickySlideIn();
     }
   }
 
   function init() {
     var state = getState();
     if (state === 'subscribed' || state === 'hidden') return;
-    if (state === 'dismissed') { sticky.hidden = false; return; }
+    if (state === 'dismissed') { stickySlideIn(); return; }
     setTimeout(openPopup, DELAY_MS);
   }
 
@@ -457,7 +477,7 @@
   // Escape key (browser default closes dialog, we just handle state)
   popup?.addEventListener('cancel', function () {
     setState('dismissed');
-    sticky.hidden = false;
+    stickySlideIn();
   });
 
   // Click outside dialog

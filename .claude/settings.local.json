@@ -38,7 +38,9 @@
       "Bash(git stash *)",
       "Bash(grep -n \"updateAvailability\\\\|function \\\\$\\\\b\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
       "Bash(grep -n \"\\\\bvar \\\\$\\\\b\\\\|\\\\$\\('\\\\|function \\\\$\\(\" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
-      "Bash(grep -n \"getElementById\\\\|var \\\\$ \" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)"
+      "Bash(grep -n \"getElementById\\\\|var \\\\$ \" /Users/martinres/Desktop/barkandframe/sections/make-portrait-configurator.liquid)",
+      "Bash(grep -E \"\\\\.\\(liquid|css|js\\)$\")",
+      "Bash(grep -n \"--hover-lift-amount\\\\|--hover-scale-amount\\\\|--hover-subtle-zoom-amount\" /Users/martinres/Desktop/barkandframe/assets/base.css)"
     ]
   }
 }
