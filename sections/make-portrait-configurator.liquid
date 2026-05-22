@@ -3093,8 +3093,11 @@
     var defaultVariantId = !variant && (window.MakePortraitCategoryPreviewVariants || {})['canvas'];
     var variantPreviews = variant ? (spMap[variant.id] || {}) : (defaultVariantId ? (spMap[defaultVariantId] || {}) : {});
     var styleBucket = variantPreviews[state.styleId] || {};
-    var borderKey = state.border === 'white-border' ? 'white_border' : 'default';
+    var hasName = !!(state.petName && state.petName.trim());
+    var borderBase = state.border === 'white-border' ? 'white_border' : 'default';
+    var borderKey = hasName ? borderBase + '_name' : borderBase;
     var url = styleBucket[borderKey]
+              || styleBucket[borderBase]
               || styleBucket['default']
               || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
               || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
@@ -4632,6 +4635,7 @@
         var feeEl = $('mp-pet-name-fee');
         if (feeEl) feeEl.hidden = !state.petName;
         updateSubtotals();
+        updatePreviewImage();
       });
     }
 
