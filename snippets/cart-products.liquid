@@ -317,10 +317,17 @@
                   headers="productTotal"
                 >
                   {%- liquid
-                    assign cp = item.properties['_custom_price'] | times: 1
-                    assign don = item.properties['_donation'] | times: 1
-                    if cp > 0
-                      assign line_price = cp | minus: don | times: item.quantity
+                    assign cp = item.properties['_custom_price_shop'] | times: 1
+                    if cp <= 0
+                      assign cp = item.properties['_custom_price'] | times: 1
+                    endif
+                    assign don = item.properties['_donation_shop'] | times: 1
+                    if don <= 0
+                      assign don = item.properties['_donation'] | times: 1
+                    endif
+                    if cp > 0 and don > 0
+                      assign product_price_share = cp | minus: don
+                      assign line_price = item.final_line_price | times: product_price_share | divided_by: cp
                     else
                       assign line_price = item.final_line_price
                     endif
@@ -344,9 +351,24 @@
             {%- assign total_donation = 0 -%}
             {%- assign donation_row_title = '' -%}
             {%- for item in cart.items -%}
-              {%- assign don = item.properties['_donation'] | times: 1 -%}
-              {%- if don > 0 -%}
-                {%- assign total_donation = total_donation | plus: don -%}
+              {%- liquid
+                assign cp = item.properties['_custom_price_shop'] | times: 1
+                if cp <= 0
+                  assign cp = item.properties['_custom_price'] | times: 1
+                endif
+                assign don = item.properties['_donation_shop'] | times: 1
+                if don <= 0
+                  assign don = item.properties['_donation'] | times: 1
+                endif
+                assign donation_value = 0
+                if don > 0 and cp > 0
+                  assign donation_value = item.final_line_price | times: don | divided_by: cp
+                elsif don > 0
+                  assign donation_value = don | times: item.quantity
+                endif
+              -%}
+              {%- if donation_value > 0 -%}
+                {%- assign total_donation = total_donation | plus: donation_value -%}
                 {%- assign donation_row_title = 'DogsTrust' -%}
               {%- endif -%}
             {%- endfor -%}
@@ -865,4 +887,3 @@
     }
   }
 {% endstylesheet %}
-

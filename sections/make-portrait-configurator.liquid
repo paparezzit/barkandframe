@@ -2805,6 +2805,88 @@
   margin: 0;
 }
 
+.make-portrait__resume-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 900;
+}
+
+.make-portrait__resume-backdrop[hidden] { display: none; }
+
+.make-portrait__resume-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 901;
+  background: var(--brown);
+  color: var(--cream);
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.32);
+}
+
+.make-portrait__resume-banner__text {
+  font-size: var(--font-size--md);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.make-portrait__resume-banner__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.make-portrait__resume-banner .button--secondary {
+  background: var(--cream);
+  color: var(--brown);
+  border-color: var(--cream);
+
+  &:hover{
+    background: var(--purple);
+  }
+}
+
+.make-portrait__resume-banner .button--ghost {
+  color: var(--beige);
+  border: 1px solid var(--beige);
+
+  &:hover{
+    color: var(--brown);
+  }
+}
+
+.make-portrait__resume-banner__detail {
+  font-size: var(--font-size--sm);
+  margin: 0;
+  opacity: 0.75;
+  line-height: 1.4;
+}
+
+.make-portrait__resume-banner[hidden] { display: none; }
+
+@media (max-width: 480px) {
+  .make-portrait__resume-banner {
+    padding: 24px 20px;
+  }
+
+  .make-portrait__resume-banner__actions {
+    flex-direction: column;
+  }
+
+  .make-portrait__resume-banner__actions .button {
+    width: 100%;
+  }
+}
+
 @media (min-width: 800px) {
   .make-portrait__layout {
     display: grid;
@@ -2820,65 +2902,6 @@
   .make-portrait__left  { grid-area: left; }
   .make-portrait__right { grid-area: right; position: sticky; top: 94px; padding-bottom: 40px;}
   .make-portrait__tabs  { grid-area: tabs; align-self: start; }
-
-  .make-portrait__resume-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 900;
-  }
-  .make-portrait__resume-backdrop[hidden] { display: none; }
-
-  .make-portrait__resume-banner {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 901;
-    background: var(--brown);
-    color: var(--cream);
-    border-radius: 16px;
-    padding: 32px 28px;
-    width: min(420px, 90vw);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.32);
-  }
-  .make-portrait__resume-banner__text {
-    font-size: var(--font-size--md);
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.4;
-  }
-  .make-portrait__resume-banner__actions {
-    display: flex;
-    gap: 10px;
-  }
-  .make-portrait__resume-banner .button--secondary {
-    background: var(--cream);
-    color: var(--brown);
-    border-color: var(--cream);
-
-    &:hover{
-      background: var(--purple);
-    }
-  }
-  .make-portrait__resume-banner .button--ghost {
-    color: var(--beige);
-    border: 1px solid var(--beige);
-
-    &:hover{
-      color: var(--brown);
-    }
-  }
-  .make-portrait__resume-banner__detail {
-    font-size: var(--font-size--sm);
-    margin: 0;
-    opacity: 0.75;
-    line-height: 1.4;
-  }
-  .make-portrait__resume-banner[hidden] { display: none; }
 
   .make-portrait__action-bar {
     position: sticky;
@@ -3046,6 +3069,19 @@
     return PRINTS_BASE_PRICE + (state.prints - 1) * PRINTS_EXTRA_PRICE;
   }
 
+  function getShopCurrencyRate() {
+    var rate = parseFloat((Shopify.currency && Shopify.currency.rate) || FX_RATE || 1);
+    return isFinite(rate) && rate > 0 ? rate : 1;
+  }
+
+  function getCustomTotalPrice() {
+    return getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice();
+  }
+
+  function toShopCurrencyCents(presentmentCents) {
+    return Math.round(presentmentCents / getShopCurrencyRate());
+  }
+
   function updatePetNameVisibility() {
     var group = $('mp-pet-name-group');
     if (!group) return;
@@ -3058,7 +3094,7 @@
   }
 
   function updateSubtotals() {
-    var total = getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice();
+    var total = getCustomTotalPrice();
     var formatted = total > 0 ? formatMoney(total) : '\u2014';
     var priceEl = $('mp-subtotal-price');
     if (priceEl) priceEl.textContent = formatted;
@@ -3157,8 +3193,9 @@
     var defaultVariantId = !variant && (window.MakePortraitCategoryPreviewVariants || {})['canvas'];
     var variantPreviews = variant ? (spMap[variant.id] || {}) : (defaultVariantId ? (spMap[defaultVariantId] || {}) : {});
     var styleBucket = variantPreviews[state.styleId] || {};
-    var hasName = !!(state.petName && state.petName.trim());
-    var borderBase = state.border === 'white-border' ? 'white_border' : 'default';
+    var effectivePetName = getEffectivePetName();
+    var hasName = !!(effectivePetName && effectivePetName.trim());
+    var borderBase = getEffectiveBorder() === 'white-border' ? 'white_border' : 'default';
     var borderKey = hasName ? borderBase + '_name' : borderBase;
     var url = styleBucket[borderKey]
               || styleBucket[borderBase]
@@ -3896,6 +3933,23 @@
     return btn ? btn.textContent.trim() : '';
   }
 
+  function isStaticOptionGroupEnabled(groupId) {
+    var group = $(groupId);
+    return !!group && !group.hidden;
+  }
+
+  function getEffectiveBorder() {
+    return isStaticOptionGroupEnabled('mp-border-group') ? state.border : 'no-border';
+  }
+
+  function getSelectedBorderLabel() {
+    return isStaticOptionGroupEnabled('mp-border-group') ? getSelectedLabel('mp-border-grid') : '';
+  }
+
+  function getEffectivePetName() {
+    return isStaticOptionGroupEnabled('mp-pet-name-group') ? (state.petName || '') : '';
+  }
+
   function buildSummary() {
     var container = $('mp-order-summary');
     if (!container) return;
@@ -3945,9 +3999,9 @@
           details.push(COLOR_DISPLAY_NAMES[o.toLowerCase()] || o);
         });
       }
-      var border = getSelectedLabel('mp-border-grid');
+      var border = getSelectedBorderLabel();
       if (border) details.push(border);
-      if (state.petName) details.push('Add name');
+      if (getEffectivePetName()) details.push('Add name');
       if (details.length) addLine('Details', details.join(' | '));
     }
 
@@ -4310,9 +4364,10 @@
     if (state.variant && state.variant.options) {
       state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') detailParts.push(o); });
     }
-    var borderLabel = getSelectedLabel('mp-border-grid');
+    var borderLabel = getSelectedBorderLabel();
     if (borderLabel) detailParts.push(borderLabel);
-    if (state.petName) detailParts.push(state.petName);
+    var effectivePetName = getEffectivePetName();
+    if (effectivePetName) detailParts.push(effectivePetName);
 
     var properties = {
       'Style': state.style ? state.style.name : '',
@@ -4328,19 +4383,23 @@
     if (state.prints > 0) customizeCart.unshift('Add ' + state.prints + ' cop' + (state.prints === 1 ? 'y' : 'ies'));
     if (customizeCart.length) properties['Customize order'] = customizeCart.join(' | ');
 
-    if (state.donation > 0) {
-      properties['_donation'] = String(state.donation);
+    var displayDonation = Math.round(state.donation);
+    var shopDonation = toShopCurrencyCents(displayDonation);
+    if (displayDonation > 0) {
+      properties['_donation'] = String(displayDonation);
+      properties['_donation_shop'] = String(shopDonation);
     }
 
     if (state.previewImageUrl) {
       properties['_preview_image'] = state.previewImageUrl;
     }
 
-    // Total price in local-currency cents -- the Cart Transform function reads
-    // this and sets the line item price to exactly this amount.
-    properties['_custom_price'] = String(Math.round(
-      getBasePrice() + getPetExtra() + state.addonTotal + state.donation + getPrintsPrice()
-    ));
+    var displayTotal = Math.round(getCustomTotalPrice());
+
+    // Keep the legacy presentment price for deploy compatibility; the current
+    // Cart Transform uses the shop-currency value and converts it at checkout.
+    properties['_custom_price'] = String(displayTotal);
+    properties['_custom_price_shop'] = String(toShopCurrencyCents(displayTotal));
 
     var newOrderItem = {
       line_item_id: "",
@@ -4348,8 +4407,8 @@
       printful_variant_id: (window.MakePortraitPrintfulVariants && state.variantId)
         ? (window.MakePortraitPrintfulVariants[state.variantId] || null)
         : null,
-      pasparta: state.border === 'white-border',
-      pet_name: state.petName || '',
+      pasparta: getEffectiveBorder() === 'white-border',
+      pet_name: effectivePetName,
       photos: state.photoUrls,
       portrait_font: null,
       quantity: state.prints > 0 ? state.prints + 1 : 1,

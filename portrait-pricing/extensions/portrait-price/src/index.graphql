@@ -1,8 +1,12 @@
 query Input {
+  presentmentCurrencyRate
   cart {
     lines {
       id
-      attribute(key: "_custom_price") {
+      shopCurrencyPrice: attribute(key: "_custom_price_shop") {
+        value
+      }
+      legacyPrice: attribute(key: "_custom_price") {
         value
       }
     }
