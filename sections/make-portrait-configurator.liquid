@@ -263,7 +263,14 @@
         <div class="make-portrait__preview-style-name" id="mp-preview-style-name"></div>
 
         {%- comment -%} Artist badge - visible on step 1 {%- endcomment -%}
-        <div class="make-portrait_artist-badge" id="mp-artist-badge">
+        <div
+          class="make-portrait_artist-badge"
+          id="mp-artist-badge"
+          role="button"
+          tabindex="0"
+          aria-controls="tab-artist"
+          aria-label="Open artist details"
+        >
           <img class="artist-badge__photo" id="mp-artist-photo" src="" alt="" width="32" height="32">
           <div class="artist-badge__text">
             <span class="artist-badge__label">Designed by</span>
@@ -1087,10 +1094,16 @@
   text-align: center;
   transition: opacity 0.3s;
   width: 120px;
+  cursor: pointer;
 }
 
 .make-portrait_artist-badge[hidden] {
   display: none;
+}
+
+.make-portrait_artist-badge:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
 }
 
 .artist-badge__photo {
@@ -3414,7 +3427,7 @@
   /* --------------------------------------------------------------------------------
      Step 1 - Style
   -------------------------------------------------------------------------------- */
-  function selectStyle(styleId, openTab) {
+  function selectStyle(styleId) {
     state.styleId = styleId;
     state.style = STYLES.filter(function (s) { return s.id === styleId; })[0] || null;
 
@@ -3438,6 +3451,10 @@
       artistPhoto.alt = state.style.artistName || '';
       artistPhoto.hidden = !state.style.artistName;
     }
+    var artistBadge = $('mp-artist-badge');
+    if (artistBadge) {
+      artistBadge.setAttribute('aria-label', state.style.artistName ? 'Open artist details for ' + state.style.artistName : 'Open artist details');
+    }
 
     // Artist tab panel
     document.querySelectorAll('.tab-artist-panel').forEach(function (p) { p.hidden = true; });
@@ -3455,8 +3472,6 @@
 
     var desc = $('mp-style-description');
     if (desc) desc.innerHTML = state.style.description || '';
-
-    if (openTab) switchTab('artist');
 
     var cta1 = $('mp-cta-step1');
     if (cta1) {
@@ -4745,6 +4760,18 @@
         switchTab(btn.dataset.tab);
       });
     });
+
+    var artistBadge = $('mp-artist-badge');
+    if (artistBadge) {
+      artistBadge.addEventListener('click', function () {
+        switchTab('artist');
+      });
+      artistBadge.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        switchTab('artist');
+      });
+    }
   }
 
   /* --------------------------------------------------------------------------------
@@ -4921,7 +4948,10 @@
 
     // Style picker
     document.querySelectorAll('.style-picker__item').forEach(function (btn) {
-      btn.addEventListener('click', function () { selectStyle(btn.dataset.styleId, true); });
+      btn.addEventListener('click', function () {
+        selectStyle(btn.dataset.styleId);
+        switchTab('overview');
+      });
     });
 
     // Product picker
