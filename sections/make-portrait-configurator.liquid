@@ -1065,6 +1065,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  scroll-margin-top: 20px;
 }
 
 .make-portrait__preview-wrap {
@@ -1309,13 +1310,15 @@
 }
 
 .tab-overview__image-card--wall {
+  border-radius: 48px;
   left: 31.66%;
+  overflow: hidden;
   top: 53.14%;
   width: 68.34%;
 }
 
 .tab-overview__image-card--wall img {
-  border-radius: 7% / 10.3%;
+  border-radius: inherit;
 }
 
 .tab-overview__photo-label {
@@ -3404,6 +3407,17 @@
     return;
   }
 
+  function scrollToPreviewAnchor() {
+    if (window.innerWidth < 800 || (state.step !== 1 && state.step !== 2)) return;
+
+    var previewAnchor = document.querySelector('.make-portrait__left');
+    if (!previewAnchor) return;
+
+    var stickyPanel = document.querySelector('.make-portrait__right');
+    if (stickyPanel) stickyPanel.style.top = '94px';
+    previewAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   var MP_AVAILABILITY_LABELS = {
     in_stock:    'Our artists are available',
     out_of_stock: 'Our artists are not available',
@@ -4983,11 +4997,23 @@
     // Product picker
     document.querySelectorAll('.product-picker__item').forEach(function (btn) {
       if (btn.dataset.category) {
-        btn.addEventListener('click', function () { selectCategory(btn.dataset.category); });
+        btn.addEventListener('click', function () {
+          selectCategory(btn.dataset.category);
+        });
       } else {
-        btn.addEventListener('click', function () { selectProduct(btn.dataset.productHandle); });
+        btn.addEventListener('click', function () {
+          selectProduct(btn.dataset.productHandle);
+        });
       }
     });
+
+    var rightPanel = document.querySelector('.make-portrait__right');
+    if (rightPanel) {
+      rightPanel.addEventListener('click', function (event) {
+        if (!event.target.closest('.style-picker__item, .product-picker__item')) return;
+        scrollToPreviewAnchor();
+      });
+    }
 
     // CTA step 1
     var ctaStep1 = $('mp-cta-step1');
