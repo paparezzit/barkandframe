@@ -3416,19 +3416,82 @@
   }
 
   var previewScrollFrame = null;
+  var previewScrollSettleTimer = null;
+  var previewScrollToken = 0;
+  var previewAnchorTimer = null;
+  var previewAnchorState = null;
 
-  function animatePreviewScroll(targetTop) {
-    targetTop = Math.max(0, Math.round(targetTop));
+  function lockPreviewScrollAnchoring() {
+    if (!previewAnchorState) {
+      previewAnchorState = {
+        html: document.documentElement.style.overflowAnchor,
+        body: document.body ? document.body.style.overflowAnchor : ''
+      };
+    }
 
+    document.documentElement.style.overflowAnchor = 'none';
+    if (document.body) document.body.style.overflowAnchor = 'none';
+
+    if (previewAnchorTimer) {
+      window.clearTimeout(previewAnchorTimer);
+    }
+
+    previewAnchorTimer = window.setTimeout(function () {
+      if (!previewAnchorState) return;
+      document.documentElement.style.overflowAnchor = previewAnchorState.html;
+      if (document.body) document.body.style.overflowAnchor = previewAnchorState.body;
+      previewAnchorState = null;
+      previewAnchorTimer = null;
+    }, 900);
+  }
+
+  function getPreviewAnchorTargetTop() {
+    var previewAnchor = document.querySelector('.make-portrait__left');
+    if (!previewAnchor) return null;
+
+    return Math.max(0, Math.round(previewAnchor.getBoundingClientRect().top + window.pageYOffset - 20));
+  }
+
+  function cancelPreviewScroll() {
+    previewScrollToken += 1;
     if (previewScrollFrame) {
       window.cancelAnimationFrame(previewScrollFrame);
       previewScrollFrame = null;
     }
+    if (previewScrollSettleTimer) {
+      window.clearTimeout(previewScrollSettleTimer);
+      previewScrollSettleTimer = null;
+    }
+  }
+
+  function settlePreviewScroll(token, attempts) {
+    if (token !== previewScrollToken || attempts <= 0) return;
+
+    var targetTop = getPreviewAnchorTargetTop();
+    if (targetTop === null) return;
+
+    window.scrollTo(0, targetTop);
+    previewScrollSettleTimer = window.setTimeout(function () {
+      settlePreviewScroll(token, attempts - 1);
+    }, 80);
+  }
+
+  function animatePreviewScroll() {
+    cancelPreviewScroll();
+    lockPreviewScrollAnchoring();
+
+    var token = previewScrollToken;
+    var targetTop = getPreviewAnchorTargetTop();
+    if (targetTop === null) return;
+
+    var currentTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    window.scrollTo(0, currentTop);
 
     var startTop = window.pageYOffset || document.documentElement.scrollTop || 0;
     var distance = targetTop - startTop;
     if (Math.abs(distance) < 1) {
       window.scrollTo(0, targetTop);
+      settlePreviewScroll(token, 4);
       return;
     }
 
@@ -3440,8 +3503,13 @@
     }
 
     function step(timestamp) {
+      if (token !== previewScrollToken) return;
       if (startTime === null) startTime = timestamp;
 
+      targetTop = getPreviewAnchorTargetTop();
+      if (targetTop === null) return;
+
+      distance = targetTop - startTop;
       var progress = Math.min(1, (timestamp - startTime) / duration);
       window.scrollTo(0, startTop + distance * easeOutCubic(progress));
 
@@ -3450,6 +3518,7 @@
       } else {
         window.scrollTo(0, targetTop);
         previewScrollFrame = null;
+        settlePreviewScroll(token, 4);
       }
     }
 
@@ -3572,13 +3641,9 @@
   function scrollToPreviewAnchor() {
     if (window.innerWidth < 800 || (state.step !== 1 && state.step !== 2)) return;
 
-    var previewAnchor = document.querySelector('.make-portrait__left');
-    if (!previewAnchor) return;
-
-    var targetTop = previewAnchor.getBoundingClientRect().top + window.pageYOffset - 20;
     var stickyPanel = document.querySelector('.make-portrait__right');
     if (stickyPanel) stickyPanel.style.top = '94px';
-    animatePreviewScroll(targetTop);
+    animatePreviewScroll();
   }
 
   var MP_AVAILABILITY_LABELS = {
@@ -5172,10 +5237,20 @@
 
     var rightPanel = document.querySelector('.make-portrait__right');
     if (rightPanel) {
-      rightPanel.addEventListener('click', function (event) {
-        if (!event.target.closest('.style-picker__item, .product-picker__item')) return;
+      function isPreviewScrollChoice(event) {
+        return event.target.closest('.style-picker__item, .product-picker__item');
+      }
+
+      rightPanel.addEventListener('pointerdown', function (event) {
+        if (!isPreviewScrollChoice(event)) return;
         scrollToPreviewAnchor();
-      });
+      }, true);
+
+      rightPanel.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (!isPreviewScrollChoice(event)) return;
+        scrollToPreviewAnchor();
+      }, true);
     }
 
     // CTA step 1
