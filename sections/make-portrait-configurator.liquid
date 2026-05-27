@@ -905,11 +905,17 @@
                   <p>
                     Printed on gallery-quality paper with a clean, precise finish that captures fine detail and tonal depth of colors while maintaining clarity.
                   </p>
-                  <img src="{{ 'make-portrait/product-materials-paper.png' | asset_url }}" alt="Paper" loading="lazy">
+                  <div class="tab-accordion__image-grid">
+                    <img src="{{ 'make-portrait/bark-and-frame-configurator-paper-portrait-work-in-progress-jack-russell-gentleman-style-watercolour.jpg' | asset_url }}" alt="Paper portrait work in progress" loading="lazy">
+                    <img src="{{ 'make-portrait/bark-and-frame-configurator-paper-material-close-up-texture-matte-gallery-quality.jpg' | asset_url }}" alt="Paper material close-up texture" loading="lazy">
+                  </div>
                   <p>
                     Canvas introduces a structured surface with visible texture that interacts with light, adding depth and reducing glare. The result feels more physical and holds its presence as an object.
                   </p>
-                  <img src="{{ 'make-portrait/product-materials-canvas.png' | asset_url }}" alt="Canvas" loading="lazy">
+                  <div class="tab-accordion__image-grid">
+                    <img src="{{ 'make-portrait/bark-and-frame-configurator-canvas-portrait-work-in-progress-jack-russell-gentleman-style-oil-painting.jpg' | asset_url }}" alt="Canvas portrait work in progress" loading="lazy">
+                    <img src="{{ 'make-portrait/bark-and-frame-configurator-canvas-material-close-up-texture-natural-cotton-weave.jpg' | asset_url }}" alt="Canvas material close-up texture" loading="lazy">
+                  </div>
                   <p>
                     The same material standards are applied across all formats, ensuring consistency in detail, color, and durability.
                   </p>
@@ -930,12 +936,12 @@
                     <p class="accordion-card__desc">Black or white. Ayous wood for paper portraits, pine for canvas. The wall stays calm, the artwork takes the lead.</p>
                     <div class="accordion-card__grid">
                       <div class="accordion-card__item">
-                        <img src="{{ 'make-portrait/framing-black.jpg' | asset_url }}" alt="Black frame" loading="lazy">
+                        <img src="{{ 'make-portrait/bark-and-frame-canvas-black-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Black frame" loading="lazy">
                         <p class="accordion-card__item-name">Black</p>
                         <p class="accordion-card__item-desc">Defined edge, modern feel.</p>
                       </div>
                       <div class="accordion-card__item">
-                        <img src="{{ 'make-portrait/framing-white.jpg' | asset_url }}" alt="White frame" loading="lazy">
+                        <img src="{{ 'make-portrait/bark-and-frame-canvas-white-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="White frame" loading="lazy">
                         <p class="accordion-card__item-name">White</p>
                         <p class="accordion-card__item-desc">Soft, minimal, blends in.</p>
                       </div>
@@ -947,12 +953,12 @@
                     <p class="accordion-card__desc">Oak for paper portraits, walnut for canvas. Both have a visible natural grain that gives the piece real surface presence and a quiet weight on the wall.</p>
                     <div class="accordion-card__grid">
                       <div class="accordion-card__item">
-                        <img src="{{ 'make-portrait/framing-oak.jpg' | asset_url }}" alt="Premium Oak frame" loading="lazy">
+                        <img src="{{ 'make-portrait/bark-and-frame-canvas-oak-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Premium Oak frame" loading="lazy">
                         <p class="accordion-card__item-name">Premium Oak</p>
                         <p class="accordion-card__item-desc">Light, warm, natural grain.<br>For paper portraits.</p>
                       </div>
                       <div class="accordion-card__item">
-                        <img src="{{ 'make-portrait/framing-walnut.jpg' | asset_url }}" alt="Walnut frame" loading="lazy">
+                        <img src="{{ 'make-portrait/bark-and-frame-canvas-walnut-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Walnut frame" loading="lazy">
                         <p class="accordion-card__item-name">Premium Walnut</p>
                         <p class="accordion-card__item-desc">Deep, rich, more weight.<br>For canvas portraits.</p>
                       </div>
@@ -973,7 +979,7 @@
                   <p>
                     Each portrait arrives complete. Hanging hardware ready. Nothing to adjust, nothing left to do. Just hang it on the wall. Acrylite front protector on paper formats.
                   </p>
-                  <img src="{{ 'make-portrait/product-finish.png' | asset_url }}" alt="Canvas" loading="lazy">
+                  <img src="{{ 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg' | asset_url }}" alt="Finished portrait in a living room" loading="lazy">
                   <p class="tab-accordion__claim">Made to hold its place.</p>
                 </div>
               </details>
@@ -1437,6 +1443,20 @@
   line-height: 1.4;
   margin: 0 !important;
   padding: 0 10px;
+}
+
+.tab-accordion__image-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  margin: 2em 0;
+}
+
+.tab-accordion__image-grid img {
+  border-radius: 30px;
+  display: block;
+  margin: 0;
+  width: 100%;
 }
 
 .size-table {
