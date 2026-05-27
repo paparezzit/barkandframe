@@ -979,7 +979,7 @@
                   <p>
                     Each portrait arrives complete. Hanging hardware ready. Nothing to adjust, nothing left to do. Just hang it on the wall. Acrylite front protector on paper formats.
                   </p>
-                  <img src="{{ 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg' | asset_url }}" alt="Finished portrait in a living room" loading="lazy">
+                  <img class="tab-accordion__finish-image" src="{{ 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg' | asset_url }}" alt="Finished portrait in a living room" loading="lazy">
                   <p class="tab-accordion__claim">Made to hold its place.</p>
                 </div>
               </details>
@@ -1579,6 +1579,12 @@
 .tab-accordion__body img {
   margin: 2em 0 2em;
   vertical-align: top;
+}
+
+.tab-accordion__finish-image {
+  border-radius: 30px;
+  display: block;
+  width: 100%;
 }
 
 /* ------ Tab: Limited ------ */
@@ -5271,6 +5277,10 @@
         if (details.open) {
           productAccordions.forEach(function (other) {
             if (other !== details && other.open) other.open = false;
+          });
+          window.requestAnimationFrame(function () {
+            var top = details.getBoundingClientRect().top + window.pageYOffset - 20;
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
           });
         }
       });
