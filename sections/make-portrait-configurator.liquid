@@ -23,6 +23,27 @@
     {%- endfor -%}
   ].filter(s => s.name).sort((a, b) => a.order - b.order);
 
+  window.MakePortraitOverviewImages = {
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'overview_style' and block.settings.style_id != blank -%}
+        {{ block.settings.style_id | strip | json }}: {
+          photo: {
+            src: {%- if block.settings.photo_image != blank -%}{{ block.settings.photo_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
+            alt: {{ block.settings.photo_image.alt | default: block.settings.style_name | default: '' | json }}
+          },
+          artist: {
+            src: {%- if block.settings.artist_image != blank -%}{{ block.settings.artist_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
+            alt: {{ block.settings.artist_image.alt | default: block.settings.style_name | default: '' | json }}
+          },
+          wall: {
+            src: {%- if block.settings.wall_image != blank -%}{{ block.settings.wall_image | image_url: width: 1040 | json }}{%- else -%}null{%- endif -%},
+            alt: {{ block.settings.wall_image.alt | default: block.settings.style_name | default: '' | json }}
+          }
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  };
+
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
   window.MakePortraitCloudinary = {
     cloudName: {{ section.settings.cloudinary_cloud_name | default: '' | json }},
@@ -758,11 +779,25 @@
         <div class="tab-panel" id="tab-overview" data-tab="overview" role="tabpanel">
           <div class="tab-overview">
             <h2 class="tab-overview__heading">It's that simple</h2>
-            <img src="{{ 'make-portrait/overview01.png' | asset_url }}" alt="Size" loading="lazy">
+            <div class="tab-overview__media" id="mp-overview-media">
+              <div class="tab-overview__media-row">
+                <figure class="tab-overview__image-card tab-overview__image-card--photo">
+                  <img id="mp-overview-photo" src="" alt="" width="320" height="380" loading="lazy">
+                  <figcaption class="tab-overview__photo-label tab-overview__photo-label--photo">Your photo</figcaption>
+                </figure>
+                <figure class="tab-overview__image-card tab-overview__image-card--artist">
+                  <img id="mp-overview-artist" src="" alt="" width="320" height="380" loading="lazy">
+                  <figcaption class="tab-overview__photo-label tab-overview__photo-label--artist">Designed by artists</figcaption>
+                </figure>
+              </div>
+            </div>
             <p>
               A portrait of your dog isn't just wall art. It's a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
-            <img src="{{ 'make-portrait/overview02.png' | asset_url }}" alt="Size" loading="lazy">
+            <figure class="tab-overview__image-card tab-overview__image-card--wall">
+              <img id="mp-overview-wall" src="" alt="" width="1036" height="1020" loading="lazy">
+              <figcaption class="tab-overview__photo-label tab-overview__photo-label--wall">On your wall</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -1157,7 +1192,9 @@
 
 /* ------ Tab: Overview ------ */
 .tab-overview img {
-  margin-bottom: 60px;
+  display: block;
+  height: auto;
+  max-width: 100%;
 }
 
 .tab-overview__heading {
@@ -1214,27 +1251,46 @@
 
 .tab-overview__body p { margin: 0; }
 
-.tab-overview__photos {
+.tab-overview__media {
+  margin-bottom: 60px;
+}
+
+.tab-overview__media-row {
+  align-items: center;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 80px;
+  justify-content: center;
+  min-height: 250px;
 }
 
-.tab-overview__photo-item {
+.tab-overview__image-card {
+  margin: 0;
   position: relative;
-  align-self: flex-start;
 }
 
-.tab-overview__photo-item img {
-  border-radius: 12px;
+.tab-overview__image-card img {
+  border-radius: 32px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.tab-overview__image-card--photo {
+  margin-top: 54px;
   width: 160px;
-  height: auto;
-  display: block;
 }
 
-.tab-overview__photo-item--artist { align-self: center; }
-.tab-overview__photo-item--space { align-self: stretch; }
-.tab-overview__photo-item--space img { width: 100%; }
+.tab-overview__image-card--artist {
+  width: 160px;
+}
+
+.tab-overview__image-card--wall {
+  margin-top: 60px;
+  width: 100%;
+}
+
+.tab-overview__image-card--wall img {
+  border-radius: 36px;
+}
 
 .tab-overview__photo-label {
   position: absolute;
@@ -1247,6 +1303,41 @@
   border-radius: 20px;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.tab-overview__photo-label--photo {
+  bottom: 32%;
+  right: -82px;
+}
+
+.tab-overview__photo-label--artist {
+  right: -165px;
+  top: 42%;
+}
+
+.tab-overview__photo-label--wall {
+  bottom: 50%;
+  left: -120px;
+  right: auto;
+}
+
+@media (max-width: 749px) {
+  .tab-overview__media-row {
+    gap: 56px;
+  }
+
+  .tab-overview__image-card--photo,
+  .tab-overview__image-card--artist {
+    width: min(160px, 34vw);
+  }
+
+  .tab-overview__photo-label--artist {
+    right: -128px;
+  }
+
+  .tab-overview__photo-label--wall {
+    left: 10px;
+  }
 }
 
 /* ------ Tab: Product ------ */
@@ -3032,6 +3123,29 @@
     return document.getElementById(selector);
   }
 
+  function setOverviewImage(slot, data) {
+    var img = $('mp-overview-' + slot);
+    if (!img) return;
+    var card = img.closest('.tab-overview__image-card');
+    if (!data || !data.src) {
+      img.removeAttribute('src');
+      img.alt = '';
+      if (card) card.hidden = true;
+      return;
+    }
+    img.src = data.src;
+    img.alt = data.alt || '';
+    if (card) card.hidden = false;
+  }
+
+  function updateOverviewImages() {
+    var overviewMap = window.MakePortraitOverviewImages || {};
+    var bucket = overviewMap[state.styleId] || null;
+    setOverviewImage('photo', bucket && bucket.photo);
+    setOverviewImage('artist', bucket && bucket.artist);
+    setOverviewImage('wall', bucket && bucket.wall);
+  }
+
   /* --------------------------------------------------------------------------------
      Delivery dates
   -------------------------------------------------------------------------------- */
@@ -3238,6 +3352,7 @@
     if (!state.style) return;
 
     updatePreviewImage();
+    updateOverviewImages();
 
     // Artist badge
     var artistName = $('mp-artist-name');
@@ -5249,6 +5364,38 @@
           "label": "Donation amounts",
           "default": "10, 50, 100",
           "info": "Comma-separated whole numbers (e.g. 10, 50, 100)"
+        }
+      ]
+    },
+    {
+      "type": "overview_style",
+      "name": "Overview style",
+      "settings": [
+        {
+          "type": "text",
+          "id": "style_id",
+          "label": "Style ID",
+          "info": "Must match the configurator style_id, for example the_gentleman or studio_pop."
+        },
+        {
+          "type": "text",
+          "id": "style_name",
+          "label": "Style name"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_image",
+          "label": "01 - Your photo"
+        },
+        {
+          "type": "image_picker",
+          "id": "artist_image",
+          "label": "02 - Designed by artists"
+        },
+        {
+          "type": "image_picker",
+          "id": "wall_image",
+          "label": "03 - On your wall"
         }
       ]
     }

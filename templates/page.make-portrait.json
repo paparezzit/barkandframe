@@ -37,12 +37,122 @@
             "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
             "amounts": "10, 50, 100"
           }
+        },
+        "overview_the_gentleman": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "the_gentleman",
+            "style_name": "The Gentleman",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-jack-russell-terrier-green-boucle-cushion-eye-level-good-upload.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.55.49_1_d95d1548-5c47-4793-8ac6-219e8265484f.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-jack-russell-terrier-gentleman-old-masters-portrait-black-frame-leather-chair-office.jpg"
+          }
+        },
+        "overview_studio_pencil": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "studio_pencil",
+            "style_name": "Studio Pencil",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-chihuahua-fawn-bedside-natural-light-eye-level.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.58.28_1.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-chihuahua-studio-pencil-sketch-portrait-black-frame-rattan-bed-headboard-bedroom.jpg"
+          }
+        },
+        "overview_the_duchess": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "the_duchess",
+            "style_name": "The Duchess",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-samoyed-white-fluffy-victorian-sofa-eye-level.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.52.31_1_684b540f-a9b5-430e-97dd-1d451ff501f9.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-samoyed-duchess-old-masters-portrait-black-frame-cream-victorian-sofa-living-room.jpg"
+          }
+        },
+        "overview_atelier_sketch": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "atelier_sketch",
+            "style_name": "Atelier Sketch",
+            "photo_image": "shopify://shop_images/04_Atelier_Sketch.png",
+            "artist_image": "shopify://shop_images/04_Atelier_Sketch.png",
+            "wall_image": "shopify://shop_images/04_Atelier_Sketch.png"
+          }
+        },
+        "overview_pure_portrait": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "pure_portrait",
+            "style_name": "Pure Portrait",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-golden-retriever-garden-grass-eye-level-good-upload.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.52.57_1_13d51fa6-9b27-41cc-b07e-5fd2c741d2d2.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-golden-retriever-pure-portrait-oil-painting-oak-frame-kitchen.jpg"
+          }
+        },
+        "overview_dream": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "dream",
+            "style_name": "Dream",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-husky-siberian-sunset-grass-field-eye-level.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.56.13_1.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-husky-dream-style-portrait-on-swing-sunset-clouds-living-room-elderly-customer.jpg"
+          }
+        },
+        "overview_studio_watercolour": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "studio_watercolour",
+            "style_name": "Studio Watercolour",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-pomeranian-white-fluffy-rattan-chair-eye-level-good-upload.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.54.23_1.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-pomeranian-dream-watercolour-portrait-walnut-frame-day-bed-bedroom.jpg"
+          }
+        },
+        "overview_la_parisienne": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "la_parisienne",
+            "style_name": "La Parisienne",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-cavalier-king-charles-spaniel-blenheim-eye-level-good-upload.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.54.00_7_bb7b6fcd-bd64-42dc-8fc1-39bfaa6606cc.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-cavalier-king-charles-spaniel-la-parisienne-style-portrait-victorian-desk-bedroom.jpg"
+          }
+        },
+        "overview_indigo": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "indigo",
+            "style_name": "Indigo",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-border-collie-puppy-chocolate-brown-mid-century-console-eye-level.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.59.43_1.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-border-collie-indigo-style-portrait-walnut-frame-mid-century-console-living-room.jpg"
+          }
+        },
+        "overview_studio_pop": {
+          "type": "overview_style",
+          "settings": {
+            "style_id": "studio_pop",
+            "style_name": "Studio Pop",
+            "photo_image": "shopify://shop_images/bark-and-frame-customer-photo-example-french-bulldog-fawn-eye-level-soft-light-good-upload.jpg",
+            "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.58.59_1_222b3a56-1f79-4f54-9a41-8d9dbf717112.jpg",
+            "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg"
+          }
         }
       },
       "block_order": [
         "prints_LRmCfz",
         "addon_BFcPdG",
-        "donation_enNYcj"
+        "donation_enNYcj",
+        "overview_the_gentleman",
+        "overview_studio_pencil",
+        "overview_the_duchess",
+        "overview_atelier_sketch",
+        "overview_pure_portrait",
+        "overview_dream",
+        "overview_studio_watercolour",
+        "overview_la_parisienne",
+        "overview_indigo",
+        "overview_studio_pop"
       ],
       "settings": {
         "products_collection": "configurator",
