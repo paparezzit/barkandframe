@@ -1310,15 +1310,17 @@
 }
 
 .tab-overview__image-card--wall {
-  border-radius: 80px;
+  border-radius: 30px;
   left: 31.66%;
   overflow: hidden;
   top: 53.14%;
   width: 68.34%;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .tab-overview__image-card--wall img {
-  border-radius: inherit;
+  border-radius: 30px;
+  clip-path: inset(0 round 30px);
 }
 
 .tab-overview__photo-label {
@@ -1585,7 +1587,7 @@
 }
 
 .tab-accordion__finish-image {
-  border-radius: 30px;
+  border-radius: 40px;
   display: block;
   width: 100%;
 }
