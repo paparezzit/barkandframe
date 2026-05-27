@@ -505,7 +505,7 @@
               <h3 class="title">
                 Good
               </h3>
-              <img class="image" src="{{ 'good.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-good-jack-russell-sitting-eye-level-soft-light-clean.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
               <ul>
                 <li>Dog facing the camera at eye level</li>
                 <li>Good lighting</li>
@@ -518,7 +518,7 @@
               <h3 class="title">
                 Bad
               </h3>
-              <img class="image" src="{{ 'bad01.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-cafe-rotated-busy-background.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
               <ul>
                 <li>Angled face, not at eye level</li>
                 <li>Poor lighting, heavy shadows</li>
@@ -530,7 +530,7 @@
               <h3 class="title">
                 Bad
               </h3>
-              <img class="image" src="{{ 'bad02.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-profile-harsh-shadow-not-eye-level.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
               <ul>
                 <li>Head and neck not fully visible</li>
                 <li>Pet lying down</li>
@@ -3159,11 +3159,19 @@
     var backBtn3 = $('mp-back-step3');
     if (backBtn3) backBtn3.hidden = step !== 4;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToConfiguratorTop();
+  }
+
+  function scrollToConfiguratorTop() {
+    var section = $('make-portrait-section');
+    var top = section ? section.getBoundingClientRect().top + window.pageYOffset : 0;
+    var stickyPanel = document.querySelector('.make-portrait__right');
+    if (stickyPanel) stickyPanel.style.top = window.innerWidth >= 800 ? '94px' : '';
+    window.scrollTo({ top: Math.max(0, top - 20), behavior: 'smooth' });
   }
 
   function scrollToPreview() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
   }
 
   var MP_AVAILABILITY_LABELS = {
@@ -3558,6 +3566,36 @@
     var a = parseFloat(parts[0]);
     var b = parseFloat(parts[1]);
     if (isNaN(a) || isNaN(b)) return null;
+
+    var key = Math.round(a) + 'x' + Math.round(b);
+    var handle = state.productHandle || '';
+    var canvasHandles = window.MakePortraitCanvasHandles || {};
+    var sizeOverrides = null;
+
+    if (!isCm && handle === canvasHandles.unframed) {
+      sizeOverrides = {
+        '8x10':  { cm: '20 \u00D7 25 cm', inches: '7.9 \u00D7 9.8 in' },
+        '12x16': { cm: '30 \u00D7 40 cm', inches: '11.8 \u00D7 15.7 in' },
+        '20x28': { cm: '51 \u00D7 71 cm', inches: '20.1 \u00D7 28.0 in' }
+      };
+    } else if (!isCm && handle === canvasHandles.framed) {
+      sizeOverrides = {
+        '8x10':  { cm: '23 \u00D7 28 cm', inches: '9.1 \u00D7 11.0 in' },
+        '12x16': { cm: '33 \u00D7 43 cm', inches: '13.0 \u00D7 16.9 in' },
+        '20x28': { cm: '54 \u00D7 74 cm', inches: '21.3 \u00D7 29.1 in' }
+      };
+    } else if (isCm && handle === FRAMED_POSTER_HANDLE) {
+      sizeOverrides = {
+        '21x30': { cm: '24 \u00D7 33 cm', inches: '9.4 \u00D7 13.0 in' },
+        '30x40': { cm: '33 \u00D7 43 cm', inches: '13.0 \u00D7 16.9 in' },
+        '50x70': { cm: '52 \u00D7 72 cm', inches: '20.5 \u00D7 28.3 in' }
+      };
+    }
+
+    if (sizeOverrides && sizeOverrides[key]) {
+      return sizeOverrides[key];
+    }
+
     var inchStr, cmStr;
     if (isCm) {
       cmStr = Math.round(a) + '\u00D7' + Math.round(b) + ' cm';
@@ -3950,6 +3988,63 @@
     return isStaticOptionGroupEnabled('mp-pet-name-group') ? (state.petName || '') : '';
   }
 
+  function getSelectedSizeValue() {
+    if (!state.product) return null;
+    var sizeOpts = normalizeOptions(state.product.options)
+      .filter(function (o) { return o.name.toLowerCase() === 'size'; });
+    return sizeOpts.length ? state.selectedOptions[sizeOpts[0].position] : null;
+  }
+
+  function getFramingLabel() {
+    if (state.canvasFrameChoice) {
+      return state.canvasFrameChoice === 'framed' ? 'Framed' : 'Unframed';
+    }
+    if (state.productHandle === FRAMED_POSTER_HANDLE) {
+      return 'Framed';
+    }
+    return '';
+  }
+
+  function getProductSummaryLabel() {
+    var canvasHandles = window.MakePortraitCanvasHandles || {};
+    if (state.productCategory === 'canvas' || state.productHandle === canvasHandles.unframed || state.productHandle === canvasHandles.framed) {
+      return 'Canvas';
+    }
+    if (state.product) return state.product.title;
+    var categoryNames = { canvas: 'Canvas', paper: 'Fine Art Paper' };
+    if (state.productCategory) return categoryNames[state.productCategory] || state.productCategory;
+    return '';
+  }
+
+  function getConfigurationDetails(useHtml) {
+    var details = [];
+    var sizeValue = getSelectedSizeValue();
+
+    if (sizeValue) {
+      var dims = getSizeDimensions(sizeValue);
+      details.push(dims
+        ? (useHtml ? dims.cm + ' <span style="opacity:0.45">' + dims.inches + '</span>' : dims.cm + ' ' + dims.inches)
+        : sizeValue);
+    }
+
+    var framingLabel = getFramingLabel();
+    if (framingLabel) details.push(framingLabel);
+
+    if (state.variant && state.variant.options) {
+      state.variant.options.forEach(function (o) {
+        if (!o || o === 'Default Title') return;
+        if (o === sizeValue) return;
+        details.push(COLOR_DISPLAY_NAMES[o.toLowerCase()] || o);
+      });
+    }
+
+    var border = getSelectedBorderLabel();
+    if (border) details.push(border);
+    if (getEffectivePetName()) details.push(useHtml ? 'Add name' : 'Name: ' + getEffectivePetName());
+
+    return details;
+  }
+
   function buildSummary() {
     var container = $('mp-order-summary');
     if (!container) return;
@@ -3967,41 +4062,11 @@
 
     if (state.style) addLine('Style', state.style.name);
 
-    var categoryNames = { canvas: 'Print on Canvas', paper: 'Print on Paper' };
-    if (state.product) {
-      addLine('Product', state.product.title);
-    } else if (state.productCategory) {
-      addLine('Product', categoryNames[state.productCategory] || state.productCategory);
-    }
+    var productSummaryLabel = getProductSummaryLabel();
+    if (productSummaryLabel) addLine('Product', productSummaryLabel);
 
     if (state.step >= 3) {
-      var details = [];
-
-      // Size first -- cm + inches with reduced opacity
-      var sizeValue = null;
-      if (state.product) {
-        var sizeOpts = normalizeOptions(state.product.options)
-          .filter(function (o) { return o.name.toLowerCase() === 'size'; });
-        if (sizeOpts.length) sizeValue = state.selectedOptions[sizeOpts[0].position];
-      }
-      if (sizeValue) {
-        var dims = getSizeDimensions(sizeValue);
-        details.push(dims
-          ? dims.cm + ' <span style="opacity:0.45">' + dims.inches + '</span>'
-          : sizeValue);
-      }
-
-      if (state.canvasFrameChoice) details.push(state.canvasFrameChoice === 'framed' ? 'Framed' : 'Unframed');
-      if (state.variant && state.variant.options) {
-        state.variant.options.forEach(function (o) {
-          if (!o || o === 'Default Title') return;
-          if (o === sizeValue) return; // already shown above
-          details.push(COLOR_DISPLAY_NAMES[o.toLowerCase()] || o);
-        });
-      }
-      var border = getSelectedBorderLabel();
-      if (border) details.push(border);
-      if (getEffectivePetName()) details.push('Add name');
+      var details = getConfigurationDetails(true);
       if (details.length) addLine('Details', details.join(' | '));
     }
 
@@ -4360,18 +4425,11 @@
     if (btn) { btn.disabled = true; btn.textContent = 'Adding to cart\u2026'; }
     hideError();
 
-    var detailParts = [];
-    if (state.variant && state.variant.options) {
-      state.variant.options.forEach(function (o) { if (o && o !== 'Default Title') detailParts.push(o); });
-    }
-    var borderLabel = getSelectedBorderLabel();
-    if (borderLabel) detailParts.push(borderLabel);
-    var effectivePetName = getEffectivePetName();
-    if (effectivePetName) detailParts.push(effectivePetName);
+    var detailParts = getConfigurationDetails(false);
 
     var properties = {
       'Style': state.style ? state.style.name : '',
-      'Product': state.product ? state.product.title : '',
+      'Product': getProductSummaryLabel(),
       'Details': detailParts.join(' | ')
     };
 
@@ -4407,8 +4465,8 @@
       printful_variant_id: (window.MakePortraitPrintfulVariants && state.variantId)
         ? (window.MakePortraitPrintfulVariants[state.variantId] || null)
         : null,
-      pasparta: getEffectiveBorder() === 'white-border',
-      pet_name: effectivePetName,
+      pasparta: state.border === 'white-border',
+      pet_name: state.petName || '',
       photos: state.photoUrls,
       portrait_font: null,
       quantity: state.prints > 0 ? state.prints + 1 : 1,

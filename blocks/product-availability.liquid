@@ -1,5 +1,7 @@
 {%- liquid
-  assign _avail_status = product.selected_or_first_available_variant.metafields.custom.availability_status.value | default: 'in_stock'
+  assign _avail_variant = product.selected_or_first_available_variant
+  assign _avail_status = _avail_variant.metafields.custom.availability_status.value | default: 'in_stock'
+  assign _avail_count = _avail_variant.metafields.custom.availability_count.value | default: 0 | plus: 0
 -%}
 
 <p class="product-availability product-availability--{{ _avail_status }}" id="product-availability-indicator">
@@ -7,7 +9,12 @@
   <span class="product-availability__label">
     {%- case _avail_status -%}
       {%- when 'out_of_stock' -%}Out of stock
-      {%- when 'low_stock' -%}Last few products available
+      {%- when 'low_stock' -%}
+        {%- if _avail_count > 0 -%}
+          Only {{ _avail_count }} {% if _avail_count == 1 %}product{% else %}products{% endif %} available
+        {%- else -%}
+          Last few products available
+        {%- endif -%}
       {%- else -%}In stock
     {%- endcase -%}
   </span>
