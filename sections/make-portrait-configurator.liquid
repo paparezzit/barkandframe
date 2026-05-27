@@ -1307,7 +1307,10 @@
   padding: 3px 10px;
   border-radius: 20px;
   font-weight: 600;
+  transform: translate3d(0, var(--overview-label-parallax, 0px), 0);
+  transition: transform 120ms linear;
   white-space: nowrap;
+  will-change: transform;
 }
 
 .tab-overview__photo-label--photo {
@@ -3175,6 +3178,49 @@
     window.requestAnimationFrame(layoutOverviewComposite);
   }
 
+  function initOverviewLabelParallax() {
+    var media = $('mp-overview-media');
+    if (!media || !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var labels = [
+      { el: media.querySelector('.tab-overview__photo-label--photo'), strength: 0.026 },
+      { el: media.querySelector('.tab-overview__photo-label--artist'), strength: 0.034 },
+      { el: media.querySelector('.tab-overview__photo-label--wall'), strength: 0.022 }
+    ].filter(function (item) {
+      return item.el;
+    });
+    var ticking = false;
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function update() {
+      ticking = false;
+      var rect = media.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+      var mediaCenter = rect.top + rect.height / 2;
+      var viewportCenter = window.innerHeight / 2;
+      var distanceFromCenter = viewportCenter - mediaCenter;
+
+      labels.forEach(function (item) {
+        var offset = clamp(distanceFromCenter * item.strength, -12, 12);
+        item.el.style.setProperty('--overview-label-parallax', offset.toFixed(2) + 'px');
+      });
+    }
+
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+  }
+
   /* --------------------------------------------------------------------------------
      Delivery dates
   -------------------------------------------------------------------------------- */
@@ -4815,6 +4861,7 @@
     updateDeliveryDates();
     initTabs();
     initSmartSticky();
+    initOverviewLabelParallax();
 
     // Resume banner
     var urlParams = new URLSearchParams(window.location.search);
