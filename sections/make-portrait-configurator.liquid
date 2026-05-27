@@ -1265,35 +1265,38 @@
 
 .tab-overview__image-card img {
   display: block;
-  height: 100%;
-  border-radius: 32px;
-  object-fit: cover;
+  height: auto;
   width: 100%;
 }
 
 .tab-overview__image-card--photo {
-  height: 34.31%;
   left: 0;
   top: 15.1%;
-  width: 25.39%;
+  width: 25.29%;
+}
+
+.tab-overview__image-card--photo img {
+  border-radius: 12% / 9%;
 }
 
 .tab-overview__image-card--artist {
-  height: 23.82%;
-  left: 47.35%;
+  left: 45.95%;
   top: 9.8%;
-  width: 16.3%;
+  width: 19.11%;
+}
+
+.tab-overview__image-card--artist img {
+  border-radius: 11% / 9%;
 }
 
 .tab-overview__image-card--wall {
-  height: 46.86%;
-  left: 31.56%;
+  left: 31.66%;
   top: 53.14%;
-  width: 68.44%;
+  width: 68.34%;
 }
 
 .tab-overview__image-card--wall img {
-  border-radius: 36px;
+  border-radius: 7% / 10.3%;
 }
 
 .tab-overview__photo-label {
@@ -3114,6 +3117,38 @@
     return document.getElementById(selector);
   }
 
+  var overviewCompositeBase = { width: 1036, height: 1020 };
+  var overviewCompositeBoxes = {
+    photo: { x: 0, y: 154, width: 262 },
+    artist: { x: 476, y: 100, width: 198 },
+    wall: { x: 328, y: 542, width: 708 }
+  };
+
+  function layoutOverviewComposite() {
+    var media = $('mp-overview-media');
+    if (!media) return;
+
+    var scale = media.clientWidth / overviewCompositeBase.width;
+    if (!scale) return;
+
+    var maxBottom = overviewCompositeBase.height * scale;
+    Object.keys(overviewCompositeBoxes).forEach(function (slot) {
+      var box = overviewCompositeBoxes[slot];
+      var img = $('mp-overview-' + slot);
+      var card = img && img.closest('.tab-overview__image-card');
+      if (!card || card.hidden) return;
+
+      card.style.left = (box.x * scale) + 'px';
+      card.style.top = (box.y * scale) + 'px';
+      card.style.width = (box.width * scale) + 'px';
+
+      var bottom = (box.y * scale) + card.getBoundingClientRect().height;
+      if (bottom > maxBottom) maxBottom = bottom;
+    });
+
+    media.style.height = Math.ceil(maxBottom) + 'px';
+  }
+
   function setOverviewImage(slot, data) {
     var img = $('mp-overview-' + slot);
     if (!img) return;
@@ -3124,9 +3159,11 @@
       if (card) card.hidden = true;
       return;
     }
+    img.onload = layoutOverviewComposite;
     img.src = data.src;
     img.alt = data.alt || '';
     if (card) card.hidden = false;
+    window.requestAnimationFrame(layoutOverviewComposite);
   }
 
   function updateOverviewImages() {
@@ -3135,6 +3172,7 @@
     setOverviewImage('photo', bucket && bucket.photo);
     setOverviewImage('artist', bucket && bucket.artist);
     setOverviewImage('wall', bucket && bucket.wall);
+    window.requestAnimationFrame(layoutOverviewComposite);
   }
 
   /* --------------------------------------------------------------------------------
@@ -5185,6 +5223,7 @@
       currentTop = TOP_OFFSET;
       lastScrollY = window.scrollY;
       update();
+      layoutOverviewComposite();
     });
   }
 
