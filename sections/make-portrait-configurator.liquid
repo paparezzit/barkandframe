@@ -779,25 +779,24 @@
         <div class="tab-panel" id="tab-overview" data-tab="overview" role="tabpanel">
           <div class="tab-overview">
             <h2 class="tab-overview__heading">It's that simple</h2>
-            <div class="tab-overview__media" id="mp-overview-media">
-              <div class="tab-overview__media-row">
-                <figure class="tab-overview__image-card tab-overview__image-card--photo">
-                  <img id="mp-overview-photo" src="" alt="" width="320" height="380" loading="lazy">
-                  <figcaption class="tab-overview__photo-label tab-overview__photo-label--photo">Your photo</figcaption>
-                </figure>
-                <figure class="tab-overview__image-card tab-overview__image-card--artist">
-                  <img id="mp-overview-artist" src="" alt="" width="320" height="380" loading="lazy">
-                  <figcaption class="tab-overview__photo-label tab-overview__photo-label--artist">Designed by artists</figcaption>
-                </figure>
-              </div>
-            </div>
+            <img src="{{ 'make-portrait/overview01.png' | asset_url }}" alt="Size" loading="lazy">
             <p>
               A portrait of your dog isn't just wall art. It's a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
-            <figure class="tab-overview__image-card tab-overview__image-card--wall">
-              <img id="mp-overview-wall" src="" alt="" width="1036" height="1020" loading="lazy">
-              <figcaption class="tab-overview__photo-label tab-overview__photo-label--wall">On your wall</figcaption>
-            </figure>
+            <div class="tab-overview__composite" id="mp-overview-media">
+              <figure class="tab-overview__image-card tab-overview__image-card--photo">
+                <img id="mp-overview-photo" src="" alt="" width="263" height="350" loading="lazy">
+                <figcaption class="tab-overview__photo-label tab-overview__photo-label--photo">Your photo</figcaption>
+              </figure>
+              <figure class="tab-overview__image-card tab-overview__image-card--artist">
+                <img id="mp-overview-artist" src="" alt="" width="200" height="243" loading="lazy">
+                <figcaption class="tab-overview__photo-label tab-overview__photo-label--artist">Designed by artists</figcaption>
+              </figure>
+              <figure class="tab-overview__image-card tab-overview__image-card--wall">
+                <img id="mp-overview-wall" src="" alt="" width="709" height="478" loading="lazy">
+                <figcaption class="tab-overview__photo-label tab-overview__photo-label--wall">On your wall</figcaption>
+              </figure>
+            </div>
           </div>
         </div>
 
@@ -1191,9 +1190,10 @@
 }
 
 /* ------ Tab: Overview ------ */
-.tab-overview img {
+.tab-overview > img {
   display: block;
   height: auto;
+  margin-bottom: 60px;
   max-width: 100%;
 }
 
@@ -1251,41 +1251,45 @@
 
 .tab-overview__body p { margin: 0; }
 
-.tab-overview__media {
-  margin-bottom: 60px;
-}
-
-.tab-overview__media-row {
-  align-items: center;
-  display: flex;
-  gap: 80px;
-  justify-content: center;
-  min-height: 250px;
+.tab-overview__composite {
+  aspect-ratio: 1036 / 1020;
+  margin-top: 60px;
+  position: relative;
+  width: 100%;
 }
 
 .tab-overview__image-card {
   margin: 0;
-  position: relative;
+  position: absolute;
 }
 
 .tab-overview__image-card img {
+  display: block;
+  height: 100%;
   border-radius: 32px;
   object-fit: cover;
   width: 100%;
 }
 
 .tab-overview__image-card--photo {
-  margin-top: 54px;
-  width: 160px;
+  height: 34.31%;
+  left: 0;
+  top: 15.1%;
+  width: 25.39%;
 }
 
 .tab-overview__image-card--artist {
-  width: 160px;
+  height: 23.82%;
+  left: 47.35%;
+  top: 9.8%;
+  width: 16.3%;
 }
 
 .tab-overview__image-card--wall {
-  margin-top: 60px;
-  width: 100%;
+  height: 46.86%;
+  left: 31.56%;
+  top: 53.14%;
+  width: 68.44%;
 }
 
 .tab-overview__image-card--wall img {
@@ -1294,8 +1298,6 @@
 
 .tab-overview__photo-label {
   position: absolute;
-  bottom: 10px;
-  right: -10px;
   background: var(--green);
   color: var(--cream);
   font-size: var(--font-size--2xs);
@@ -1306,37 +1308,26 @@
 }
 
 .tab-overview__photo-label--photo {
-  bottom: 32%;
-  right: -82px;
+  left: 100%;
+  margin-left: 20px;
+  top: 45%;
 }
 
 .tab-overview__photo-label--artist {
-  right: -165px;
-  top: 42%;
+  left: 100%;
+  margin-left: 20px;
+  top: 39%;
 }
 
 .tab-overview__photo-label--wall {
-  bottom: 50%;
-  left: -120px;
-  right: auto;
+  margin-right: 20px;
+  right: 100%;
+  top: 47%;
 }
 
 @media (max-width: 749px) {
-  .tab-overview__media-row {
-    gap: 56px;
-  }
-
-  .tab-overview__image-card--photo,
-  .tab-overview__image-card--artist {
-    width: min(160px, 34vw);
-  }
-
-  .tab-overview__photo-label--artist {
-    right: -128px;
-  }
-
   .tab-overview__photo-label--wall {
-    left: 10px;
+    margin-right: 12px;
   }
 }
 
