@@ -3411,15 +3411,57 @@
     return;
   }
 
+  var previewScrollFrame = null;
+
+  function animatePreviewScroll(targetTop) {
+    targetTop = Math.max(0, Math.round(targetTop));
+
+    if (previewScrollFrame) {
+      window.cancelAnimationFrame(previewScrollFrame);
+      previewScrollFrame = null;
+    }
+
+    var startTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var distance = targetTop - startTop;
+    if (Math.abs(distance) < 1) {
+      window.scrollTo(0, targetTop);
+      return;
+    }
+
+    var duration = Math.min(700, Math.max(280, Math.abs(distance) * 0.35));
+    var startTime = null;
+
+    function easeOutCubic(progress) {
+      return 1 - Math.pow(1 - progress, 3);
+    }
+
+    function step(timestamp) {
+      if (startTime === null) startTime = timestamp;
+
+      var progress = Math.min(1, (timestamp - startTime) / duration);
+      window.scrollTo(0, startTop + distance * easeOutCubic(progress));
+
+      if (progress < 1) {
+        previewScrollFrame = window.requestAnimationFrame(step);
+      } else {
+        window.scrollTo(0, targetTop);
+        previewScrollFrame = null;
+      }
+    }
+
+    previewScrollFrame = window.requestAnimationFrame(step);
+  }
+
   function scrollToPreviewAnchor() {
     if (window.innerWidth < 800 || (state.step !== 1 && state.step !== 2)) return;
 
     var previewAnchor = document.querySelector('.make-portrait__left');
     if (!previewAnchor) return;
 
+    var targetTop = previewAnchor.getBoundingClientRect().top + window.pageYOffset - 20;
     var stickyPanel = document.querySelector('.make-portrait__right');
     if (stickyPanel) stickyPanel.style.top = '94px';
-    previewAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    animatePreviewScroll(targetTop);
   }
 
   var MP_AVAILABILITY_LABELS = {
