@@ -12,92 +12,71 @@
     "page-at-home": {
       "type": "page-at-home",
       "blocks": {
-        "photo_pprDpi": {
+        "photo_01": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/brand04.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-pomeranian-dream-watercolour-portrait-walnut-frame-day-bed-bedroom.jpg"
           }
         },
-        "photo_iHL3DJ": {
+        "photo_02": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/02.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg"
           }
         },
-        "photo_hYryyD": {
+        "photo_03": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/03.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-chihuahua-studio-pencil-sketch-portrait-black-frame-rattan-bed-headboard-bedroom.jpg"
           }
         },
-        "photo_nGkVhY": {
+        "photo_04": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/04.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-border-collie-indigo-style-portrait-walnut-frame-mid-century-console-living-room.jpg"
           }
         },
-        "photo_9W9rPH": {
+        "photo_05": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/05.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-jack-russell-terrier-gentleman-old-masters-portrait-black-frame-leather-chair-office.jpg"
           }
         },
-        "photo_ccnKbE": {
+        "photo_06": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/06.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-husky-dream-style-portrait-on-swing-sunset-clouds-living-room-elderly-customer.jpg"
           }
         },
-        "photo_UcUXAP": {
+        "photo_07": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/07.png"
+            "asset_image": "bark-and-frame-see-it-at-home-samoyed-duchess-old-masters-portrait-black-frame-cream-victorian-sofa-living-room.jpg"
           }
         },
-        "photo_qLjkmD": {
+        "photo_08": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/08.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-cavalier-king-charles-spaniel-la-parisienne-style-portrait-victorian-desk-bedroom.jpg"
           }
         },
-        "photo_rb6fzn": {
+        "photo_09": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/09.jpg"
-          }
-        },
-        "photo_N78gMW": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/10.jpg"
-          }
-        },
-        "photo_MRai83": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/11.jpg"
-          }
-        },
-        "photo_yBgjJ8": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/12.jpg"
+            "asset_image": "bark-and-frame-see-it-at-home-golden-retriever-pure-portrait-oil-painting-oak-frame-kitchen.jpg"
           }
         }
       },
       "block_order": [
-        "photo_pprDpi",
-        "photo_iHL3DJ",
-        "photo_hYryyD",
-        "photo_nGkVhY",
-        "photo_9W9rPH",
-        "photo_ccnKbE",
-        "photo_UcUXAP",
-        "photo_qLjkmD",
-        "photo_rb6fzn",
-        "photo_N78gMW",
-        "photo_MRai83",
-        "photo_yBgjJ8"
+        "photo_01",
+        "photo_02",
+        "photo_03",
+        "photo_04",
+        "photo_05",
+        "photo_06",
+        "photo_07",
+        "photo_08",
+        "photo_09"
       ],
       "settings": {
         "button_url": "shopify://pages/make-portrait",
