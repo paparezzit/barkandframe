@@ -25,24 +25,7 @@
   {%- if section.blocks.size > 0 -%}
     <div class="at-home__grid">
       {%- for block in section.blocks -%}
-        {%- assign asset_image = block.settings.asset_image | strip -%}
-        {%- if asset_image != blank -%}
-          {%- assign asset_alt = block.settings.alt | default: asset_image | split: '.' | first | replace: '-', ' ' -%}
-          <button
-            class="at-home__item"
-            data-src="{{ asset_image | asset_url }}"
-            data-alt="{{ asset_alt | escape }}"
-            {{ block.shopify_attributes }}
-          >
-            <img
-              src="{{ asset_image | asset_img_url: '800x' }}"
-              alt="{{ asset_alt | escape }}"
-              width="1534"
-              height="2048"
-              loading="lazy"
-            >
-          </button>
-        {%- elsif block.settings.image != blank -%}
+        {%- if block.settings.image != blank -%}
           <button
             class="at-home__item"
             data-src="{{ block.settings.image | image_url: width: 2000 }}"
@@ -189,16 +172,6 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "asset_image",
-          "label": "Theme asset image filename"
-        },
-        {
-          "type": "text",
-          "id": "alt",
-          "label": "Alt text"
         }
       ]
     }
