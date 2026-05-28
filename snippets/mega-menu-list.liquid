@@ -9,6 +9,8 @@
   @param {string} [menu_content_type] - Type of content: 'featured_products', 'featured_collections', 'collection_images', or 'text'.
   @param {number} [content_aspect_ratio] - Aspect ratio for content images.
   @param {number} [image_border_radius] - Border radius for content images.
+  @param {string} [cta_label] - Optional CTA label to insert into the Shop menu list.
+  @param {string} [cta_url] - Optional CTA URL to insert into the Shop menu list.
   @param {object} [section] - The section object.
 
   @example
@@ -68,6 +70,14 @@
       assign collection_object = collections.all
     else
       assign menu_content_type = 'text'
+    endif
+  endif
+
+  assign render_cta_as_menu_item = false
+  if parent_link.title == 'Shop' and cta_label != blank and cta_url != blank
+    assign existing_cta_links = parent_link.links | where: 'title', cta_label
+    if existing_cta_links.size == 0
+      assign render_cta_as_menu_item = true
     endif
   endif
 %}
@@ -164,6 +174,16 @@
         </ul>
       {% endif %}
     </div>
+    {% if render_cta_as_menu_item and forloop.index == 2 %}
+      <div>
+        <a
+          href="{{ cta_url }}"
+          class="mega-menu__link"
+        >
+          <span class="mega-menu__link-title">{{- cta_label -}}</span>
+        </a>
+      </div>
+    {% endif %}
 
     {% liquid
       # Check conditions for closing the span at the end of each iteration, then close the span if needed

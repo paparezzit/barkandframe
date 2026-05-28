@@ -150,6 +150,15 @@
                         role="list"
                         tabindex="-1"
                       >
+                        {% liquid
+                          assign render_cta_as_menu_item = false
+                          if link.title == 'Shop' and cta_label != blank and cta_url != blank
+                            assign existing_cta_links = link.links | where: 'title', cta_label
+                            if existing_cta_links.size == 0
+                              assign render_cta_as_menu_item = true
+                            endif
+                          endif
+                        %}
                         {%- for childlink in link.links -%}
                           <li
                             class="menu-drawer__list-item"
@@ -173,6 +182,19 @@
                               <span class="menu-drawer__menu-item-text">{{ childlink.title | escape }}</span>
                             </a>
                           </li>
+                          {%- if render_cta_as_menu_item and forloop.index == 2 -%}
+                            <li
+                              class="menu-drawer__list-item"
+                              style="--menu-drawer-animation-index: {{ forloop.index | plus: 1 }};"
+                            >
+                              <a
+                                href="{{ cta_url }}"
+                                class="menu-drawer__menu-item menu-drawer__menu-item--child focus-inset"
+                              >
+                                <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
+                              </a>
+                            </li>
+                          {%- endif -%}
                         {%- endfor -%}
                       </ul>
                     </details>
@@ -207,6 +229,15 @@
                     role="list"
                     tabindex="-1"
                   >
+                    {% liquid
+                      assign render_cta_as_menu_item = false
+                      if link.title == 'Shop' and cta_label != blank and cta_url != blank
+                        assign existing_cta_links = link.links | where: 'title', cta_label
+                        if existing_cta_links.size == 0
+                          assign render_cta_as_menu_item = true
+                        endif
+                      endif
+                    %}
                     {%- for childlink in link.links -%}
                       <li
                         class="menu-drawer__list-item"
@@ -226,6 +257,19 @@
                           <span class="menu-drawer__menu-item-text">{{ childlink.title | escape }}</span>
                         </a>
                       </li>
+                      {%- if render_cta_as_menu_item and forloop.index == 2 -%}
+                        <li
+                          class="menu-drawer__list-item"
+                          style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};"
+                        >
+                          <a
+                            href="{{ cta_url }}"
+                            class="menu-drawer__menu-item menu-drawer__menu-item--child menu-drawer__animated-element focus-inset"
+                          >
+                            <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
                     {%- endfor -%}
                   </ul>
                 {% else %}
@@ -244,11 +288,6 @@
                   </a>
                 {% endif %}
               </li>
-              {%- if forloop.index == 2 and cta_label != blank and cta_url != blank -%}
-                <li class="menu-drawer__cta" style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};">
-                  <a href="{{ cta_url }}" class="button">{{ cta_label }}</a>
-                </li>
-              {%- endif -%}
             {%- endfor -%}
           {% else %}
             {%- comment -%}
