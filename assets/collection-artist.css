@@ -134,6 +134,17 @@
   margin-left: auto;
 }
 
+.artist-collection__product-card:nth-child(10n+6),
+.artist-collection__product-card:nth-child(10n+8),
+.artist-collection__product-card:nth-child(10n+10) {
+  margin-left: auto;
+}
+
+.artist-collection__product-card:nth-child(10n+7),
+.artist-collection__product-card:nth-child(10n+9) {
+  margin-left: 0;
+}
+
 .artist-collection__product-card:nth-child(5n+2),
 .artist-collection__product-card:nth-child(5n+3) {
   width: 400px;
@@ -350,6 +361,29 @@
 
   .artist-collection__product-card:nth-child(5n+5) .artist-collection__product-name {
     left: 30%;
+  }
+
+  .artist-collection__product-card:nth-child(10n+6) {
+    margin-left: auto;
+  }
+
+  .artist-collection__product-card:nth-child(10n+7) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .artist-collection__product-card:nth-child(10n+8) {
+    margin-left: auto;
+    margin-right: 100px;
+  }
+
+  .artist-collection__product-card:nth-child(10n+9) {
+    margin-left: 50px;
+    margin-right: 0;
+  }
+
+  .artist-collection__product-card:nth-child(10n+10) {
+    margin-left: auto;
   }
 
   .artist-collection__info {
