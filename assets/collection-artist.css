@@ -125,6 +125,7 @@
   max-width: min(60vw, 300px);
   margin: 0;
   pointer-events: auto;
+  position: relative;
   transition: opacity .3s;
 }
 
@@ -163,9 +164,9 @@
 
 .artist-collection__product-name {
   position: absolute;
-  top: 60%;
-  left: 35%;
-  transform: translate(-50%, -50%);
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
   background-color: var(--beige);
   color: var(--green);
   border-radius: 1000px;
@@ -174,26 +175,23 @@
   white-space: nowrap;
   pointer-events: none;
   line-height: 1.2;
+  z-index: 2;
 }
 
 .artist-collection__product-card:nth-child(5n+2) .artist-collection__product-name {
   left: 50%;
-  top: 50%;
 }
 
 .artist-collection__product-card:nth-child(5n+3) .artist-collection__product-name {
   left: 50%;
-  top: 45%;
 }
 
 .artist-collection__product-card:nth-child(5n+4) .artist-collection__product-name {
   left: 50%;
-  top: 80%;
 }
 
 .artist-collection__product-card:nth-child(5n+5) .artist-collection__product-name {
-  left: 35%;
-  top: 85%;
+  left: 50%;
 }
 
 .artist-collection__info {
@@ -317,7 +315,7 @@
   }
 
   .artist-collection__product-card:nth-child(5n+1) .artist-collection__product-name {
-    left: 25%;
+    left: 50%;
   }
 
   .artist-collection__product-card:nth-child(5n+2) {
@@ -325,7 +323,7 @@
   }
 
   .artist-collection__product-card:nth-child(5n+2) .artist-collection__product-name {
-    left: 65%;
+    left: 50%;
   }
 
   .artist-collection__product-card:nth-child(5n+3) {
@@ -339,7 +337,7 @@
   }
 
   .artist-collection__product-card:nth-child(5n+4) .artist-collection__product-name {
-    left: 45%;
+    left: 50%;
   }
 
   .artist-collection__product-card:nth-child(5n+5) {
@@ -347,7 +345,7 @@
   }
 
   .artist-collection__product-card:nth-child(5n+5) .artist-collection__product-name {
-    left: 30%;
+    left: 50%;
   }
 
   .artist-collection__info {

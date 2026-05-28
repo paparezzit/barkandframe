@@ -115,10 +115,10 @@
                 height="{{ display_image_height }}"
                 loading="lazy"
               >
-              {%- if block.settings.title != blank -%}
-                <span class="artist-collection__product-name">{{ block.settings.title }}</span>
-              {%- endif -%}
             </div>
+            {%- if block.settings.title != blank -%}
+              <span class="artist-collection__product-name">{{ block.settings.title }}</span>
+            {%- endif -%}
           {%- if block.settings.link != blank -%}
             </a>
           {%- else -%}
@@ -164,8 +164,8 @@
                 loading="lazy"
               >
             {%- endif -%}
-            <span class="artist-collection__product-name">{{ product.title }}</span>
           </div>
+          <span class="artist-collection__product-name">{{ product.title }}</span>
         </a>
       {%- endfor -%}
       {%- endif -%}
