@@ -9,6 +9,13 @@
 
 {% unless product_resource.has_only_default_variant %}
   {% liquid
+    assign visible_option_count = 0
+    for product_option in product_resource.options_with_values
+      if product_option.values.size > 1
+        assign visible_option_count = visible_option_count | plus: 1
+      endif
+    endfor
+
     assign button_background_brightness = section.settings.color_scheme.settings.foreground | color_brightness
     if button_background_brightness < 105
       assign strikethrough_color_mix = '#000'
@@ -31,10 +38,18 @@
     {% if request.visual_preview_mode %}
       data-shopify-visual-preview
     {% endif %}
+    {% if visible_option_count == 0 %}
+      hidden
+    {% endif %}
   >
     <form class="variant-picker__form">
       {%- for product_option in product_resource.options_with_values -%}
         {%- liquid
+          assign hide_single_option = false
+          if product_option.values.size == 1
+            assign hide_single_option = true
+          endif
+
           assign swatch_count = product_option.values | map: 'swatch' | compact | size
           assign variant_style = block_settings.variant_style
           assign option_name_lower = product_option.name | downcase
@@ -65,6 +80,10 @@
           <fieldset
             class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
             {{ option_id_attribute }}
+            {% if hide_single_option %}
+              hidden
+              aria-hidden="true"
+            {% endif %}
           >
             <legend>
               {{ product_option.name | escape }}
@@ -73,6 +92,26 @@
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
+              {% liquid
+                assign swatch_option_position = product_option.position
+                assign swatch_option_key = 'option' | append: swatch_option_position
+                assign option_variant = product_option_value.variant
+                assign featured_media = option_variant.featured_media
+
+                if featured_media == blank
+                  if option_variant == blank
+                    for variant in product_resource.variants
+                      if variant.available and variant[swatch_option_key] == product_option_value.name and variant.featured_media
+                        assign featured_media = variant.featured_media
+                        assign option_variant = variant
+                        break
+                      endif
+                    endfor
+                  elsif product_option_value.product_url
+                    assign featured_media = option_variant.product.featured_media
+                  endif
+                endif
+              %}
               <label class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}">
                 <input
                   type="radio"
@@ -86,31 +125,24 @@
                   data-option-value-id="{{ product_option_value.id }}"
                   data-option-available="{{ product_option_value.available }}"
                   data-connected-product-url="{{ product_option_value.product_url }}"
-                  {% if product_option_value.variant.id %}
-                    data-variant-id="{{ product_option_value.variant.id }}"
+                  {% if featured_media.id %}
+                    data-option-media-id="{{ featured_media.id }}"
+                  {% endif %}
+                  {% if option_variant.id %}
+                    data-variant-id="{{ option_variant.id }}"
                   {% endif %}
                   {% if product_option_value.selected %}
                     checked
                   {% endif %}
                 >
                 {% if variant_style == 'swatch' %}
-                  {% liquid
-                    assign featured_media = product_option_value.variant.featured_media
-
-                    # If the variant has no featured media, and we have a combined listing product, then fall back to
-                    # using the featured media of the child product that is linked to this option value.
-                    if featured_media == blank and product_option_value.product_url
-                      assign featured_media = product_option_value.variant.product.featured_media
-                    endif
-                  %}
-
                   {% render 'swatch',
                     swatch: product_option_value.swatch,
                     variant_image: featured_media,
                     mode: 'unscaled',
                     color_name: product_option_value.name,
                   %}
-                  <span class="variant-option__swatch-name">{{ product_option_value.name }}</span>
+                  <span class="variant-option__swatch-name">{{ product_option_value.name | replace: ' ', '<br>' }}</span>
                 {% else %}
                   <span class="variant-option__button-label__text">{{ product_option_value | escape }}</span>
                 {% endif %}
@@ -140,7 +172,13 @@
             endif
           %}
 
-          <div class="variant-option variant-option--dropdowns">
+          <div
+            class="variant-option variant-option--dropdowns"
+            {% if hide_single_option %}
+              hidden
+              aria-hidden="true"
+            {% endif %}
+          >
             <label for="Option-{{ block.id }}-{{ forloop.index0 }}">{{ product_option.name | escape }}</label>
             <div
               class="variant-option__select-wrapper"
@@ -215,6 +253,10 @@
     --options-border-radius: var(--variant-picker-button-radius);
     --options-border-width: var(--variant-picker-button-border-width);
     --variant-option-padding-inline: var(--padding-md);
+  }
+
+  .variant-option[hidden] {
+    display: none !important;
   }
 
   .variant-option--swatches {
@@ -328,6 +370,7 @@
     gap: 5px;
     flex-basis: auto;
     min-height: auto;
+    overflow: visible;
   }
 
   .variant-option__swatch-name {
@@ -336,6 +379,9 @@
     text-align: center;
     color: var(--brown);
     white-space: nowrap;
+    overflow: visible;
+    box-sizing: border-box;
+    padding-left: 0;
   }
 
   .variant-option__button-label:has(:checked) {

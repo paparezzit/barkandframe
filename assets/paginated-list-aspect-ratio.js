@@ -11,7 +11,7 @@ export class PaginatedListAspectRatioHelper {
    * @type {Object.<string, string>}
    */
   #ASPECT_RATIOS = {
-    square: '1',
+    square: '100 / 126',
     portrait: '0.8',
     landscape: '1.778',
   };

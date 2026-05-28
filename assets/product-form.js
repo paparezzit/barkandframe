@@ -259,22 +259,98 @@ class ProductFormComponent extends Component {
             }, 5000);
           }
 
-          this.dispatchEvent(
-            new CartAddEvent({}, id.toString(), {
-              source: 'product-form-component',
-              itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
-              productId: this.dataset.productId,
-              sections: response.sections,
-            })
-          );
+          return this.#updateMerchOrderAttribute(formData).then(() => {
+            this.dispatchEvent(
+              new CartAddEvent({}, id.toString(), {
+                source: 'product-form-component',
+                itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
+                productId: this.dataset.productId,
+                sections: response.sections,
+              })
+            );
+          });
         }
       })
       .catch((error) => {
         console.error(error);
+        if (error instanceof Error && error.message === 'Merch order data update failed.' && addToCartTextError) {
+          const message = 'Product added, but order data update failed. Please try again before checkout.';
+          this.dispatchEvent(new CartErrorEvent(this.id, message, message, {}));
+          addToCartTextError.classList.remove('hidden');
+          addToCartTextError.setAttribute('aria-live', 'assertive');
+
+          const textNode = addToCartTextError.childNodes[2];
+          if (textNode) {
+            textNode.textContent = message;
+          } else {
+            addToCartTextError.appendChild(document.createTextNode(message));
+          }
+
+          this.#setLiveRegionText(message);
+          this.#timeout = setTimeout(() => {
+            addToCartTextError.classList.add('hidden');
+            this.#clearLiveRegionText();
+          }, 10000);
+        }
       })
       .finally(() => {
         // add more thing to do in here if needed.
         cartPerformance.measureFromEvent('add:user-action', event);
+      });
+  }
+
+  /**
+   * @param {FormData} formData
+   * @returns {Promise<void>}
+   */
+  #updateMerchOrderAttribute(formData) {
+    const variantId = formData.get('id')?.toString();
+    if (!variantId || !this.dataset.bafPrintfulVariants) return Promise.resolve();
+
+    let printfulVariants;
+    try {
+      printfulVariants = JSON.parse(this.dataset.bafPrintfulVariants);
+    } catch {
+      return Promise.resolve();
+    }
+
+    const printfulVariantId = Number(printfulVariants[variantId]);
+    if (!printfulVariantId) return Promise.resolve();
+
+    const quantity = Number(formData.get('quantity')) || Number(this.dataset.quantityDefault) || 1;
+
+    return fetch('/cart.js', {
+      headers: { Accept: 'application/json' },
+    })
+      .then((response) => response.json())
+      .then((cart) => {
+        let existingOrder;
+        try {
+          existingOrder = JSON.parse(cart.attributes && cart.attributes['_order']);
+        } catch {
+          existingOrder = null;
+        }
+
+        if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
+        existingOrder.items.push({
+          printful_variant_id: printfulVariantId,
+          quantity,
+        });
+
+        return fetch('/cart/update.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({ attributes: { _order: JSON.stringify(existingOrder) } }),
+        }).then((response) => {
+          if (!response.ok) throw new Error('Merch order data update failed.');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new Error('Merch order data update failed.');
       });
   }
 

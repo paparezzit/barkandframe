@@ -41,7 +41,7 @@
     when 'portrait'
       assign ratio = '4 / 5'
     when 'square'
-      assign ratio = '1'
+      assign ratio = '100 / 126'
     when 'adapt'
       if product != blank
         assign current_featured_image_for_ratio = product.featured_image
@@ -99,10 +99,6 @@
     --gallery-aspect-ratio: {{ ratio }};
   "
   data-product-id="{{ product.id }}"
-  {% if settings.show_second_image_on_hover %}
-    on:pointerenter="/previewImage"
-    on:pointerleave="/resetImage"
-  {% endif %}
   {% if settings.transition_to_main_product %}
     data-view-transition-to-main-product
   {% endif %}

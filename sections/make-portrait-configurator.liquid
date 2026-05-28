@@ -311,6 +311,7 @@
             {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
+              type="button"
               data-style-id="{{ style.style_id.value }}"
               role="option"
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
@@ -1722,6 +1723,9 @@
   display: inline-block;
   max-width: 64px;
   opacity: .45;
+  box-sizing: border-box;
+  padding-left: 4px;
+  padding-right: 0;
 }
 
 .style-picker__tag {
@@ -2003,6 +2007,9 @@
   display: block;
   opacity: .45;
   transition: opacity .2s;
+  box-sizing: border-box;
+  padding-left: 0;
+  overflow: visible;
 }
 
 .option-btn .option-btn__color-delta {
@@ -2010,6 +2017,8 @@
   font-size: 10px;
   font-weight: 400;
   transition: opacity .2s;
+  box-sizing: border-box;
+  padding-left: 0;
 }
 
 .option-btn:hover, .option-btn.selected {
@@ -2077,6 +2086,43 @@
 }
 
 .option-btn--small{
+  width: 64px;
+}
+
+.make-portrait .style-picker__name {
+  display: inline-block;
+  position: static;
+  left: auto;
+  transform: none;
+  box-sizing: border-box;
+  padding-left: 4px;
+  padding-right: 0;
+}
+
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="frame"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="border"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="color"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="color"] .option-btn__color-delta {
+  display: block;
+  position: static;
+  left: auto;
+  transform: none;
+  box-sizing: border-box;
+  padding-left: 4px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  line-height: 1.1;
+}
+
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="frame"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="border"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="color"] .option-btn__label {
+  margin-top: 8px;
+}
+
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="color"] .option-btn__label,
+.make-portrait .make-portrait__step[data-step="3"] .option-btn-grid[data-option-name="color"] .option-btn__color-delta {
   width: 64px;
 }
 
@@ -3413,13 +3459,103 @@
       window.cancelAnimationFrame(productAccordionScrollFrame);
       productAccordionScrollFrame = null;
     }
+    if (configuratorScrollTimer) {
+      window.clearTimeout(configuratorScrollTimer);
+      configuratorScrollTimer = null;
+    }
+    if (configuratorScrollFrame) {
+      window.cancelAnimationFrame(configuratorScrollFrame);
+      configuratorScrollFrame = null;
+    }
+    if (configuratorScrollRestoreTimer) {
+      window.clearTimeout(configuratorScrollRestoreTimer);
+      configuratorScrollRestoreTimer = null;
+    }
+    configuratorScrollToken += 1;
+  }
+
+  function forceWindowScrollTop(targetTop) {
+    targetTop = Math.max(0, Math.round(targetTop));
+    var root = document.documentElement;
+    var body = document.body;
+    var scroller = document.scrollingElement || root;
+    var currentTop = window.pageYOffset || (scroller && scroller.scrollTop) || 0;
+    var lenis = window.BarkFrameLenis || window.lenis || null;
+
+    if (!configuratorScrollBehaviorState) {
+      configuratorScrollBehaviorState = {
+        root: root ? root.style.scrollBehavior : '',
+        body: body ? body.style.scrollBehavior : ''
+      };
+    }
+
+    if (root) root.style.scrollBehavior = 'auto';
+    if (body) body.style.scrollBehavior = 'auto';
+    if (lenis && typeof lenis.stop === 'function') lenis.stop();
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      try { lenis.scrollTo(targetTop, { immediate: true, force: true }); } catch (e) {}
+    }
+
+    window.scrollTo({ top: currentTop, left: 0, behavior: 'auto' });
+    if (scroller) scroller.scrollTop = currentTop;
+    if (root) root.scrollTop = currentTop;
+    if (body) body.scrollTop = currentTop;
+
+    window.scrollTo({ top: targetTop, left: 0, behavior: 'auto' });
+    if (scroller) scroller.scrollTop = targetTop;
+    if (root) root.scrollTop = targetTop;
+    if (body) body.scrollTop = targetTop;
+  }
+
+  function restoreConfiguratorScrollBehavior(token) {
+    if (token !== configuratorScrollToken || !configuratorScrollBehaviorState) return;
+    var root = document.documentElement;
+    var body = document.body;
+    if (root) root.style.scrollBehavior = configuratorScrollBehaviorState.root;
+    if (body) body.style.scrollBehavior = configuratorScrollBehaviorState.body;
+    var lenis = window.BarkFrameLenis || window.lenis || null;
+    if (lenis && typeof lenis.start === 'function') lenis.start();
+    configuratorScrollBehaviorState = null;
+    configuratorScrollRestoreTimer = null;
+  }
+
+  function applyConfiguratorStartScroll(token) {
+    if (typeof token === 'number' && token !== configuratorScrollToken) return;
+    var stickyPanel = document.querySelector('.make-portrait__right');
+    if (stickyPanel) stickyPanel.style.top = window.innerWidth >= 800 ? '94px' : '';
+    lockProductAccordionScrollAnchoring();
+    forceWindowScrollTop(getConfiguratorStartTop());
+    if (configuratorScrollRestoreTimer) window.clearTimeout(configuratorScrollRestoreTimer);
+    configuratorScrollRestoreTimer = window.setTimeout(function () {
+      restoreConfiguratorScrollBehavior(configuratorScrollToken);
+    }, 350);
   }
 
   function jumpToConfiguratorStart() {
     cancelConfiguratorScrolls();
-    var stickyPanel = document.querySelector('.make-portrait__right');
-    if (stickyPanel) stickyPanel.style.top = window.innerWidth >= 800 ? '94px' : '';
-    window.scrollTo(0, getConfiguratorStartTop());
+    applyConfiguratorStartScroll();
+  }
+
+  function scheduleConfiguratorStartScroll() {
+    cancelConfiguratorScrolls();
+    var token = configuratorScrollToken;
+    var guardUntil = Date.now() + 700;
+
+    function guardConfiguratorStartScroll() {
+      if (token !== configuratorScrollToken) return;
+      applyConfiguratorStartScroll(token);
+      if (Date.now() < guardUntil) {
+        configuratorScrollFrame = window.requestAnimationFrame(guardConfiguratorStartScroll);
+      } else {
+        configuratorScrollFrame = null;
+      }
+    }
+
+    configuratorScrollTimer = window.setTimeout(function () {
+      configuratorScrollTimer = null;
+      if (token !== configuratorScrollToken) return;
+      guardConfiguratorStartScroll();
+    }, 0);
   }
 
   function scrollToPreview() {
@@ -3427,6 +3563,11 @@
   }
 
   var productAccordionScrollFrame = null;
+  var configuratorScrollTimer = null;
+  var configuratorScrollFrame = null;
+  var configuratorScrollRestoreTimer = null;
+  var configuratorScrollToken = 0;
+  var configuratorScrollBehaviorState = null;
   var productAccordionAnchorTimer = null;
   var productAccordionAnchorState = null;
 
@@ -3535,8 +3676,7 @@
   }
 
   function scrollToPreviewAnchor() {
-    if (window.innerWidth < 800) return;
-    jumpToConfiguratorStart();
+    scheduleConfiguratorStartScroll();
   }
 
   var MP_AVAILABILITY_LABELS = {
@@ -3886,6 +4026,7 @@
     group.appendChild(lbl);
     var grid = document.createElement('div');
     grid.className = 'option-btn-grid';
+    grid.dataset.optionName = 'frame';
     ['framed', 'unframed'].forEach(function (choice) {
       var label = choice === 'unframed' ? 'Unframed' : 'Framed';
       var btn = document.createElement('button');
@@ -4086,6 +4227,7 @@
     group.appendChild(label);
     var grid = document.createElement('div');
     grid.className = 'option-btn-grid';
+    grid.dataset.optionName = opt.name.toLowerCase();
 
     var seen = {}, values = [];
     product.variants.forEach(function (v) {
@@ -4263,6 +4405,7 @@
     framingGroup.appendChild(framingLabel);
     var framingGrid = document.createElement('div');
     framingGrid.className = 'option-btn-grid';
+    framingGrid.dataset.optionName = 'frame';
     var framedBtn = document.createElement('button');
     framedBtn.className = 'option-btn selected';
     framedBtn.type = 'button';
@@ -5108,12 +5251,21 @@
     if (urlStep && urlStep > 1) goToStep(urlStep);
 
     // Style picker
-    document.querySelectorAll('.style-picker__item').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    var stylePicker = $('mp-style-picker');
+    if (stylePicker) {
+      stylePicker.addEventListener('click', function (event) {
+        var btn = event.target.closest('.style-picker__item');
+        if (!btn || !stylePicker.contains(btn)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        lockProductAccordionScrollAnchoring();
         selectStyle(btn.dataset.styleId);
         switchTab('overview');
-      });
-    });
+        if (event.detail > 0 && typeof btn.blur === 'function') btn.blur();
+        scrollToPreviewAnchor();
+      }, true);
+    }
 
     // Product picker
     document.querySelectorAll('.product-picker__item').forEach(function (btn) {
@@ -5131,19 +5283,13 @@
     var rightPanel = document.querySelector('.make-portrait__right');
     if (rightPanel) {
       function isPreviewScrollChoice(event) {
-        return event.target.closest('.style-picker__item, .product-picker__item, .option-btn');
+        return event.target.closest('.product-picker__item, .option-btn');
       }
 
-      rightPanel.addEventListener('pointerdown', function (event) {
+      rightPanel.addEventListener('click', function (event) {
         if (!isPreviewScrollChoice(event)) return;
         scrollToPreviewAnchor();
-      }, true);
-
-      rightPanel.addEventListener('keydown', function (event) {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        if (!isPreviewScrollChoice(event)) return;
-        scrollToPreviewAnchor();
-      }, true);
+      });
     }
 
     // CTA step 1

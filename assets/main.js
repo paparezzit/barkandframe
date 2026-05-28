@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const lenis = new Lenis();
+  window.BarkFrameLenis = lenis;
 
   function raf(time) {
     lenis.raf(time);

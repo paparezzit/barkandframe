@@ -1512,7 +1512,7 @@
           "type": "product-card--floating",
           "name": "t:names.product_card",
           "settings": {
-            "product": "mug-fella-dog",
+            "product": "you-can-pet-the-dog-cap",
             "parallax_amount": "0vh"
           },
           "blocks": {
@@ -1573,7 +1573,7 @@
           "type": "product-card--floating",
           "name": "t:names.product_card",
           "settings": {
-            "product": "cap-dogs-make-me-happy",
+            "product": "powered-by-dogs-t-shirt",
             "parallax_amount": "-20vh"
           },
           "blocks": {
@@ -1634,7 +1634,7 @@
           "type": "product-card--floating",
           "name": "t:names.product_card",
           "settings": {
-            "product": "t-shirt-powered-by-dogs",
+            "product": "bloom-crewneck",
             "parallax_amount": "-10vh"
           },
           "blocks": {
@@ -1695,7 +1695,7 @@
           "type": "product-card--floating",
           "name": "t:names.product_card",
           "settings": {
-            "product": "cap-dogs-make-me-happy",
+            "product": "powered-by-dogs-t-shirt",
             "parallax_amount": "0vh"
           },
           "blocks": {
@@ -1756,7 +1756,7 @@
           "type": "product-card--floating",
           "name": "t:names.product_card",
           "settings": {
-            "product": "mug-fella-dog",
+            "product": "you-can-pet-the-dog-cap",
             "parallax_amount": "-20vh"
           },
           "blocks": {
@@ -2222,11 +2222,11 @@
             "gap_between_elements": 24
           },
           "blocks": {
-            "image_wyUcEx": {
+            "image_instagram_01": {
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/soap-image-3_55026bb4-33d8-441d-ab42-6edc689dc6ad.png",
+                "image": "shopify://shop_images/bark-and-frame-artist-collection-powered-by-dogs-full-color-design-pure-white-t-shirt-male-model-editorial-dynamic.jpg",
                 "link": "https://instagram.com/bark_and_frame",
                 "image_ratio": "portrait",
                 "width": "fill",
@@ -2245,11 +2245,11 @@
               },
               "blocks": {}
             },
-            "image_DcGtME": {
+            "image_instagram_02": {
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/soap-image-1_3dc8b970-db8b-4757-b330-fae4c072bd9e.png",
+                "image": "shopify://shop_images/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg",
                 "link": "https://instagram.com/bark_and_frame",
                 "image_ratio": "portrait",
                 "width": "fill",
@@ -2268,34 +2268,11 @@
               },
               "blocks": {}
             },
-            "image_rXDtMK": {
+            "image_instagram_03": {
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/soap-image-3_55026bb4-33d8-441d-ab42-6edc689dc6ad.png",
-                "link": "",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_wLwJyR": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/soap-image-4.png",
+                "image": "shopify://shop_images/bark-and-frame-father-son-holding-framed-border-collie-indigo-style-portrait-walnut-frame-living-room-banner-instagram.jpg",
                 "link": "https://instagram.com/bark_and_frame",
                 "image_ratio": "portrait",
                 "width": "fill",
@@ -2314,11 +2291,126 @@
               },
               "blocks": {}
             },
-            "image_6FGRhc": {
+            "image_instagram_04": {
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/soap-image-5_f08415d9-e2f8-41c0-b85d-9e9114995a65.png",
+                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg",
+                "link": "https://instagram.com/bark_and_frame",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_instagram_05": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-customer-photo-example-french-bulldog-fawn-eye-level-soft-light-good-upload.jpg",
+                "link": "https://instagram.com/bark_and_frame",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_instagram_06": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-jack-russell-terrier-gentleman-old-masters-portrait-black-frame-leather-chair-office.jpg",
+                "link": "https://instagram.com/bark_and_frame",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_instagram_07": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-cavalier-king-charles-spaniel-la-parisienne-style-portrait-victorian-desk-bedroom.jpg",
+                "link": "https://instagram.com/bark_and_frame",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_instagram_08": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-artist-collection-bloom-tulip-dog-design-pure-white-t-shirt-female-model-editorial-close-up.jpg",
+                "link": "https://instagram.com/bark_and_frame",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_instagram_09": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-artist-painting-jack-russell-dog-portrait-gentleman-style-on-easel-studio.jpg",
                 "link": "https://instagram.com/bark_and_frame",
                 "image_ratio": "portrait",
                 "width": "fill",
@@ -2339,11 +2431,15 @@
             }
           },
           "block_order": [
-            "image_wyUcEx",
-            "image_DcGtME",
-            "image_rXDtMK",
-            "image_wLwJyR",
-            "image_6FGRhc"
+            "image_instagram_01",
+            "image_instagram_02",
+            "image_instagram_03",
+            "image_instagram_04",
+            "image_instagram_05",
+            "image_instagram_06",
+            "image_instagram_07",
+            "image_instagram_08",
+            "image_instagram_09"
           ]
         }
       },

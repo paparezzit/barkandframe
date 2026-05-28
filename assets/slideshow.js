@@ -532,7 +532,7 @@ export class Slideshow extends Component {
 
     if (!slides || slides.length <= 1) return;
     if (!(event.target instanceof Element)) return;
-    if (this.disabled || this.#dragging) return;
+    if (this.disabled || this.#dragging || this.hasAttribute('disable-mouse-drag')) return;
 
     // Check if the event target is within a 3D model interactive element
     // This prevents the slideshow from capturing drag events when interacting with 3D models

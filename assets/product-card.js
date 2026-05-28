@@ -78,6 +78,9 @@ export class ProductCard extends Component {
     this.addEventListener(SlideshowSelectEvent.eventName, this.#handleSlideshowSelect);
     mediaQueryLarge.addEventListener('change', this.#handleQuickAdd);
 
+    this.addEventListener('pointerover', this.#handleSwatchPointerOver);
+    this.addEventListener('pointerout', this.#handleSwatchPointerOut);
+    this.addEventListener('click', this.#handleSwatchClick, true);
     this.addEventListener('click', this.navigateToProduct);
 
     // Preload the next image on the slideshow to avoid white flashes on previewImage
@@ -90,6 +93,9 @@ export class ProductCard extends Component {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('pointerover', this.#handleSwatchPointerOver);
+    this.removeEventListener('pointerout', this.#handleSwatchPointerOut);
+    this.removeEventListener('click', this.#handleSwatchClick, true);
     this.removeEventListener('click', this.navigateToProduct);
   }
 
@@ -309,6 +315,75 @@ export class ProductCard extends Component {
   }
 
   /**
+   * Previews a color swatch image when hovering the swatch itself.
+   * @param {PointerEvent} event
+   */
+  #handleSwatchPointerOver = (event) => {
+    if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
+
+    const swatchLabel = event.target.closest(
+      'swatches-variant-picker-component .variant-option__button-label'
+    );
+    if (!swatchLabel || !this.contains(swatchLabel)) return;
+    if (event.relatedTarget instanceof Node && swatchLabel.contains(event.relatedTarget)) return;
+
+    const mediaId =
+      swatchLabel.getAttribute('data-media-id') ||
+      swatchLabel.querySelector('input[data-option-media-id]')?.getAttribute('data-option-media-id');
+    if (!mediaId) return;
+
+    this.previewVariant(mediaId);
+  };
+
+  /**
+   * Resets the card image after leaving a color swatch.
+   * @param {PointerEvent} event
+   */
+  #handleSwatchPointerOut = (event) => {
+    if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
+
+    const swatchLabel = event.target.closest(
+      'swatches-variant-picker-component .variant-option__button-label'
+    );
+    if (!swatchLabel || !this.contains(swatchLabel)) return;
+    if (event.relatedTarget instanceof Node && swatchLabel.contains(event.relatedTarget)) return;
+
+    this.resetVariant();
+  };
+
+  /**
+   * Opens product detail with the clicked color swatch variant preselected.
+   * @param {MouseEvent} event
+   */
+  #handleSwatchClick = (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const swatchLabel = event.target.closest(
+      'swatches-variant-picker-component .variant-option__button-label'
+    );
+    if (!swatchLabel || !this.contains(swatchLabel)) return;
+
+    const swatchInput = swatchLabel.querySelector(
+      'input[data-first-available-or-first-variant-id], input[data-variant-id]'
+    );
+    if (!(swatchInput instanceof HTMLInputElement)) return;
+
+    const variantId = swatchInput.dataset.firstAvailableOrFirstVariantId || swatchInput.dataset.variantId;
+    if (!variantId) return;
+
+    const picker = swatchInput.closest('swatches-variant-picker-component');
+    const productUrl = picker?.getAttribute('data-product-url') || this.refs.productCardLink.href;
+    if (!productUrl) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const url = new URL(productUrl, window.location.origin);
+    url.searchParams.set('variant', variantId);
+    this.#navigateToURL(event, url);
+  };
+
+  /**
    * Previews the next image.
    * @param {PointerEvent} event - The pointer event.
    */
@@ -354,16 +429,6 @@ export class ProductCard extends Component {
 
     if (!slideshow) return;
 
-    // If we have a selected variant, always use its image
-    if (this.variantPicker?.selectedOption) {
-      const id = this.variantPicker.selectedOption.dataset.optionMediaId;
-      if (id) {
-        slideshow.select({ id }, undefined, { animate: false });
-        return;
-      }
-    }
-
-    // No variant selected - use initial slide if it's valid
     const initialSlide = slideshow.initialSlide;
     const slideId = initialSlide?.getAttribute('slide-id');
     if (initialSlide && slideshow.slides?.includes(initialSlide) && slideId) {
@@ -436,6 +501,94 @@ export class ProductCard extends Component {
 
 if (!customElements.get('product-card')) {
   customElements.define('product-card', ProductCard);
+}
+
+const productCardSwatchLabelSelector = 'swatches-variant-picker-component .variant-option__button-label';
+
+function getProductCardSwatchTarget(event) {
+  if (!(event.target instanceof Element)) return null;
+
+  const swatchLabel = event.target.closest(productCardSwatchLabelSelector);
+  if (!swatchLabel) return null;
+
+  const card = swatchLabel.closest('product-card');
+  if (!card) return null;
+
+  const input = swatchLabel.querySelector(
+    'input[data-first-available-or-first-variant-id], input[data-variant-id]'
+  );
+
+  return { card, swatchLabel, input };
+}
+
+function navigateToProductCardSwatch(event, productUrl, variantId) {
+  const url = new URL(productUrl, window.location.origin);
+  url.searchParams.set('variant', variantId);
+
+  const shouldOpenInNewTab =
+    event instanceof MouseEvent && (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1);
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+
+  if (shouldOpenInNewTab) {
+    window.open(url.href, '_blank');
+  } else {
+    window.location.href = url.href;
+  }
+}
+
+if (!window.__bafProductCardSwatchesBound) {
+  window.__bafProductCardSwatchesBound = true;
+
+  document.addEventListener(
+    'pointerover',
+    (event) => {
+      if (!(event instanceof PointerEvent) || event.pointerType !== 'mouse') return;
+
+      const target = getProductCardSwatchTarget(event);
+      if (!target) return;
+      if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
+
+      const mediaId =
+        target.swatchLabel.getAttribute('data-media-id') ||
+        target.input?.getAttribute('data-option-media-id');
+      if (mediaId && typeof target.card.previewVariant === 'function') target.card.previewVariant(mediaId);
+    },
+    true
+  );
+
+  document.addEventListener(
+    'pointerout',
+    (event) => {
+      if (!(event instanceof PointerEvent) || event.pointerType !== 'mouse') return;
+
+      const target = getProductCardSwatchTarget(event);
+      if (!target) return;
+      if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
+
+      if (typeof target.card.resetVariant === 'function') target.card.resetVariant();
+    },
+    true
+  );
+
+  document.addEventListener(
+    'click',
+    (event) => {
+      const target = getProductCardSwatchTarget(event);
+      if (!target || !(target.input instanceof HTMLInputElement)) return;
+
+      const variantId = target.input.dataset.firstAvailableOrFirstVariantId || target.input.dataset.variantId;
+      if (!variantId) return;
+
+      const picker = target.input.closest('swatches-variant-picker-component');
+      const productUrl = picker?.getAttribute('data-product-url') || target.card.refs?.productCardLink?.href;
+      if (!productUrl) return;
+
+      navigateToProductCardSwatch(event, productUrl, variantId);
+    },
+    true
+  );
 }
 
 /**

@@ -56,6 +56,11 @@
   else
     assign can_add_to_cart = false
   endif
+
+  capture baf_merch_printful_variants
+    render 'baf-merch-printful-map', product: product
+  endcapture
+  assign baf_merch_printful_variants = baf_merch_printful_variants | strip
 %}
 
 <quick-add-component
@@ -66,6 +71,9 @@
   <product-form-component
     data-section-id="{{ section_id }}"
     data-product-id="{{ product.id }}"
+    {% if baf_merch_printful_variants != blank %}
+      data-baf-printful-variants="{{ baf_merch_printful_variants | escape }}"
+    {% endif %}
     on:submit="/handleSubmit"
     class="
       quick-add__product-form-component

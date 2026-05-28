@@ -83,22 +83,17 @@
 
 {%- liquid
   assign sorted_media = '' | split: ','
-  if selected_variant_media
-    assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
-
-    for media in selected_product.media
-      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
+  for media in selected_product.media
+    if block_settings.hide_variants and variant_images contains media.src
+      unless selected_variant_media and media.id == selected_variant_media.id
         continue
-      endif
+      endunless
+    endif
 
-      if media.id != selected_variant_media.id
-        assign found_media = selected_product.media | where: 'id', media.id
-        assign sorted_media = sorted_media | concat: found_media
-      endif
-    endfor
-  else
-    assign sorted_media = selected_product.media
-  endif
+    assign found_media = selected_product.media | where: 'id', media.id
+    assign sorted_media = sorted_media | concat: found_media
+  endfor
+
   assign has_image_drop = sorted_media | has: 'media_type', 'image'
 
   # Determine if we're in single column mode (carousel or grid with one column)
@@ -128,7 +123,7 @@
   endcapture
   assign sizes = sizes | strip
 -%}
-{%- if has_image_drop -%}
+{%- if block_settings.zoom and has_image_drop -%}
   <script
     src="{{ 'drag-zoom-wrapper.js' | asset_url }}"
     type="module"
@@ -318,10 +313,17 @@
           --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};
         {% endcapture %}
       {% endif %}
+      {% assign attributes = '' %}
+      {% if media.media_type == 'image' %}
+        {% capture attributes %}
+          data-product-lightbox-src="{{ media.preview_image | image_url: width: 2400 }}"
+          data-product-lightbox-alt="{{ media.alt | escape }}"
+        {% endcapture %}
+      {% endif %}
       {% if block_settings.zoom and media.media_type == 'model' %}
-        {%- capture attributes -%}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
+        {%- capture attributes -%}{{ attributes }} "{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
       {% elsif block_settings.zoom %}
-        {%- capture attributes -%}on:click="#zoom-dialog-{{ block.id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
+        {%- capture attributes -%}{{ attributes }} on:click="#zoom-dialog-{{ block.id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
       {% endif %}
 
       {% render 'slideshow-slide',
@@ -375,7 +377,8 @@
     slide_count: sorted_media.size,
     slideshow_arrows: slideshow_arrows,
     arrows_position: icons_position,
-    controls: controls
+    controls: controls,
+    attributes: 'disable-mouse-drag'
   %}
 
   {% if block_settings.media_presentation == 'grid' %}
@@ -388,6 +391,10 @@
           ref="media[]"
           class="{{ product_media_container_class }} product-media-container--{{ media.media_type }}"
           style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}"
+          {% if media.media_type == 'image' %}
+            data-product-lightbox-src="{{ media.preview_image | image_url: width: 2400 }}"
+            data-product-lightbox-alt="{{ media.alt | escape }}"
+          {% endif %}
           {% if settings.transition_to_main_product and forloop.first %}
             data-view-transition-type="product-image-transition"
           {% endif %}
@@ -564,6 +571,28 @@
   {%- endif -%}
 </media-gallery>
 
+<div class="at-home-lightbox product-gallery-lightbox" data-product-gallery-lightbox aria-hidden="true">
+  <div class="at-home-lightbox__backdrop" data-product-lightbox-backdrop></div>
+  <button class="at-home-lightbox__close" data-product-lightbox-close aria-label="Close">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="2" y1="2" x2="18" y2="18"/><line x1="18" y1="2" x2="2" y2="18"/>
+    </svg>
+  </button>
+  <button class="at-home-lightbox__arrow at-home-lightbox__arrow--prev" data-product-lightbox-prev aria-label="Previous">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <button class="at-home-lightbox__arrow at-home-lightbox__arrow--next" data-product-lightbox-next aria-label="Next">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </button>
+  <div class="at-home-lightbox__stage">
+    <img class="at-home-lightbox__img" data-product-lightbox-img src="" alt="" width="1600" height="1200" loading="eager">
+  </div>
+</div>
+
 {% stylesheet %}
   .dialog-zoomed-gallery {
     cursor: zoom-out;
@@ -678,7 +707,7 @@
   }
 
   .product-media-container--zoomable.product-media-container--image {
-    cursor: zoom-in;
+    cursor: pointer;
   }
 
   .dialog-zoomed-gallery .product-media-container--video deferred-media,
@@ -690,6 +719,94 @@
   .dialog-zoomed-gallery .product-media-container--model .product-media__image {
     /* Make the height match the height of the model-viewer */
     height: 100vh;
+  }
+
+  [data-product-lightbox-src] {
+    cursor: pointer;
+  }
+
+  .product-gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .product-gallery-lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.81);
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__close,
+  .product-gallery-lightbox .at-home-lightbox__arrow {
+    position: absolute;
+    z-index: 11;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 100%;
+    background: var(--cream);
+    color: var(--brown);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__close {
+    top: 20px;
+    right: 20px;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__arrow {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__arrow--prev {
+    left: 20px;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__arrow--next {
+    right: 20px;
+  }
+
+  .product-gallery-lightbox svg {
+    opacity: 0.45;
+    transition: opacity 0.2s;
+  }
+
+  .product-gallery-lightbox button:hover svg {
+    opacity: 1;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__stage {
+    position: relative;
+    z-index: 10;
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-gallery-lightbox .at-home-lightbox__img {
+    width: 100vw;
+    height: 100dvh;
+    object-fit: contain;
+    image-rendering: auto;
   }
 
   media-gallery{
@@ -928,7 +1045,7 @@
           "label": "t:options.auto"
         },
         {
-          "value": "1/1.25",
+          "value": "100 / 111",
           "label": "t:options.portrait"
         },
         {

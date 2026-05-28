@@ -184,9 +184,22 @@
           margin-bottom: 1em;
         }
 
-        .variant-option__button-label{
-          display: block;
-          background-color: transparent;
+        .variant-option--swatches{
+          align-items: flex-start;
+        }
+
+          .variant-option__button-label{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: transparent;
+            overflow: visible;
+
+          &.variant-option__button-label--has-swatch {
+            width: 64px;
+            overflow: visible;
+            justify-content: flex-start;
+          }
 
           &:not(.variant-option__button-label--has-swatch){
             width: 42px !important;
@@ -219,7 +232,19 @@
           }
 
           .variant-option__swatch-name{
+            display: block;
             font-weight: 700;
+            position: static;
+            left: auto;
+            box-sizing: border-box;
+            padding-left: 4px;
+            text-align: left;
+            overflow: visible;
+            white-space: normal;
+            line-height: 1.1;
+            width: 64px;
+            max-width: 64px;
+            transform: none;
             opacity: .63;
           }
 

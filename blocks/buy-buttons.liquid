@@ -35,6 +35,11 @@
       assign add_to_cart_text = 'products.product.unavailable' | t
     endif
   endif
+
+  capture baf_merch_printful_variants
+    render 'baf-merch-printful-map', product: product
+  endcapture
+  assign baf_merch_printful_variants = baf_merch_printful_variants | strip
 %}
 
 <span
@@ -47,6 +52,9 @@
       data-section-id="{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-product-url="{{ product.url }}"
+      {% if baf_merch_printful_variants != blank %}
+        data-baf-printful-variants="{{ baf_merch_printful_variants | escape }}"
+      {% endif %}
       on:submit="/handleSubmit"
       data-quantity-default="{% if product.selected_or_first_available_variant.quantity_rule.min %}{{ product.selected_or_first_available_variant.quantity_rule.min }}{% else %}1{% endif %}"
     >

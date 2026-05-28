@@ -1,0 +1,85 @@
+{%- liquid
+  assign product_resource = product
+  if product_resource == blank
+    assign product_resource = closest.product
+  endif
+
+  assign product_type = product_resource.type
+  assign is_merch = false
+  if product_type == 'Crewneck' or product_type == 'T-Shirt' or product_type == 'Cap'
+    assign is_merch = true
+  endif
+-%}
+
+{%- if product_resource != blank and is_merch -%}
+  {%- assign first_entry = true -%}
+  {
+  {%- for variant in product_resource.variants -%}
+    {%- assign printful_variant_id = blank -%}
+    {%- assign color = variant.option1 -%}
+    {%- assign size = variant.option2 -%}
+
+    {%- case product_type -%}
+      {%- when 'Crewneck' -%}
+        {%- case color -%}
+          {%- when 'Black' -%}
+            {%- case size -%}
+              {%- when 'S' -%}{%- assign printful_variant_id = 11254 -%}
+              {%- when 'M' -%}{%- assign printful_variant_id = 11255 -%}
+              {%- when 'L' -%}{%- assign printful_variant_id = 11256 -%}
+              {%- when 'XL' -%}{%- assign printful_variant_id = 11257 -%}
+              {%- when '2XL' -%}{%- assign printful_variant_id = 11258 -%}
+              {%- when '3XL' -%}{%- assign printful_variant_id = 13258 -%}
+            {%- endcase -%}
+          {%- when 'Heather Grey' -%}
+            {%- case size -%}
+              {%- when 'S' -%}{%- assign printful_variant_id = 11244 -%}
+              {%- when 'M' -%}{%- assign printful_variant_id = 11245 -%}
+              {%- when 'L' -%}{%- assign printful_variant_id = 11246 -%}
+              {%- when 'XL' -%}{%- assign printful_variant_id = 11247 -%}
+              {%- when '2XL' -%}{%- assign printful_variant_id = 11248 -%}
+              {%- when '3XL' -%}{%- assign printful_variant_id = 13259 -%}
+            {%- endcase -%}
+        {%- endcase -%}
+      {%- when 'T-Shirt' -%}
+        {%- case color -%}
+          {%- when 'Black' -%}
+            {%- case size -%}
+              {%- when 'S' -%}{%- assign printful_variant_id = 21000 -%}
+              {%- when 'M' -%}{%- assign printful_variant_id = 21006 -%}
+              {%- when 'L' -%}{%- assign printful_variant_id = 21012 -%}
+              {%- when 'XL' -%}{%- assign printful_variant_id = 21018 -%}
+              {%- when '2XL' -%}{%- assign printful_variant_id = 21024 -%}
+            {%- endcase -%}
+          {%- when 'Heather Grey' -%}
+            {%- case size -%}
+              {%- when 'S' -%}{%- assign printful_variant_id = 21002 -%}
+              {%- when 'M' -%}{%- assign printful_variant_id = 21008 -%}
+              {%- when 'L' -%}{%- assign printful_variant_id = 21014 -%}
+              {%- when 'XL' -%}{%- assign printful_variant_id = 21020 -%}
+              {%- when '2XL' -%}{%- assign printful_variant_id = 21026 -%}
+            {%- endcase -%}
+          {%- when 'Pure White' -%}
+            {%- case size -%}
+              {%- when 'S' -%}{%- assign printful_variant_id = 21005 -%}
+              {%- when 'M' -%}{%- assign printful_variant_id = 21011 -%}
+              {%- when 'L' -%}{%- assign printful_variant_id = 21017 -%}
+              {%- when 'XL' -%}{%- assign printful_variant_id = 21023 -%}
+              {%- when '2XL' -%}{%- assign printful_variant_id = 21029 -%}
+            {%- endcase -%}
+        {%- endcase -%}
+      {%- when 'Cap' -%}
+        {%- case color -%}
+          {%- when 'Black' -%}{%- assign printful_variant_id = 12689 -%}
+          {%- when 'Oyster' -%}{%- assign printful_variant_id = 12692 -%}
+        {%- endcase -%}
+    {%- endcase -%}
+
+    {%- if printful_variant_id != blank -%}
+      {%- unless first_entry -%},{%- endunless -%}
+      "{{ variant.id }}": {{ printful_variant_id }}
+      {%- assign first_entry = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+  }
+{%- endif -%}

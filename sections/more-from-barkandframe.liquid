@@ -20,10 +20,17 @@
       </div>
     </a>
 
-    {%- for product in section.settings.collection.products limit: 3 -%}
-      <div class="more-from__product-card">
-        {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
-      </div>
+    {%- liquid
+      assign more_from_handles = 'bloom-crewneck,you-can-pet-the-dog-cap,powered-by-dogs-t-shirt' | split: ','
+    -%}
+
+    {%- for product_handle in more_from_handles -%}
+      {%- assign product = all_products[product_handle] -%}
+      {%- if product != blank -%}
+        <div class="more-from__product-card">
+          {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
+        </div>
+      {%- endif -%}
     {%- endfor -%}
 
   </div>
@@ -49,7 +56,13 @@
 }
 
 .more-from__product-card {
+  --color: var(--brown);
+  color: var(--brown);
   transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
+}
+
+.more-from__product-card :is(.product-title, .product-title *, product-price, product-price *, .price, .compare-at-price, .unit-price) {
+  color: var(--brown);
 }
 
 @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -70,7 +83,7 @@
 
 .more-from__cta-img img {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 100 / 126;
   object-fit: cover;
   display: block;
   background-color: var(--cream);
