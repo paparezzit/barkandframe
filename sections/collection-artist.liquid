@@ -210,14 +210,8 @@
     </div>
 
     <div class="artist-collection__collection-desc">
-      {%- if col_text != blank or col_claim != blank -%}
-        <h2 class="artist-collection__desc-title">{{ col_desc_title }}</h2>
-      {%- endif -%}
       {%- if col_text != blank -%}
         <div class="artist-collection__desc-text rte">{{ col_text | newline_to_br }}</div>
-      {%- endif -%}
-      {%- if col_claim != blank -%}
-        <p class="artist-collection__desc-claim">{{ col_claim }}</p>
       {%- endif -%}
     </div>
 
