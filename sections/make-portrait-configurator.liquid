@@ -3400,129 +3400,30 @@
     var backBtn3 = $('mp-back-step3');
     if (backBtn3) backBtn3.hidden = step !== 4;
 
-    scrollToConfiguratorTop();
+    jumpToConfiguratorStart();
   }
 
-  function scrollToConfiguratorTop() {
+  function getConfiguratorStartTop() {
     var section = $('make-portrait-section');
-    var top = section ? section.getBoundingClientRect().top + window.pageYOffset : 0;
+    return section ? Math.max(0, Math.round(section.getBoundingClientRect().top + window.pageYOffset - 20)) : 0;
+  }
+
+  function cancelConfiguratorScrolls() {
+    if (productAccordionScrollFrame) {
+      window.cancelAnimationFrame(productAccordionScrollFrame);
+      productAccordionScrollFrame = null;
+    }
+  }
+
+  function jumpToConfiguratorStart() {
+    cancelConfiguratorScrolls();
     var stickyPanel = document.querySelector('.make-portrait__right');
     if (stickyPanel) stickyPanel.style.top = window.innerWidth >= 800 ? '94px' : '';
-    window.scrollTo({ top: Math.max(0, top - 20), behavior: 'smooth' });
+    window.scrollTo(0, getConfiguratorStartTop());
   }
 
   function scrollToPreview() {
     return;
-  }
-
-  var previewScrollFrame = null;
-  var previewScrollSettleTimer = null;
-  var previewScrollToken = 0;
-  var previewAnchorTimer = null;
-  var previewAnchorState = null;
-
-  function lockPreviewScrollAnchoring() {
-    if (!previewAnchorState) {
-      previewAnchorState = {
-        html: document.documentElement.style.overflowAnchor,
-        body: document.body ? document.body.style.overflowAnchor : ''
-      };
-    }
-
-    document.documentElement.style.overflowAnchor = 'none';
-    if (document.body) document.body.style.overflowAnchor = 'none';
-
-    if (previewAnchorTimer) {
-      window.clearTimeout(previewAnchorTimer);
-    }
-
-    previewAnchorTimer = window.setTimeout(function () {
-      if (!previewAnchorState) return;
-      document.documentElement.style.overflowAnchor = previewAnchorState.html;
-      if (document.body) document.body.style.overflowAnchor = previewAnchorState.body;
-      previewAnchorState = null;
-      previewAnchorTimer = null;
-    }, 900);
-  }
-
-  function getPreviewAnchorTargetTop() {
-    var previewAnchor = document.querySelector('.make-portrait__left');
-    if (!previewAnchor) return null;
-
-    return Math.max(0, Math.round(previewAnchor.getBoundingClientRect().top + window.pageYOffset - 20));
-  }
-
-  function cancelPreviewScroll() {
-    previewScrollToken += 1;
-    if (previewScrollFrame) {
-      window.cancelAnimationFrame(previewScrollFrame);
-      previewScrollFrame = null;
-    }
-    if (previewScrollSettleTimer) {
-      window.clearTimeout(previewScrollSettleTimer);
-      previewScrollSettleTimer = null;
-    }
-  }
-
-  function settlePreviewScroll(token, attempts) {
-    if (token !== previewScrollToken || attempts <= 0) return;
-
-    var targetTop = getPreviewAnchorTargetTop();
-    if (targetTop === null) return;
-
-    window.scrollTo(0, targetTop);
-    previewScrollSettleTimer = window.setTimeout(function () {
-      settlePreviewScroll(token, attempts - 1);
-    }, 80);
-  }
-
-  function animatePreviewScroll() {
-    cancelPreviewScroll();
-    lockPreviewScrollAnchoring();
-
-    var token = previewScrollToken;
-    var targetTop = getPreviewAnchorTargetTop();
-    if (targetTop === null) return;
-
-    var currentTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-    window.scrollTo(0, currentTop);
-
-    var startTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-    var distance = targetTop - startTop;
-    if (Math.abs(distance) < 1) {
-      window.scrollTo(0, targetTop);
-      settlePreviewScroll(token, 4);
-      return;
-    }
-
-    var duration = Math.min(700, Math.max(280, Math.abs(distance) * 0.35));
-    var startTime = null;
-
-    function easeOutCubic(progress) {
-      return 1 - Math.pow(1 - progress, 3);
-    }
-
-    function step(timestamp) {
-      if (token !== previewScrollToken) return;
-      if (startTime === null) startTime = timestamp;
-
-      targetTop = getPreviewAnchorTargetTop();
-      if (targetTop === null) return;
-
-      distance = targetTop - startTop;
-      var progress = Math.min(1, (timestamp - startTime) / duration);
-      window.scrollTo(0, startTop + distance * easeOutCubic(progress));
-
-      if (progress < 1) {
-        previewScrollFrame = window.requestAnimationFrame(step);
-      } else {
-        window.scrollTo(0, targetTop);
-        previewScrollFrame = null;
-        settlePreviewScroll(token, 4);
-      }
-    }
-
-    previewScrollFrame = window.requestAnimationFrame(step);
   }
 
   var productAccordionScrollFrame = null;
@@ -3572,11 +3473,6 @@
   function animateProductAccordionScroll(targetTop, onComplete) {
     targetTop = Math.max(0, Math.round(targetTop));
     lockProductAccordionScrollAnchoring();
-
-    if (previewScrollFrame) {
-      window.cancelAnimationFrame(previewScrollFrame);
-      previewScrollFrame = null;
-    }
 
     if (productAccordionScrollFrame) {
       window.cancelAnimationFrame(productAccordionScrollFrame);
@@ -3639,11 +3535,8 @@
   }
 
   function scrollToPreviewAnchor() {
-    if (window.innerWidth < 800 || (state.step !== 1 && state.step !== 2)) return;
-
-    var stickyPanel = document.querySelector('.make-portrait__right');
-    if (stickyPanel) stickyPanel.style.top = '94px';
-    animatePreviewScroll();
+    if (window.innerWidth < 800) return;
+    jumpToConfiguratorStart();
   }
 
   var MP_AVAILABILITY_LABELS = {
@@ -5238,7 +5131,7 @@
     var rightPanel = document.querySelector('.make-portrait__right');
     if (rightPanel) {
       function isPreviewScrollChoice(event) {
-        return event.target.closest('.style-picker__item, .product-picker__item');
+        return event.target.closest('.style-picker__item, .product-picker__item, .option-btn');
       }
 
       rightPanel.addEventListener('pointerdown', function (event) {
