@@ -307,8 +307,20 @@
 
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
           {%- for style in _portrait_styles -%}
+            {%- assign _style_id = style.style_id.value | strip -%}
             {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
             {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
+            {%- if _style_id == 'atelier_sketch' or style.name.value == 'Atelier Sketch' -%}
+              {%- for block in section.blocks -%}
+                {%- assign _block_style_id = block.settings.style_id | strip -%}
+                {%- if block.type == 'overview_style' and block.settings.artist_image != blank -%}
+                  {%- if _block_style_id == _style_id or block.settings.style_name == style.name.value -%}
+                    {%- assign _btn_img = block.settings.artist_image -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
               type="button"
@@ -319,11 +331,7 @@
             >
               {%- if _btn_img -%}
                 <div class="style-picker__item__img">
-                  {%- if style.style_id.value == 'atelier_sketch' or style.name.value == 'Atelier Sketch' -%}
-                    <img src="{{ 'atelier-sketch.png' | file_img_url: '240x' }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
-                  {%- else -%}
-                    <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
-                  {%- endif -%}
+                  <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
                   {%- if _style_tag != blank -%}
                     <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize | replace: 'Sold out', 'Soon' }}</span>
                   {%- endif -%}
