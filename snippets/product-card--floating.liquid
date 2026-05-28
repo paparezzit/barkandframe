@@ -83,6 +83,7 @@
   id="product-card-{{ block.id }}"
   data-product-transition="{{ settings.transition_to_main_product }}"
   data-parallax="{{ parallax_amount }}"
+  style="--floating-card-width: {{ card_width | default: 300 }}px;"
 
   {{ block.shopify_attributes }}
   {% if no_swatch_selected %}
@@ -101,7 +102,7 @@
   product-card--floating{
     border-radius: 40px;
     display: block;
-    width: 300px;
+    width: var(--floating-card-width, 300px);
     max-width: 60vw;
     transition: opacity .3s;
 
@@ -110,17 +111,28 @@
     }
 
     .image-block{
-      width: 100%;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
       vertical-align: top;
-      border-radius: 40px;
-      overflow: hidden;
-      aspect-ratio: 3/4;
+      border-radius: 40px !important;
+      overflow: hidden !important;
+      aspect-ratio: var(--ratio) !important;
+      line-height: 0;
+      clip-path: inset(0 round 40px);
 
+      .image-block__image,
       img{
-        height: 120%;
-        width: 100%;
-        object-fit: cover;
+        display: block !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        aspect-ratio: var(--ratio) !important;
+        object-fit: contain !important;
         object-position: center;
+        border-radius: 40px !important;
+        content-visibility: visible !important;
+        contain-intrinsic-size: none !important;
       }
     }
 

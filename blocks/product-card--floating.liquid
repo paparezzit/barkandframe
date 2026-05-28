@@ -3,13 +3,14 @@
 {% liquid
   assign product = block.settings.product
   assign parallax_amount = block.settings.parallax_amount
+  assign card_width = block.settings.card_width | default: 300
 -%}
 
 {% capture children %}
   {% content_for 'blocks', closest.product: product %}
 {% endcapture %}
 
-{% render 'product-card--floating', children: children, product: product, parallax_amount: parallax_amount %}
+{% render 'product-card--floating', children: children, product: product, parallax_amount: parallax_amount, card_width: card_width %}
 
 {% schema %}
 {
@@ -34,6 +35,16 @@
       "id": "parallax_amount",
       "label": "Parallax Amount"
     },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card width",
+      "min": 120,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    }
   ],
   "presets": [
     {
@@ -50,7 +61,7 @@
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_radius": 0,
+            "border_radius": 32,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,

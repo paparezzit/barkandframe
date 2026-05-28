@@ -149,12 +149,6 @@
         }
 
         &:nth-child(2){
-          width: 400px;
-
-          .image-block{
-            aspect-ratio: 4/5;
-          }
-
           .product-title{
             left: 50%;
             top: 50%;
@@ -162,12 +156,6 @@
         }
 
         &:nth-child(3){
-          width: 400px;
-
-          .image-block{
-            aspect-ratio: 4/3;
-          }
-
           .product-title{
             left: 50%;
             top: 45%;
@@ -182,12 +170,6 @@
         }
 
         &:nth-child(5){
-          width: 300px;
-
-          .image-block{
-            aspect-ratio: 1/1;
-          }
-
           .product-title{
             left: 35%;
             top: 85%;
@@ -201,6 +183,34 @@
         opacity: .27;
       }
     }
+  }
+
+  .floating-images__holder product-card--floating.product-card--floating{
+    display: block !important;
+    width: var(--floating-card-width, 300px) !important;
+    max-width: min(60vw, var(--floating-card-width, 300px)) !important;
+  }
+
+  .floating-images__holder product-card--floating.product-card--floating .image-block{
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important;
+    border-radius: 40px !important;
+    overflow: hidden !important;
+    line-height: 0;
+  }
+
+  .floating-images__holder product-card--floating.product-card--floating .image-block__image{
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    aspect-ratio: var(--ratio) !important;
+    object-fit: contain !important;
+    border-radius: 40px !important;
+    content-visibility: visible !important;
+    contain-intrinsic-size: none !important;
   }
 
   @media(min-width: 1200px){
@@ -297,7 +307,7 @@
 {% schema %}
 {
   "name": "Floating Images",
-  "max_blocks": 5,
+  "max_blocks": 8,
   "settings": [
     {
       "type": "text",
