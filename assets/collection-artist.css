@@ -129,6 +129,10 @@
   transition: opacity .3s;
 }
 
+.artist-collection__products:has(.artist-collection__product-card:hover) .artist-collection__product-card:not(:hover) {
+  opacity: .27;
+}
+
 .artist-collection__product-card:nth-child(5n+2),
 .artist-collection__product-card:nth-child(5n+4) {
   margin-left: auto;
@@ -166,11 +170,6 @@
   display: block;
   object-fit: contain;
   border-radius: 40px;
-  transition: transform .4s ease;
-}
-
-.artist-collection__product-card:hover .artist-collection__product-image img {
-  transform: scale(1.04);
 }
 
 .artist-collection__product-name {
