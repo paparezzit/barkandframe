@@ -290,6 +290,23 @@
     }
   }
 
+  .product-details .quantity-selector :is(.quantity-minus, .quantity-plus):active .svg-wrapper{
+    transform: scale(0.9) !important;
+  }
+
+  .product-details .quantity-selector :is(.quantity-minus, .quantity-plus).quantity-button--pressed .svg-wrapper{
+    transform: scale(0.9) !important;
+  }
+
+  .product-details .quantity-selector :is(.quantity-minus, .quantity-plus) .svg-wrapper svg{
+    transition: transform var(--animation-speed) var(--animation-easing);
+  }
+
+  .product-details .quantity-selector :is(.quantity-minus, .quantity-plus):active .svg-wrapper svg,
+  .product-details .quantity-selector :is(.quantity-minus, .quantity-plus).quantity-button--pressed .svg-wrapper svg{
+    transform: scale(0.9) !important;
+  }
+
   .add-to-cart-button{
     .add-to-cart-icon{
       display: none;

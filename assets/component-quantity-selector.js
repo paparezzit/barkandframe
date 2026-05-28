@@ -10,6 +10,56 @@ import { QuantitySelectorUpdateEvent } from '@theme/events';
  * @extends {Component<Refs>}
  */
 class QuantitySelectorComponent extends Component {
+  /** @type {HTMLElement | null} */
+  #pressedButton = null;
+
+  /** @type {HTMLElement | null} */
+  #pressedIcon = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (!this.closest('.product-details')) return;
+
+    this.addEventListener('pointerdown', this.#handlePressStart);
+    this.addEventListener('pointerup', this.#clearPressedButton);
+    this.addEventListener('pointerleave', this.#clearPressedButton);
+    this.addEventListener('pointercancel', this.#clearPressedButton);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.removeEventListener('pointerdown', this.#handlePressStart);
+    this.removeEventListener('pointerup', this.#clearPressedButton);
+    this.removeEventListener('pointerleave', this.#clearPressedButton);
+    this.removeEventListener('pointercancel', this.#clearPressedButton);
+  }
+
+  /**
+   * Adds a pressed visual state to product detail quantity buttons.
+   * @param {PointerEvent} event - The pointer event.
+   */
+  #handlePressStart = (event) => {
+    if (!(event.target instanceof HTMLElement)) return;
+
+    const button = event.target.closest('.quantity-minus, .quantity-plus');
+    if (!(button instanceof HTMLElement) || !this.contains(button)) return;
+
+    this.#clearPressedButton();
+    this.#pressedButton = button;
+    this.#pressedIcon = button.querySelector('.svg-wrapper svg, .svg-wrapper');
+    button.classList.add('quantity-button--pressed');
+    if (this.#pressedIcon) this.#pressedIcon.style.transform = 'scale(0.9)';
+  };
+
+  #clearPressedButton = () => {
+    this.#pressedButton?.classList.remove('quantity-button--pressed');
+    if (this.#pressedIcon) this.#pressedIcon.style.transform = '';
+    this.#pressedButton = null;
+    this.#pressedIcon = null;
+  };
+
   /**
    * Handles the quantity increase event.
    * @param {Event} event - The event.
