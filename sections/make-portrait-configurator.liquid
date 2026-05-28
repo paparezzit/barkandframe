@@ -309,6 +309,14 @@
           {%- for style in _portrait_styles -%}
             {%- assign _style_tag = style.tags.value | first | downcase | strip | replace: ' ', '-' -%}
             {%- assign _btn_img = style.image_button.value | default: style.preview_image.value -%}
+            {%- if style.style_id.value == 'atelier_sketch' -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'overview_style' and block.settings.style_id == 'atelier_sketch' and block.settings.artist_image != blank -%}
+                  {%- assign _btn_img = block.settings.artist_image -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
             <button
               class="style-picker__item{% if forloop.first %} selected{% endif %}{% if _style_tag != blank %} style--{{ _style_tag }}{% endif %}"
               type="button"
