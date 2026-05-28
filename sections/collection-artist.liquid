@@ -6,6 +6,12 @@
 
   assign col_text  = collection.metafields.custom.collection_text.value
   assign col_claim = collection.metafields.custom.collection_claim.value
+  if col_text == blank
+    assign col_text = section.settings.collection_text
+  endif
+  if col_claim == blank
+    assign col_claim = section.settings.collection_claim
+  endif
   assign col_desc_title = section.settings.collection_desc_title | default: 'About the collection'
 -%}
 
@@ -59,8 +65,81 @@
     </div>
 
     <div class="artist-collection__products">
+      {%- liquid
+        assign floating_image_count = 0
+        assign rendered_floating_cards = 0
+      -%}
+
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign target_collection = block.settings.collection_handle | strip
+          assign render_block = false
+
+          if block.type == 'floating_image' and block.settings.image != blank
+            if target_collection == blank or target_collection == collection.handle
+              assign render_block = true
+            endif
+          endif
+        -%}
+
+        {%- if render_block -%}
+          {%- liquid
+            assign pattern_index = floating_image_count | modulo: 5
+            assign floating_image_count = floating_image_count | plus: 1
+            assign rendered_floating_cards = rendered_floating_cards | plus: 1
+            assign parallax_amount = '0vh'
+            if pattern_index == 1
+              assign parallax_amount = '-20vh'
+            elsif pattern_index == 2
+              assign parallax_amount = '-10vh'
+            elsif pattern_index == 4
+              assign parallax_amount = '-20vh'
+            endif
+
+            assign display_image = block.settings.image
+            assign display_image_alt = display_image.alt | default: block.settings.title
+            assign display_image_width = display_image.width
+            assign display_image_height = display_image.height
+          -%}
+
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="artist-collection__product-card" data-parallax="{{ parallax_amount }}" {{ block.shopify_attributes }}>
+          {%- else -%}
+            <div class="artist-collection__product-card" data-parallax="{{ parallax_amount }}" {{ block.shopify_attributes }}>
+          {%- endif -%}
+            <div class="artist-collection__product-image">
+              <img
+                src="{{ display_image | image_url: width: 900 }}"
+                alt="{{ display_image_alt }}"
+                width="{{ display_image_width }}"
+                height="{{ display_image_height }}"
+                loading="lazy"
+              >
+              {%- if block.settings.title != blank -%}
+                <span class="artist-collection__product-name">{{ block.settings.title }}</span>
+              {%- endif -%}
+            </div>
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if rendered_floating_cards == 0 -%}
       {%- for product in collection.products -%}
         {%- liquid
+          assign pattern_index = forloop.index0 | modulo: 5
+          assign parallax_amount = '0vh'
+          if pattern_index == 1
+            assign parallax_amount = '-20vh'
+          elsif pattern_index == 2
+            assign parallax_amount = '-10vh'
+          elsif pattern_index == 4
+            assign parallax_amount = '-20vh'
+          endif
+
           assign collection_img = product.metafields.custom.collection_image.value
           if collection_img != blank
             assign display_image = collection_img
@@ -74,7 +153,7 @@
             assign display_image_height = product.featured_image.height
           endif
         -%}
-        <a href="{{ product.url }}" class="artist-collection__product-card">
+        <a href="{{ product.url }}" class="artist-collection__product-card" data-parallax="{{ parallax_amount }}">
           <div class="artist-collection__product-image">
             {%- if display_image -%}
               <img
@@ -89,6 +168,7 @@
           </div>
         </a>
       {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 
@@ -160,6 +240,44 @@
       "id": "collection_desc_title",
       "label": "Description heading",
       "default": "About the collection"
+    },
+    {
+      "type": "richtext",
+      "id": "collection_text",
+      "label": "Collection text"
+    },
+    {
+      "type": "text",
+      "id": "collection_claim",
+      "label": "Collection claim"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "floating_image",
+      "name": "Floating image",
+      "settings": [
+        {
+          "type": "text",
+          "id": "collection_handle",
+          "label": "Collection handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Bubble text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Bubble link"
+        }
+      ]
     }
   ]
 }

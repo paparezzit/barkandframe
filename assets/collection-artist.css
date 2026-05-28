@@ -1,5 +1,4 @@
 .artist-collection {
-  max-width: calc(1000px + (2 * var(--page-margin)));
   margin-left: auto;
   margin-right: auto;
 }
@@ -106,30 +105,38 @@
 }
 
 .artist-collection__products {
-  display: grid;
-  grid-template-columns: 1fr;
-  column-gap: 16px;
-  row-gap: 16px;
-  align-items: start;
-  padding: 60px var(--page-margin) 80px;
-  max-width: calc(1280px + (2 * var(--page-margin)));
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: flex-start;
+  padding: 0 calc(var(--page-margin) * 2) 80vh;
+  max-width: 1280px;
+  margin: -33dvh auto 0;
   position: relative;
   z-index: 0;
-  margin-top: -20dvh;
+  pointer-events: none;
 }
 
 .artist-collection__product-card {
   display: block;
   text-decoration: none;
   color: var(--brown);
-  width: 80%;
-  margin-bottom: 20px;
+  width: 300px;
+  max-width: min(60vw, 300px);
+  margin: 0;
+  pointer-events: auto;
+  transition: opacity .3s;
+}
 
-  &:nth-child(even){
-    margin-left: 20%;
-  }
+.artist-collection__product-card:nth-child(5n+2),
+.artist-collection__product-card:nth-child(5n+4) {
+  margin-left: auto;
+}
+
+.artist-collection__product-card:nth-child(5n+2),
+.artist-collection__product-card:nth-child(5n+3) {
+  width: 400px;
+  max-width: min(60vw, 400px);
 }
 
 .artist-collection__product-image {
@@ -137,12 +144,16 @@
   overflow: hidden;
   border-radius: 40px;
   background: var(--cream);
+  line-height: 0;
 }
 
 .artist-collection__product-image img {
   width: 100%;
   height: auto;
+  max-width: 100%;
   display: block;
+  object-fit: contain;
+  border-radius: 40px;
   transition: transform .4s ease;
 }
 
@@ -152,9 +163,9 @@
 
 .artist-collection__product-name {
   position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 60%;
+  left: 35%;
+  transform: translate(-50%, -50%);
   background-color: var(--beige);
   color: var(--green);
   border-radius: 1000px;
@@ -162,6 +173,27 @@
   font-size: 14px;
   white-space: nowrap;
   pointer-events: none;
+  line-height: 1.2;
+}
+
+.artist-collection__product-card:nth-child(5n+2) .artist-collection__product-name {
+  left: 50%;
+  top: 50%;
+}
+
+.artist-collection__product-card:nth-child(5n+3) .artist-collection__product-name {
+  left: 50%;
+  top: 45%;
+}
+
+.artist-collection__product-card:nth-child(5n+4) .artist-collection__product-name {
+  left: 50%;
+  top: 80%;
+}
+
+.artist-collection__product-card:nth-child(5n+5) .artist-collection__product-name {
+  left: 35%;
+  top: 85%;
 }
 
 .artist-collection__info {
@@ -264,25 +296,6 @@
     margin-left: 20px;
   }
 
-  .artist-collection__products {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .artist-collection__product-card{
-    &:nth-child(even){
-      margin-top: 50%;
-      margin-bottom: -10%;
-    }
-
-    &:nth-child(3n+3){
-      margin-left: 20%;
-    }
-
-    &:nth-child(5n+4){
-      margin-left: 10%;
-    }
-  }
-
   .artist-collection__info{
     flex-direction: row;
     gap: 20px;
@@ -298,6 +311,45 @@
 }
 
 @media screen and (min-width: 1200px) {
+  .artist-collection__products {
+    gap: 0;
+    padding: 0 calc(var(--page-margin) * 3) 0;
+  }
+
+  .artist-collection__product-card:nth-child(5n+1) .artist-collection__product-name {
+    left: 25%;
+  }
+
+  .artist-collection__product-card:nth-child(5n+2) {
+    margin-top: -100px;
+  }
+
+  .artist-collection__product-card:nth-child(5n+2) .artist-collection__product-name {
+    left: 65%;
+  }
+
+  .artist-collection__product-card:nth-child(5n+3) {
+    margin-left: 100px;
+    margin-top: -100px;
+  }
+
+  .artist-collection__product-card:nth-child(5n+4) {
+    margin-right: 50px;
+    margin-top: -100px;
+  }
+
+  .artist-collection__product-card:nth-child(5n+4) .artist-collection__product-name {
+    left: 45%;
+  }
+
+  .artist-collection__product-card:nth-child(5n+5) {
+    margin-top: -50px;
+  }
+
+  .artist-collection__product-card:nth-child(5n+5) .artist-collection__product-name {
+    left: 30%;
+  }
+
   .artist-collection__info {
     padding-top: 100px;
     padding-bottom: 200px;

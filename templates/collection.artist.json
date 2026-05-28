@@ -11,6 +11,170 @@
   "sections": {
     "collection-artist": {
       "type": "collection-artist",
+      "blocks": {
+        "bark_studio_image_01": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-no-fart-no-love-bulldog-cat-design-black-crewneck-sweatshirt-female-model-editorial.jpg",
+            "title": "No fart No love | Crewneck",
+            "link": "shopify://products/no-fart-no-love-crewneck"
+          }
+        },
+        "bark_studio_image_02": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-powered-by-dogs-full-color-design-black-crewneck-sweatshirt-male-model-editorial.jpg",
+            "title": "Powered by Dogs | Crewneck",
+            "link": "shopify://products/powered-by-dogs-crewneck"
+          }
+        },
+        "bark_studio_image_03": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-doggery-squad-skateboard-dogs-design-heather-grey-t-shirt-female-model-editorial.jpg",
+            "title": "Doggery Squad | T-Shirt",
+            "link": "shopify://products/doggery-squad-t-shirt"
+          }
+        },
+        "bark_studio_image_04": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-chill-vibes-palms-dog-design-heather-grey-crewneck-sweatshirt-male-model-editorial.jpg",
+            "title": "Chill Vibes | Crewneck",
+            "link": "shopify://products/chill-vibes-crewneck"
+          }
+        },
+        "bark_studio_image_05": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-love-is-everywhere-dog-heart-design-heather-grey-crewneck-sweatshirt-female-model-editorial.jpg",
+            "title": "Love is Everywhere | Crewneck",
+            "link": "shopify://products/love-is-everywhere-crewneck"
+          }
+        },
+        "bark_studio_image_06": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-doggery-squad-skateboard-dogs-design-black-crewneck-sweatshirt-female-model-editorial.jpg",
+            "title": "Doggery Squad | Crewneck",
+            "link": "shopify://products/doggery-squad-crewneck"
+          }
+        },
+        "bark_studio_image_07": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-chill-vibes-palms-dog-design-pure-white-t-shirt-male-model-editorial-full-body.jpg",
+            "title": "Chill Vibes | T-Shirt",
+            "link": "shopify://products/chill-vibes-t-shirt"
+          }
+        },
+        "bark_studio_image_08": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-powered-by-dogs-full-color-design-pure-white-t-shirt-male-model-editorial-dynamic.jpg",
+            "title": "Powered by Dogs | T-Shirt",
+            "link": "shopify://products/powered-by-dogs-t-shirt"
+          }
+        },
+        "bark_studio_image_09": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-no-fart-no-love-bulldog-cat-design-heather-grey-t-shirt-female-model-editorial.jpg",
+            "title": "No fart No love | T-Shirt",
+            "link": "shopify://products/no-fart-no-love-t-shirt"
+          }
+        },
+        "bark_studio_image_10": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "bark-studio",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-love-is-everywhere-dog-heart-design-black-t-shirt-female-model-editorial-portrait.jpg",
+            "title": "Love is Everywhere | T-Shirt",
+            "link": "shopify://products/love-is-everywhere-t-shirt"
+          }
+        },
+        "dogs_holland_image_01": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-the-professor-dog-flat-cap-design-heather-grey-crewneck-sweatshirt-male-model-editorial.jpg",
+            "title": "The Professor | Crewneck",
+            "link": "shopify://products/the-professor-crewneck"
+          }
+        },
+        "dogs_holland_image_02": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-bloom-tulip-dog-design-pure-white-t-shirt-female-model-editorial-close-up.jpg",
+            "title": "Bloom | T-Shirt",
+            "link": "shopify://products/bloom-t-shirt"
+          }
+        },
+        "dogs_holland_image_03": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-the-professor-dog-flat-cap-design-black-t-shirt-male-model-editorial-portrait.jpg",
+            "title": "The Professor | T-Shirt",
+            "link": "shopify://products/the-professor-t-shirt"
+          }
+        },
+        "dogs_holland_image_04": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-sunday-ride-basket-dog-design-heather-grey-crewneck-sweatshirt-male-model-editorial.jpg",
+            "title": "Sunday Ride | Crewneck",
+            "link": "shopify://products/sunday-ride-crewneck"
+          }
+        },
+        "dogs_holland_image_05": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-bloom-tulip-dog-design-black-crewneck-sweatshirt-female-model-editorial.jpg",
+            "title": "Bloom | Crewneck",
+            "link": "shopify://products/bloom-crewneck"
+          }
+        },
+        "dogs_holland_image_06": {
+          "type": "floating_image",
+          "settings": {
+            "collection_handle": "dogs-of-holland",
+            "image": "shopify://shop_images/bark-and-frame-artist-collection-sunday-ride-basket-dog-design-black-t-shirt-male-model-editorial-mid-figure.jpg",
+            "title": "Sunday Ride | T-Shirt",
+            "link": "shopify://products/sunday-ride-t-shirt"
+          }
+        }
+      },
+      "block_order": [
+        "bark_studio_image_01",
+        "bark_studio_image_02",
+        "bark_studio_image_03",
+        "bark_studio_image_04",
+        "bark_studio_image_05",
+        "bark_studio_image_06",
+        "bark_studio_image_07",
+        "bark_studio_image_08",
+        "bark_studio_image_09",
+        "bark_studio_image_10",
+        "dogs_holland_image_01",
+        "dogs_holland_image_02",
+        "dogs_holland_image_03",
+        "dogs_holland_image_04",
+        "dogs_holland_image_05",
+        "dogs_holland_image_06"
+      ],
       "settings": {
         "collection_nav": "artist-collections",
         "collection_text": "<p>It began with a quiet moment.</p><p>A dog resting in the grass, held by soft morning light under a clear blue sky. Nothing dramatic — just a sense of calm that stayed. This is what stays.</p><p>Not the scene itself, but the feeling it leaves behind — something clear, still, and lasting.</p>",
