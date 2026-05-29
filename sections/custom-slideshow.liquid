@@ -1,4 +1,11 @@
 {% assign slide_speed = section.settings.autoplay_speed | default: 4 %}
+{% assign has_video = false %}
+{% for block in section.blocks %}
+  {% if block.settings.video != blank or block.settings.video_url != blank %}
+    {% assign has_video = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
 <style>
   :root {
     --slideshow-duration: {{ slide_speed }}s;
@@ -22,11 +29,25 @@
                 muted
                 loop
                 playsinline
+                preload="auto"
                 class="slide-video"
               >
                 {% for source in block.settings.video.sources %}
                   <source src="{{ source.url }}" type="{{ source.mime_type }}">
                 {% endfor %}
+              </video>
+            </div>
+          {% elsif block.settings.video_url != blank %}
+            <div class="slide-image">
+              <video
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                class="slide-video"
+              >
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
               </video>
             </div>
           {% elsif block.settings.image %}
@@ -62,6 +83,13 @@
         <button class="dot {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}"></button>
       {% endfor %}
     </div>
+
+    {% if has_video %}
+      <button class="slideshow__sound-toggle" type="button" aria-label="Turn sound on" aria-pressed="false" data-sound-toggle>
+        <img class="sound-icon sound-icon--off" src="{{ 'icon-volume-off.svg' | asset_url }}" alt="" width="24" height="24" loading="lazy">
+        <img class="sound-icon sound-icon--on" src="{{ 'icon-volume-up.svg' | asset_url }}" alt="" width="24" height="24" loading="lazy">
+      </button>
+    {% endif %}
   </div>
 </div>
 
@@ -182,6 +210,46 @@
     }
   }
 
+  .slideshow__sound-toggle {
+    position: absolute;
+    right: var(--page-margin);
+    bottom: 24px;
+    z-index: 6;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--beige);
+    color: var(--brown);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .slideshow__sound-toggle.is-visible {
+    display: flex;
+  }
+
+  .slideshow__sound-toggle .sound-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  .slideshow__sound-toggle .sound-icon--on {
+    display: none;
+  }
+
+  .slideshow__sound-toggle.is-sound-on .sound-icon--off {
+    display: none;
+  }
+
+  .slideshow__sound-toggle.is-sound-on .sound-icon--on {
+    display: block;
+  }
+
   @media(min-width: 750px){
     .custom-slideshow {
       margin-bottom: 120px;
@@ -245,8 +313,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const slides = slideshow.querySelectorAll(".slide");
   const dots = slideshow.querySelectorAll(".dot");
+  const soundToggle = slideshow.querySelector("[data-sound-toggle]");
   
   let index = 0;
+  let soundOn = false;
 
   const autoplay = slideshow.dataset.autoplay === "true";
   const speed = (parseInt(slideshow.dataset.speed) || 4) * 1000;
@@ -262,7 +332,8 @@ document.addEventListener("DOMContentLoaded", () => {
       slide.classList.toggle("is-active", active);
       const video = slide.querySelector("video");
       if (video) {
-        if (active) { video.currentTime = 0; video.play(); }
+        video.muted = !soundOn;
+        if (active) { video.currentTime = 0; video.play().catch(() => {}); }
         else video.pause();
       }
     });
@@ -270,6 +341,11 @@ document.addEventListener("DOMContentLoaded", () => {
     dots.forEach((dot, idx) => {
       dot.classList.toggle("is-active", idx === i);
     });
+
+    if (soundToggle) {
+      const activeVideo = slides[i] && slides[i].querySelector("video");
+      soundToggle.classList.toggle("is-visible", Boolean(activeVideo));
+    }
   }
 
   function nextSlide() {
@@ -289,6 +365,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  if (soundToggle) {
+    soundToggle.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundToggle.classList.toggle("is-sound-on", soundOn);
+      soundToggle.setAttribute("aria-pressed", soundOn ? "true" : "false");
+      soundToggle.setAttribute("aria-label", soundOn ? "Turn sound off" : "Turn sound on");
+      slides.forEach(slide => {
+        const video = slide.querySelector("video");
+        if (video) video.muted = !soundOn;
+      });
+    });
+  }
+
+  showSlide(index);
 });
 {% endjavascript %}
 
@@ -321,6 +412,11 @@ document.addEventListener("DOMContentLoaded", () => {
           "type": "video",
           "id": "video",
           "label": "Video"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video URL"
         },
         {
           "type": "image_picker",
