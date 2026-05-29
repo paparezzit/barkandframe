@@ -62,7 +62,7 @@
 
           <div class="slide-content">
             <h2 class="slide__title">
-              {{ block.settings.title }}
+              {{ block.settings.title | newline_to_br }}
             </h2>
             <p class="slide__text">
               {{ block.settings.text }}
@@ -161,6 +161,17 @@
     .slide__button{
       margin-top: 10px;
     }
+  }
+
+  .custom-slideshow .slide:last-child .slide__title,
+  .custom-slideshow .slide:last-child .slide__text {
+    color: var(--beige);
+  }
+
+  .custom-slideshow .slide:last-child .slide__button:not(:hover) {
+    --button-color: var(--brown);
+    --button-background-color: var(--beige);
+    --button-border-color: var(--beige);
   }
 
   .slideshow__dots {
