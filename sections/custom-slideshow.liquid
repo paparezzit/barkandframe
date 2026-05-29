@@ -369,9 +369,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       index = parseInt(dot.dataset.index);
       showSlide(index);
-      pauseAutoplayTemporarily();
     });
   });
+
+  slideshow.addEventListener("click", pauseAutoplayTemporarily);
 
   if (soundToggle) {
     soundToggle.addEventListener("click", () => {
