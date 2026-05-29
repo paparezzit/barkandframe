@@ -10,6 +10,7 @@
   @param {number} [image_border_radius] - The border radius used for the content images
   @param {string} [cta_label] - Optional CTA button label shown below the menu links
   @param {string} [cta_url] - Optional CTA button URL
+  @param {boolean} [hide_empty_collection_links] - Whether empty collection links should be hidden
 {%- enddoc -%}
 
 <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
@@ -28,7 +29,8 @@
       content_aspect_ratio: content_aspect_ratio,
       image_border_radius: image_border_radius,
       cta_label: cta_label,
-      cta_url: cta_url
+      cta_url: cta_url,
+      hide_empty_collection_links: hide_empty_collection_links
     %}
   </div>
 </div>

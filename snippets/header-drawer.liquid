@@ -104,6 +104,9 @@
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
+              {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
+                {% continue %}
+              {% endif %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -160,6 +163,9 @@
                           endif
                         %}
                         {%- for childlink in link.links -%}
+                          {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' %}
+                            {% continue %}
+                          {% endif %}
                           <li
                             class="menu-drawer__list-item"
                             style="--menu-drawer-animation-index: {{ forloop.index }};"
@@ -239,6 +245,9 @@
                       endif
                     %}
                     {%- for childlink in link.links -%}
+                      {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' %}
+                        {% continue %}
+                      {% endif %}
                       <li
                         class="menu-drawer__list-item"
                         style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -295,6 +304,9 @@
             {%- endcomment -%}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
+              {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
+                {% continue %}
+              {% endif %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 class="menu-drawer__list-item"
@@ -366,6 +378,9 @@
                         >
                           {% assign first_accordion_open = false -%}
                           {%- for childlink in link.links -%}
+                            {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' %}
+                              {% continue %}
+                            {% endif %}
                             <li
                               class="
                                 menu-drawer__list-item
@@ -442,6 +457,9 @@
                                         tabindex="-1"
                                       >
                                         {%- for grandchildlink in childlink.links -%}
+                                          {% if block_settings.hide_empty_collection_links and grandchildlink.type == 'collection_link' and grandchildlink.object.all_products_count == 0 and grandchildlink.object.template_suffix != 'with-portrait-cta' %}
+                                            {% continue %}
+                                          {% endif %}
                                           <li
                                             class="menu-drawer__list-item"
                                             style="--menu-drawer-animation-index: {{ forloop.index }};"
@@ -498,6 +516,9 @@
                                     tabindex="-1"
                                   >
                                     {%- for grandchildlink in childlink.links -%}
+                                      {% if block_settings.hide_empty_collection_links and grandchildlink.type == 'collection_link' and grandchildlink.object.all_products_count == 0 and grandchildlink.object.template_suffix != 'with-portrait-cta' %}
+                                        {% continue %}
+                                      {% endif %}
                                       <li
                                         class="menu-drawer__list-item"
                                         style="--menu-drawer-animation-index: {{ forloop.index }};"

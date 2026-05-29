@@ -25,6 +25,9 @@
 
 {% capture children %}
   {% for link in block_settings.menu.links %}
+    {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
+      {% continue %}
+    {% endif %}
     <li
       role="presentation"
       class="menu-list__list-item"
@@ -62,7 +65,8 @@
               content_aspect_ratio: ratio,
               image_border_radius: image_border_radius,
               cta_label: block_settings.cta_label,
-              cta_url: block_settings.cta_url
+              cta_url: block_settings.cta_url,
+              hide_empty_collection_links: block_settings.hide_empty_collection_links
             %}
           </div>
         </div>
