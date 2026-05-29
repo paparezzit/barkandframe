@@ -26,9 +26,9 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/bark-and-frame-father-son-holding-framed-border-collie-indigo-style-portrait-walnut-frame-living-room-banner.jpg",
-            "title": "Your dog. Recognizable. Refined.",
-            "text": "We turn your photo into a portrait that still feels like them.",
-            "button_text": "See your dog",
+            "title": "The Father’s Day gift, by heart.",
+            "text": "A personalised dog portrait, designed by our studio of award-winning artists.",
+            "button_text": "Create your portrait",
             "button_link": "shopify://pages/make-portrait"
           }
         },
@@ -36,19 +36,19 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/bark-and-frame-amsterdam-couple-with-golden-retriever-puppy-powered-by-dogs-sweatshirt-lifestyle-banner.jpg",
-            "title": "More than wall art. Still with you.",
-            "text": "A portrait that keeps them close – every day.",
-            "button_text": "Keep him close",
-            "button_link": "shopify://pages/make-portrait"
+            "title": "Wear your love for dogs.",
+            "text": "Wearable art from our small studio. Designed with dogs, made to be comfortable.",
+            "button_text": "Shop the collection",
+            "button_link": "shopify://collections/bark-studio"
           }
         },
         "slide_banner_04": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/bark-and-frame-last-supper-dog-feast-old-masters-style-jack-russell-baron-framed-portrait-hero-banner.jpg",
-            "title": "Your dog. Recognizable. Refined.",
-            "text": "We turn your photo into a portrait that still feels like them.",
-            "button_text": "See your dog",
+            "title": "Real artists. Real dogs. Real art.",
+            "text": "Every portrait is designed by our award-winning artists. No shortcuts. Just art.",
+            "button_text": "Create your portrait",
             "button_link": "shopify://pages/make-portrait"
           }
         }
