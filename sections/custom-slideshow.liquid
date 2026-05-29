@@ -322,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const speed = (parseInt(slideshow.dataset.speed) || 4) * 1000;
 
   let interval;
+  let resumeTimeout;
   if (autoplay) {
     interval = setInterval(nextSlide, speed);
   }
@@ -353,16 +354,22 @@ document.addEventListener("DOMContentLoaded", () => {
     showSlide(index);
   }
 
+  function pauseAutoplayTemporarily() {
+    if (!autoplay) return;
+    clearInterval(interval);
+    clearTimeout(resumeTimeout);
+    resumeTimeout = setTimeout(() => {
+      clearInterval(interval);
+      interval = setInterval(nextSlide, speed);
+    }, 15000);
+  }
+
   dots.forEach(dot => {
     dot.addEventListener("click", () => {
 
       index = parseInt(dot.dataset.index);
       showSlide(index);
-
-      if (autoplay) {
-        clearInterval(interval);
-        interval = setInterval(nextSlide, speed);
-      }
+      pauseAutoplayTemporarily();
     });
   });
 
