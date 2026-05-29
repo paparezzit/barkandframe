@@ -21,8 +21,10 @@
     <div class="slideshow__track">
       {% for block in section.blocks %}
         {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
+        {% assign portrait_image_position_key = portrait_image_position | split: ' ' | first %}
         <div
           class="slide {% if forloop.first %}is-active{% endif %}"
+          data-portrait-image-position="{{ portrait_image_position_key }}"
           style="--slide-image-position-portrait: {{ portrait_image_position }};"
           {{ block.shopify_attributes }}
         >
@@ -334,6 +336,21 @@
       .slide-image img,
       .slide-image video {
         object-position: var(--slide-image-position-portrait, center center);
+      }
+
+      .slide[data-portrait-image-position='left'] .slide-image img,
+      .slide[data-portrait-image-position='left'] .slide-image video {
+        object-position: left center;
+      }
+
+      .slide[data-portrait-image-position='center'] .slide-image img,
+      .slide[data-portrait-image-position='center'] .slide-image video {
+        object-position: center center;
+      }
+
+      .slide[data-portrait-image-position='right'] .slide-image img,
+      .slide[data-portrait-image-position='right'] .slide-image video {
+        object-position: right center;
       }
 
       .slide-content {
