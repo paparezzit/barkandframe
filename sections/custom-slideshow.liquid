@@ -427,6 +427,13 @@
       }
     }
   }
+
+  @media (orientation: portrait) {
+    .custom-slideshow .slide .slide-image img,
+    .custom-slideshow .slide .slide-image video {
+      object-position: var(--slide-image-position-portrait, center center) !important;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -614,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => {
               "label": "Center"
             },
             {
-              "value": "right center",
+              "value": "78% center",
               "label": "Right"
             }
           ],
