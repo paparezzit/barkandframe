@@ -2,6 +2,10 @@
   assign klaviyo_public_key = 'V6mwd3'
   assign klaviyo_list_id    = 'XGb23F'
   assign popup_delay_ms     = settings.klaviyo_popup_delay | times: 1000 | default: 3000
+  assign show_klaviyo_sticky = false
+  if template.name == 'index'
+    assign show_klaviyo_sticky = true
+  endif
 -%}
 
 {%- if settings.klaviyo_popup_enabled -%}
@@ -99,12 +103,14 @@
 </dialog>
 
 <!-- Sticky reopener (shown after popup is dismissed) -->
-<div class="klav-sticky" id="klav-sticky" hidden>
-  <button class="klav-sticky__open" id="klav-sticky-open" type="button">
-    Your<br>welcome<br>offer
-  </button>
-  <button class="klav-sticky__dismiss" id="klav-sticky-dismiss" type="button" aria-label="Hide offer">×</button>
-</div>
+{%- if show_klaviyo_sticky -%}
+  <div class="klav-sticky" id="klav-sticky" hidden>
+    <button class="klav-sticky__open" id="klav-sticky-open" type="button">
+      Your<br>welcome<br>offer
+    </button>
+    <button class="klav-sticky__dismiss" id="klav-sticky-dismiss" type="button" aria-label="Hide offer">×</button>
+  </div>
+{%- endif -%}
 
 <style>
 .klav-popup{
@@ -378,6 +384,17 @@
   margin: 20px 0 -10px;
 }
 
+@media(max-width: 749px){
+  .klav-sticky {
+    top: 50svh;
+    transform: translateY(-50%);
+  }
+
+  .klav-sticky--out {
+    transform: translate(calc(-100% - 2px), -50%);
+  }
+}
+
 @media(min-width: 750px){
   .klav-popup{
     border-radius: 80px;
@@ -434,11 +451,13 @@
   }
 
   function stickySlideOut() {
+    if (!sticky) return;
     if (sticky.hidden) return;
     sticky.classList.add('klav-sticky--out');
   }
 
   function stickySlideIn() {
+    if (!sticky) return;
     sticky.classList.add('klav-sticky--out');
     sticky.hidden = false;
     requestAnimationFrame(function () {
@@ -538,9 +557,9 @@
   });
 
   // Sticky
-  document.getElementById('klav-sticky-open').addEventListener('click', openPopup);
-  document.getElementById('klav-sticky-dismiss').addEventListener('click', function () {
-    sticky.hidden = true;
+  document.getElementById('klav-sticky-open')?.addEventListener('click', openPopup);
+  document.getElementById('klav-sticky-dismiss')?.addEventListener('click', function () {
+    if (sticky) sticky.hidden = true;
     setState('hidden');
   });
 

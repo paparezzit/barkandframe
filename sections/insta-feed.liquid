@@ -13,6 +13,81 @@
 
 
 {% javascript %}
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".insta-feed marquee-component").forEach(marquee => {
+    const wrapper = marquee.querySelector(".marquee__wrapper");
+    if (!wrapper) return;
+
+    let pointerId = null;
+    let startX = 0;
+    let startY = 0;
+    let startTranslateX = 0;
+    let isDragging = false;
+    let suppressClick = false;
+
+    function currentTranslateX() {
+      const transform = window.getComputedStyle(wrapper).transform;
+      if (!transform || transform === "none") return 0;
+
+      try {
+        return new DOMMatrixReadOnly(transform).m41 || 0;
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function finishSwipe(event) {
+      if (event && pointerId !== event.pointerId) return;
+      if (pointerId !== null) marquee.releasePointerCapture?.(pointerId);
+      pointerId = null;
+      isDragging = false;
+      marquee.removeAttribute("data-swiping");
+      wrapper.style.transform = "";
+      wrapper.style.animationPlayState = "";
+    }
+
+    marquee.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse") return;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startY = event.clientY;
+      startTranslateX = currentTranslateX();
+      isDragging = false;
+      marquee.setPointerCapture?.(event.pointerId);
+      marquee.setAttribute("data-swiping", "true");
+      wrapper.style.animationPlayState = "paused";
+    });
+
+    marquee.addEventListener("pointermove", event => {
+      if (pointerId !== event.pointerId) return;
+
+      const deltaX = event.clientX - startX;
+      const deltaY = event.clientY - startY;
+
+      if (!isDragging && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 8) {
+        finishSwipe(event);
+        return;
+      }
+
+      if (Math.abs(deltaX) < 8) return;
+
+      isDragging = true;
+      suppressClick = true;
+      wrapper.style.transform = `translate3d(${startTranslateX + deltaX}px, 0, 0)`;
+      event.preventDefault();
+    }, { passive: false });
+
+    marquee.addEventListener("pointerup", finishSwipe);
+    marquee.addEventListener("pointercancel", finishSwipe);
+
+    marquee.addEventListener("click", event => {
+      if (!suppressClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClick = false;
+    }, true);
+  });
+});
 
 {% endjavascript %}
 
@@ -44,6 +119,16 @@
 
   marquee-component{
     --marquee-gap: 1px !important;
+    cursor: grab;
+    touch-action: pan-y;
+
+    &[data-swiping='true']{
+      cursor: grabbing;
+
+      .marquee__wrapper{
+        animation-play-state: paused !important;
+      }
+    }
 
     .image-block{
       width: 160px;

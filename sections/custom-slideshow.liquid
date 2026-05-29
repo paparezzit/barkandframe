@@ -116,6 +116,7 @@
     aspect-ratio: 1/1;
     position: relative;
     border-radius: 0 0 80px 80px;
+    touch-action: pan-y;
   }
 
   .custom-slideshow .slide {
@@ -436,9 +437,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const slides = slideshow.querySelectorAll(".slide");
   const dots = slideshow.querySelectorAll(".dot");
   const soundToggle = slideshow.querySelector("[data-sound-toggle]");
+  const swipeSurface = slideshow.querySelector(".slideshow__track");
   
   let index = 0;
   let soundOn = false;
+  let swipePointerId = null;
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  let swipeMoved = false;
 
   const autoplay = slideshow.dataset.autoplay === "true";
   const speed = (parseInt(slideshow.dataset.speed) || 4) * 1000;
@@ -476,6 +482,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showSlide(index);
   }
 
+  function previousSlide() {
+    index = (index - 1 + slides.length) % slides.length;
+    showSlide(index);
+  }
+
   function pauseAutoplayTemporarily() {
     if (!autoplay) return;
     clearInterval(interval);
@@ -495,6 +506,42 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   slideshow.addEventListener("click", pauseAutoplayTemporarily);
+
+  if (swipeSurface) {
+    swipeSurface.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse") return;
+      swipePointerId = event.pointerId;
+      swipeStartX = event.clientX;
+      swipeStartY = event.clientY;
+      swipeMoved = false;
+      swipeSurface.setPointerCapture?.(event.pointerId);
+    });
+
+    swipeSurface.addEventListener("pointerup", event => {
+      if (swipePointerId !== event.pointerId) return;
+      const deltaX = event.clientX - swipeStartX;
+      const deltaY = event.clientY - swipeStartY;
+      swipePointerId = null;
+
+      if (Math.abs(deltaX) < 45 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+      swipeMoved = true;
+      pauseAutoplayTemporarily();
+      if (deltaX < 0) nextSlide();
+      else previousSlide();
+    });
+
+    swipeSurface.addEventListener("pointercancel", () => {
+      swipePointerId = null;
+    });
+
+    swipeSurface.addEventListener("click", event => {
+      if (!swipeMoved) return;
+      event.preventDefault();
+      event.stopPropagation();
+      swipeMoved = false;
+    }, true);
+  }
 
   if (soundToggle) {
     soundToggle.addEventListener("click", () => {
