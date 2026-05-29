@@ -20,7 +20,12 @@
   >
     <div class="slideshow__track">
       {% for block in section.blocks %}
-        <div class="slide {% if forloop.first %}is-active{% endif %}" {{ block.shopify_attributes }}>
+        {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
+        <div
+          class="slide {% if forloop.first %}is-active{% endif %}"
+          style="--slide-image-position-portrait: {{ portrait_image_position }};"
+          {{ block.shopify_attributes }}
+        >
 
           {% if block.settings.video != blank %}
             <div class="slide-image">
@@ -322,20 +327,22 @@
 
       .slideshow__track {
         aspect-ratio: auto;
-        min-height: calc(88svh - var(--header-height));
+        min-height: calc(94svh - var(--header-height));
         max-height: none;
       }
 
       .slide-image img,
       .slide-image video {
-        object-position: center;
+        object-position: var(--slide-image-position-portrait, center center);
       }
 
       .slide-content {
+        width: auto;
+        margin-inline: max(var(--util-page-margin-offset), 24px);
         justify-content: flex-end;
         align-items: flex-start;
         gap: 14px;
-        padding: 80px 0 110px;
+        padding: 80px 0 125px;
 
         .slide__title {
           max-width: 340px;
@@ -362,11 +369,11 @@
       margin-bottom: 120px;
 
       .slideshow__track {
-        min-height: calc(90svh - var(--header-height));
+        min-height: calc(95svh - var(--header-height));
       }
 
       .slide-content {
-        padding: 100px 0 150px;
+        padding: 110px 0 165px;
 
         .slide__title {
           max-width: 520px;
@@ -384,11 +391,11 @@
   @media (min-width: 1200px) and (orientation: portrait) {
     .custom-slideshow {
       .slideshow__track {
-        min-height: calc(92svh - var(--header-height));
+        min-height: calc(96svh - var(--header-height));
       }
 
       .slide-content {
-        padding: 130px 0 190px;
+        padding: 140px 0 205px;
 
         .slide__title {
           max-width: 650px;
@@ -528,6 +535,26 @@ document.addEventListener("DOMContentLoaded", () => {
           "type": "image_picker",
           "id": "image",
           "label": "Image (fallback if no video)"
+        },
+        {
+          "type": "select",
+          "id": "portrait_image_position",
+          "label": "Portrait image position",
+          "options": [
+            {
+              "value": "left center",
+              "label": "Left"
+            },
+            {
+              "value": "center center",
+              "label": "Center"
+            },
+            {
+              "value": "right center",
+              "label": "Right"
+            }
+          ],
+          "default": "center center"
         },
         {
           "type": "text",
