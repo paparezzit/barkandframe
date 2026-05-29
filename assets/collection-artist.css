@@ -216,6 +216,12 @@
   width: min(var(--page-width), 100%);
   margin: 0 auto;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.artist-collection__info + .artist-collection__products {
+  margin-top: 0;
 }
 
 .artist-collection__artist-bio {
