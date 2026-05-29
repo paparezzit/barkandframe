@@ -110,6 +110,10 @@
     margin-bottom: 80px;
   }
 
+  .custom-slideshow.is-autoplay-paused .slideshow__dots .dot.is-active::after {
+    animation-play-state: paused;
+  }
+
   .slideshow__track{
     overflow: hidden;
     width: 100%;
@@ -456,13 +460,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoplay = slideshow.dataset.autoplay === "true";
   const speed = (parseInt(slideshow.dataset.speed) || 4) * 1000;
 
-  let interval;
+  let slideTimer;
   let resumeTimeout;
-  if (autoplay) {
-    interval = setInterval(nextSlide, speed);
+  let slideStartedAt = 0;
+  let remainingSlideTime = speed;
+  let autoplayPaused = false;
+
+  function scheduleNextSlide(duration = speed) {
+    if (!autoplay) return;
+    clearTimeout(slideTimer);
+    remainingSlideTime = duration;
+    slideStartedAt = Date.now();
+    slideTimer = setTimeout(nextSlide, duration);
   }
 
-  function showSlide(i) {
+  function restartAutoplayTimer() {
+    if (!autoplay) return;
+    autoplayPaused = false;
+    slideshow.classList.remove("is-autoplay-paused");
+    scheduleNextSlide(speed);
+  }
+
+  function showSlide(i, resetAutoplay = true) {
     slides.forEach((slide, idx) => {
       const active = idx === i;
       slide.classList.toggle("is-active", active);
@@ -482,6 +501,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const activeVideo = slides[i] && slides[i].querySelector("video");
       soundToggle.classList.toggle("is-visible", Boolean(activeVideo));
     }
+
+    if (resetAutoplay) restartAutoplayTimer();
   }
 
   function nextSlide() {
@@ -496,11 +517,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function pauseAutoplayTemporarily() {
     if (!autoplay) return;
-    clearInterval(interval);
     clearTimeout(resumeTimeout);
+
+    if (!autoplayPaused) {
+      const elapsed = Date.now() - slideStartedAt;
+      remainingSlideTime = Math.max(0, remainingSlideTime - elapsed);
+      clearTimeout(slideTimer);
+      autoplayPaused = true;
+      slideshow.classList.add("is-autoplay-paused");
+    }
+
     resumeTimeout = setTimeout(() => {
-      clearInterval(interval);
-      interval = setInterval(nextSlide, speed);
+      autoplayPaused = false;
+      slideshow.classList.remove("is-autoplay-paused");
+      scheduleNextSlide(remainingSlideTime);
     }, 15000);
   }
 
@@ -533,9 +563,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (Math.abs(deltaX) < 45 || Math.abs(deltaX) < Math.abs(deltaY)) return;
 
       swipeMoved = true;
-      pauseAutoplayTemporarily();
       if (deltaX < 0) nextSlide();
       else previousSlide();
+      pauseAutoplayTemporarily();
     });
 
     swipeSurface.addEventListener("pointercancel", () => {

@@ -2,7 +2,7 @@
   <div class="dogstrust__inner">
     <div class="dogstrust__wrapper">
       <div class="dogstrust__bg">
-        <img src="{{ 'dogstrust.png' | asset_url }}" alt="" data-parallax width="400" height="300">
+        <img src="{{ 'dogstrust.png' | asset_url }}" alt="" width="400" height="300">
       </div>
 
       <div class="dogstrust__content">
@@ -149,6 +149,21 @@
 
       .dogstrust__content{
         padding: 30px 80px 30px 0;
+      }
+    }
+  }
+
+  @media (orientation: portrait) {
+    .dogstrust__wrapper {
+      .dogstrust__bg {
+        overflow: visible;
+
+        img {
+          height: 100%;
+          object-fit: contain;
+          object-position: left bottom;
+          transform: none !important;
+        }
       }
     }
   }
