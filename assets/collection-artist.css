@@ -213,7 +213,9 @@
   flex-direction: column;
   gap: 100px;
   padding: 40px var(--page-margin) 80px;
-  max-width: calc(1280px + (2 * var(--page-margin)));
+  width: min(var(--page-width), 100%);
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .artist-collection__artist-bio {

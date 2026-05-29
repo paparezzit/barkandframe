@@ -31,6 +31,51 @@
     </nav>
   {%- endif -%}
 
+  <div class="artist-collection__info section section--page-width">
+
+    <div class="artist-collection__artist-bio">
+      {%- if artist -%}
+        {%- if artist.photo.value != blank -%}
+          <div class="artist-collection__artist-photo">
+            <img
+              src="{{ artist.photo.value | image_url: width: 600 }}"
+              alt="{{ artist.name.value }}"
+              width="600"
+              height="750"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+        <div class="artist-collection__artist-text">
+          {%- if artist.name.value != blank -%}
+            <p class="artist-collection__artist-name">{{ artist.name.value }}</p>
+          {%- endif -%}
+          {%- if artist['about-long'].value != blank -%}
+            <div class="rte artist-collection__artist-about">{{ artist['about-long'].value | newline_to_br }}</div>
+          {%- endif -%}
+          {%- if artist.signature.value != blank -%}
+            <div class="artist-collection__artist-signature">
+              <img
+                src="{{ artist.signature.value | image_url: width: 240 }}"
+                alt=""
+                width="240"
+                height="60"
+                loading="lazy"
+              >
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="artist-collection__collection-desc">
+      {%- if col_text != blank -%}
+        <div class="artist-collection__desc-text rte">{{ col_text | newline_to_br }}</div>
+      {%- endif -%}
+    </div>
+
+  </div>
+
   <div class="artist-collection__wrapper">
     <div class="artist-collection__hero">
       <h1 class="artist-collection__title">{{ collection.title }}</h1>
@@ -170,51 +215,6 @@
       {%- endfor -%}
       {%- endif -%}
     </div>
-  </div>
-
-  <div class="artist-collection__info section section--page-width">
-
-    <div class="artist-collection__artist-bio">
-      {%- if artist -%}
-        {%- if artist.photo.value != blank -%}
-          <div class="artist-collection__artist-photo">
-            <img
-              src="{{ artist.photo.value | image_url: width: 600 }}"
-              alt="{{ artist.name.value }}"
-              width="600"
-              height="750"
-              loading="lazy"
-            >
-          </div>
-        {%- endif -%}
-        <div class="artist-collection__artist-text">
-          {%- if artist.name.value != blank -%}
-            <p class="artist-collection__artist-name">{{ artist.name.value }}</p>
-          {%- endif -%}
-          {%- if artist['about-long'].value != blank -%}
-            <div class="rte artist-collection__artist-about">{{ artist['about-long'].value | newline_to_br }}</div>
-          {%- endif -%}
-          {%- if artist.signature.value != blank -%}
-            <div class="artist-collection__artist-signature">
-              <img
-                src="{{ artist.signature.value | image_url: width: 240 }}"
-                alt=""
-                width="240"
-                height="60"
-                loading="lazy"
-              >
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    </div>
-
-    <div class="artist-collection__collection-desc">
-      {%- if col_text != blank -%}
-        <div class="artist-collection__desc-text rte">{{ col_text | newline_to_br }}</div>
-      {%- endif -%}
-    </div>
-
   </div>
 
 </div>
