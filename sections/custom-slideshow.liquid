@@ -142,6 +142,16 @@
     height: 100%;
   }
 
+  .custom-slideshow .slide::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 33.333%;
+    background: linear-gradient(90deg, rgb(0 0 0 / 0.36) 0%, rgb(0 0 0 / 0) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .custom-slideshow .slide-image img,
   .custom-slideshow .slide-image video {
     width: 100%;
