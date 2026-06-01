@@ -4,25 +4,24 @@
       <img src="{{ 'portait-formats-bg.jpg' | asset_url }}" alt="" data-parallax width="1200" height="800">
     </div>
     <div class="portrait-formats__wrapper">
-      <div class="portrait-formats__cta">
-        <h2 class="portrait-formats__title">
-          {{ section.settings.main-text }}
-        </h2>
-        {%- if section.settings.subtitle != blank -%}
-          <p class="portrait-formats__subtitle">{{ section.settings.subtitle }}</p>
-        {%- endif -%}
-        {% if section.settings.button_text != blank %}
-          <div class="portrait-formats__button">
-            <a href="{{ section.settings.button_link }}" class="button">
-              {{ section.settings.button_text }}
-            </a>
-          </div>
-        {% endif %}
-      </div>
+      <h2 class="portrait-formats__title">
+        {{ section.settings.main-text }}
+      </h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="portrait-formats__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
 
       <div class="portrait-formats__content" data-parallax>
         {% content_for 'blocks' %}
       </div>
+
+      {% if section.settings.button_text != blank %}
+        <div class="portrait-formats__button">
+          <a href="{{ section.settings.button_link }}" class="button">
+            {{ section.settings.button_text }}
+          </a>
+        </div>
+      {% endif %}
     </div>
     
   </div>
@@ -64,20 +63,6 @@
     }
   }
 
-  .portrait-formats__cta{
-    position: absolute;
-    left: 30px;
-    right: 30px;
-    bottom: 30px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    max-width: 55%;
-    transition: opacity .3s;
-  }
-
   .portrait-formats__content{
     height: 100%;
     position: absolute;
@@ -87,32 +72,41 @@
   }
 
   .portrait-formats__title{
-    margin: 0;
+    padding: 40px 30px 0;
+    margin-bottom: 0;
     font-size: 5vw;
+    max-width: 55%;
     position: relative;
     z-index: 2;
+    transition: opacity .3s;
   }
 
   .portrait-formats__subtitle {
+    padding: 15px 30px 0;
     margin: 0;
     font-size: 14px;
     color: var(--brown);
     position: relative;
     z-index: 2;
+    transition: opacity .3s;
+    max-width: 50%;
     font-weight: 700;
   }
 
   .portrait-formats__button{
-    margin: 0;
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
     transition: opacity .3s;
 
     .button{
-      margin: 0;
+      margin: 0 auto;
     }
   }
 
   &.hovered{
-    .portrait-formats__bg, .portrait-formats__cta, product-card--custom:not(:hover){
+    .portrait-formats__bg, .portrait-formats__title, product-card--custom:not(:hover), .portrait-formats__button{
       opacity: .81;
     }
   }
@@ -122,7 +116,7 @@
       aspect-ratio: 3/2;
     }
 
-    .portrait-formats__cta{
+    .portrait-formats__title{
       max-width: 40%;
     }
 
@@ -135,21 +129,19 @@
   @media(min-width: 1200px){
     margin: 180px 0;
 
-    .portrait-formats__cta{
-      left: 40px;
-      right: auto;
-      bottom: 40px;
-      gap: 18px;
-      max-width: 440px;
-    }
-
     .portrait-formats__title{
       font-size: 54px;
+      padding: 60px 40px 30px;
       width: 440px;
     }
 
     .portrait-formats__subtitle{
+      padding: 0 40px;
       max-width: 320px;
+    }
+
+    .portrait-formats__button{
+      bottom: 40px;
     }
   }
 }
