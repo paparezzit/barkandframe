@@ -164,7 +164,8 @@
         "cloudinary_cloud_name": "dpkilh6fx",
         "cloudinary_upload_preset": "Unsigned",
         "extra_pet_price": 9,
-        "pet_name_price": 5
+        "pet_name_price": 5,
+        "show_reviews": false
       }
     }
   },

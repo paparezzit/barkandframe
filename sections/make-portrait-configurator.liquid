@@ -1011,40 +1011,42 @@
 
       </div>
 
-      <div class="mp-reviews">
-        <h2 class="reviews__heading">What dog people say</h2>
-        <div class="reviews__outer">
-          <div class="reviews__grid">
-            {%- for r in shop.metaobjects['review'].values limit: 9 -%}
-              <div class="review-card">
-                {%- if r.photo.value != blank -%}
-                  <div class="review-card__img">
-                    <img
-                      src="{{ r.photo.value | image_url: width: 600 }}"
-                      alt="{{ r.heading.value | escape }}"
-                      loading="lazy"
-                      width="600"
-                      height="400"
-                    >
-                  </div>
-                {%- endif -%}
-                {%- if r.heading.value != blank -%}
-                  <h3 class="review-card__heading">{{ r.heading.value }}</h3>
-                {%- endif -%}
-                {%- if r.body.value != blank -%}
-                  <p class="review-card__body">{{ r.body.value | newline_to_br }}</p>
-                {%- endif -%}
-              </div>
-            {%- endfor -%}
+      {%- if section.settings.show_reviews -%}
+        <div class="mp-reviews">
+          <h2 class="reviews__heading">What dog people say</h2>
+          <div class="reviews__outer">
+            <div class="reviews__grid">
+              {%- for r in shop.metaobjects['review'].values limit: 9 -%}
+                <div class="review-card">
+                  {%- if r.photo.value != blank -%}
+                    <div class="review-card__img">
+                      <img
+                        src="{{ r.photo.value | image_url: width: 600 }}"
+                        alt="{{ r.heading.value | escape }}"
+                        loading="lazy"
+                        width="600"
+                        height="400"
+                      >
+                    </div>
+                  {%- endif -%}
+                  {%- if r.heading.value != blank -%}
+                    <h3 class="review-card__heading">{{ r.heading.value }}</h3>
+                  {%- endif -%}
+                  {%- if r.body.value != blank -%}
+                    <p class="review-card__body">{{ r.body.value | newline_to_br }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+            <div class="reviews__fade" aria-hidden="true"></div>
           </div>
-          <div class="reviews__fade" aria-hidden="true"></div>
+          <!--
+            <div class="reviews__cta">
+              <a href="/pages/reviews" class="button">All reviews</a>
+            </div>
+          -->
         </div>
-        <!--
-          <div class="reviews__cta">
-            <a href="/pages/reviews" class="button">All reviews</a>
-          </div>
-        -->
-      </div>
+      {%- endif -%}
 
     </div>
 
@@ -5742,6 +5744,12 @@
       "label": "Pet name fee (in EUR)",
       "default": 5
     },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews",
+      "default": false
+    }
   ],
   "blocks": [
     {

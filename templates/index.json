@@ -297,6 +297,7 @@
     },
     "section_reviews": {
       "type": "reviews",
+      "disabled": true,
       "blocks": {
         "product_card_QxrxEc": {
           "type": "product-card",
