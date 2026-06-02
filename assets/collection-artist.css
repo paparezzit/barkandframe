@@ -221,7 +221,7 @@
 }
 
 .artist-collection__info + .artist-collection__products {
-  margin-top: 160px;
+  margin-top: 80px;
 }
 
 .artist-collection__artist-bio {
@@ -399,7 +399,7 @@
   }
 
   .artist-collection__info + .artist-collection__products {
-    margin-top: 400px;
+    margin-top: 200px;
   }
 
   .artist-collection__artist-text {
