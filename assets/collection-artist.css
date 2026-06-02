@@ -1,6 +1,8 @@
 .artist-collection {
   margin-left: auto;
   margin-right: auto;
+  --artist-info-top-offset: clamp(18px, 4svh, 40px);
+  --artist-products-peek: clamp(110px, 18svh, 220px);
 }
 
 .artist-collection__nav {
@@ -212,16 +214,17 @@
   display: flex;
   flex-direction: column;
   gap: 100px;
-  padding: 40px var(--page-margin) 80px;
+  padding: 0 var(--page-margin);
   width: min(var(--page-width), 100%);
-  margin: 0 auto;
+  margin: calc(-100dvh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
+  min-height: calc(100svh - var(--header-height) - var(--artist-info-top-offset) - var(--artist-products-peek));
   box-sizing: border-box;
   position: relative;
   z-index: 2;
 }
 
 .artist-collection__info + .artist-collection__products {
-  margin-top: 80px;
+  margin-top: 0;
 }
 
 .artist-collection__artist-bio {
@@ -331,6 +334,11 @@
 }
 
 @media screen and (min-width: 1200px) {
+  .artist-collection {
+    --artist-info-top-offset: clamp(24px, 5svh, 56px);
+    --artist-products-peek: clamp(150px, 20svh, 280px);
+  }
+
   .artist-collection__products {
     gap: 0;
     padding: 0 calc(var(--page-margin) * 3) 0;
@@ -394,12 +402,12 @@
   }
 
   .artist-collection__info {
-    padding-top: 100px;
-    padding-bottom: 200px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .artist-collection__info + .artist-collection__products {
-    margin-top: 200px;
+    margin-top: 0;
   }
 
   .artist-collection__artist-text {
