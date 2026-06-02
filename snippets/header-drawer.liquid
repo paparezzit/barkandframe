@@ -24,6 +24,16 @@
     assign ratio = block_settings.featured_products_aspect_ratio
   endif
 
+  assign about_url = pages['about-us'].url | default: '/pages/about-us'
+  assign about_title = 'About us'
+  assign has_about_link = false
+  for link in linklist.links
+    assign link_title = link.title | downcase
+    if link_title == 'about us' or link.url == about_url or link.url == '/pages/about-us'
+      assign has_about_link = true
+    endif
+  endfor
+
   ##
   # We only eager load heavy elements of the page when rendering this template
   # through the Section Rendering API.
@@ -103,10 +113,12 @@
           {% if linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
+            {% assign visible_menu_index = 0 %}
             {%- for link in linklist.links -%}
               {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
                 {% continue %}
               {% endif %}
+              {% assign visible_menu_index = visible_menu_index | plus: 1 %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -297,16 +309,36 @@
                   </a>
                 {% endif %}
               </li>
+              {%- if has_about_link == false and visible_menu_index == 2 -%}
+                {% assign animation_index = animation_index | plus: 1 %}
+                <li
+                  style="--menu-drawer-animation-index: {{ animation_index }};"
+                  class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                >
+                  <a
+                    id="HeaderDrawer-about-us"
+                    href="{{ about_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == about_url %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    <span class="menu-drawer__menu-item-text">{{ about_title }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
             {%- endfor -%}
           {% else %}
             {%- comment -%}
               Handle menus with 3 levels of links
             {%- endcomment -%}
             {% assign animation_index = 0 %}
+            {% assign visible_menu_index = 0 %}
             {%- for link in linklist.links -%}
               {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
                 {% continue %}
               {% endif %}
+              {% assign visible_menu_index = visible_menu_index | plus: 1 %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 class="menu-drawer__list-item"
@@ -620,6 +652,24 @@
                   </a>
                 {%- endif -%}
               </li>
+              {%- if has_about_link == false and visible_menu_index == 2 -%}
+                {% assign animation_index = animation_index | plus: 1 %}
+                <li
+                  class="menu-drawer__list-item"
+                  style="--menu-drawer-animation-index: {{ animation_index }};"
+                >
+                  <a
+                    id="HeaderDrawer-about-us"
+                    href="{{ about_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == about_url %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    <span class="menu-drawer__menu-item-text">{{ about_title }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
             {%- endfor -%}
           {% endif %}
         </ul>

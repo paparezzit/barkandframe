@@ -21,13 +21,25 @@
   elsif block_settings.menu_style == 'featured_products'
     assign ratio = block_settings.featured_products_aspect_ratio
   endif
+
+  assign about_url = pages['about-us'].url | default: '/pages/about-us'
+  assign about_title = 'About us'
+  assign has_about_link = false
+  for link in block_settings.menu.links
+    assign link_title = link.title | downcase
+    if link_title == 'about us' or link.url == about_url or link.url == '/pages/about-us'
+      assign has_about_link = true
+    endif
+  endfor
 %}
 
 {% capture children %}
+  {% assign visible_menu_index = 0 %}
   {% for link in block_settings.menu.links %}
     {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
       {% continue %}
     {% endif %}
+    {% assign visible_menu_index = visible_menu_index | plus: 1 %}
     <li
       role="presentation"
       class="menu-list__list-item"
@@ -72,6 +84,28 @@
         </div>
       {%- endif -%}
     </li>
+    {% if has_about_link == false and visible_menu_index == 2 %}
+      <li
+        role="presentation"
+        class="menu-list__list-item"
+        on:focus="/activate"
+        on:blur="/deactivate"
+        on:pointerenter="/activate"
+        on:pointerleave="/deactivate"
+      >
+        <a
+          href="{{ about_url }}"
+          data-skip-node-update="true"
+          class="menu-list__link{% if request.path == about_url %} menu-list__link--active{% endif %}"
+          {% if request.path == about_url %}
+            aria-current="page"
+          {% endif %}
+          ref="menuitem"
+        >
+          <span class="menu-list__link-title">{{ about_title }}</span>
+        </a>
+      </li>
+    {% endif %}
   {% endfor %}
   <li
     class="menu-list__list-item"

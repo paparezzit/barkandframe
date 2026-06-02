@@ -17,6 +17,16 @@
   elsif block_settings.menu_style == 'collection_images' and block_settings.collection_title_case == 'uppercase'
     assign title_case_style = ' --title-case: uppercase;'
   endif
+
+  assign about_url = pages['about-us'].url | default: '/pages/about-us'
+  assign about_title = 'About us'
+  assign has_about_link = false
+  for link in block_settings.menu.links
+    assign link_title = link.title | downcase
+    if link_title == 'about us' or link.url == about_url or link.url == '/pages/about-us'
+      assign has_about_link = true
+    endif
+  endfor
 %}
 
 {% case variant %}
@@ -47,10 +57,12 @@
             class="menu-list__list list-unstyled"
             role="list"
           >
+            {% assign visible_menu_index = 0 %}
             {% for link in block_settings.menu.links %}
               {% if block_settings.hide_empty_collection_links and link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' %}
                 {% continue %}
               {% endif %}
+              {% assign visible_menu_index = visible_menu_index | plus: 1 %}
               <li>
                 <a
                   href="{{ link.url }}"
@@ -63,6 +75,20 @@
                   {{- link.title -}}
                 </a>
               </li>
+              {% if has_about_link == false and visible_menu_index == 2 %}
+                <li>
+                  <a
+                    href="{{ about_url }}"
+                    id="MenuItem-about-us"
+                    class="menu-list__item"
+                    {% if request.path == about_url %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- about_title -}}
+                  </a>
+                </li>
+              {% endif %}
             {% endfor %}
           </ul>
         </div>
