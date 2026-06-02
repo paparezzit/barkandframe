@@ -89,7 +89,7 @@
 {%- if show_klaviyo_sticky -%}
   <div class="klav-sticky" id="klav-sticky" hidden>
     <button class="klav-sticky__open" id="klav-sticky-open" type="button">
-      Your<br>welcome<br>offer
+      Your <br>welcome <br>offer
     </button>
     <button class="klav-sticky__dismiss" id="klav-sticky-dismiss" type="button" aria-label="Hide offer">×</button>
   </div>
@@ -380,8 +380,8 @@
 }
 
 @media(orientation: portrait){
-  :root {
-    --klav-sticky-bar-height: 44px;
+  body {
+    --klav-sticky-bar-height: calc(var(--header-height, 60px) * 2 / 3);
   }
 
   html.klav-sticky-visible body {
