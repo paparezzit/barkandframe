@@ -4995,7 +4995,8 @@
       photos: state.photoUrls,
       portrait_font: null,
       quantity: state.prints > 0 ? state.prints + 1 : 1,
-      low_resolution: state.lowResPhoto || undefined
+      low_resolution: state.lowResPhoto || undefined,
+      skip_the_queue: checkedAddons.includes('Skip the queue')
     };
 
     var doRedirect = function () {

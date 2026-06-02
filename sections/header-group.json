@@ -65,7 +65,6 @@
           "settings": {
             "menu": "main-menu",
             "menu_style": "text",
-            "hide_empty_collection_links": true,
             "featured_products_aspect_ratio": "4 / 5",
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
