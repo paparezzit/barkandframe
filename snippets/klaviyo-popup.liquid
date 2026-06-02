@@ -25,23 +25,6 @@
   </div>
 
   <div class="klav-popup__inner">
-
-    <!-- Left: portrait image -->
-    <div class="klav-popup__col klav-popup__col--image">
-      <div class="klav-popup__portrait-wrap">
-        <img
-          class="klav-popup__portrait"
-          src="{{ 'popup-portrait.jpg' | asset_url }}"
-          alt=""
-          loading="lazy"
-          width="220"
-          height="300"
-          onerror="this.closest('.klav-popup__col--image').style.display='none'"
-        >
-      </div>
-    </div>
-
-    <!-- Right: content -->
     <div class="klav-popup__col klav-popup__col--content">
       <button
         class="klav-popup__close"
@@ -116,8 +99,8 @@
 .klav-popup{
   padding: 0;
   border: none;
-  border-radius: 40px;
-  max-width: 740px;
+  border-radius: 36px;
+  max-width: 520px;
   width: calc(100vw - 2rem);
   overflow: hidden;
   background: transparent;
@@ -129,7 +112,7 @@
 }
 
 .klav-popup__inner {
-  display: flex;
+  display: block;
   background-color: color-mix(in srgb, var(--purple) 45%, transparent);
 }
 
@@ -157,12 +140,13 @@
 
 /* Content column */
 .klav-popup__col--content {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  min-height: 430px;
+  padding: 70px 48px 52px;
   position: relative;
+  box-sizing: border-box;
 }
 
 /* Brand logo in content column */
@@ -221,7 +205,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 40px;
+  gap: 32px;
   width: 100%;
 }
 
@@ -230,7 +214,7 @@
 .klav-step__icon {
   color: var(--brown);
   line-height: 0;
-  margin: 60px 0 -10px;
+  margin: 10px 0 -8px;
 }
 
 .klav-step__heading {
@@ -395,25 +379,74 @@
   }
 }
 
+@media(orientation: portrait){
+  :root {
+    --klav-sticky-bar-height: 44px;
+  }
+
+  html.klav-sticky-visible body {
+    padding-top: var(--klav-sticky-bar-height);
+  }
+
+  html.klav-sticky-visible .header[transparent] {
+    top: var(--klav-sticky-bar-height);
+  }
+
+  html.klav-sticky-visible .header-section:has(> #header-component[sticky='always']),
+  html.klav-sticky-visible .header-section:has(> #header-component[sticky='scroll-up'][data-sticky-state='active']) {
+    top: calc(var(--klav-sticky-bar-height) - 1px);
+  }
+
+  .klav-sticky {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-height: var(--klav-sticky-bar-height);
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 0;
+    padding: 0 52px 0 18px;
+    transform: translateY(0);
+    z-index: calc(var(--layer-overlay, 16) + 2);
+  }
+
+  .klav-sticky--out {
+    transform: translateY(-100%);
+  }
+
+  .klav-sticky:hover {
+    padding-left: 18px;
+  }
+
+  .klav-sticky__open {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .klav-sticky__open br {
+    display: none;
+  }
+
+  .klav-sticky__dismiss {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    font-size: 20px;
+  }
+}
+
 @media(min-width: 750px){
   .klav-popup{
-    border-radius: 80px;
-  }
-
-  .klav-popup__col--image{
-    display: block;
-    flex: 1;
-    padding: 40px;
-    padding-right: 20px;
-  }
-
-  .klav-popup__col--content{
-    padding-left: 20px;
+    border-radius: 56px;
   }
 
   .klav-popup__close{
-    right: 40px;
-    top: 40px;
+    right: 32px;
+    top: 32px;
   }
 }
 
@@ -452,6 +485,7 @@
 
   function stickySlideOut() {
     if (!sticky) return;
+    document.documentElement.classList.remove('klav-sticky-visible');
     if (sticky.hidden) return;
     sticky.classList.add('klav-sticky--out');
   }
@@ -463,6 +497,7 @@
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         sticky.classList.remove('klav-sticky--out');
+        document.documentElement.classList.add('klav-sticky-visible');
       });
     });
   }
@@ -560,6 +595,7 @@
   document.getElementById('klav-sticky-open')?.addEventListener('click', openPopup);
   document.getElementById('klav-sticky-dismiss')?.addEventListener('click', function () {
     if (sticky) sticky.hidden = true;
+    document.documentElement.classList.remove('klav-sticky-visible');
     setState('hidden');
   });
 
