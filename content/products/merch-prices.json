@@ -1,0 +1,1311 @@
+{
+  "source": "Shopify Admin product pricing snapshot",
+  "currency": "EUR",
+  "rules": {
+    "Cap": "65.00",
+    "T-Shirt": "79.00",
+    "Crewneck": "94.00"
+  },
+  "products": [
+    {
+      "id": "gid://shopify/Product/10865188995418",
+      "title": "Bloom | Crewneck",
+      "handle": "bloom-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206717854042",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206717886810",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206717919578",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206717952346",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206717985114",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718017882",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718050650",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718083418",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718116186",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718148954",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718181722",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718214490",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189028186",
+      "title": "Bloom | T-Shirt",
+      "handle": "bloom-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206718247258",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718280026",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718312794",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718345562",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718378330",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718411098",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718443866",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718476634",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718509402",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718542170",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718574938",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718607706",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718640474",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718673242",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718706010",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189060954",
+      "title": "Chill Vibes | Crewneck",
+      "handle": "chill-vibes-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206718738778",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718771546",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718804314",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718837082",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718869850",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718902618",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718935386",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206718968154",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719000922",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719033690",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719066458",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719099226",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189093722",
+      "title": "Chill Vibes | T-Shirt",
+      "handle": "chill-vibes-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206719131994",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719164762",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719197530",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719230298",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719263066",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719295834",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719328602",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719361370",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719394138",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719426906",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719459674",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719492442",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719525210",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719557978",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719590746",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189126490",
+      "title": "Doggery Squad | Crewneck",
+      "handle": "doggery-squad-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206719754586",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719787354",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719820122",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719852890",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719885658",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719918426",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719951194",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206719983962",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720016730",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720049498",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720082266",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720115034",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189159258",
+      "title": "Doggery Squad | T-Shirt",
+      "handle": "doggery-squad-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206720180570",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720213338",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720246106",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720278874",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720311642",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720344410",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720377178",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720409946",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720442714",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720475482",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720508250",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720541018",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720573786",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720606554",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720639322",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189192026",
+      "title": "Give Love | Cap",
+      "handle": "give-love-cap",
+      "productType": "Cap",
+      "price": "65.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206720672090",
+          "title": "Black / One size",
+          "price": "65.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720704858",
+          "title": "Oyster / One size",
+          "price": "65.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189224794",
+      "title": "Love is Everywhere | Crewneck",
+      "handle": "love-is-everywhere-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206720868698",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720901466",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720934234",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720967002",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206720999770",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721032538",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721065306",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721098074",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721130842",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721163610",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721196378",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721229146",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189257562",
+      "title": "Love is Everywhere | T-Shirt",
+      "handle": "love-is-everywhere-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206721261914",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721294682",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721327450",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721360218",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721392986",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721425754",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721458522",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721491290",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721524058",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721556826",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721589594",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721622362",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721655130",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721687898",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721720666",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189290330",
+      "title": "More Dog is More Dog | Cap",
+      "handle": "more-dog-is-more-dog-cap",
+      "productType": "Cap",
+      "price": "65.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206721753434",
+          "title": "Black / One size",
+          "price": "65.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721786202",
+          "title": "Oyster / One size",
+          "price": "65.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189618010",
+      "title": "No fart No love | Crewneck",
+      "handle": "no-fart-no-love-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206721917274",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721950042",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206721982810",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722015578",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722048346",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722081114",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722113882",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722146650",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722179418",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722212186",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722244954",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722277722",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189650778",
+      "title": "No fart No love | T-Shirt",
+      "handle": "no-fart-no-love-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206722310490",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722343258",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722376026",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722408794",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722441562",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722474330",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722507098",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722539866",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722572634",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722605402",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722638170",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722670938",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722703706",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722736474",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722769242",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189683546",
+      "title": "Powered by Dogs | Cap",
+      "handle": "powered-by-dogs-cap",
+      "productType": "Cap",
+      "price": "65.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206722802010",
+          "title": "Black / One size",
+          "price": "65.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722834778",
+          "title": "Oyster / One size",
+          "price": "65.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189716314",
+      "title": "Powered by Dogs | Crewneck",
+      "handle": "powered-by-dogs-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206722965850",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206722998618",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723031386",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723064154",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723096922",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723129690",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723162458",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723195226",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723227994",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723260762",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723293530",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723326298",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189749082",
+      "title": "Powered by Dogs | T-Shirt",
+      "handle": "powered-by-dogs-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206723391834",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723424602",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723457370",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723490138",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723522906",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723555674",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723588442",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723621210",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723653978",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723686746",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723719514",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723752282",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723785050",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723817818",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723850586",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189781850",
+      "title": "Sunday Ride | Crewneck",
+      "handle": "sunday-ride-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206723916122",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723948890",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206723981658",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724014426",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724047194",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724079962",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724112730",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724145498",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724178266",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724211034",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724243802",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206724276570",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189814618",
+      "title": "Sunday Ride | T-Shirt",
+      "handle": "sunday-ride-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206725685594",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725718362",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725751130",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725783898",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725816666",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725849434",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725882202",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725914970",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725947738",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206725980506",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726013274",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726046042",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726078810",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726111578",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726144346",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189880154",
+      "title": "The Professor | Crewneck",
+      "handle": "the-professor-crewneck",
+      "productType": "Crewneck",
+      "price": "94.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206726308186",
+          "title": "Black / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726340954",
+          "title": "Black / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726373722",
+          "title": "Black / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726406490",
+          "title": "Black / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726439258",
+          "title": "Black / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726472026",
+          "title": "Black / 3XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726504794",
+          "title": "Heather Grey / S",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726537562",
+          "title": "Heather Grey / M",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726570330",
+          "title": "Heather Grey / L",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726603098",
+          "title": "Heather Grey / XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726635866",
+          "title": "Heather Grey / 2XL",
+          "price": "94.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726668634",
+          "title": "Heather Grey / 3XL",
+          "price": "94.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189912922",
+      "title": "The Professor | T-Shirt",
+      "handle": "the-professor-t-shirt",
+      "productType": "T-Shirt",
+      "price": "79.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206726701402",
+          "title": "Black / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726734170",
+          "title": "Black / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726766938",
+          "title": "Black / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726799706",
+          "title": "Black / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726832474",
+          "title": "Black / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726865242",
+          "title": "Heather Grey / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726898010",
+          "title": "Heather Grey / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726930778",
+          "title": "Heather Grey / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726963546",
+          "title": "Heather Grey / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206726996314",
+          "title": "Heather Grey / 2XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727029082",
+          "title": "Pure White / S",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727061850",
+          "title": "Pure White / M",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727094618",
+          "title": "Pure White / L",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727127386",
+          "title": "Pure White / XL",
+          "price": "79.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727160154",
+          "title": "Pure White / 2XL",
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Product/10865189945690",
+      "title": "You Can Pet the Dog | Cap",
+      "handle": "you-can-pet-the-dog-cap",
+      "productType": "Cap",
+      "price": "65.00",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/54206727225690",
+          "title": "Black / One size",
+          "price": "65.00"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/54206727258458",
+          "title": "Oyster / One size",
+          "price": "65.00"
+        }
+      ]
+    }
+  ]
+}
