@@ -1901,6 +1901,68 @@
             "product_title_merch_lifestyle_01"
           ]
         },
+        "product_card_floating_merch_lifestyle_02_cap": {
+          "type": "product-card--floating",
+          "name": "t:names.product_card",
+          "settings": {
+            "product": "more-dog-is-more-dog-cap",
+            "parallax_amount": "-20vh",
+            "card_width": 400
+          },
+          "blocks": {
+            "image_merch_lifestyle_02_cap": {
+              "type": "image",
+              "settings": {
+                "image": "shopify://shop_images/bark-and-frame-cap-more-dog-is-more-dog-oyster-front-view-auburn-woman.jpg",
+                "link": "",
+                "image_ratio": "adapt",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 32,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "product_title_merch_lifestyle_02_cap": {
+              "type": "product-title",
+              "name": "t:names.product_title",
+              "settings": {
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image_merch_lifestyle_02_cap",
+            "product_title_merch_lifestyle_02_cap"
+          ]
+        },
         "product_card_floating_merch_lifestyle_02": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
@@ -2028,6 +2090,7 @@
       },
       "block_order": [
         "product_card_floating_merch_lifestyle_01",
+        "product_card_floating_merch_lifestyle_02_cap",
         "product_card_floating_merch_lifestyle_02",
         "product_card_floating_merch_lifestyle_03",
         "product_card_floating_Aq9RiH",
