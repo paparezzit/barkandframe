@@ -138,38 +138,58 @@
 
       product-card--floating{
         pointer-events: auto;
-        &:nth-child(even){
+        --floating-card-width: 300px !important;
+
+        &:nth-child(5n+2),
+        &:nth-child(5n+4){
           margin-left: auto;
         }
 
-        &:nth-child(1){
+        &:nth-child(10n+6),
+        &:nth-child(10n+8),
+        &:nth-child(10n+10){
+          margin-left: auto;
+        }
+
+        &:nth-child(10n+7),
+        &:nth-child(10n+9){
+          margin-left: 0;
+        }
+
+        &:nth-child(5n+2),
+        &:nth-child(5n+3){
+          --floating-card-width: 400px !important;
+        }
+
+        &:nth-child(5n+1){
           .product-title{
             left: 35%;
+            top: 60%;
           }
         }
 
-        &:nth-child(2){
+        &:nth-child(5n+2){
           .product-title{
             left: 50%;
             top: 50%;
           }
         }
 
-        &:nth-child(3){
+        &:nth-child(5n+3){
           .product-title{
             left: 50%;
             top: 45%;
           }
         }
 
-        &:nth-child(4){
+        &:nth-child(5n+4){
           .product-title{
             left: 50%;
             top: 80%;
           }
         }
 
-        &:nth-child(5){
+        &:nth-child(5n+5){
           .product-title{
             left: 35%;
             top: 85%;
@@ -248,13 +268,13 @@
         padding: 0 calc(var(--page-margin)*3) 0;
 
         .product-card--floating{
-          &:nth-child(1){
+          &:nth-child(5n+1){
             .product-title{
               left: 25%;
             }
           }
 
-          &:nth-child(2){
+          &:nth-child(5n+2){
             margin-top: -100px;
 
             .product-title{
@@ -262,12 +282,12 @@
             }
           }
 
-          &:nth-child(3){
+          &:nth-child(5n+3){
             margin-left: 100px;
-            margin-top: -100px
+            margin-top: -100px;
           }
 
-          &:nth-child(4){
+          &:nth-child(5n+4){
             margin-right: 50px;
             margin-top: -100px;
 
@@ -276,12 +296,35 @@
             }
           }
 
-          &:nth-child(5){
+          &:nth-child(5n+5){
             margin-top: -50px;
 
             .product-title{
               left: 30%;
             }
+          }
+
+          &:nth-child(10n+6){
+            margin-left: auto;
+          }
+
+          &:nth-child(10n+7){
+            margin-left: 0;
+            margin-right: 0;
+          }
+
+          &:nth-child(10n+8){
+            margin-left: auto;
+            margin-right: 100px;
+          }
+
+          &:nth-child(10n+9){
+            margin-left: 50px;
+            margin-right: 0;
+          }
+
+          &:nth-child(10n+10){
+            margin-left: auto;
           }
         }
       }
@@ -307,7 +350,6 @@
 {% schema %}
 {
   "name": "Floating Images",
-  "max_blocks": 8,
   "settings": [
     {
       "type": "text",

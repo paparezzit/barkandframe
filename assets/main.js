@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lenis.on('scroll', ScrollTrigger.update);
 
+  const floatingParallaxPattern = ["0vh", "-20vh", "-10vh", "0vh", "-20vh"];
+  document.querySelectorAll(".floating-images__holder > .product-card--floating").forEach((card, index) => {
+    if (!card.dataset.parallax) {
+      card.dataset.parallax = floatingParallaxPattern[index % floatingParallaxPattern.length];
+    }
+  });
 
   document.querySelectorAll("[data-parallax], .product-card--floating .image-block img").forEach(parallax => {
     const amount = parallax.dataset.parallax ? parallax.dataset.parallax : "-5vh";
