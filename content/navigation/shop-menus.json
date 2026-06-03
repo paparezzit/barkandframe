@@ -1,0 +1,126 @@
+{
+  "source": "Shopify Admin navigation snapshot",
+  "menus": [
+    {
+      "id": "gid://shopify/Menu/297372582234",
+      "handle": "main-menu",
+      "title": "Main menu",
+      "items": [
+        {
+          "id": "gid://shopify/MenuItem/723437486426",
+          "title": "Portraits",
+          "type": "PAGE",
+          "url": "/pages/make-portrait",
+          "resourceId": "gid://shopify/Page/160300925274",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/723437519194",
+          "title": "Shop",
+          "type": "COLLECTION",
+          "url": "/collections/all-products",
+          "resourceId": "gid://shopify/Collection/674767798618",
+          "items": [
+            {
+              "id": "gid://shopify/MenuItem/765684089178",
+              "title": "All products",
+              "type": "COLLECTION",
+              "url": "/collections/all-products",
+              "resourceId": "gid://shopify/Collection/674767798618"
+            },
+            {
+              "id": "gid://shopify/MenuItem/766354129242",
+              "title": "Custom portrait",
+              "type": "COLLECTION",
+              "url": "/collections/custom-portrait",
+              "resourceId": "gid://shopify/Collection/674376089946"
+            },
+            {
+              "id": "gid://shopify/MenuItem/768090636634",
+              "title": "Artist collection",
+              "type": "COLLECTION",
+              "url": "/collections/bark-studio",
+              "resourceId": "gid://shopify/Collection/675079389530"
+            },
+            {
+              "id": "gid://shopify/MenuItem/765684121946",
+              "title": "For dog people",
+              "type": "COLLECTION",
+              "url": "/collections/for-dog-people",
+              "resourceId": "gid://shopify/Collection/674765963610"
+            },
+            {
+              "id": "gid://shopify/MenuItem/765684154714",
+              "title": "Home & accessories",
+              "type": "COLLECTION",
+              "url": "/collections/home-accessories",
+              "resourceId": "gid://shopify/Collection/674765996378"
+            },
+            {
+              "id": "gid://shopify/MenuItem/765684187482",
+              "title": "For dogs",
+              "type": "COLLECTION",
+              "url": "/collections/for-dogs",
+              "resourceId": "gid://shopify/Collection/674766029146"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Menu/297372615002",
+      "handle": "footer",
+      "title": "Shop menu",
+      "items": [
+        {
+          "id": "gid://shopify/MenuItem/723815367002",
+          "title": "All products",
+          "type": "COLLECTION",
+          "url": "/collections/all-products",
+          "resourceId": "gid://shopify/Collection/674767798618",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/766997922138",
+          "title": "Custom portrait",
+          "type": "COLLECTION",
+          "url": "/collections/custom-portrait",
+          "resourceId": "gid://shopify/Collection/674376089946",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/768090669402",
+          "title": "Artist collection",
+          "type": "COLLECTION",
+          "url": "/collections/bark-studio",
+          "resourceId": "gid://shopify/Collection/675079389530",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/765538107738",
+          "title": "For dog people",
+          "type": "COLLECTION",
+          "url": "/collections/for-dog-people",
+          "resourceId": "gid://shopify/Collection/674765963610",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/765538206042",
+          "title": "Home & accessories",
+          "type": "COLLECTION",
+          "url": "/collections/home-accessories",
+          "resourceId": "gid://shopify/Collection/674765996378",
+          "items": []
+        },
+        {
+          "id": "gid://shopify/MenuItem/765538173274",
+          "title": "For dogs",
+          "type": "COLLECTION",
+          "url": "/collections/for-dogs",
+          "resourceId": "gid://shopify/Collection/674766029146",
+          "items": []
+        }
+      ]
+    }
+  ]
+}

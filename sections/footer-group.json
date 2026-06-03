@@ -162,7 +162,7 @@
                       "name": "t:names.menu",
                       "settings": {
                         "menu": "footer",
-                        "heading": "SHOP",
+                        "heading": "Shop",
                         "menu_spacing": 12,
                         "show_as_accordion": false,
                         "accordion_icon": "caret",

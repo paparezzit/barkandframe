@@ -190,7 +190,8 @@
                           endif
                         %}
                         {%- for childlink in link.links -%}
-                          {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' %}
+                          {% assign childlink_url = childlink.url | split: '?' | first %}
+                          {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' and childlink_url != '/collections/bark-studio' %}
                             {% continue %}
                           {% endif %}
                           <li
