@@ -18,12 +18,13 @@
     assign title_case_style = ' --title-case: uppercase;'
   endif
 
-  assign about_url = pages['about-us'].url | default: '/pages/about-us'
+  assign about_path = '/pages/our-story'
+  assign about_url = pages['our-story'].url | default: about_path
   assign about_title = 'About us'
   assign has_about_link = false
   for link in block_settings.menu.links
-    assign link_title = link.title | downcase
-    if link_title == 'about us' or link.url == about_url or link.url == '/pages/about-us'
+    assign link_title = link.title | strip | downcase
+    if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us'
       assign has_about_link = true
     endif
   endfor
@@ -63,12 +64,26 @@
                 {% continue %}
               {% endif %}
               {% assign visible_menu_index = visible_menu_index | plus: 1 %}
+              {% assign link_title = link.title | strip | downcase %}
+              {% assign is_about_link = false %}
+              {% if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us' %}
+                {% assign is_about_link = true %}
+              {% endif %}
+              {% assign menu_link_url = link.url %}
+              {% assign menu_link_current = link.current %}
+              {% if is_about_link %}
+                {% assign menu_link_url = about_url %}
+                {% assign menu_link_current = false %}
+                {% if request.path == about_path or request.path == about_url %}
+                  {% assign menu_link_current = true %}
+                {% endif %}
+              {% endif %}
               <li>
                 <a
-                  href="{{ link.url }}"
+                  href="{{ menu_link_url }}"
                   id="MenuItem-{{ link.handle }}"
                   class="menu-list__item"
-                  {% if link.current %}
+                  {% if menu_link_current %}
                     aria-current="page"
                   {% endif %}
                 >
@@ -81,7 +96,7 @@
                     href="{{ about_url }}"
                     id="MenuItem-about-us"
                     class="menu-list__item"
-                    {% if request.path == about_url %}
+                    {% if request.path == about_path or request.path == about_url %}
                       aria-current="page"
                     {% endif %}
                   >

@@ -24,12 +24,13 @@
     assign ratio = block_settings.featured_products_aspect_ratio
   endif
 
-  assign about_url = pages['about-us'].url | default: '/pages/about-us'
+  assign about_path = '/pages/our-story'
+  assign about_url = pages['our-story'].url | default: about_path
   assign about_title = 'About us'
   assign has_about_link = false
   for link in linklist.links
-    assign link_title = link.title | downcase
-    if link_title == 'about us' or link.url == about_url or link.url == '/pages/about-us'
+    assign link_title = link.title | strip | downcase
+    if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us'
       assign has_about_link = true
     endif
   endfor
@@ -120,6 +121,20 @@
               {% endif %}
               {% assign visible_menu_index = visible_menu_index | plus: 1 %}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% assign link_title = link.title | strip | downcase %}
+              {% assign is_about_link = false %}
+              {% if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us' %}
+                {% assign is_about_link = true %}
+              {% endif %}
+              {% assign menu_link_url = link.url %}
+              {% assign menu_link_current = link.current %}
+              {% if is_about_link %}
+                {% assign menu_link_url = about_url %}
+                {% assign menu_link_current = false %}
+                {% if request.path == about_path or request.path == about_url %}
+                  {% assign menu_link_current = true %}
+                {% endif %}
+              {% endif %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
                 class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
@@ -223,9 +238,9 @@
                   {%- endcomment -%}
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
-                    href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
-                    {% if link.current %}
+                    href="{{ menu_link_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if menu_link_current %} menu-drawer__menu-item--active{% endif %}"
+                    {% if menu_link_current %}
                       aria-current="page"
                     {% endif %}
                   >
@@ -299,9 +314,9 @@
                   {%- endcomment -%}
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
-                    href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
-                    {% if link.current %}
+                    href="{{ menu_link_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if menu_link_current %} menu-drawer__menu-item--active{% endif %}"
+                    {% if menu_link_current %}
                       aria-current="page"
                     {% endif %}
                   >
@@ -318,8 +333,8 @@
                   <a
                     id="HeaderDrawer-about-us"
                     href="{{ about_url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
-                    {% if request.path == about_url %}
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_path or request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == about_path or request.path == about_url %}
                       aria-current="page"
                     {% endif %}
                   >
@@ -340,6 +355,20 @@
               {% endif %}
               {% assign visible_menu_index = visible_menu_index | plus: 1 %}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% assign link_title = link.title | strip | downcase %}
+              {% assign is_about_link = false %}
+              {% if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us' %}
+                {% assign is_about_link = true %}
+              {% endif %}
+              {% assign menu_link_url = link.url %}
+              {% assign menu_link_current = link.current %}
+              {% if is_about_link %}
+                {% assign menu_link_url = about_url %}
+                {% assign menu_link_current = false %}
+                {% if request.path == about_path or request.path == about_url %}
+                  {% assign menu_link_current = true %}
+                {% endif %}
+              {% endif %}
               <li
                 class="menu-drawer__list-item"
                 style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -642,9 +671,9 @@
                   {%- endcomment -%}
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
-                    href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
-                    {% if link.current %}
+                    href="{{ menu_link_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if menu_link_current %} menu-drawer__menu-item--active{% endif %}"
+                    {% if menu_link_current %}
                       aria-current="page"
                     {% endif %}
                   >
@@ -661,8 +690,8 @@
                   <a
                     id="HeaderDrawer-about-us"
                     href="{{ about_url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
-                    {% if request.path == about_url %}
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == about_path or request.path == about_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == about_path or request.path == about_url %}
                       aria-current="page"
                     {% endif %}
                   >
