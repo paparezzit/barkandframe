@@ -2326,6 +2326,19 @@
   object-fit: cover;
 }
 
+.photo-preview__file-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 239, 229, 0.9);
+  color: var(--brown, #5a4035);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .photo-preview__spinner {
   position: absolute;
   inset: 0;
@@ -4735,9 +4748,14 @@
     }
   }
 
-  function uploadToCloudinary(file, previewEl) {
+  function uploadToCloudinary(file, previewEl, onSuccess) {
     var cfg = window.MakePortraitCloudinary;
-    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
+    if (!cfg || !cfg.cloudName || !cfg.uploadPreset) {
+      previewEl.classList.add('photo-preview--error');
+      showUploadError('Photo upload is not configured. Please try again later.');
+      updateOrderButton();
+      return;
+    }
 
     state.pendingUploads++;
     updateOrderButton();
@@ -4757,8 +4775,11 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.secure_url) {
-          state.photoUrls.push(data.secure_url);
-          previewEl.dataset.photoUrl = data.secure_url;
+          if (previewEl.isConnected) {
+            state.photoUrls.push(data.secure_url);
+            previewEl.dataset.photoUrl = data.secure_url;
+            if (typeof onSuccess === 'function') onSuccess(data);
+          }
           spinner.remove();
         } else {
           spinner.classList.add('photo-preview__spinner--error');
@@ -4778,6 +4799,27 @@
 
   var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
   var MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+  function getFileExtension(file) {
+    var parts = String(file && file.name ? file.name : '').split('.');
+    return parts.length > 1 ? parts.pop().toLowerCase() : '';
+  }
+
+  function isHeicFile(file) {
+    var ext = getFileExtension(file);
+    var type = String(file && file.type ? file.type : '').toLowerCase();
+    return ext === 'heic' || ext === 'heif' ||
+      type === 'image/heic' || type === 'image/heif' ||
+      type === 'image/heic-sequence' || type === 'image/heif-sequence';
+  }
+
+  function isAllowedUploadFile(file) {
+    var ext = getFileExtension(file);
+    var type = String(file && file.type ? file.type : '').toLowerCase();
+    return ALLOWED_TYPES.includes(type) ||
+      ext === 'jpg' || ext === 'jpeg' || ext === 'png' ||
+      ext === 'heic' || ext === 'heif';
+  }
 
   function showUploadError(msg) {
     var el = $('mp-upload-error');
@@ -4855,15 +4897,55 @@
     var previews = $('mp-photo-previews');
     if (!previews) return;
 
+    function removePreviewFile(file, preview) {
+      var idx = state.files.indexOf(file);
+      if (idx > -1) state.files.splice(idx, 1);
+      if (preview.dataset.photoUrl) {
+        var urlIdx = state.photoUrls.indexOf(preview.dataset.photoUrl);
+        if (urlIdx > -1) state.photoUrls.splice(urlIdx, 1);
+      }
+      preview.remove();
+      state.fileDimensions.delete(file);
+      updateQualityIndicator();
+      updateUploadCounter();
+      updateOrderButton();
+    }
+
+    function createPreview(file, imageSrc, fallbackLabel) {
+      var preview = document.createElement('div');
+      preview.className = 'photo-preview';
+
+      if (imageSrc) {
+        var img = document.createElement('img');
+        img.src = imageSrc;
+        img.alt = 'Pet photo preview';
+        preview.appendChild(img);
+      } else {
+        var fallback = document.createElement('span');
+        fallback.className = 'photo-preview__file-fallback';
+        fallback.textContent = fallbackLabel || 'FILE';
+        preview.appendChild(fallback);
+      }
+
+      var removeBtn = document.createElement('button');
+      removeBtn.className = 'photo-preview__remove';
+      removeBtn.type = 'button';
+      removeBtn.textContent = '\u00D7';
+      removeBtn.setAttribute('aria-label', 'Remove photo');
+      removeBtn.addEventListener('click', function () {
+        removePreviewFile(file, preview);
+      });
+      preview.appendChild(removeBtn);
+
+      return preview;
+    }
+
     Array.from(files).forEach(function (file) {
       if (state.files.length >= state.petCount) {
         showUploadError('You can only upload ' + state.petCount + ' photo' + (state.petCount > 1 ? 's' : '') + ' for ' + state.petCount + ' pet' + (state.petCount > 1 ? 's' : '') + '.');
         return;
       }
-      // HEIC files on iOS/macOS sometimes report empty or generic type -- allow by extension
-      var ext = file.name.split('.').pop().toLowerCase();
-      var typeOk = ALLOWED_TYPES.includes(file.type) || ext === 'heic' || ext === 'heif';
-      if (!typeOk) {
+      if (!isAllowedUploadFile(file)) {
         showUploadError('Unsupported file type: ' + file.name + '. Please use JPG, PNG or HEIC.');
         return;
       }
@@ -4874,36 +4956,21 @@
       state.files.push(file);
       updateUploadCounter();
 
+      if (isHeicFile(file)) {
+        var heicPreview = createPreview(file, null, 'HEIC');
+        previews.appendChild(heicPreview);
+        uploadToCloudinary(file, heicPreview, function (data) {
+          if (data.width && data.height) {
+            state.fileDimensions.set(file, { w: data.width, h: data.height });
+            updateQualityIndicator();
+          }
+        });
+        return;
+      }
+
       var reader = new FileReader();
       reader.onload = function (e) {
-        var preview = document.createElement('div');
-        preview.className = 'photo-preview';
-
-        var img = document.createElement('img');
-        img.src = e.target.result;
-        img.alt = 'Pet photo preview';
-        preview.appendChild(img);
-
-        var removeBtn = document.createElement('button');
-        removeBtn.className = 'photo-preview__remove';
-        removeBtn.type = 'button';
-        removeBtn.textContent = '\u00D7';
-        removeBtn.setAttribute('aria-label', 'Remove photo');
-        removeBtn.addEventListener('click', function () {
-          var idx = state.files.indexOf(file);
-          if (idx > -1) state.files.splice(idx, 1);
-          if (preview.dataset.photoUrl) {
-            var urlIdx = state.photoUrls.indexOf(preview.dataset.photoUrl);
-            if (urlIdx > -1) state.photoUrls.splice(urlIdx, 1);
-          }
-          preview.remove();
-          state.fileDimensions.delete(file);
-          updateQualityIndicator();
-          updateUploadCounter();
-          updateOrderButton();
-        });
-        preview.appendChild(removeBtn);
-
+        var preview = createPreview(file, e.target.result, null);
         previews.appendChild(preview);
 
 
@@ -4942,7 +5009,19 @@
             );
           }
         };
+        dimImg.onerror = function () {
+          preview.classList.add('photo-preview--error');
+          showUploadError('Could not read this image. Please try another photo.');
+          updateOrderButton();
+        };
         dimImg.src = e.target.result;
+      };
+      reader.onerror = function () {
+        showUploadError('Could not read this image. Please try another photo.');
+        var idx = state.files.indexOf(file);
+        if (idx > -1) state.files.splice(idx, 1);
+        updateUploadCounter();
+        updateOrderButton();
       };
       reader.readAsDataURL(file);
     });
@@ -4973,11 +5052,16 @@
     hideError();
 
     var detailParts = getConfigurationDetails(false);
+    var orderItemId = 'portrait-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+    var unitQuantity = state.prints > 0 ? state.prints + 1 : 1;
 
     var properties = {
       'Style': state.style ? state.style.name : '',
       'Product': getProductSummaryLabel(),
-      'Details': detailParts.join(' | ')
+      'Details': detailParts.join(' | '),
+      '_baf_order_type': 'portrait',
+      '_baf_order_item_id': orderItemId,
+      '_baf_order_unit_quantity': String(unitQuantity)
     };
 
     var checkedAddons = [];
@@ -5008,6 +5092,7 @@
 
     var newOrderItem = {
       line_item_id: "",
+      order_item_id: orderItemId,
       style_id: state.styleId || null,
       printful_variant_id: (window.MakePortraitPrintfulVariants && state.variantId)
         ? (window.MakePortraitPrintfulVariants[state.variantId] || null)
@@ -5016,7 +5101,7 @@
       pet_name: state.petName || '',
       photos: state.photoUrls,
       portrait_font: null,
-      quantity: state.prints > 0 ? state.prints + 1 : 1,
+      quantity: unitQuantity,
       low_resolution: state.lowResPhoto || undefined,
       skip_the_queue: checkedAddons.includes('Skip the queue')
     };
@@ -5037,34 +5122,23 @@
       showError(msg || 'An error occurred. Please try again.');
     };
 
-    // Store _order as a cart attribute (cart-level, not tied to any line item)
-    fetch('/cart.js')
-      .then(function (r) { return r.json(); })
-      .then(function (cart) {
-        var existingOrder;
-        try { existingOrder = JSON.parse(cart.attributes && cart.attributes['_order']); } catch (e) { existingOrder = null; }
-        if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
-        existingOrder.items.push(newOrderItem);
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (result) {
+        if (!result.ok) { doError(result.data.description || result.data.message); return; }
 
-        return fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: state.variantId, quantity: 1, properties: properties })
-        })
-          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
-          .then(function (result) {
-            if (!result.ok) { doError(result.data.description || result.data.message); return; }
+        if (!window.BAFOrderSync || typeof window.BAFOrderSync.syncCartOrder !== 'function') {
+          doError('Portrait added, but order data update failed.');
+          return;
+        }
 
-            return fetch('/cart/update.js', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ attributes: { '_order': JSON.stringify(existingOrder) } })
-            })
-              .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
-              .then(function (result) {
-                if (result.ok) { doRedirect(); } else { doError('Portrait added, but order data update failed.'); }
-              });
-          });
+        return window.BAFOrderSync.syncCartOrder({ additionalItems: [newOrderItem] })
+          .then(doRedirect)
+          .catch(function () { doError('Portrait added, but order data update failed.'); });
       })
       .catch(function () { doError(); });
   }

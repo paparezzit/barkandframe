@@ -20,6 +20,7 @@
       "@theme/media-gallery": "{{ 'media-gallery.js' | asset_url }}",
       "@theme/quick-add": "{{ 'quick-add.js' | asset_url }}",
       "@theme/paginated-list-aspect-ratio": "{{ 'paginated-list-aspect-ratio.js' | asset_url }}",
+      "@theme/baf-order-sync": "{{ 'baf-order-sync.js' | asset_url }}",
       "@theme/popover-polyfill": "{{ 'popover-polyfill.js' | asset_url }}"
     }
   }
@@ -134,6 +135,11 @@
 ></script>
 <script
   src="{{ 'product-card.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'baf-order-sync.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
