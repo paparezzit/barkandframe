@@ -255,10 +255,10 @@
         <img
           class="make-portrait__preview-img make-portrait__preview-img--square"
           id="mp-preview-img"
-          src="{% if _first_portrait_style.visualizator.value %}{{ _first_portrait_style.visualizator.value | image_url: width: 900 }}{% elsif _first_portrait_style.visualizer_image.value %}{{ _first_portrait_style.visualizer_image.value | image_url: width: 900 }}{% elsif _first_portrait_style.preview_image.value %}{{ _first_portrait_style.preview_image.value | image_url: width: 900 }}{% endif %}"
           width="900"
           height="1125"
           alt=""
+          style="opacity: 0;"
         >
 
         <div class="make-portrait__preview-style-name" id="mp-preview-style-name"></div>
@@ -3742,6 +3742,7 @@
     img.style.opacity = '0';
     img.onload = function () { img.style.opacity = '1'; };
     img.src = visualPreviewUrl;
+    if (img.complete) img.style.opacity = '1';
   }
 
   function updatePreviewImage() {
