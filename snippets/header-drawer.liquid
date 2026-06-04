@@ -27,11 +27,18 @@
   assign about_path = '/pages/our-story'
   assign about_url = pages['our-story'].url | default: about_path
   assign about_title = 'About us'
+  assign artists_path = '/pages/our-artists'
+  assign artists_url = pages['our-artists'].url | default: artists_path
+  assign artists_title = 'Our artists'
   assign has_about_link = false
+  assign has_artists_link = false
   for link in linklist.links
     assign link_title = link.title | strip | downcase
     if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us'
       assign has_about_link = true
+    endif
+    if link_title == 'our artists' or link_title == 'our artist' or link.url == artists_url or link.url == artists_path
+      assign has_artists_link = true
     endif
   endfor
 
@@ -126,12 +133,22 @@
               {% if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us' %}
                 {% assign is_about_link = true %}
               {% endif %}
+              {% assign is_artists_link = false %}
+              {% if link_title == 'our artists' or link_title == 'our artist' or link.url == artists_url or link.url == artists_path %}
+                {% assign is_artists_link = true %}
+              {% endif %}
               {% assign menu_link_url = link.url %}
               {% assign menu_link_current = link.current %}
               {% if is_about_link %}
                 {% assign menu_link_url = about_url %}
                 {% assign menu_link_current = false %}
                 {% if request.path == about_path or request.path == about_url %}
+                  {% assign menu_link_current = true %}
+                {% endif %}
+              {% elsif is_artists_link %}
+                {% assign menu_link_url = artists_url %}
+                {% assign menu_link_current = false %}
+                {% if request.path == artists_path or request.path == artists_url %}
                   {% assign menu_link_current = true %}
                 {% endif %}
               {% endif %}
@@ -342,6 +359,41 @@
                     <span class="menu-drawer__menu-item-text">{{ about_title }}</span>
                   </a>
                 </li>
+                {%- if has_artists_link == false -%}
+                  {% assign animation_index = animation_index | plus: 1 %}
+                  <li
+                    style="--menu-drawer-animation-index: {{ animation_index }};"
+                    class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                  >
+                    <a
+                      id="HeaderDrawer-our-artists"
+                      href="{{ artists_url }}"
+                      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == artists_path or request.path == artists_url %} menu-drawer__menu-item--active{% endif %}"
+                      {% if request.path == artists_path or request.path == artists_url %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      <span class="menu-drawer__menu-item-text">{{ artists_title }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- elsif is_about_link and has_artists_link == false -%}
+                {% assign animation_index = animation_index | plus: 1 %}
+                <li
+                  style="--menu-drawer-animation-index: {{ animation_index }};"
+                  class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                >
+                  <a
+                    id="HeaderDrawer-our-artists"
+                    href="{{ artists_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == artists_path or request.path == artists_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == artists_path or request.path == artists_url %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    <span class="menu-drawer__menu-item-text">{{ artists_title }}</span>
+                  </a>
+                </li>
               {%- endif -%}
             {%- endfor -%}
           {% else %}
@@ -361,12 +413,22 @@
               {% if link_title == 'about us' or link.url == about_url or link.url == about_path or link.url == '/pages/about-us' %}
                 {% assign is_about_link = true %}
               {% endif %}
+              {% assign is_artists_link = false %}
+              {% if link_title == 'our artists' or link_title == 'our artist' or link.url == artists_url or link.url == artists_path %}
+                {% assign is_artists_link = true %}
+              {% endif %}
               {% assign menu_link_url = link.url %}
               {% assign menu_link_current = link.current %}
               {% if is_about_link %}
                 {% assign menu_link_url = about_url %}
                 {% assign menu_link_current = false %}
                 {% if request.path == about_path or request.path == about_url %}
+                  {% assign menu_link_current = true %}
+                {% endif %}
+              {% elsif is_artists_link %}
+                {% assign menu_link_url = artists_url %}
+                {% assign menu_link_current = false %}
+                {% if request.path == artists_path or request.path == artists_url %}
                   {% assign menu_link_current = true %}
                 {% endif %}
               {% endif %}
@@ -697,6 +759,41 @@
                     {% endif %}
                   >
                     <span class="menu-drawer__menu-item-text">{{ about_title }}</span>
+                  </a>
+                </li>
+                {%- if has_artists_link == false -%}
+                  {% assign animation_index = animation_index | plus: 1 %}
+                  <li
+                    class="menu-drawer__list-item"
+                    style="--menu-drawer-animation-index: {{ animation_index }};"
+                  >
+                    <a
+                      id="HeaderDrawer-our-artists"
+                      href="{{ artists_url }}"
+                      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == artists_path or request.path == artists_url %} menu-drawer__menu-item--active{% endif %}"
+                      {% if request.path == artists_path or request.path == artists_url %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      <span class="menu-drawer__menu-item-text">{{ artists_title }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- elsif is_about_link and has_artists_link == false -%}
+                {% assign animation_index = animation_index | plus: 1 %}
+                <li
+                  class="menu-drawer__list-item"
+                  style="--menu-drawer-animation-index: {{ animation_index }};"
+                >
+                  <a
+                    id="HeaderDrawer-our-artists"
+                    href="{{ artists_url }}"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if request.path == artists_path or request.path == artists_url %} menu-drawer__menu-item--active{% endif %}"
+                    {% if request.path == artists_path or request.path == artists_url %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    <span class="menu-drawer__menu-item-text">{{ artists_title }}</span>
                   </a>
                 </li>
               {%- endif -%}
