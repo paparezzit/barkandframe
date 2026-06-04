@@ -3423,6 +3423,35 @@
   /* --------------------------------------------------------------------------------
      Step navigation
   -------------------------------------------------------------------------------- */
+  function syncPreviewNameForStep() {
+    var previewName = $('mp-preview-style-name');
+    if (!previewName) return;
+
+    previewName.innerHTML = '';
+
+    if (state.step === 4) return;
+
+    if (state.step >= 3) {
+      var sizeValue = getSelectedSizeValue();
+      var dims = sizeValue ? getSizeDimensions(sizeValue) : null;
+      if (dims) {
+        previewName.innerHTML =
+          '<span class="preview-size-cm">' + dims.cm + '</span>' +
+          '<span class="preview-size-inch">' + dims.inches + '</span>';
+        return;
+      }
+    }
+
+    if (state.step === 2 && (state.productCategory || state.productHandle || state.product)) {
+      previewName.textContent = getProductSummaryLabel();
+      return;
+    }
+
+    if (state.step === 1) {
+      previewName.textContent = state.style ? (state.style.name || '') : '';
+    }
+  }
+
   function goToStep(step) {
     document.querySelectorAll('.make-portrait__step').forEach(function (el) {
       el.hidden = parseInt(el.dataset.step, 10) !== step;
@@ -3447,19 +3476,9 @@
     var previewImg = $('mp-preview-img');
     if (previewImg) previewImg.style.opacity = step === 4 ? '0.27' : '1';
 
-    // Step 4: replace preview name with static upload info; sync order button state
-    var previewStyleName = $('mp-preview-style-name');
-    if (previewStyleName && step === 4) {
-      previewStyleName.innerHTML = '';
-    }
     if (step === 4) updateOrderButton();
 
-    // Restore style name in preview when leaving step 4
-    var previewName = $('mp-preview-style-name');
-    if (previewName && step !== 4) {
-      previewName.innerHTML = '';
-      if (state.style) previewName.textContent = state.style.name || '';
-    }
+    syncPreviewNameForStep();
 
     // Show only the CTA for the active step
     var ctaMap = { 1: 'mp-cta-step1', 2: 'mp-cta-step2', 3: 'mp-cta-step3', 4: 'mp-cta-order' };
@@ -3944,7 +3963,7 @@
       btn.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
 
-    var categoryNames = { canvas: 'Canvas', paper: 'Paper' };
+    var categoryNames = { canvas: 'Canvas', paper: 'Fine Art Paper' };
     var previewName = $('mp-preview-style-name');
     if (previewName) previewName.textContent = categoryNames[category] || '';
 
@@ -4447,6 +4466,43 @@
     }
   }
 
+  function buildPaperDetailsThenGoToStep3() {
+    var handle = state.productHandle || FRAMED_POSTER_HANDLE;
+    var ctaStep2 = $('mp-cta-step2');
+
+    if (!handle) return;
+
+    if (state.product && state.product.handle === handle) {
+      buildOptionsUI(state.product);
+      goToStep(3);
+      syncPreviewNameForStep();
+      return;
+    }
+
+    if (ctaStep2) ctaStep2.disabled = true;
+    fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (product) {
+        state.productCategory = 'paper';
+        state.productHandle = handle;
+        state.product = product;
+        state.variantId = null;
+        state.variant = null;
+        state.selectedOptions = {};
+        buildOptionsUI(product);
+        goToStep(3);
+        syncPreviewNameForStep();
+      })
+      .catch(function (err) {
+        console.error('Failed to fetch paper product:', err);
+        var c = $('mp-options-container');
+        if (c) c.innerHTML = '<p class="make-portrait__error-note">Failed to load product.</p>';
+      })
+      .finally(function () {
+        if (ctaStep2) ctaStep2.disabled = false;
+      });
+  }
+
   function buildVariantOptions(product, container, previousSelections) {
     if (!product.options || product.options.length === 0) {
       if (product.variants && product.variants.length) {
@@ -4547,6 +4603,7 @@
 
       updatePreviewImage();
       updateAvailability();
+      syncPreviewNameForStep();
     }
 
     updateSubtotals();
@@ -5573,8 +5630,8 @@
       ctaStep1.addEventListener('click', function () {
         if (!state.styleId) return;
         if (state.style && (state.style.tag || '').replace(/ /g, '-') === 'sold-out') return;
-        goToStep(2);
         if (!state.productHandle && !state.productCategory) selectCategory('canvas');
+        goToStep(2);
       });
     }
 
@@ -5597,10 +5654,11 @@
         if (!state.productHandle && !state.productCategory) return;
         if (state.productCategory === 'canvas') {
           buildCanvasFrameUI();
+          goToStep(3);
+          syncPreviewNameForStep();
         } else {
-          buildOptionsUI(state.product);
+          buildPaperDetailsThenGoToStep3();
         }
-        goToStep(3);
       });
     }
 
