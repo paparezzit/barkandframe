@@ -3479,6 +3479,7 @@
     if (step === 4) updateOrderButton();
 
     syncPreviewNameForStep();
+    updatePreviewImage({ skipScroll: true });
 
     // Show only the CTA for the active step
     var ctaMap = { 1: 'mp-cta-step1', 2: 'mp-cta-step2', 3: 'mp-cta-step3', 4: 'mp-cta-order' };
@@ -3764,9 +3765,10 @@
     if (img.complete) img.style.opacity = '1';
   }
 
-  function updatePreviewImage() {
+  function updatePreviewImage(options) {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
+    var useStyleFallback = state.step <= 1;
     var defaultVariantId = !variant && (window.MakePortraitCategoryPreviewVariants || {})['canvas'];
     var variantPreviews = variant ? (spMap[variant.id] || {}) : (defaultVariantId ? (spMap[defaultVariantId] || {}) : {});
     var styleBucket = variantPreviews[state.styleId] || {};
@@ -3779,15 +3781,15 @@
     var url = styleBucket[borderKey]
               || styleBucket[borderBase]
               || styleBucket['default']
-              || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
-              || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
+              || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null)
+              || (useStyleFallback && state.style && state.style.imageUrl ? state.style.imageUrl : null);
     var visualUrl = styleBucket[visualizerKey]
               || styleBucket[visualizerBaseKey]
               || styleBucket['visualizer']
-              || (state.style && state.style.visualizerImageUrl ? state.style.visualizerImageUrl : null)
+              || (useStyleFallback && state.style && state.style.visualizerImageUrl ? state.style.visualizerImageUrl : null)
               || url;
     setConfiguratorPreviewImage(url, { visualPreviewUrl: visualUrl });
-    if (state.initialized) scrollToPreview();
+    if (state.initialized && !(options && options.skipScroll)) scrollToPreview();
   }
 
   /* --------------------------------------------------------------------------------
