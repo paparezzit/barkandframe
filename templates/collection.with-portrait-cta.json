@@ -278,7 +278,7 @@
         "padding-block-start": 0,
         "padding-block-end": 60,
         "sticky_button_enabled": true,
-        "sticky_button_text": "Make a Portrait",
+        "sticky_button_text": "Artist Collection",
         "sticky_button_link": "shopify://collections/bark-studio"
       }
     }
