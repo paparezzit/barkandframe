@@ -3494,6 +3494,10 @@
     var backBtn3 = $('mp-back-step3');
     if (backBtn3) backBtn3.hidden = step !== 4;
 
+  }
+
+  function goToStepFromControl(step) {
+    goToStep(step);
     jumpToConfiguratorStart();
   }
 
@@ -4468,7 +4472,7 @@
     }
   }
 
-  function buildPaperDetailsThenGoToStep3() {
+  function buildPaperDetailsThenGoToStep3(resetPosition) {
     var handle = state.productHandle || FRAMED_POSTER_HANDLE;
     var ctaStep2 = $('mp-cta-step2');
 
@@ -4478,6 +4482,7 @@
       buildOptionsUI(state.product);
       goToStep(3);
       syncPreviewNameForStep();
+      if (resetPosition) jumpToConfiguratorStart();
       return;
     }
 
@@ -4494,6 +4499,7 @@
         buildOptionsUI(product);
         goToStep(3);
         syncPreviewNameForStep();
+        if (resetPosition) jumpToConfiguratorStart();
       })
       .catch(function (err) {
         console.error('Failed to fetch paper product:', err);
@@ -5633,21 +5639,21 @@
         if (!state.styleId) return;
         if (state.style && (state.style.tag || '').replace(/ /g, '-') === 'sold-out') return;
         if (!state.productHandle && !state.productCategory) selectCategory('canvas');
-        goToStep(2);
+        goToStepFromControl(2);
       });
     }
 
     // Back to step 1
     var backStep1 = $('mp-back-step1');
-    if (backStep1) backStep1.addEventListener('click', function () { goToStep(1); });
+    if (backStep1) backStep1.addEventListener('click', function () { goToStepFromControl(1); });
 
     // Back to step 2
     var backStep2 = $('mp-back-step2');
-    if (backStep2) backStep2.addEventListener('click', function () { goToStep(2); });
+    if (backStep2) backStep2.addEventListener('click', function () { goToStepFromControl(2); });
 
     // Back to step 3
     var backStep3 = $('mp-back-step3');
-    if (backStep3) backStep3.addEventListener('click', function () { goToStep(3); });
+    if (backStep3) backStep3.addEventListener('click', function () { goToStepFromControl(3); });
 
     // CTA step 2
     var ctaStep2 = $('mp-cta-step2');
@@ -5656,10 +5662,10 @@
         if (!state.productHandle && !state.productCategory) return;
         if (state.productCategory === 'canvas') {
           buildCanvasFrameUI();
-          goToStep(3);
+          goToStepFromControl(3);
           syncPreviewNameForStep();
         } else {
-          buildPaperDetailsThenGoToStep3();
+          buildPaperDetailsThenGoToStep3(true);
         }
       });
     }
@@ -5672,7 +5678,7 @@
         var _avStatus = (state.variantId && _avMap[state.variantId]) || 'in_stock';
         if (_avStatus === 'out_of_stock') { showOutOfStockPopup(); return; }
         state.petName = ($('mp-pet-name') || {}).value || '';
-        goToStep(4);
+        goToStepFromControl(4);
       });
     }
 
