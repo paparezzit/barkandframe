@@ -4312,6 +4312,10 @@ body{
   background-color: var(--beige) !important;
 }
 
+:where(p, h1, h2, h3, h4, h5) {
+  color: var(--brown);
+}
+
 h2, .text-block.h2 p{
   font-family: "display", "Times New Roman", serif !important;
   font-weight: normal !important;
@@ -4900,7 +4904,6 @@ slideshow-component.slideshow--homepage{
     }
   }
 }
-
 
 
 
