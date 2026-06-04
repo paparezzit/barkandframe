@@ -23,6 +23,10 @@ export class ProductCard extends Component {
     return this.refs.productCardLink.href;
   }
 
+  get isInProductListing() {
+    return this.closest('.product-grid, .shop-products__product-grid') !== null;
+  }
+
   /**
    * Gets the currently selected variant ID from the product card
    * @returns {string | null} The variant ID or null if none selected
@@ -296,6 +300,8 @@ export class ProductCard extends Component {
    * @param {SlideshowSelectEvent} event - The slideshow select event.
    */
   #handleSlideshowSelect = (event) => {
+    if (this.isInProductListing) return;
+
     if (event.detail.userInitiated) {
       this.#previousSlideIndex = event.detail.index;
     }
@@ -306,6 +312,8 @@ export class ProductCard extends Component {
    * @param {string} id - The id of the variant to preview.
    */
   previewVariant(id) {
+    if (this.isInProductListing) return;
+
     const { slideshow } = this.refs;
 
     if (!slideshow) return;
@@ -319,6 +327,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOver = (event) => {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -340,6 +350,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOut = (event) => {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -356,6 +368,8 @@ export class ProductCard extends Component {
    * @param {MouseEvent} event
    */
   #handleSwatchClick = (event) => {
+    if (this.isInProductListing) return;
+
     if (!(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -388,6 +402,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event - The pointer event.
    */
   previewImage(event) {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse') return;
 
     const { slideshow } = this.refs;
@@ -409,6 +425,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event - The pointer event.
    */
   resetImage(event) {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse') return;
 
     const { slideshow } = this.refs;
@@ -548,6 +566,7 @@ if (!window.__bafProductCardSwatchesBound) {
 
       const target = getProductCardSwatchTarget(event);
       if (!target) return;
+      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
       if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
 
       const mediaId =
@@ -565,6 +584,7 @@ if (!window.__bafProductCardSwatchesBound) {
 
       const target = getProductCardSwatchTarget(event);
       if (!target) return;
+      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
       if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
 
       if (typeof target.card.resetVariant === 'function') target.card.resetVariant();
@@ -577,6 +597,7 @@ if (!window.__bafProductCardSwatchesBound) {
     (event) => {
       const target = getProductCardSwatchTarget(event);
       if (!target || !(target.input instanceof HTMLInputElement)) return;
+      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
 
       const variantId = target.input.dataset.firstAvailableOrFirstVariantId || target.input.dataset.variantId;
       if (!variantId) return;
