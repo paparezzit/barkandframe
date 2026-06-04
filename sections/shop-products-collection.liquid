@@ -1,0 +1,814 @@
+{%- liquid
+  assign cap_cards = ''
+  assign tshirt_cards = ''
+  assign crewneck_cards = ''
+  assign cap_count = 0
+  assign tshirt_count = 0
+  assign crewneck_count = 0
+-%}
+
+{%- paginate collection.products by 50 -%}
+  {%- for product in collection.products -%}
+    {%- liquid
+      assign product_type = product.type | downcase
+      assign product_title = product.title | downcase
+      assign is_cap = false
+      assign is_tshirt = false
+      assign is_crewneck = false
+
+      if product_type == 'cap' or product_title contains '| cap' or product_title contains ' cap'
+        assign is_cap = true
+      elsif product_type contains 't-shirt' or product_type contains 't shirt' or product_title contains '| t-shirt' or product_title contains '| t shirt'
+        assign is_tshirt = true
+      elsif product_type contains 'crewneck' or product_type contains 'crew neck' or product_title contains '| crewneck' or product_title contains '| crew neck'
+        assign is_crewneck = true
+      endif
+    -%}
+
+    {%- capture card_markup -%}
+      <li class="shop-products__grid-item" data-product-id="{{ product.id }}">
+        {%- # theme-check-disable UniqueStaticBlockId -%}
+        {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+        {%- # theme-check-enable UniqueStaticBlockId -%}
+      </li>
+    {%- endcapture -%}
+
+    {%- if is_cap -%}
+      {%- assign cap_cards = cap_cards | append: card_markup -%}
+      {%- assign cap_count = cap_count | plus: 1 -%}
+    {%- elsif is_tshirt -%}
+      {%- assign tshirt_cards = tshirt_cards | append: card_markup -%}
+      {%- assign tshirt_count = tshirt_count | plus: 1 -%}
+    {%- elsif is_crewneck -%}
+      {%- assign crewneck_cards = crewneck_cards | append: card_markup -%}
+      {%- assign crewneck_count = crewneck_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endpaginate -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="shop-products section color-{{ section.settings.color_scheme }}"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+>
+  <nav class="shop-products__nav" aria-label="Shop products sections">
+    <a href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
+    <a href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>
+    {%- if cap_count > 0 -%}<a href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
+    {%- if tshirt_count > 0 -%}<a href="#shop-products-tshirt">{{ section.settings.tshirt_title }}</a>{%- endif -%}
+    {%- if crewneck_count > 0 -%}<a href="#shop-products-crewneck">{{ section.settings.crewneck_title }}</a>{%- endif -%}
+  </nav>
+
+  <div class="shop-products__inner">
+    <section id="shop-products-custom" class="shop-products__custom shop-products__anchor">
+      <h1 class="shop-products__hero-title">{{ section.settings.custom_portrait_title }}</h1>
+
+      <div class="shop-products__portrait-grid">
+        {%- render 'shop-products-portrait-tile',
+          image: section.settings.portrait_1_image,
+          style_label: section.settings.portrait_1_style_label,
+          style_id: section.settings.portrait_1_style_id,
+          product: section.settings.portrait_1_product,
+          product_label: section.settings.portrait_1_product_label,
+          product_handle_override: section.settings.portrait_1_product_handle_override,
+          preset_product_category: 'canvas',
+          preset_framing: 'unframed',
+          preset_size: '20″×28″',
+          button_label: section.settings.portrait_1_button_label,
+          fallback_image: 'make-portrait/overview01.png'
+        -%}
+
+        {%- render 'shop-products-portrait-tile',
+          image: section.settings.portrait_2_image,
+          style_label: section.settings.portrait_2_style_label,
+          style_id: section.settings.portrait_2_style_id,
+          product: section.settings.portrait_2_product,
+          product_label: section.settings.portrait_2_product_label,
+          product_handle_override: section.settings.portrait_2_product_handle_override,
+          button_label: section.settings.portrait_2_button_label,
+          fallback_image: 'make-portrait/overview02.png'
+        -%}
+
+        {%- render 'shop-products-portrait-tile',
+          image: section.settings.portrait_3_image,
+          style_label: section.settings.portrait_3_style_label,
+          style_id: section.settings.portrait_3_style_id,
+          product: section.settings.portrait_3_product,
+          product_label: section.settings.portrait_3_product_label,
+          product_handle_override: section.settings.portrait_3_product_handle_override,
+          button_label: section.settings.portrait_3_button_label,
+          fallback_image: 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg'
+        -%}
+      </div>
+    </section>
+
+    {%- if section.settings.bestseller_products != blank -%}
+      <section id="shop-products-bestseller" class="shop-products__bestseller shop-products__anchor">
+        <h2 class="shop-products__section-title shop-products__section-title--center">
+          {{ section.settings.bestseller_title }}
+        </h2>
+
+        {%- capture bestseller_cards -%}
+          {%- for product in section.settings.bestseller_products limit: 5 -%}
+            <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+              {%- # theme-check-disable UniqueStaticBlockId -%}
+              {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+              {%- # theme-check-enable UniqueStaticBlockId -%}
+            </li>
+            {%- unless forloop.last -%}<!--@split-->{%- endunless -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- assign bestseller_items = bestseller_cards | split: '<!--@split-->' -%}
+
+        <div class="shop-products__rail" data-shop-products-rail>
+          <ul class="shop-products__rail-track" role="list">
+            {%- for i in (1..2) -%}
+              {%- for item in bestseller_items -%}
+                {{ item }}
+              {%- endfor -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- if cap_cards != blank -%}
+      <section id="shop-products-cap" class="shop-products__product-section shop-products__anchor">
+        <h2 class="shop-products__section-title">{{ section.settings.cap_title }}</h2>
+        <ul class="shop-products__product-grid" role="list">{{ cap_cards }}</ul>
+      </section>
+    {%- endif -%}
+
+    {%- if tshirt_cards != blank -%}
+      <section id="shop-products-tshirt" class="shop-products__product-section shop-products__anchor">
+        <h2 class="shop-products__section-title">{{ section.settings.tshirt_title }}</h2>
+        <ul class="shop-products__product-grid" role="list">{{ tshirt_cards }}</ul>
+      </section>
+    {%- endif -%}
+
+    {%- if crewneck_cards != blank -%}
+      <section id="shop-products-crewneck" class="shop-products__product-section shop-products__anchor">
+        <h2 class="shop-products__section-title">{{ section.settings.crewneck_title }}</h2>
+        <ul class="shop-products__product-grid" role="list">{{ crewneck_cards }}</ul>
+      </section>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if section.settings.sticky_button_enabled and section.settings.sticky_button_link != blank -%}
+  <a href="{{ section.settings.sticky_button_link }}" class="collection-sticky-btn button">
+    {{- section.settings.sticky_button_text | default: 'Shop Now' -}}
+  </a>
+{%- endif -%}
+
+{% stylesheet %}
+  .shop-products {
+    padding-block: var(--padding-block-start) var(--padding-block-end);
+    background: var(--beige);
+  }
+
+  .shop-products__inner {
+    width: min(100% - 32px, 1274px);
+    margin-inline: auto;
+  }
+
+  .shop-products__anchor {
+    scroll-margin-top: 120px;
+  }
+
+  .shop-products__nav {
+    position: sticky;
+    top: var(--header-height, 64px);
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    padding: 20px 16px 18px;
+    background: color-mix(in srgb, var(--beige) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .shop-products__nav a {
+    color: var(--brown);
+    font-family: "display", serif;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .shop-products__nav a:not(:first-child) {
+    opacity: 0.45;
+  }
+
+  .shop-products__nav a:nth-child(2) {
+    color: #aea8a1;
+    opacity: 1;
+  }
+
+  .shop-products__nav a:hover {
+    opacity: 1;
+  }
+
+  .shop-products__custom {
+    padding-top: 103px;
+  }
+
+  .shop-products__hero-title {
+    margin: 0;
+    color: var(--brown);
+    font-family: "display", serif;
+    font-size: clamp(54px, 6.35vw, 96px);
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+  }
+
+  .shop-products__portrait-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    justify-content: center;
+    gap: 20px;
+    margin-top: 126px;
+  }
+
+  .shop-products__portrait-card {
+    position: relative;
+    display: grid;
+    gap: 20px;
+    isolation: isolate;
+  }
+
+  .shop-products__portrait-media {
+    display: block;
+    aspect-ratio: 302 / 383;
+    overflow: hidden;
+    border-radius: 40px;
+    background: #f4efe5;
+  }
+
+  .shop-products__portrait-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .shop-products__portrait-badges {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    pointer-events: none;
+  }
+
+  .shop-products__portrait-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 15px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .shop-products__portrait-badge--style {
+    background: #dbdbff;
+    color: var(--brown);
+  }
+
+  .shop-products__portrait-badge--product {
+    background: var(--green);
+    color: var(--beige);
+  }
+
+  .shop-products__portrait-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 51px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: var(--brown);
+    color: var(--beige);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .shop-products__bestseller {
+    margin: clamp(100px, 16vw, 244px) auto 0;
+    padding: 76px 0 92px;
+    overflow: hidden;
+    border-radius: 360px;
+    background: #f4efe5;
+  }
+
+  .shop-products__section-title {
+    margin: 0 0 48px;
+    color: var(--brown);
+    font-family: "display", serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: none;
+  }
+
+  .shop-products__section-title--center {
+    text-align: center;
+  }
+
+  .shop-products__rail {
+    overflow-x: auto;
+    cursor: grab;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .shop-products__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-products__rail.is-dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+  }
+
+  .shop-products__rail-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    margin: 0;
+    padding: 0 20px;
+    list-style: none;
+  }
+
+  .shop-products__rail-item {
+    flex: 0 0 303px;
+  }
+
+  .shop-products__product-section {
+    margin-top: 112px;
+  }
+
+  .shop-products__product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 64px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shop-products__grid-item {
+    min-width: 0;
+  }
+
+  .collection-sticky-btn {
+    position: sticky;
+    bottom: 20px;
+    left: 50%;
+    z-index: 100;
+    margin-bottom: 60px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background-color: var(--beige);
+    border: 1px solid var(--brown);
+    color: var(--brown);
+  }
+
+  .collection-sticky-btn.is-hidden-on-scroll {
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .shop-products__product-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .shop-products__inner {
+      width: min(100% - 24px, 1274px);
+    }
+
+    .shop-products__nav {
+      justify-content: flex-start;
+      gap: 22px;
+      overflow-x: auto;
+      padding-inline: 12px;
+      scrollbar-width: none;
+    }
+
+    .shop-products__nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .shop-products__nav a {
+      font-size: 19px;
+    }
+
+    .shop-products__custom {
+      padding-top: 68px;
+    }
+
+    .shop-products__hero-title {
+      margin: 0;
+      font-size: 54px;
+    }
+
+    .shop-products__portrait-grid {
+      grid-template-columns: 1fr;
+      max-width: 320px;
+      margin-top: 83px;
+      margin-inline: auto;
+    }
+
+    .shop-products__bestseller {
+      margin-top: 84px;
+      padding: 52px 0 64px;
+      border-radius: 80px;
+    }
+
+    .shop-products__section-title {
+      margin-bottom: 28px;
+      font-size: 34px;
+    }
+
+    .shop-products__rail-track {
+      gap: 12px;
+      padding-inline: 12px;
+    }
+
+    .shop-products__rail-item {
+      flex-basis: min(72vw, 303px);
+    }
+
+    .shop-products__product-section {
+      margin-top: 76px;
+    }
+
+    .shop-products__product-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 42px 12px;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const rails = document.querySelectorAll('[data-shop-products-rail]');
+    const stickyButton = document.querySelector('.collection-sticky-btn');
+
+    rails.forEach((rail) => {
+      const track = rail.querySelector('.shop-products__rail-track');
+      if (!track) return;
+
+      let frame = null;
+      let paused = false;
+      let dragging = false;
+      let startX = 0;
+      let startScroll = 0;
+      const speed = 0.45;
+
+      const getLoopPoint = () => track.scrollWidth / 2;
+
+      const normalizeScroll = () => {
+        const loopPoint = getLoopPoint();
+        if (loopPoint <= 0) return;
+        if (rail.scrollLeft >= loopPoint) rail.scrollLeft -= loopPoint;
+        if (rail.scrollLeft < 0) rail.scrollLeft += loopPoint;
+      };
+
+      const tick = () => {
+        if (!paused && !dragging) {
+          rail.scrollLeft += speed;
+          normalizeScroll();
+        }
+        frame = window.requestAnimationFrame(tick);
+      };
+
+      rail.addEventListener('mouseenter', () => {
+        paused = true;
+      });
+
+      rail.addEventListener('mouseleave', () => {
+        paused = false;
+        dragging = false;
+        rail.classList.remove('is-dragging');
+      });
+
+      rail.addEventListener('pointerdown', (event) => {
+        dragging = true;
+        paused = true;
+        startX = event.clientX;
+        startScroll = rail.scrollLeft;
+        rail.classList.add('is-dragging');
+        rail.setPointerCapture(event.pointerId);
+      });
+
+      rail.addEventListener('pointermove', (event) => {
+        if (!dragging) return;
+        event.preventDefault();
+        rail.scrollLeft = startScroll - (event.clientX - startX);
+        normalizeScroll();
+      });
+
+      const endDrag = (event) => {
+        if (!dragging) return;
+        dragging = false;
+        paused = false;
+        rail.classList.remove('is-dragging');
+        if (rail.hasPointerCapture(event.pointerId)) {
+          rail.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      rail.addEventListener('pointerup', endDrag);
+      rail.addEventListener('pointercancel', endDrag);
+
+      frame = window.requestAnimationFrame(tick);
+
+      document.addEventListener('shopify:section:unload', () => {
+        if (frame) window.cancelAnimationFrame(frame);
+      }, { once: true });
+    });
+
+    if (!stickyButton) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const scrollThreshold = 8;
+
+    const updateStickyButton = () => {
+      const currentScrollY = Math.max(window.scrollY, 0);
+      const delta = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= scrollThreshold || delta < -scrollThreshold) {
+        stickyButton.classList.remove('is-hidden-on-scroll');
+      } else if (delta > scrollThreshold) {
+        stickyButton.classList.add('is-hidden-on-scroll');
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateStickyButton);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('shopify:section:unload', () => {
+      window.removeEventListener('scroll', onScroll);
+    }, { once: true });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop products layout",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_portrait_title",
+      "label": "Custom portrait title",
+      "default": "Custom Portrait"
+    },
+    {
+      "type": "header",
+      "content": "Custom portrait 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "portrait_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "portrait_1_style_label",
+      "label": "Style bubble",
+      "default": "The Gentleman"
+    },
+    {
+      "type": "text",
+      "id": "portrait_1_style_id",
+      "label": "Style ID",
+      "info": "Must match the configurator style_id, for example the_gentleman or studio_pop.",
+      "default": "the_gentleman"
+    },
+    {
+      "type": "product",
+      "id": "portrait_1_product",
+      "label": "Configurator product"
+    },
+    {
+      "type": "text",
+      "id": "portrait_1_product_label",
+      "label": "Product bubble",
+      "default": "Canvas"
+    },
+    {
+      "type": "text",
+      "id": "portrait_1_product_handle_override",
+      "label": "Product handle override",
+      "info": "Use only if the product picker is not enough."
+    },
+    {
+      "type": "text",
+      "id": "portrait_1_button_label",
+      "label": "Button label",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "header",
+      "content": "Custom portrait 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "portrait_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "portrait_2_style_label",
+      "label": "Style bubble",
+      "default": "Studio Watercolour"
+    },
+    {
+      "type": "text",
+      "id": "portrait_2_style_id",
+      "label": "Style ID",
+      "default": "studio_watercolour"
+    },
+    {
+      "type": "product",
+      "id": "portrait_2_product",
+      "label": "Configurator product"
+    },
+    {
+      "type": "text",
+      "id": "portrait_2_product_label",
+      "label": "Product bubble",
+      "default": "Canvas Framed"
+    },
+    {
+      "type": "text",
+      "id": "portrait_2_product_handle_override",
+      "label": "Product handle override",
+      "info": "Use only if the product picker is not enough."
+    },
+    {
+      "type": "text",
+      "id": "portrait_2_button_label",
+      "label": "Button label",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "header",
+      "content": "Custom portrait 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "portrait_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "portrait_3_style_label",
+      "label": "Style bubble",
+      "default": "Studio Pop"
+    },
+    {
+      "type": "text",
+      "id": "portrait_3_style_id",
+      "label": "Style ID",
+      "default": "studio_pop"
+    },
+    {
+      "type": "product",
+      "id": "portrait_3_product",
+      "label": "Configurator product"
+    },
+    {
+      "type": "text",
+      "id": "portrait_3_product_label",
+      "label": "Product bubble",
+      "default": "Fine Art Paper Framed"
+    },
+    {
+      "type": "text",
+      "id": "portrait_3_product_handle_override",
+      "label": "Product handle override",
+      "info": "Use only if the product picker is not enough."
+    },
+    {
+      "type": "text",
+      "id": "portrait_3_button_label",
+      "label": "Button label",
+      "default": "Make a Portrait"
+    },
+    {
+      "type": "text",
+      "id": "bestseller_title",
+      "label": "Bestseller title",
+      "default": "Bestseller"
+    },
+    {
+      "type": "product_list",
+      "id": "bestseller_products",
+      "label": "Bestseller products",
+      "limit": 5
+    },
+    {
+      "type": "text",
+      "id": "cap_title",
+      "label": "Cap title",
+      "default": "Cap"
+    },
+    {
+      "type": "text",
+      "id": "tshirt_title",
+      "label": "T-Shirt title",
+      "default": "T-Shirt"
+    },
+    {
+      "type": "text",
+      "id": "crewneck_title",
+      "label": "Crewneck title",
+      "default": "Crewneck"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Sticky button"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_button_enabled",
+      "label": "Show sticky button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sticky_button_text",
+      "label": "Sticky button text",
+      "default": "Artist Collection"
+    },
+    {
+      "type": "url",
+      "id": "sticky_button_link",
+      "label": "Sticky button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop products layout"
+    }
+  ]
+}
+{% endschema %}

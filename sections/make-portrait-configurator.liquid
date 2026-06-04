@@ -3879,6 +3879,17 @@
             goToStep(r.step || 2);
           }
           applyRestoredStatics(r);
+        } else if (_pendingUrlPreset && _pendingUrlPreset.productHandle === handle) {
+          var preset = _pendingUrlPreset;
+          _pendingUrlPreset = null;
+          if (preset.step >= 3) {
+            buildOptionsUI(product, preset.optionValuesByName);
+            goToStep(3);
+          } else if (preset.step && preset.step > 1) {
+            goToStep(preset.step);
+          }
+          applyUrlPresetStatics(preset);
+          updateSubtotals();
         } else {
           updateSubtotals();
         }
@@ -3952,7 +3963,7 @@
   /* --------------------------------------------------------------------------------
      Step 3 - Canvas frame toggle
   -------------------------------------------------------------------------------- */
-  function buildFrameUI(handles) {
+  function buildFrameUI(handles, initialChoice, initialSelections) {
     var container = $('mp-options-container');
     var loading = $('mp-options-loading');
     if (!container) return;
@@ -3964,7 +3975,8 @@
     var borderGroup = $('mp-border-group');
     if (borderGroup) borderGroup.hidden = true;
 
-    state.canvasFrameChoice = 'framed';
+    var frameChoice = initialChoice === 'unframed' ? 'unframed' : 'framed';
+    state.canvasFrameChoice = frameChoice;
     state.product = null;
     state.variantId = null;
     state.variant = null;
@@ -3973,10 +3985,10 @@
     var ctaStep3 = $('mp-cta-step3');
     if (ctaStep3) ctaStep3.disabled = true;
 
-    selectFrameProduct(handles, 'framed');
+    selectFrameProduct(handles, frameChoice, initialSelections);
   }
 
-  function selectFrameProduct(handles, choice) {
+  function selectFrameProduct(handles, choice, initialSelections) {
     state.canvasFrameChoice = choice;
     var handle = choice === 'framed' ? handles.framed : handles.unframed;
     var ctaStep3 = $('mp-cta-step3');
@@ -3989,6 +4001,11 @@
       normalizeOptions(state.product.options).forEach(function (opt) {
         var val = state.selectedOptions[opt.position];
         if (val !== undefined) previousSelections[opt.name.toLowerCase()] = val;
+      });
+    }
+    if (initialSelections) {
+      Object.keys(initialSelections).forEach(function (key) {
+        previousSelections[key.toLowerCase()] = initialSelections[key];
       });
     }
 
@@ -4357,7 +4374,7 @@
   /* --------------------------------------------------------------------------------
      Step 3 - Options
   -------------------------------------------------------------------------------- */
-  function buildOptionsUI(product) {
+  function buildOptionsUI(product, initialSelections) {
     var container = $('mp-options-container');
     var loading = $('mp-options-loading');
     if (!container || !product) return;
@@ -4367,6 +4384,11 @@
 
     resetOptionsLayout();
     var prevSel = {};
+    if (initialSelections) {
+      Object.keys(initialSelections).forEach(function (key) {
+        prevSel[key.toLowerCase()] = initialSelections[key];
+      });
+    }
     normalizeOptions(product.options || []).forEach(function (opt) {
       var val = state.selectedOptions[opt.position];
       if (val !== undefined) prevSel[opt.name.toLowerCase()] = val;
@@ -4374,7 +4396,7 @@
     state.selectedOptions = {};
 
     if (FRAMED_POSTER_HANDLE && product.handle === FRAMED_POSTER_HANDLE) {
-      buildPosterUI(product, container);
+      buildPosterUI(product, container, prevSel);
     } else {
       var borderGroup  = $('mp-border-group');
       var petNameGroup = $('mp-pet-name-group');
@@ -4401,14 +4423,14 @@
     matchVariant(product);
   }
 
-  function buildPosterUI(product, container) {
+  function buildPosterUI(product, container, previousSelections) {
     var container2 = $('mp-options-container-2');
     var opts = normalizeOptions(product.options);
     var sizeOpts  = opts.filter(function (o) { return o.name.toLowerCase() === 'size'; });
     var colorOpts = opts.filter(function (o) { return o.name.toLowerCase() === 'color'; });
 
     // 1. Size
-    sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, {}); });
+    sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections || {}); });
 
     // 2. Framing - always "Framed", display only (no choice)
     var framingGroup = document.createElement('div');
@@ -4437,7 +4459,7 @@
     // 4. Dogs Name (static built-in - shown via resetOptionsLayout)
 
     // 5. Frame Color in container-2
-    colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, {}); });
+    colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, previousSelections || {}); });
 
     matchVariant(product);
     var ctaStep3 = $('mp-cta-step3');
@@ -5099,6 +5121,7 @@
   var DRAFT_KEY    = 'mp_draft';
   var DRAFT_EXPIRY = 30 * 24 * 60 * 60 * 1000;
   var _pendingRestore = null;
+  var _pendingUrlPreset = null;
 
   function saveDraft() {
     if (!state.styleId) return;
@@ -5190,6 +5213,84 @@
     }
   }
 
+  function normalizeFramingParam(value) {
+    var normalized = String(value || '').toLowerCase().replace(/[_\s]+/g, '-');
+    if (normalized === 'unframed' || normalized === 'no-frame' || normalized === 'without-frame') return 'unframed';
+    if (normalized === 'framed' || normalized === 'frame') return 'framed';
+    return null;
+  }
+
+  function getUrlOptionValues(urlParams) {
+    var values = {};
+    ['size', 'color'].forEach(function (name) {
+      var value = urlParams.get(name);
+      if (value) values[name] = value;
+    });
+    return values;
+  }
+
+  function getUrlPreset(urlParams) {
+    var step = parseInt(urlParams.get('step'), 10);
+    return {
+      step: step && step > 1 ? Math.min(step, 4) : null,
+      productHandle: urlParams.get('product') || '',
+      productCategory: String(urlParams.get('category') || '').toLowerCase(),
+      canvasFrameChoice: normalizeFramingParam(urlParams.get('framing') || urlParams.get('frame')),
+      optionValuesByName: getUrlOptionValues(urlParams),
+      border: urlParams.get('border') || null
+    };
+  }
+
+  function applyUrlPresetStatics(preset) {
+    if (!preset || !preset.border) return;
+    applyRestoredStatics({ border: preset.border });
+  }
+
+  function isCanvasUrlPreset(preset) {
+    if (!preset) return false;
+    return preset.productCategory === 'canvas'
+      || preset.productHandle === CANVAS_HANDLES.unframed
+      || preset.productHandle === CANVAS_HANDLES.framed;
+  }
+
+  function applyUrlPreset(urlParams) {
+    var preset = getUrlPreset(urlParams);
+    if (!preset.productHandle && !preset.productCategory && !preset.step) return;
+
+    if (isCanvasUrlPreset(preset)) {
+      var choice = preset.canvasFrameChoice
+        || (preset.productHandle === CANVAS_HANDLES.unframed ? 'unframed' : 'framed');
+      selectCategory('canvas');
+      if (preset.step >= 3) {
+        buildFrameUI(CANVAS_HANDLES, choice, preset.optionValuesByName);
+        goToStep(3);
+        applyUrlPresetStatics(preset);
+      } else if (preset.step && preset.step > 1) {
+        goToStep(preset.step);
+        applyUrlPresetStatics(preset);
+      }
+      return;
+    }
+
+    if (preset.productHandle) {
+      var productBtn = document.querySelector('.product-picker__item[data-product-handle="' + preset.productHandle + '"]');
+      if (productBtn) {
+        _pendingUrlPreset = preset;
+        selectProduct(preset.productHandle);
+        if (preset.step && preset.step > 1 && preset.step < 3) {
+          goToStep(preset.step);
+          applyUrlPresetStatics(preset);
+        }
+        return;
+      }
+    }
+
+    if (preset.step && preset.step > 1) {
+      goToStep(preset.step);
+      applyUrlPresetStatics(preset);
+    }
+  }
+
   /* --------------------------------------------------------------------------------
      Init
   -------------------------------------------------------------------------------- */
@@ -5211,7 +5312,7 @@
 
     // Resume banner
     var urlParams = new URLSearchParams(window.location.search);
-    var hasFreshStart = urlParams.get('style') || urlParams.get('product');
+    var hasFreshStart = urlParams.get('style') || urlParams.get('product') || urlParams.get('category');
     var savedDraft = !hasFreshStart && loadDraft();
     if (savedDraft && (savedDraft.step || 1) <= 1) {
       clearDraft();
@@ -5249,21 +5350,8 @@
       selectStyle(preselect ? preselect.id : STYLES[0].id);
     }
 
-    // Pre-select product and jump to step from URL params
-    var urlProduct = urlParams.get('product');
-    var urlStep = parseInt(urlParams.get('step'), 10);
-    if (urlProduct) {
-      var productBtn = document.querySelector('.product-picker__item[data-product-handle="' + urlProduct + '"]');
-      if (productBtn) {
-        selectProduct(urlProduct);
-      } else {
-        var matchedCategory = ['canvas', 'paper'].find(function (cat) {
-          return urlProduct.indexOf(cat) !== -1;
-        });
-        if (matchedCategory) selectCategory(matchedCategory);
-      }
-    }
-    if (urlStep && urlStep > 1) goToStep(urlStep);
+    // Pre-select product/category and jump from URL params after building any needed UI
+    applyUrlPreset(urlParams);
 
     // Style picker
     var stylePicker = $('mp-style-picker');
