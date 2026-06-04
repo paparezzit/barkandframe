@@ -3198,13 +3198,11 @@
     photoUrls: [],
     pendingUploads: 0,
     fileDimensions: new Map(),
-    previewImageUrl: null,
-    visualPreviewImageUrl: null
+    previewImageUrl: null
   };
 
   var STYLES = window.MakePortraitStyles || [];
   var FRAMED_POSTER_HANDLE = window.MakePortraitFramedPosterHandle || '';
-  var ATELIER_SKETCH_FRAMED_VISUALIZER_URL = 'https://cdn.shopify.com/s/files/1/0978/8932/1306/files/04_Atelier_Sketch.png?v=1779766164';
   var COLOR_DISPLAY_NAMES = { 'oak': 'Premium Oak', 'brown': 'Premium Walnut' };
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
@@ -3729,28 +3727,12 @@
     if (orderBtn) orderBtn.classList.toggle('make-portrait__cta--upload-required', isOos);
   }
 
-  function isAtelierSketchFramedVisualizerContext() {
-    if (state.styleId !== 'atelier_sketch') return false;
-    if (state.canvasFrameChoice === 'unframed') return false;
-    if (state.canvasFrameChoice === 'framed') return true;
-    if (state.productHandle === CANVAS_HANDLES.framed || state.productHandle === FRAMED_POSTER_HANDLE) return true;
-    if (state.productCategory === 'paper') return true;
-    if (state.productCategory === 'canvas' && !state.productHandle) return true;
-    return !state.variant && !state.productHandle && !state.productCategory;
-  }
-
-  function getVisualizerPreviewUrl(orderPreviewUrl) {
-    if (isAtelierSketchFramedVisualizerContext()) return ATELIER_SKETCH_FRAMED_VISUALIZER_URL;
-    return orderPreviewUrl;
-  }
-
   function setConfiguratorPreviewImage(orderPreviewUrl, options) {
-    if (!orderPreviewUrl) return;
-    var persistOrderPreview = !options || options.persistOrderPreview !== false;
-    if (persistOrderPreview) state.previewImageUrl = orderPreviewUrl;
+    var visualPreviewUrl = options && options.visualPreviewUrl ? options.visualPreviewUrl : orderPreviewUrl;
+    if (!visualPreviewUrl) return;
 
-    var visualPreviewUrl = getVisualizerPreviewUrl(orderPreviewUrl);
-    state.visualPreviewImageUrl = visualPreviewUrl;
+    var persistOrderPreview = !options || options.persistOrderPreview !== false;
+    if (persistOrderPreview && orderPreviewUrl) state.previewImageUrl = orderPreviewUrl;
 
     var img = $('mp-preview-img');
     if (!img) return;
@@ -3769,12 +3751,18 @@
     var hasName = !!(effectivePetName && effectivePetName.trim());
     var borderBase = getEffectiveBorder() === 'white-border' ? 'white_border' : 'default';
     var borderKey = hasName ? borderBase + '_name' : borderBase;
+    var visualizerKey = borderKey + '_visualizer';
+    var visualizerBaseKey = borderBase + '_visualizer';
     var url = styleBucket[borderKey]
               || styleBucket[borderBase]
               || styleBucket['default']
               || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
               || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
-    setConfiguratorPreviewImage(url);
+    var visualUrl = styleBucket[visualizerKey]
+              || styleBucket[visualizerBaseKey]
+              || styleBucket['visualizer']
+              || url;
+    setConfiguratorPreviewImage(url, { visualPreviewUrl: visualUrl });
     if (state.initialized) scrollToPreview();
   }
 
@@ -3881,8 +3869,9 @@
           var _pvPreviews = spMap[_previewVariantId] || {};
           var _pvBucket   = _pvPreviews[state.styleId] || {};
           var _pvUrl      = _pvBucket['default'] || (state.style && state.style.imageUrl) || null;
+          var _pvVisualUrl = _pvBucket['default_visualizer'] || _pvBucket['visualizer'] || _pvUrl;
           if (_pvUrl) {
-            setConfiguratorPreviewImage(_pvUrl, { persistOrderPreview: false });
+            setConfiguratorPreviewImage(_pvUrl, { persistOrderPreview: false, visualPreviewUrl: _pvVisualUrl });
             scrollToPreview();
           }
         } else if (matchedProduct && matchedProduct.featuredImage) {
@@ -3962,8 +3951,9 @@
       var _catPreviews = (window.MakePortraitStylePreviews || {})[_catPreviewId] || {};
       var _catBucket   = _catPreviews[state.styleId] || {};
       var _catUrl      = _catBucket['default'] || (state.style && state.style.imageUrl) || null;
+      var _catVisualUrl = _catBucket['default_visualizer'] || _catBucket['visualizer'] || _catUrl;
       if (_catUrl) {
-        setConfiguratorPreviewImage(_catUrl, { persistOrderPreview: false });
+        setConfiguratorPreviewImage(_catUrl, { persistOrderPreview: false, visualPreviewUrl: _catVisualUrl });
         scrollToPreview();
       }
     }
