@@ -4821,6 +4821,41 @@
       ext === 'heic' || ext === 'heif';
   }
 
+  function getCloudinaryPreviewUrl(url) {
+    if (!url) return '';
+    return String(url).replace('/upload/', '/upload/c_fill,h_180,w_180,q_auto,f_jpg/');
+  }
+
+  function setPreviewImage(preview, src) {
+    if (!preview || !src) return;
+    preview.querySelectorAll('img, .photo-preview__file-fallback').forEach(function (el) {
+      el.remove();
+    });
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = 'Pet photo preview';
+    var removeBtn = preview.querySelector('.photo-preview__remove');
+    preview.insertBefore(img, removeBtn || preview.firstChild);
+  }
+
+  function getMinResolutionParts() {
+    var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
+    if (!minResStr) return null;
+
+    var parts = minResStr.split(/x/i);
+    var minW = parseInt(parts[0], 10);
+    var minH = parseInt(parts[1], 10);
+    if (!minW || !minH) return null;
+
+    return { minResStr: minResStr, minW: minW, minH: minH };
+  }
+
+  function photoMeetsMinResolution(dims, minRes) {
+    if (!dims || !minRes) return true;
+    return Math.max(dims.w, dims.h) >= Math.max(minRes.minW, minRes.minH) &&
+           Math.min(dims.w, dims.h) >= Math.min(minRes.minW, minRes.minH);
+  }
+
   function showUploadError(msg) {
     var el = $('mp-upload-error');
     if (!el) return;
@@ -4960,9 +4995,21 @@
         var heicPreview = createPreview(file, null, 'HEIC');
         previews.appendChild(heicPreview);
         uploadToCloudinary(file, heicPreview, function (data) {
+          setPreviewImage(heicPreview, getCloudinaryPreviewUrl(data.secure_url));
+
           if (data.width && data.height) {
-            state.fileDimensions.set(file, { w: data.width, h: data.height });
+            var heicDims = { w: data.width, h: data.height };
+            state.fileDimensions.set(file, heicDims);
             updateQualityIndicator();
+
+            var minRes = getMinResolutionParts();
+            if (minRes && !photoMeetsMinResolution(heicDims, minRes)) {
+              showQualityPopup(
+                minRes.minResStr,
+                function () { updateOrderButton(); },
+                function () { removePreviewFile(file, heicPreview); }
+              );
+            }
           }
         });
         return;
