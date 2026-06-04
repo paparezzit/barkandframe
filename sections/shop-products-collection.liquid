@@ -188,15 +188,23 @@
 
   .shop-products__nav {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 4px 0;
-    width: 100%;
-    padding: 40px 16px 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    margin-inline: calc((100% - 100vw) / 2);
+    padding: 10px 0 0;
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+  }
+
+  .shop-products__nav::before,
+  .shop-products__nav::after {
+    content: "";
+    flex: 1 0 var(--page-margin);
   }
 
   .shop-products__nav::-webkit-scrollbar {
@@ -205,6 +213,7 @@
 
   .shop-products__nav-link {
     display: inline-block;
+    flex: 0 0 auto;
     padding: 10px;
     color: var(--brown);
     font-family: "display", serif;
