@@ -53,11 +53,11 @@
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
 >
   <nav class="shop-products__nav" aria-label="Shop products sections">
-    <a href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
-    <a href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>
-    {%- if cap_count > 0 -%}<a href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
-    {%- if tshirt_count > 0 -%}<a href="#shop-products-tshirt">{{ section.settings.tshirt_title }}</a>{%- endif -%}
-    {%- if crewneck_count > 0 -%}<a href="#shop-products-crewneck">{{ section.settings.crewneck_title }}</a>{%- endif -%}
+    <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
+    <a class="shop-products__nav-link" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>
+    {%- if cap_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
+    {%- if tshirt_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-tshirt">{{ section.settings.tshirt_title }}</a>{%- endif -%}
+    {%- if crewneck_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-crewneck">{{ section.settings.crewneck_title }}</a>{%- endif -%}
   </nav>
 
   <div class="shop-products__inner">
@@ -187,38 +187,38 @@
   }
 
   .shop-products__nav {
-    position: sticky;
-    top: var(--header-height, 64px);
-    z-index: 20;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
+    gap: 4px 0;
     width: 100%;
-    padding: 20px 16px 18px;
-    background: color-mix(in srgb, var(--beige) 92%, transparent);
-    backdrop-filter: blur(10px);
+    padding: 40px 16px 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
 
-  .shop-products__nav a {
+  .shop-products__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-products__nav-link {
+    display: inline-block;
+    padding: 10px;
     color: var(--brown);
     font-family: "display", serif;
     font-size: 21px;
     font-weight: 400;
     line-height: 1;
     text-decoration: none;
+    opacity: 0.35;
+    transition: opacity 0.2s;
     white-space: nowrap;
   }
 
-  .shop-products__nav a:not(:first-child) {
-    opacity: 0.45;
-  }
-
-  .shop-products__nav a:nth-child(2) {
-    color: #aea8a1;
-    opacity: 1;
-  }
-
-  .shop-products__nav a:hover {
+  .shop-products__nav-link:hover,
+  .shop-products__nav-link.is-active {
     opacity: 1;
   }
 
@@ -413,22 +413,6 @@
   @media screen and (max-width: 749px) {
     .shop-products__inner {
       width: min(100% - 24px, 1274px);
-    }
-
-    .shop-products__nav {
-      justify-content: flex-start;
-      gap: 22px;
-      overflow-x: auto;
-      padding-inline: 12px;
-      scrollbar-width: none;
-    }
-
-    .shop-products__nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    .shop-products__nav a {
-      font-size: 19px;
     }
 
     .shop-products__custom {
