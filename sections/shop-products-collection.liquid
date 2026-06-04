@@ -318,6 +318,12 @@
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
+    transition: background-color .2s, color .2s;
+  }
+
+  .shop-products__portrait-card:is(:hover, :focus-within) .shop-products__portrait-button {
+    background-color: var(--purple);
+    color: var(--brown);
   }
 
   .shop-products__bestseller {
@@ -801,7 +807,7 @@
       "type": "text",
       "id": "sticky_button_text",
       "label": "Sticky button text",
-      "default": "Artist Collection"
+      "default": "Make a Portrait"
     },
     {
       "type": "url",
