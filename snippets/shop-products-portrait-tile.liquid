@@ -14,7 +14,7 @@
     assign style_id_encoded = style_id | url_encode
     assign portrait_url = portrait_url | append: '&style=' | append: style_id_encoded
   endif
-  if product_handle != blank
+  if product_handle != blank and preset_product_category == blank
     assign product_handle_encoded = product_handle | url_encode
     assign portrait_url = portrait_url | append: '&product=' | append: product_handle_encoded
   endif

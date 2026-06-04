@@ -3895,6 +3895,7 @@
         } else if (_pendingUrlPreset && _pendingUrlPreset.productHandle === handle) {
           var preset = _pendingUrlPreset;
           _pendingUrlPreset = null;
+          if (preset.productCategory) state.productCategory = preset.productCategory;
           if (preset.step >= 3) {
             buildOptionsUI(product, preset.optionValuesByName);
             goToStep(3);
@@ -4592,9 +4593,9 @@
     if (state.productCategory === 'canvas' || state.productHandle === canvasHandles.unframed || state.productHandle === canvasHandles.framed) {
       return 'Canvas';
     }
-    if (state.product) return state.product.title;
     var categoryNames = { canvas: 'Canvas', paper: 'Fine Art Paper' };
     if (state.productCategory) return categoryNames[state.productCategory] || state.productCategory;
+    if (state.product) return state.product.title;
     return '';
   }
 
@@ -5418,6 +5419,18 @@
         buildFrameUI(CANVAS_HANDLES, choice, preset.optionValuesByName);
         goToStep(3);
         applyUrlPresetStatics(preset);
+      } else if (preset.step && preset.step > 1) {
+        goToStep(preset.step);
+        applyUrlPresetStatics(preset);
+      }
+      return;
+    }
+
+    if (preset.productCategory === 'paper') {
+      if (FRAMED_POSTER_HANDLE) {
+        preset.productHandle = FRAMED_POSTER_HANDLE;
+        _pendingUrlPreset = preset;
+        selectProduct(FRAMED_POSTER_HANDLE);
       } else if (preset.step && preset.step > 1) {
         goToStep(preset.step);
         applyUrlPresetStatics(preset);
