@@ -238,19 +238,16 @@
   }
 
   .shop-products__portrait-grid {
-    --portrait-page-gutter: max(16px, calc((100vw - 1274px) / 2));
     --portrait-grid-gap: 20px;
-    --portrait-content-width: calc(100vw - (var(--portrait-page-gutter) * 2));
-    --portrait-card-width: calc((var(--portrait-content-width) - (var(--portrait-grid-gap) * 3)) / 4);
+    --portrait-card-width: calc((min(calc(100vw - 32px), 1274px) - (var(--portrait-grid-gap) * 3)) / 4);
+    --portrait-grid-width: calc((var(--portrait-card-width) * 3) + (var(--portrait-grid-gap) * 2));
     display: flex;
-    gap: 0;
-    box-sizing: border-box;
-    width: 100vw;
+    gap: var(--portrait-grid-gap);
+    width: min(100%, var(--portrait-grid-width));
     margin-top: calc(126px - var(--hover-lift-amount));
-    margin-inline: calc((100% - 100vw) / 2);
+    margin-inline: auto;
     padding-block-start: var(--hover-lift-amount);
     overflow-x: auto;
-    scroll-padding-inline: var(--portrait-page-gutter);
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -258,12 +255,6 @@
 
   .shop-products__portrait-grid::-webkit-scrollbar {
     display: none;
-  }
-
-  .shop-products__portrait-grid::before,
-  .shop-products__portrait-grid::after {
-    content: "";
-    flex: 0 0 var(--portrait-page-gutter);
   }
 
   .shop-products__portrait-card {
@@ -274,10 +265,6 @@
     isolation: isolate;
     scroll-snap-align: start;
     transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
-  }
-
-  .shop-products__portrait-card + .shop-products__portrait-card {
-    margin-left: var(--portrait-grid-gap);
   }
 
   .shop-products__portrait-media {
@@ -450,7 +437,7 @@
 
   @media screen and (max-width: 989px) {
     .shop-products__portrait-grid {
-      --portrait-card-width: calc((var(--portrait-content-width) - (var(--portrait-grid-gap) * 2)) / 3);
+      --portrait-card-width: calc((min(calc(100vw - 32px), 1274px) - (var(--portrait-grid-gap) * 2)) / 3);
     }
 
     .shop-products__product-grid {
@@ -473,10 +460,14 @@
     }
 
     .shop-products__portrait-grid {
-      --portrait-page-gutter: 12px;
       --portrait-grid-gap: 12px;
-      --portrait-card-width: calc((var(--portrait-content-width) - var(--portrait-grid-gap)) / 2);
+      --portrait-card-width: calc((min(calc(100vw - 24px), 1274px) - var(--portrait-grid-gap)) / 2);
+      box-sizing: border-box;
+      width: 100vw;
       margin-top: calc(83px - var(--hover-lift-amount));
+      margin-inline: calc((100% - 100vw) / 2);
+      padding-inline: 12px;
+      scroll-padding-inline: 12px;
     }
 
     .shop-products__bestseller {
