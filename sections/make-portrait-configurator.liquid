@@ -13,6 +13,7 @@
         "id": {{ style.style_id.value | json }},
         "name": {{ style.name.value | default: '' | json }},
         "imageUrl": "{{ style.preview_image.value | image_url: width: 900 }}",
+        "visualizerImageUrl": "{% if style.visualizator.value %}{{ style.visualizator.value | image_url: width: 900 }}{% elsif style.visualizer_image.value %}{{ style.visualizer_image.value | image_url: width: 900 }}{% endif %}",
         "artistName": {%- if artist != blank -%}{{ artist.name.value | default: '' | json }}{%- else -%}""{%- endif -%},
         "artistPhotoUrl": "{%- if artist != blank -%}{{ artist.photo.value | image_url: width: 200 }}{%- endif -%}",
         "artistId": {%- if artist != blank -%}{{ artist.system.handle | json }}{%- else -%}null{%- endif -%},
@@ -254,7 +255,7 @@
         <img
           class="make-portrait__preview-img make-portrait__preview-img--square"
           id="mp-preview-img"
-          src="{% if _first_portrait_style.preview_image.value %}{{ _first_portrait_style.preview_image.value | image_url: width: 900 }}{% endif %}"
+          src="{% if _first_portrait_style.visualizator.value %}{{ _first_portrait_style.visualizator.value | image_url: width: 900 }}{% elsif _first_portrait_style.visualizer_image.value %}{{ _first_portrait_style.visualizer_image.value | image_url: width: 900 }}{% elsif _first_portrait_style.preview_image.value %}{{ _first_portrait_style.preview_image.value | image_url: width: 900 }}{% endif %}"
           width="900"
           height="1125"
           alt=""
@@ -3680,6 +3681,8 @@
   }
 
   function scrollProductAccordionIntoView(details) {
+    return;
+
     var summary = details.querySelector('.tab-accordion__summary') || details;
 
     function getTargetTop() {
@@ -3703,7 +3706,7 @@
   }
 
   function scrollToPreviewAnchor() {
-    scheduleConfiguratorStartScroll();
+    return;
   }
 
   var MP_AVAILABILITY_LABELS = {
@@ -3761,6 +3764,7 @@
     var visualUrl = styleBucket[visualizerKey]
               || styleBucket[visualizerBaseKey]
               || styleBucket['visualizer']
+              || (state.style && state.style.visualizerImageUrl ? state.style.visualizerImageUrl : null)
               || url;
     setConfiguratorPreviewImage(url, { visualPreviewUrl: visualUrl });
     if (state.initialized) scrollToPreview();
