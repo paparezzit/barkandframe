@@ -4856,6 +4856,11 @@
            Math.min(dims.w, dims.h) >= Math.min(minRes.minW, minRes.minH);
   }
 
+  function formatPhotoResolution(dims) {
+    if (!dims || !dims.w || !dims.h) return '';
+    return Math.round(dims.w) + ' \u00D7 ' + Math.round(dims.h) + ' px';
+  }
+
   function showUploadError(msg) {
     var el = $('mp-upload-error');
     if (!el) return;
@@ -4898,7 +4903,7 @@
     if (backdrop) backdrop.addEventListener('click', close);
   }
 
-  function showQualityPopup(minResStr, onConfirm, onCancel) {
+  function showQualityPopup(minResStr, photoDims, onConfirm, onCancel) {
     var backdrop = $('mp-quality-backdrop');
     var banner   = $('mp-quality-banner');
     var detail   = $('mp-quality-banner-detail');
@@ -4908,7 +4913,9 @@
 
     if (detail && minResStr) {
       var rp = minResStr.split(/x/i);
-      detail.textContent = 'For best results, use a photo at least ' + rp[0] + ' \u00D7 ' + rp[1] + ' px.';
+      var currentResolution = formatPhotoResolution(photoDims);
+      detail.textContent = (currentResolution ? 'Your photo resolution is ' + currentResolution + '. ' : '') +
+        'For best results, use a photo at least ' + rp[0] + ' \u00D7 ' + rp[1] + ' px.';
     }
     if (backdrop) backdrop.hidden = false;
     banner.hidden = false;
@@ -5006,6 +5013,7 @@
             if (minRes && !photoMeetsMinResolution(heicDims, minRes)) {
               showQualityPopup(
                 minRes.minResStr,
+                heicDims,
                 function () { updateOrderButton(); },
                 function () { removePreviewFile(file, heicPreview); }
               );
@@ -5043,6 +5051,7 @@
           } else {
             showQualityPopup(
               minResStr,
+              dims,
               function () { uploadToCloudinary(file, preview); },
               function () {
                 var idx = state.files.indexOf(file);
