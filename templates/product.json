@@ -499,7 +499,7 @@
       "settings": {
         "title": "More from Bark&Frame",
         "cta_image": "shopify://shop_images/make-portrait.png",
-        "cta_label": "Create custom portrait",
+        "cta_label": "Make a Portrait",
         "cta_link": "/pages/make-portrait",
         "collection": "all-products"
       }
