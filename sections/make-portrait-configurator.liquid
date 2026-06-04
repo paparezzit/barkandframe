@@ -3772,7 +3772,8 @@
   function updatePreviewImage(options) {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
-    var useStyleFallback = state.step <= 1;
+    var hasProductConfiguration = !!(state.variant || state.product || state.productHandle || state.productCategory);
+    var useStyleFallback = state.step <= 1 && !hasProductConfiguration;
     var defaultVariantId = !variant && (window.MakePortraitCategoryPreviewVariants || {})['canvas'];
     var variantPreviews = variant ? (spMap[variant.id] || {}) : (defaultVariantId ? (spMap[defaultVariantId] || {}) : {});
     var styleBucket = variantPreviews[state.styleId] || {};
