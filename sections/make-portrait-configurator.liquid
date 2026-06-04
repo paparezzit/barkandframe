@@ -3198,11 +3198,13 @@
     photoUrls: [],
     pendingUploads: 0,
     fileDimensions: new Map(),
-    previewImageUrl: null
+    previewImageUrl: null,
+    visualPreviewImageUrl: null
   };
 
   var STYLES = window.MakePortraitStyles || [];
   var FRAMED_POSTER_HANDLE = window.MakePortraitFramedPosterHandle || '';
+  var ATELIER_SKETCH_FRAMED_VISUALIZER_URL = 'https://cdn.shopify.com/s/files/1/0978/8932/1306/files/04_Atelier_Sketch.png?v=1779766164';
   var COLOR_DISPLAY_NAMES = { 'oak': 'Premium Oak', 'brown': 'Premium Walnut' };
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
@@ -3727,6 +3729,36 @@
     if (orderBtn) orderBtn.classList.toggle('make-portrait__cta--upload-required', isOos);
   }
 
+  function isAtelierSketchFramedVisualizerContext() {
+    if (state.styleId !== 'atelier_sketch') return false;
+    if (state.canvasFrameChoice === 'unframed') return false;
+    if (state.canvasFrameChoice === 'framed') return true;
+    if (state.productHandle === CANVAS_HANDLES.framed || state.productHandle === FRAMED_POSTER_HANDLE) return true;
+    if (state.productCategory === 'paper') return true;
+    if (state.productCategory === 'canvas' && !state.productHandle) return true;
+    return !state.variant && !state.productHandle && !state.productCategory;
+  }
+
+  function getVisualizerPreviewUrl(orderPreviewUrl) {
+    if (isAtelierSketchFramedVisualizerContext()) return ATELIER_SKETCH_FRAMED_VISUALIZER_URL;
+    return orderPreviewUrl;
+  }
+
+  function setConfiguratorPreviewImage(orderPreviewUrl, options) {
+    if (!orderPreviewUrl) return;
+    var persistOrderPreview = !options || options.persistOrderPreview !== false;
+    if (persistOrderPreview) state.previewImageUrl = orderPreviewUrl;
+
+    var visualPreviewUrl = getVisualizerPreviewUrl(orderPreviewUrl);
+    state.visualPreviewImageUrl = visualPreviewUrl;
+
+    var img = $('mp-preview-img');
+    if (!img) return;
+    img.style.opacity = '0';
+    img.onload = function () { img.style.opacity = '1'; };
+    img.src = visualPreviewUrl;
+  }
+
   function updatePreviewImage() {
     var spMap = window.MakePortraitStylePreviews || {};
     var variant = state.variant;
@@ -3742,13 +3774,7 @@
               || styleBucket['default']
               || (state.style && state.style.imageUrl ? state.style.imageUrl : null)
               || (variant && variant.featured_image && variant.featured_image.src ? variant.featured_image.src : null);
-    if (!url) return;
-    state.previewImageUrl = url;
-    var img = $('mp-preview-img');
-    if (!img) return;
-    img.style.opacity = '0';
-    img.onload = function () { img.style.opacity = '1'; };
-    img.src = url;
+    setConfiguratorPreviewImage(url);
     if (state.initialized) scrollToPreview();
   }
 
@@ -3856,21 +3882,11 @@
           var _pvBucket   = _pvPreviews[state.styleId] || {};
           var _pvUrl      = _pvBucket['default'] || (state.style && state.style.imageUrl) || null;
           if (_pvUrl) {
-            var _pvImg = $('mp-preview-img');
-            if (_pvImg) {
-              _pvImg.style.opacity = '0';
-              _pvImg.onload = function () { _pvImg.style.opacity = '1'; };
-              _pvImg.src = _pvUrl;
-            }
+            setConfiguratorPreviewImage(_pvUrl, { persistOrderPreview: false });
             scrollToPreview();
           }
         } else if (matchedProduct && matchedProduct.featuredImage) {
-          var img = $('mp-preview-img');
-          if (img) {
-            img.style.opacity = '0';
-            img.onload = function () { img.style.opacity = '1'; };
-            img.src = matchedProduct.featuredImage;
-          }
+          setConfiguratorPreviewImage(matchedProduct.featuredImage, { persistOrderPreview: false });
           scrollToPreview();
         }
         if (product.variants && product.variants.length) {
@@ -3947,12 +3963,7 @@
       var _catBucket   = _catPreviews[state.styleId] || {};
       var _catUrl      = _catBucket['default'] || (state.style && state.style.imageUrl) || null;
       if (_catUrl) {
-        var _catImg = $('mp-preview-img');
-        if (_catImg) {
-          _catImg.style.opacity = '0';
-          _catImg.onload = function () { _catImg.style.opacity = '1'; };
-          _catImg.src = _catUrl;
-        }
+        setConfiguratorPreviewImage(_catUrl, { persistOrderPreview: false });
         scrollToPreview();
       }
     }
