@@ -199,6 +199,7 @@
                       >
                         {% liquid
                           assign render_cta_as_menu_item = false
+                          assign rendered_cta_as_menu_item = false
                           if link.title == 'Shop' and cta_label != blank and cta_url != blank
                             assign existing_cta_links = link.links | where: 'title', cta_label
                             if existing_cta_links.size == 0
@@ -245,8 +246,22 @@
                                 <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
                               </a>
                             </li>
+                            {% assign rendered_cta_as_menu_item = true %}
                           {%- endif -%}
                         {%- endfor -%}
+                        {%- if render_cta_as_menu_item and rendered_cta_as_menu_item == false -%}
+                          <li
+                            class="menu-drawer__list-item"
+                            style="--menu-drawer-animation-index: {{ link.links.size | plus: 1 }};"
+                          >
+                            <a
+                              href="{{ cta_url }}"
+                              class="menu-drawer__menu-item menu-drawer__menu-item--child focus-inset"
+                            >
+                              <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
+                            </a>
+                          </li>
+                        {%- endif -%}
                       </ul>
                     </details>
                   </accordion-custom>
@@ -282,6 +297,7 @@
                   >
                     {% liquid
                       assign render_cta_as_menu_item = false
+                      assign rendered_cta_as_menu_item = false
                       if link.title == 'Shop' and cta_label != blank and cta_url != blank
                         assign existing_cta_links = link.links | where: 'title', cta_label
                         if existing_cta_links.size == 0
@@ -323,8 +339,22 @@
                             <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
                           </a>
                         </li>
+                        {% assign rendered_cta_as_menu_item = true %}
                       {%- endif -%}
                     {%- endfor -%}
+                    {%- if render_cta_as_menu_item and rendered_cta_as_menu_item == false -%}
+                      <li
+                        class="menu-drawer__list-item"
+                        style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};"
+                      >
+                        <a
+                          href="{{ cta_url }}"
+                          class="menu-drawer__menu-item menu-drawer__menu-item--child menu-drawer__animated-element focus-inset"
+                        >
+                          <span class="menu-drawer__menu-item-text">{{ cta_label | escape }}</span>
+                        </a>
+                      </li>
+                    {%- endif -%}
                   </ul>
                 {% else %}
                   {%- comment -%}
@@ -911,6 +941,11 @@
     height: var(--icon-size-xs);
   }
 
+  .header__icon--summary .header-drawer-icon--open {
+    width: 24px;
+    height: 20px;
+  }
+
   .header__drawer {
     display: flex;
     min-height: 60px;
@@ -1256,13 +1291,19 @@
   }
 
   .menu-drawer__close-button {
-    position: relative;
-    right: auto;
-    top: auto;
+    position: absolute;
+    right: var(--padding-lg);
+    top: var(--padding-lg);
+    align-self: flex-end;
     width: fit-content;
     height: fit-content;
     padding: var(--padding-lg);
     will-change: transform;
+    z-index: 1;
+  }
+
+  .menu-drawer__list-item--flat:has(> #HeaderDrawer-shop) {
+    margin-block-end: calc(var(--padding-xl) * 1.33);
   }
 
   .menu-drawer__back-button {
