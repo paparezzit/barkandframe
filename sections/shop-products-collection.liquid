@@ -250,6 +250,7 @@
     display: grid;
     gap: 20px;
     isolation: isolate;
+    transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
   }
 
   .shop-products__portrait-media {
@@ -368,6 +369,7 @@
 
   .shop-products__rail-item {
     flex: 0 0 303px;
+    transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
   }
 
   .shop-products__product-section {
@@ -385,6 +387,15 @@
 
   .shop-products__grid-item {
     min-width: 0;
+    transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
+  }
+
+  @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .shop-products__portrait-card:hover,
+    .shop-products__rail-item:hover,
+    .shop-products__grid-item:hover {
+      transform: translateY(calc(-1 * var(--hover-lift-amount)));
+    }
   }
 
   .collection-sticky-btn {
