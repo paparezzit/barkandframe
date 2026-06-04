@@ -4288,6 +4288,18 @@ text-component {
   --brown: #4C443F;
   --green: #899800;
   --purple: #DBDBFF;
+  --color-black: var(--brown);
+}
+
+:where(
+  [style*="color:#000"],
+  [style*="color: #000"],
+  [style*="color:black"],
+  [style*="color: black"],
+  [style*="color:rgb(0,0,0)"],
+  [style*="color: rgb(0, 0, 0)"]
+) {
+  color: var(--brown) !important;
 }
 
 @font-face {
@@ -4888,7 +4900,6 @@ slideshow-component.slideshow--homepage{
     }
   }
 }
-
 
 
 
