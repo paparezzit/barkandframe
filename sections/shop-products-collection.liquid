@@ -462,9 +462,12 @@
     .shop-products__portrait-grid {
       --portrait-grid-gap: 12px;
       --portrait-card-width: calc((min(calc(100vw - 24px), 1274px) - var(--portrait-grid-gap)) / 2);
+      box-sizing: border-box;
       width: 100vw;
       margin-top: calc(83px - var(--hover-lift-amount));
       margin-inline: calc((100% - 100vw) / 2);
+      padding-inline: 12px;
+      scroll-padding-inline: 12px;
     }
 
     .shop-products__bestseller {
