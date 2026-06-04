@@ -11,6 +11,7 @@
   "sections": {
     "section": {
       "type": "section",
+      "disabled": true,
       "blocks": {
         "menu_CWNWMf": {
           "type": "menu",
@@ -68,7 +69,7 @@
       }
     },
     "main": {
-      "type": "main-collection",
+      "type": "shop-products-collection",
       "blocks": {
         "filters": {
           "type": "filters",
@@ -240,21 +241,42 @@
         }
       },
       "settings": {
-        "layout_type": "grid",
-        "product_card_size": "medium",
-        "mobile_product_card_size": "small",
-        "product_grid_width": "centered",
-        "full_width_on_mobile": false,
-        "columns_gap_horizontal": 20,
-        "columns_gap_vertical": 20,
-        "padding-inline-start": 0,
-        "padding-inline-end": 0,
+        "custom_portrait_title": "Custom Portrait",
+        "portrait_1_image": "shopify://shop_images/The_Gentleman_01_20x28_Canvas_Black.png",
+        "portrait_1_style_label": "The Gentleman",
+        "portrait_1_style_id": "the_gentleman",
+        "portrait_1_product": "shopify://products/unframed-canvas",
+        "portrait_1_product_label": "Canvas",
+        "portrait_1_product_handle_override": "",
+        "portrait_1_button_label": "Make a Portrait",
+        "portrait_2_image": "shopify://shop_images/bark-and-frame-see-it-at-home-pomeranian-dream-watercolour-portrait-walnut-frame-day-bed-bedroom.jpg",
+        "portrait_2_style_label": "Studio Watercolour",
+        "portrait_2_style_id": "studio_watercolour",
+        "portrait_2_product": "shopify://products/framed-canvas-1",
+        "portrait_2_product_label": "Canvas Framed",
+        "portrait_2_product_handle_override": "",
+        "portrait_2_button_label": "Make a Portrait",
+        "portrait_3_image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg",
+        "portrait_3_style_label": "Studio Pop",
+        "portrait_3_style_id": "studio_pop",
+        "portrait_3_product": "shopify://products/framed-poster",
+        "portrait_3_product_label": "Fine Art Paper Framed",
+        "portrait_3_product_handle_override": "",
+        "portrait_3_button_label": "Make a Portrait",
+        "bestseller_title": "Bestseller",
+        "bestseller_products": [
+          "shopify://products/give-love-cap",
+          "shopify://products/powered-by-dogs-t-shirt",
+          "shopify://products/powered-by-dogs-cap",
+          "shopify://products/bloom-crewneck",
+          "shopify://products/no-fart-no-love-t-shirt"
+        ],
+        "cap_title": "Cap",
+        "tshirt_title": "T-Shirt",
+        "crewneck_title": "Crewneck",
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 60,
-        "cta_image": "shopify://shop_images/The_Gentleman_01_20x28_Canvas_Black.png",
-        "cta_label": "Make a Portrait",
-        "cta_link": "/pages/make-portrait",
         "sticky_button_enabled": true,
         "sticky_button_text": "Artist Collection",
         "sticky_button_link": "shopify://collections/bark-studio"

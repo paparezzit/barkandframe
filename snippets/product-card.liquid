@@ -83,6 +83,11 @@
   if product.id == empty or product == blank
     assign onboarding = true
   endif
+
+  assign product_card_badge = product.metafields.custom.card_badge.value | default: ''
+  if product_card_badge == blank and product.handle == 'give-love-cap'
+    assign product_card_badge = 'Charity Cap'
+  endif
 %}
 
 {%- if settings.transition_to_main_product -%}
@@ -145,6 +150,9 @@
       {% if block_settings.padding-block-end > 0 %}--zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7}}px);{% endif %}
     "
   >
+    {%- if product_card_badge != blank -%}
+      <span class="baf-product-card-bubble">{{ product_card_badge }}</span>
+    {%- endif -%}
     {{ children }}
   </div>
 </product-card>
@@ -160,6 +168,35 @@
 
   .product-card__placeholder-image svg {
     height: 100%;
+  }
+
+  .baf-product-card-bubble {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: calc(var(--layer-flat) + 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 15px;
+    padding: 2px 10px;
+    border-radius: 1000px;
+    background: #EA3143;
+    color: var(--beige);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 749px) {
+    .baf-product-card-bubble {
+      min-height: 15px;
+      padding-inline: 10px;
+      font-size: 10px;
+    }
   }
 
   @media screen and (max-width: 749px) {

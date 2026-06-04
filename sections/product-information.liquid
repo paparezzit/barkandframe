@@ -85,10 +85,45 @@
       {% endif %}
     {% endfor %}
 
-    {%- assign size_chart_url = closest.product.metafields.custom.size_chart_image.value | image_url: width: 1200 -%}
-    {%- assign materials = closest.product.metafields.custom.materials.value -%}
-    {%- assign print_tech = closest.product.metafields.custom.print_technology.value -%}
+    {%- assign product_the_fabric = closest.product.metafields.custom.the_fabric -%}
+    {%- assign product_the_fit = closest.product.metafields.custom.the_fit -%}
+    {%- assign product_size_guide = closest.product.metafields.custom.size_guide -%}
+    {%- assign product_made = closest.product.metafields.custom.made -%}
+    {%- assign product_care = closest.product.metafields.custom.care -%}
+    {%- assign product_type_downcase = closest.product.type | downcase -%}
+    {%- assign product_title_downcase = closest.product.title | downcase -%}
+    {%- assign is_crewneck_product = false -%}
+    {%- if product_type_downcase contains 'crewneck'
+      or product_type_downcase contains 'crew neck'
+      or product_title_downcase contains 'crewneck'
+      or product_title_downcase contains 'crew neck'
+    -%}
+      {%- assign is_crewneck_product = true -%}
+    {%- endif -%}
+    {%- assign is_tshirt_product = false -%}
+    {%- if product_type_downcase contains 't-shirt'
+      or product_type_downcase contains 't shirt'
+      or product_title_downcase contains 't-shirt'
+      or product_title_downcase contains 't shirt'
+    -%}
+      {%- assign is_tshirt_product = true -%}
+    {%- endif -%}
+    {%- assign is_cap_product = false -%}
+    {%- if product_type_downcase == 'cap' or product_title_downcase contains ' cap' or product_title_downcase contains '| cap' -%}
+      {%- assign is_cap_product = true -%}
+    {%- endif -%}
+    {%- assign has_product_tabs = false -%}
+    {%- if closest.product.description != blank
+      or product_the_fabric != blank
+      or product_the_fit != blank
+      or product_size_guide != blank
+      or product_made != blank
+      or product_care != blank
+    -%}
+      {%- assign has_product_tabs = true -%}
+    {%- endif -%}
 
+    {%- if has_product_tabs -%}
     <div class="product-information__tabs">
       {%- if closest.product.description != blank -%}
         <div class="product-information__tabs-description rte">
@@ -97,44 +132,189 @@
       {%- endif -%}
 
       <div class="prod-accordion-section__accordions" id="prod-accordions">
+        {%- assign opened_product_accordion = false -%}
 
-        {%- if size_chart_url != blank -%}
+        {%- if product_the_fabric != blank -%}
           <accordion-custom>
-            <details class="details tab-accordion">
+            <details class="details tab-accordion" open>
+              {%- assign opened_product_accordion = true -%}
               <summary class="tab-accordion__summary">
-                <span>Size Chart</span>
+                <span>The fabric</span>
                 <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
               </summary>
               <div class="details-content tab-accordion__body">
-                <img src="{{ size_chart_url }}" alt="Size Chart" loading="lazy" width="1200" height="auto">
+                {{ product_the_fabric | metafield_tag }}
               </div>
             </details>
           </accordion-custom>
         {%- endif -%}
 
-        {%- if materials != blank -%}
+        {%- if product_the_fit != blank -%}
           <accordion-custom>
-            <details class="details tab-accordion">
+            <details class="details tab-accordion"{% unless opened_product_accordion %} open{% assign opened_product_accordion = true %}{% endunless %}>
               <summary class="tab-accordion__summary">
-                <span>Materials</span>
+                <span>The fit</span>
                 <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
               </summary>
               <div class="details-content tab-accordion__body">
-                {{ materials | newline_to_br }}
+                {{ product_the_fit | metafield_tag }}
               </div>
             </details>
           </accordion-custom>
         {%- endif -%}
 
-        {%- if print_tech != blank -%}
+        {%- if product_size_guide != blank -%}
           <accordion-custom>
-            <details class="details tab-accordion">
+            <details class="details tab-accordion"{% unless opened_product_accordion %} open{% assign opened_product_accordion = true %}{% endunless %}>
               <summary class="tab-accordion__summary">
-                <span>Print technology</span>
+                <span>Size guide</span>
                 <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
               </summary>
               <div class="details-content tab-accordion__body">
-                {{ print_tech | newline_to_br }}
+                {%- if is_crewneck_product -%}
+                  <p class="baf-size-guide__intro">Body length × Chest width.</p>
+                  <div class="baf-size-guide" aria-label="Crewneck size guide">
+                    <h3 class="baf-size-guide__title">Crewneck</h3>
+                    <table class="baf-size-guide__table">
+                      <thead>
+                        <tr>
+                          <th scope="col"><span class="baf-size-guide__badge baf-size-guide__badge--size">SIZE</span></th>
+                          <th scope="col"><span class="baf-size-guide__badge">CM</span></th>
+                          <th scope="col"><span class="baf-size-guide__badge">IN</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">S</th>
+                          <td>68.5 × 84 to 91</td>
+                          <td>27.0 × 33.1 to 35.8</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">M</th>
+                          <td>71 × 94 to 101</td>
+                          <td>28.0 × 37.0 to 39.8</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">L</th>
+                          <td>73.5 × 104 to 109</td>
+                          <td>29.0 × 40.9 to 42.9</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">XL</th>
+                          <td>76 × 112 to 117</td>
+                          <td>30.0 × 44.1 to 46.1</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2XL</th>
+                          <td>78.5 × 119 to 124</td>
+                          <td>31.0 × 46.9 to 48.8</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3XL</th>
+                          <td>81 × 127 to 132</td>
+                          <td>32.0 × 50.0 to 52.0</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                {%- elsif is_tshirt_product -%}
+                  <p class="baf-size-guide__intro">Body length × Chest width.</p>
+                  <div class="baf-size-guide" aria-label="T-Shirt size guide">
+                    <h3 class="baf-size-guide__title">T-Shirt</h3>
+                    <table class="baf-size-guide__table">
+                      <thead>
+                        <tr>
+                          <th scope="col"><span class="baf-size-guide__badge baf-size-guide__badge--size">SIZE</span></th>
+                          <th scope="col"><span class="baf-size-guide__badge">CM</span></th>
+                          <th scope="col"><span class="baf-size-guide__badge">IN</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">XS</th>
+                          <td>69 × 104</td>
+                          <td>27.2 × 40.9</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">S</th>
+                          <td>71 × 110</td>
+                          <td>28.0 × 43.3</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">M</th>
+                          <td>75 × 116</td>
+                          <td>29.5 × 45.7</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">L</th>
+                          <td>77 × 122</td>
+                          <td>30.3 × 48.0</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">XL</th>
+                          <td>79 × 128</td>
+                          <td>31.1 × 50.4</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2XL</th>
+                          <td>81 × 134</td>
+                          <td>31.9 × 52.8</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3XL</th>
+                          <td>83 × 140</td>
+                          <td>32.7 × 55.1</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                {%- elsif is_cap_product -%}
+                  <div class="baf-size-guide" aria-label="Cap size guide">
+                    <h3 class="baf-size-guide__title">Cap</h3>
+                    <table class="baf-size-guide__table baf-size-guide__table--single">
+                      <thead>
+                        <tr>
+                          <th scope="col"><span class="baf-size-guide__badge baf-size-guide__badge--size">SIZE</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>One size · adjustable</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                {%- else -%}
+                  {{ product_size_guide | metafield_tag }}
+                {%- endif -%}
+              </div>
+            </details>
+          </accordion-custom>
+        {%- endif -%}
+
+        {%- if product_made != blank -%}
+          <accordion-custom>
+            <details class="details tab-accordion"{% unless opened_product_accordion %} open{% assign opened_product_accordion = true %}{% endunless %}>
+              <summary class="tab-accordion__summary">
+                <span>Made</span>
+                <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+              </summary>
+              <div class="details-content tab-accordion__body">
+                {{ product_made | metafield_tag }}
+              </div>
+            </details>
+          </accordion-custom>
+        {%- endif -%}
+
+        {%- if product_care != blank -%}
+          <accordion-custom>
+            <details class="details tab-accordion"{% unless opened_product_accordion %} open{% assign opened_product_accordion = true %}{% endunless %}>
+              <summary class="tab-accordion__summary">
+                <span>Care</span>
+                <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+              </summary>
+              <div class="details-content tab-accordion__body">
+                {{ product_care | metafield_tag }}
               </div>
             </details>
           </accordion-custom>
@@ -142,6 +322,7 @@
 
       </div>
     </div>
+    {%- endif -%}
   </div>
 
   {% content_for 'blocks' %}
@@ -517,6 +698,152 @@
     line-height: 1.6;
     color: var(--brown);
     margin-bottom: 40px;
+  }
+
+  .baf-size-guide {
+    margin: 20px 0;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    color: var(--brown);
+    background: var(--cream);
+    border-radius: 40px;
+  }
+
+  .baf-size-guide__intro {
+    margin: 0 0 18px;
+    color: var(--brown);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .baf-size-guide__title {
+    margin: 0 0 10px !important;
+    font-family: "display", serif;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+  }
+
+  .baf-size-guide__table {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .baf-size-guide__table thead,
+  .baf-size-guide__table tbody,
+  .baf-size-guide__table tr {
+    display: contents;
+  }
+
+  .baf-size-guide__table--single {
+    grid-template-columns: 1fr;
+  }
+
+  .baf-size-guide__table th,
+  .baf-size-guide__table td {
+    padding: 0;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .baf-size-guide__table thead th {
+    display: flex;
+    align-items: center;
+  }
+
+  .baf-size-guide__table thead th:not(:first-child) {
+    justify-content: center;
+  }
+
+  .baf-size-guide__table tbody th,
+  .baf-size-guide__table tbody td {
+    padding: 14px 0;
+  }
+
+  .baf-size-guide__table tbody th {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+    padding-right: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .baf-size-guide__table tbody td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid var(--brown);
+    padding-inline: 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .baf-size-guide__table tbody td:last-child {
+    border-right: 1px solid var(--brown);
+  }
+
+  .baf-size-guide__table.baf-size-guide__table--single tbody td {
+    justify-content: flex-start;
+    border-left: 0;
+    border-right: 0;
+    padding-inline: 0;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .baf-size-guide__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin: 20px 0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: var(--cream);
+    background: var(--green);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .baf-size-guide__badge--size {
+    background: var(--brown);
+  }
+
+  .baf-size-guide__table thead th:not(:first-child) .baf-size-guide__badge {
+    margin-inline: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .baf-size-guide {
+      padding: 40px 20px;
+      border-radius: 40px;
+    }
+
+    .baf-size-guide__table {
+      grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .baf-size-guide__table tbody td {
+      padding-inline: 10px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .baf-size-guide {
+      padding: 40px;
+    }
   }
 
   /* Three-area grid: left (media) | right (details sticky) / tabs (description+accordion) */
