@@ -901,7 +901,7 @@
                       </div>
                       <div class="size-table__row">
                         <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
-                        <div class="size-table__dim"><strong>52 × 72 cm</strong><span>20.5 × 28.3 in</span></div>
+                        <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
                       </div>
                     </div>
                   </div>
@@ -4141,7 +4141,7 @@
       sizeOverrides = {
         '21x30': { cm: '24 \u00D7 33 cm', inches: '9.4 \u00D7 13.0 in' },
         '30x40': { cm: '33 \u00D7 43 cm', inches: '13.0 \u00D7 16.9 in' },
-        '50x70': { cm: '52 \u00D7 72 cm', inches: '20.5 \u00D7 28.3 in' }
+        '50x70': { cm: '54 \u00D7 74 cm', inches: '21.3 \u00D7 29.1 in' }
       };
     }
 
@@ -4261,6 +4261,26 @@
     });
   }
 
+  function normalizePresetOptionValue(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\u00D7/g, 'x')
+      .replace(/[\u2033"']/g, '')
+      .replace(/\s+/g, '')
+      .replace(/-/g, '');
+  }
+
+  function matchPresetOptionValue(values, presetValue) {
+    if (!presetValue) return null;
+    if (values.indexOf(presetValue) !== -1) return presetValue;
+
+    var normalizedPreset = normalizePresetOptionValue(presetValue);
+    for (var i = 0; i < values.length; i++) {
+      if (normalizePresetOptionValue(values[i]) === normalizedPreset) return values[i];
+    }
+    return null;
+  }
+
   function appendOptionGroup(opt, product, container, previousSelections) {
     var group = document.createElement('div');
     group.className = 'make-portrait__option-group';
@@ -4292,11 +4312,12 @@
     }
 
     var prevValue = previousSelections && previousSelections[opt.name.toLowerCase()];
-    var hasPrev = prevValue && values.indexOf(prevValue) !== -1;
+    var matchedPrevValue = matchPresetOptionValue(values, prevValue);
+    var hasPrev = matchedPrevValue !== null;
 
     values.forEach(function (value, vIdx) {
       var _defaultIdx = opt.name.toLowerCase() === 'size' ? Math.floor(values.length / 2) : 0;
-      var isSelected = hasPrev ? (value === prevValue) : (vIdx === _defaultIdx);
+      var isSelected = hasPrev ? (value === matchedPrevValue) : (vIdx === _defaultIdx);
       var btn = document.createElement('button');
       var optNameLower = opt.name.toLowerCase();
       btn.className = 'option-btn' +
@@ -4445,7 +4466,8 @@
     // 1. Size
     sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections || {}); });
 
-    // 2. Framing - always "Framed", display only (no choice)
+    // 2. Border (static built-in - shown via resetOptionsLayout)
+    // 3. Framing - always "Framed", display only (no choice)
     var framingGroup = document.createElement('div');
     framingGroup.className = 'make-portrait__option-group';
     var framingLabel = document.createElement('p');
@@ -4466,13 +4488,13 @@
     }
     framingGrid.appendChild(framedBtn);
     framingGroup.appendChild(framingGrid);
-    container.appendChild(framingGroup);
+    var secondaryContainer = container2 || container;
+    secondaryContainer.appendChild(framingGroup);
 
-    // 3. Border (static built-in - shown via resetOptionsLayout)
     // 4. Dogs Name (static built-in - shown via resetOptionsLayout)
 
     // 5. Frame Color in container-2
-    colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, container2 || container, previousSelections || {}); });
+    colorOpts.forEach(function (opt) { appendOptionGroup(opt, product, secondaryContainer, previousSelections || {}); });
 
     matchVariant(product);
     var ctaStep3 = $('mp-cta-step3');
@@ -4587,6 +4609,9 @@
         : sizeValue);
     }
 
+    var border = getSelectedBorderLabel();
+    if (border) details.push(border);
+
     var framingLabel = getFramingLabel();
     if (framingLabel) details.push(framingLabel);
 
@@ -4598,8 +4623,6 @@
       });
     }
 
-    var border = getSelectedBorderLabel();
-    if (border) details.push(border);
     if (getEffectivePetName()) details.push(useHtml ? 'Add name' : 'Name: ' + getEffectivePetName());
 
     return details;

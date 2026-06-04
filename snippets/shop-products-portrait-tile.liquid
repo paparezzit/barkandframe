@@ -4,8 +4,10 @@
     assign product_handle = product.handle
   endif
   assign preset_product_category = preset_product_category | strip
-  assign preset_framing = preset_framing | strip
   assign preset_size = preset_size | strip
+  assign preset_border = preset_border | strip
+  assign preset_framing = preset_framing | strip
+  assign preset_color = preset_color | strip
 
   assign portrait_url = '/pages/make-portrait?step=3'
   if style_id != blank
@@ -20,13 +22,21 @@
     assign preset_product_category_encoded = preset_product_category | url_encode
     assign portrait_url = portrait_url | append: '&category=' | append: preset_product_category_encoded
   endif
+  if preset_size != blank
+    assign preset_size_encoded = preset_size | url_encode
+    assign portrait_url = portrait_url | append: '&size=' | append: preset_size_encoded
+  endif
+  if preset_border != blank
+    assign preset_border_encoded = preset_border | url_encode
+    assign portrait_url = portrait_url | append: '&border=' | append: preset_border_encoded
+  endif
   if preset_framing != blank
     assign preset_framing_encoded = preset_framing | url_encode
     assign portrait_url = portrait_url | append: '&framing=' | append: preset_framing_encoded
   endif
-  if preset_size != blank
-    assign preset_size_encoded = preset_size | url_encode
-    assign portrait_url = portrait_url | append: '&size=' | append: preset_size_encoded
+  if preset_color != blank
+    assign preset_color_encoded = preset_color | url_encode
+    assign portrait_url = portrait_url | append: '&color=' | append: preset_color_encoded
   endif
 
   if product_label == blank and product != blank
