@@ -3,6 +3,7 @@ import { fetchConfig, onAnimationEnd, preloadImage } from '@theme/utilities';
 import { ThemeEvents, CartAddEvent, CartErrorEvent, VariantUpdateEvent } from '@theme/events';
 import { cartPerformance } from '@theme/performance';
 import { morph } from '@theme/morph';
+import { syncBafOrderAttribute } from '@theme/baf-order-sync';
 
 export const ADD_TO_CART_TEXT_ANIMATION_DURATION = 2000;
 
@@ -175,6 +176,7 @@ class ProductFormComponent extends Component {
     if (!form) throw new Error('Product form element missing');
 
     const formData = new FormData(form);
+    const hasMerchOrderItem = this.#appendMerchOrderProperties(formData);
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
     let cartItemComponentsSectionIds = [];
@@ -259,7 +261,7 @@ class ProductFormComponent extends Component {
             }, 5000);
           }
 
-          return this.#updateMerchOrderAttribute(formData).then(() => {
+          return this.#syncMerchOrderAttribute(hasMerchOrderItem).then(() => {
             this.dispatchEvent(
               new CartAddEvent({}, id.toString(), {
                 source: 'product-form-component',
@@ -301,53 +303,65 @@ class ProductFormComponent extends Component {
 
   /**
    * @param {FormData} formData
-   * @returns {Promise<void>}
+   * @returns {boolean}
    */
-  #updateMerchOrderAttribute(formData) {
+  #appendMerchOrderProperties(formData) {
     const variantId = formData.get('id')?.toString();
-    if (!variantId || !this.dataset.bafPrintfulVariants) return Promise.resolve();
+    if (!variantId) return false;
 
-    let printfulVariants;
-    try {
-      printfulVariants = JSON.parse(this.dataset.bafPrintfulVariants);
-    } catch {
-      return Promise.resolve();
+    const merchOrderItem = this.#getMerchOrderItem(variantId);
+    if (!merchOrderItem) return false;
+
+    const printfulVariantId = Number(merchOrderItem.printful_variant_id);
+    if (!printfulVariantId) return false;
+
+    formData.set('properties[_baf_order_type]', 'merch');
+    formData.set('properties[_baf_design_name]', merchOrderItem.design_name || '');
+    formData.set('properties[_baf_product_name]', merchOrderItem.product_name || '');
+    formData.set('properties[_baf_production_line]', merchOrderItem.production_line || '');
+    formData.set('properties[_baf_product_color]', merchOrderItem.product_color || '');
+    formData.set('properties[_baf_size]', merchOrderItem.size || '');
+    formData.set('properties[_baf_artwork_colorway]', merchOrderItem.artwork_colorway || '');
+    formData.set('properties[_baf_production_name]', merchOrderItem.production_name || '');
+    formData.set('properties[_baf_printful_variant_id]', String(printfulVariantId));
+    if (merchOrderItem.production && typeof merchOrderItem.production === 'object') {
+      formData.set('properties[_baf_production]', JSON.stringify(merchOrderItem.production));
     }
 
-    const printfulVariantId = Number(printfulVariants[variantId]);
-    if (!printfulVariantId) return Promise.resolve();
+    return true;
+  }
 
-    const quantity = Number(formData.get('quantity')) || Number(this.dataset.quantityDefault) || 1;
+  /**
+   * @param {string} variantId
+   * @returns {Record<string, unknown> | null}
+   */
+  #getMerchOrderItem(variantId) {
+    const rawMap = this.dataset.bafMerchOrderItems || this.dataset.bafPrintfulVariants;
+    if (!rawMap) return null;
 
-    return fetch('/cart.js', {
-      headers: { Accept: 'application/json' },
-    })
-      .then((response) => response.json())
-      .then((cart) => {
-        let existingOrder;
-        try {
-          existingOrder = JSON.parse(cart.attributes && cart.attributes['_order']);
-        } catch {
-          existingOrder = null;
-        }
+    try {
+      const merchOrderItems = JSON.parse(rawMap);
+      const merchOrderItem = merchOrderItems[variantId];
 
-        if (!existingOrder || !Array.isArray(existingOrder.items)) existingOrder = { items: [] };
-        existingOrder.items.push({
-          printful_variant_id: printfulVariantId,
-          quantity,
-        });
+      if (typeof merchOrderItem === 'number') {
+        return { printful_variant_id: merchOrderItem };
+      }
 
-        return fetch('/cart/update.js', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({ attributes: { _order: JSON.stringify(existingOrder) } }),
-        }).then((response) => {
-          if (!response.ok) throw new Error('Merch order data update failed.');
-        });
-      })
+      return merchOrderItem && typeof merchOrderItem === 'object' ? merchOrderItem : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * @param {boolean} hasMerchOrderItem
+   * @returns {Promise<void>}
+   */
+  #syncMerchOrderAttribute(hasMerchOrderItem) {
+    if (!hasMerchOrderItem) return Promise.resolve();
+
+    return syncBafOrderAttribute()
+      .then(() => undefined)
       .catch((error) => {
         console.error(error);
         throw new Error('Merch order data update failed.');

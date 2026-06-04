@@ -143,8 +143,17 @@
                       -%}
                       {%- if upsell_product != blank -%}
                         {%- assign first_variant = upsell_product.selected_or_first_available_variant -%}
+                        {%- capture upsell_merch_order_items -%}
+                          {%- render 'baf-merch-printful-map', product: upsell_product -%}
+                        {%- endcapture -%}
+                        {%- assign upsell_merch_order_items = upsell_merch_order_items | strip -%}
                         <div class="cart-drawer__upsell-card__wrapper">
-                          <div class="cart-drawer__upsell-card">
+                          <div
+                            class="cart-drawer__upsell-card"
+                            {% if upsell_merch_order_items != blank %}
+                              data-baf-merch-order-items="{{ upsell_merch_order_items | escape }}"
+                            {% endif %}
+                          >
                             <a
                               href="{{ upsell_product.url }}"
                               class="cart-drawer__upsell-card-image-link"
@@ -245,6 +254,9 @@
       try {
         const sectionId = document.querySelector('cart-items-component')?.dataset.sectionId;
         const body = { id: Number(variantId), quantity: 1 };
+        const card = btn.closest('.cart-drawer__upsell-card');
+        const merchOrderItem = getMerchOrderItem(card, variantId);
+        if (merchOrderItem) body.properties = getMerchLineProperties(merchOrderItem);
         if (sectionId) body.sections = sectionId;
 
         const res = await fetch('/cart/add.js', {
@@ -256,6 +268,9 @@
         if (!res.ok) throw new Error('add failed');
 
         const data = await res.json();
+        if (merchOrderItem && window.BAFOrderSync?.syncCartOrder) {
+          await window.BAFOrderSync.syncCartOrder();
+        }
 
         document.dispatchEvent(new CustomEvent('cart:update', {
           bubbles: true,
@@ -266,6 +281,35 @@
         btn.disabled = false;
       }
     });
+
+    function getMerchOrderItem(card, variantId) {
+      if (!card?.dataset.bafMerchOrderItems) return null;
+
+      try {
+        const merchOrderItems = JSON.parse(card.dataset.bafMerchOrderItems);
+        const merchOrderItem = merchOrderItems[variantId];
+        return merchOrderItem && typeof merchOrderItem === 'object' ? merchOrderItem : null;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function getMerchLineProperties(merchOrderItem) {
+      return {
+        _baf_order_type: 'merch',
+        _baf_design_name: merchOrderItem.design_name || '',
+        _baf_product_name: merchOrderItem.product_name || '',
+        _baf_production_line: merchOrderItem.production_line || '',
+        _baf_product_color: merchOrderItem.product_color || '',
+        _baf_size: merchOrderItem.size || '',
+        _baf_artwork_colorway: merchOrderItem.artwork_colorway || '',
+        _baf_production_name: merchOrderItem.production_name || '',
+        _baf_printful_variant_id: String(merchOrderItem.printful_variant_id || ''),
+        ...(merchOrderItem.production && typeof merchOrderItem.production === 'object'
+          ? { _baf_production: JSON.stringify(merchOrderItem.production) }
+          : {}),
+      };
+    }
 
     // Dots: click → scroll to card, scroll → update active dot
     document.addEventListener('click', (e) => {

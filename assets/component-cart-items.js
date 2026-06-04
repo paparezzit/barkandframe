@@ -9,6 +9,7 @@ import {
   DiscountUpdateEvent,
 } from '@theme/events';
 import { cartPerformance } from '@theme/performance';
+import { syncBafOrderAttribute } from '@theme/baf-order-sync';
 
 /** @typedef {import('./utilities').TextComponent} TextComponent */
 
@@ -147,24 +148,30 @@ class CartItemsComponent extends Component {
           return;
         }
 
-        const newSectionHTML = new DOMParser().parseFromString(
-          parsedResponseText.sections[this.sectionId],
-          'text/html'
-        );
-
-        // Grab the new cart item count from a hidden element
-        const newCartHiddenItemCount = newSectionHTML.querySelector('[ref="cartItemCount"]')?.textContent;
-        const newCartItemCount = newCartHiddenItemCount ? parseInt(newCartHiddenItemCount, 10) : 0;
-
-        this.dispatchEvent(
-          new CartUpdateEvent({}, this.sectionId, {
-            itemCount: newCartItemCount,
-            source: 'cart-items-component',
-            sections: parsedResponseText.sections,
+        return syncBafOrderAttribute({ cart: parsedResponseText })
+          .catch((error) => {
+            console.error(error);
           })
-        );
+          .then(() => {
+            const newSectionHTML = new DOMParser().parseFromString(
+              parsedResponseText.sections[this.sectionId],
+              'text/html'
+            );
 
-        morphSection(this.sectionId, parsedResponseText.sections[this.sectionId]);
+            // Grab the new cart item count from a hidden element
+            const newCartHiddenItemCount = newSectionHTML.querySelector('[ref="cartItemCount"]')?.textContent;
+            const newCartItemCount = newCartHiddenItemCount ? parseInt(newCartHiddenItemCount, 10) : 0;
+
+            this.dispatchEvent(
+              new CartUpdateEvent({}, this.sectionId, {
+                itemCount: newCartItemCount,
+                source: 'cart-items-component',
+                sections: parsedResponseText.sections,
+              })
+            );
+
+            morphSection(this.sectionId, parsedResponseText.sections[this.sectionId]);
+          });
       })
       .catch((error) => {
         console.error(error);

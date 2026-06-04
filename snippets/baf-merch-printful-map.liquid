@@ -9,6 +9,16 @@
   if product_type == 'Crewneck' or product_type == 'T-Shirt' or product_type == 'Cap'
     assign is_merch = true
   endif
+
+  assign product_title_parts = product_resource.title | split: ' | '
+  assign design_name = product_title_parts | first | strip
+  assign product_name = product_title_parts | last | strip
+  if design_name == blank
+    assign design_name = product_resource.title
+  endif
+  if product_name == blank or product_name == product_resource.title
+    assign product_name = product_type
+  endif
 -%}
 
 {%- if product_resource != blank and is_merch -%}
@@ -16,8 +26,15 @@
   {
   {%- for variant in product_resource.variants -%}
     {%- assign printful_variant_id = blank -%}
-    {%- assign color = variant.option1 -%}
-    {%- assign size = variant.option2 -%}
+    {%- assign shopify_color = variant.option1 | strip -%}
+    {%- assign color = shopify_color -%}
+    {%- assign size = variant.option2 | strip -%}
+
+    {%- if product_type == 'Crewneck' and shopify_color == 'Heather Grey' -%}
+      {%- assign color = 'Carbon Grey' -%}
+    {%- elsif product_type == 'T-Shirt' and shopify_color == 'Pure White' -%}
+      {%- assign color = 'White' -%}
+    {%- endif -%}
 
     {%- case product_type -%}
       {%- when 'Crewneck' -%}
@@ -31,7 +48,7 @@
               {%- when '2XL' -%}{%- assign printful_variant_id = 11258 -%}
               {%- when '3XL' -%}{%- assign printful_variant_id = 13258 -%}
             {%- endcase -%}
-          {%- when 'Heather Grey' -%}
+          {%- when 'Carbon Grey' -%}
             {%- case size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 11244 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 11245 -%}
@@ -59,7 +76,7 @@
               {%- when 'XL' -%}{%- assign printful_variant_id = 21020 -%}
               {%- when '2XL' -%}{%- assign printful_variant_id = 21026 -%}
             {%- endcase -%}
-          {%- when 'Pure White' -%}
+          {%- when 'White' -%}
             {%- case size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 21005 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 21011 -%}
@@ -75,9 +92,141 @@
         {%- endcase -%}
     {%- endcase -%}
 
+    {%- assign artwork_color = 'Dark' -%}
+    {%- if color == 'Black' -%}
+      {%- assign artwork_color = 'Light' -%}
+    {%- endif -%}
+    {%- assign artwork_color_slug = artwork_color | downcase -%}
+    {%- assign color_slug = color | handleize -%}
+    {%- assign design_slug = design_name | handleize -%}
+    {%- assign product_slug = product_name | handleize -%}
+    {%- assign artwork_file = design_slug | append: '_' | append: product_slug | append: '_' | append: artwork_color_slug | append: '.png' -%}
+    {%- assign artwork_colorway = artwork_color_slug | append: '-on-' | append: color_slug -%}
+    {%- assign production_name = design_name | append: ' | ' | append: product_name | append: ' | ' | append: artwork_color -%}
+    {%- assign production_line = blank -%}
+    {%- assign has_inside_label = false -%}
+    {%- assign has_cap_production = false -%}
+    {%- if product_type == 'T-Shirt' or product_type == 'Crewneck' -%}
+      {%- assign has_inside_label = true -%}
+      {%- assign inside_label_artwork_color = 'black' -%}
+      {%- if color == 'Black' -%}
+        {%- assign inside_label_artwork_color = 'white' -%}
+      {%- endif -%}
+      {%- assign inside_label_artwork_file = 'baf-logo_' | append: inside_label_artwork_color | append: '.png' -%}
+    {%- elsif product_type == 'Cap' -%}
+      {%- assign has_cap_production = true -%}
+      {%- assign cap_product_slug = product_slug -%}
+      {%- assign cap_front_artwork = 'text' -%}
+      {%- assign cap_back_artwork = 'heart' -%}
+      {%- assign cap_front_embroidery_type = 'Flat Embroidery' -%}
+      {%- assign cap_front_embroidery_type_key = 'flat' -%}
+      {%- assign cap_back_embroidery_type = 'Flat Embroidery' -%}
+      {%- assign cap_back_embroidery_type_key = 'flat' -%}
+      {%- assign cap_front_fallback_embroidery_type = blank -%}
+      {%- assign cap_front_fallback_embroidery_type_key = blank -%}
+
+      {%- if design_name == 'Give Love' -%}
+        {%- assign production_line = 'Foundation' -%}
+        {%- assign cap_thread_code = '1839 Red' -%}
+        {%- assign cap_thread_name = 'Red' -%}
+        {%- assign cap_thread_hex = '#CC3333' -%}
+        {%- assign cap_thread_slug = 'red' -%}
+        {%- assign cap_front_artwork = 'heart' -%}
+        {%- assign cap_back_artwork = 'give-love' -%}
+        {%- assign cap_front_embroidery_type = '3D Puff' -%}
+        {%- assign cap_front_embroidery_type_key = '3d' -%}
+        {%- assign cap_front_fallback_embroidery_type = 'Flat Embroidery' -%}
+        {%- assign cap_front_fallback_embroidery_type_key = 'flat' -%}
+        {%- assign artwork_colorway = 'red-embroidery' -%}
+        {%- assign production_name = design_name | append: ' | ' | append: product_name | append: ' | Red Embroidery' -%}
+      {%- elsif color == 'Black' -%}
+        {%- assign cap_thread_code = '1801 White' -%}
+        {%- assign cap_thread_name = 'White' -%}
+        {%- assign cap_thread_hex = '#FFFFFF' -%}
+        {%- assign cap_thread_slug = 'white' -%}
+        {%- assign artwork_colorway = 'white-on-black' -%}
+        {%- assign production_name = design_name | append: ' | ' | append: product_name | append: ' | White Embroidery' -%}
+      {%- else -%}
+        {%- assign cap_thread_code = '1800 Black' -%}
+        {%- assign cap_thread_name = 'Black' -%}
+        {%- assign cap_thread_hex = '#000000' -%}
+        {%- assign cap_thread_slug = 'black' -%}
+        {%- assign artwork_colorway = 'black-on-' | append: color_slug -%}
+        {%- assign production_name = design_name | append: ' | ' | append: product_name | append: ' | Black Embroidery' -%}
+      {%- endif -%}
+
+      {%- assign cap_front_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_front-' | append: cap_front_artwork | append: '_' | append: cap_thread_slug | append: '.png' -%}
+      {%- assign cap_back_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_back-' | append: cap_back_artwork | append: '_' | append: cap_thread_slug | append: '.png' -%}
+      {%- if cap_thread_code == blank -%}
+        {%- assign has_cap_production = false -%}
+      {%- endif -%}
+    {%- endif -%}
+
     {%- if printful_variant_id != blank -%}
       {%- unless first_entry -%},{%- endunless -%}
-      "{{ variant.id }}": {{ printful_variant_id }}
+      "{{ variant.id }}": {
+        "type": "merch",
+        "design_name": {{ design_name | json }},
+        "product_name": {{ product_name | json }},
+        {%- if production_line != blank -%}
+          "production_line": {{ production_line | json }},
+        {%- endif -%}
+        "product_color": {{ color | json }},
+        "size": {{ size | json }},
+        "artwork_colorway": {{ artwork_colorway | json }},
+        "production_name": {{ production_name | json }},
+        "printful_variant_id": {{ printful_variant_id }}
+        {%- if has_inside_label -%},
+          "production": {
+            "technique": "Printing",
+            "printing_type": "DTG printing",
+            "placements": [
+              {
+                "placement": "Front print",
+                "placement_key": "front",
+                "artwork_file": {{ artwork_file | json }}
+              },
+              {
+                "placement": "Inside label",
+                "placement_key": "label_inside",
+                "type": "native",
+                "artwork_file": {{ inside_label_artwork_file | json }}
+              }
+            ]
+          }
+        {%- elsif has_cap_production -%},
+          "production": {
+            "technique": "Embroidery",
+            "thread": {
+              "code": {{ cap_thread_code | json }},
+              "name": {{ cap_thread_name | json }},
+              "hex": {{ cap_thread_hex | json }}
+            },
+            "placements": [
+              {
+                "placement": "Front",
+                "placement_key": "embroidery_front",
+                "artwork": {{ cap_front_artwork | json }},
+                "artwork_file": {{ cap_front_artwork_file | json }},
+                "embroidery_type": {{ cap_front_embroidery_type | json }},
+                "embroidery_type_key": {{ cap_front_embroidery_type_key | json }}
+                {%- if cap_front_fallback_embroidery_type != blank -%},
+                  "fallback_embroidery_type": {{ cap_front_fallback_embroidery_type | json }},
+                  "fallback_embroidery_type_key": {{ cap_front_fallback_embroidery_type_key | json }}
+                {%- endif -%}
+              },
+              {
+                "placement": "Back",
+                "placement_key": "embroidery_back",
+                "artwork": {{ cap_back_artwork | json }},
+                "artwork_file": {{ cap_back_artwork_file | json }},
+                "embroidery_type": {{ cap_back_embroidery_type | json }},
+                "embroidery_type_key": {{ cap_back_embroidery_type_key | json }}
+              }
+            ]
+          }
+        {%- endif -%}
+      }
       {%- assign first_entry = false -%}
     {%- endif -%}
   {%- endfor -%}

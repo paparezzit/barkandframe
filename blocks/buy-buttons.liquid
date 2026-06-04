@@ -36,10 +36,10 @@
     endif
   endif
 
-  capture baf_merch_printful_variants
+  capture baf_merch_order_items
     render 'baf-merch-printful-map', product: product
   endcapture
-  assign baf_merch_printful_variants = baf_merch_printful_variants | strip
+  assign baf_merch_order_items = baf_merch_order_items | strip
 %}
 
 <span
@@ -52,8 +52,8 @@
       data-section-id="{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-product-url="{{ product.url }}"
-      {% if baf_merch_printful_variants != blank %}
-        data-baf-printful-variants="{{ baf_merch_printful_variants | escape }}"
+      {% if baf_merch_order_items != blank %}
+        data-baf-merch-order-items="{{ baf_merch_order_items | escape }}"
       {% endif %}
       on:submit="/handleSubmit"
       data-quantity-default="{% if product.selected_or_first_available_variant.quantity_rule.min %}{{ product.selected_or_first_available_variant.quantity_rule.min }}{% else %}1{% endif %}"
