@@ -178,7 +178,7 @@
   }
 
   .shop-products__inner {
-    width: 100%;
+    width: min(100% - 32px, 1274px);
     margin-inline: auto;
   }
 
@@ -457,6 +457,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    .shop-products__inner {
+      width: min(100% - 24px, 1274px);
+    }
+
     .shop-products__custom {
       padding-top: 68px;
     }
