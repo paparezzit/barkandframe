@@ -107,18 +107,20 @@ class HeaderDrawer extends Component {
     summary.setAttribute('aria-expanded', 'false');
     details.classList.remove('menu-open');
 
+    if (details === this.refs.details) {
+      reset(details);
+      removeTrapFocus();
+      const openDetails = this.querySelectorAll('details[open]');
+      openDetails.forEach(reset);
+      return;
+    }
+
     onAnimationEnd(details, () => {
       reset(details);
 
-      if (details === this.refs.details) {
-        removeTrapFocus();
-        const openDetails = this.querySelectorAll('details[open]');
-        openDetails.forEach(reset);
-      } else {
-        setTimeout(() => {
-          trapFocus(this.refs.details);
-        }, 0);
-      }
+      setTimeout(() => {
+        trapFocus(this.refs.details);
+      }, 0);
     });
   }
 
