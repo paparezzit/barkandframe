@@ -160,8 +160,8 @@
   svg{
     opacity: .45;
     transition: opacity 0.2s;
-    width: 14px;
-    height: 14px;
+    width: var(--close-icon-size);
+    height: var(--close-icon-size);
   }
 }
 

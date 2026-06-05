@@ -56,17 +56,15 @@
 <div class="at-home-lightbox" id="at-home-lightbox" aria-hidden="true">
   <div class="at-home-lightbox__backdrop"></div>
   <button class="at-home-lightbox__close" aria-label="Close">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="2" y1="2" x2="18" y2="18"/><line x1="18" y1="2" x2="2" y2="18"/>
-    </svg>
+    {{- 'icon-close.svg' | inline_asset_content -}}
   </button>
   <button class="at-home-lightbox__arrow at-home-lightbox__arrow--prev" aria-label="Previous">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
       <polyline points="15 18 9 12 15 6"/>
     </svg>
   </button>
   <button class="at-home-lightbox__arrow at-home-lightbox__arrow--next" aria-label="Next">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
       <polyline points="9 18 15 12 9 6"/>
     </svg>
   </button>

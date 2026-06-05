@@ -13,6 +13,7 @@ body {
 }
 
 :root {
+  --close-icon-size: 24px;
   --hover-lift-amount: 4px;
   --hover-scale-amount: 1.03;
   --hover-subtle-zoom-amount: 1.015;
@@ -1785,9 +1786,14 @@ zoom-dialog dialog {
   opacity: 0.8;
 }
 
-.close-button svg {
-  width: var(--icon-size-xs);
-  height: var(--icon-size-xs);
+.close-button :is(.svg-wrapper, svg),
+.close-button .svg-wrapper > svg,
+.predictive-search__close-modal-button :is(.svg-wrapper, svg),
+.predictive-search__close-modal-button .svg-wrapper > svg,
+.at-home-lightbox__close svg,
+.klav-popup__close svg {
+  width: var(--close-icon-size);
+  height: var(--close-icon-size);
 }
 
 /* Product media */
