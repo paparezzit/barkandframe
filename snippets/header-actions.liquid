@@ -4,14 +4,20 @@
   fetchpriority="low"
 ></script>
 
+{%- liquid
+  assign show_customer_account_icon = false
+  assign render_customer_account_icon = false
+
+  if show_customer_account_icon and shop.customer_accounts_enabled
+    assign render_customer_account_icon = true
+  endif
+-%}
+
 <header-actions
+  class="{% unless render_customer_account_icon %}header-actions--account-hidden{% endunless %}"
   {{- block.shopify_attributes -}}
 >
-  {%- liquid
-    assign show_customer_account_icon = false
-  -%}
-
-  {% if show_customer_account_icon and shop.customer_accounts_enabled %}
+  {% if render_customer_account_icon %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}

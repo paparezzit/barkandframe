@@ -531,7 +531,7 @@
       padding-block: 0;
       padding-inline: 0 var(--padding-3xs);
 
-      &:has(header-actions:not(:has(.account-popover)):not(:has(.account-drawer))) {
+      &:has(.header-actions--account-hidden) {
         --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
           var(--header-mobile-bookend) var(--header-mobile-bookend);
       }
