@@ -522,7 +522,7 @@
 
     @media screen and (max-width: 749px) {
       --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-        var(--header-mobile-bookend) var(--header-mobile-bookend);
+        var(--header-mobile-bookend) calc(var(--header-mobile-bookend) * 2);
 
       grid-template-areas: 'leftA leftB center rightA rightB';
       grid-column: span 3;
