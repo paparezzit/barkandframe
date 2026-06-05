@@ -1,4 +1,6 @@
 (function () {
+  const skipMenuNavigationTransitionKey = 'skip-header-drawer-navigation-transition';
+
   //Remove the view transition render blocker if the user has reduced motion enabled
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const viewTransitionRenderBlocker = document.getElementById('view-transition-render-blocker');
@@ -14,6 +16,13 @@
     if (!hasViewTransition(event)) return;
 
     const { viewTransition } = event;
+    const skipMenuNavigationTransition = sessionStorage.getItem(skipMenuNavigationTransitionKey) === 'true';
+
+    if (skipMenuNavigationTransition) {
+      viewTransition.skipTransition();
+      sessionStorage.removeItem('custom-transition-type');
+      return;
+    }
 
     // Cancel view transition on user interaction to improve INP (Interaction to Next Paint)
     ['pointerdown', 'keydown'].forEach(eventName => {
@@ -51,6 +60,15 @@
 
     const { viewTransition } = event;
     const customTransitionType = sessionStorage.getItem('custom-transition-type');
+    const skipMenuNavigationTransition = sessionStorage.getItem(skipMenuNavigationTransitionKey) === 'true';
+
+    if (skipMenuNavigationTransition) {
+      viewTransition.skipTransition();
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      sessionStorage.removeItem(skipMenuNavigationTransitionKey);
+      sessionStorage.removeItem('custom-transition-type');
+      return;
+    }
 
     if (customTransitionType) {
       viewTransition.types.clear();

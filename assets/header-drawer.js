@@ -2,6 +2,8 @@ import { Component } from '@theme/component';
 import { trapFocus, removeTrapFocus } from '@theme/focus';
 import { onAnimationEnd } from '@theme/utilities';
 
+const skipMenuNavigationTransitionKey = 'skip-header-drawer-navigation-transition';
+
 /**
  * A custom element that manages the main menu drawer.
  *
@@ -17,12 +19,14 @@ class HeaderDrawer extends Component {
     super.connectedCallback();
 
     this.addEventListener('keyup', this.#onKeyUp);
+    this.addEventListener('click', this.#onMenuLinkClick);
     this.#setupAnimatedElementListeners();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keyup', this.#onKeyUp);
+    this.removeEventListener('click', this.#onMenuLinkClick);
   }
 
   /**
@@ -33,6 +37,22 @@ class HeaderDrawer extends Component {
     if (event.key !== 'Escape') return;
 
     this.#close(this.#getDetailsElement(event));
+  };
+
+  /**
+   * Disable page transition animation for direct navigation from the header drawer.
+   * @param {MouseEvent} event
+   */
+  #onMenuLinkClick = (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const link = event.target.closest('.menu-drawer a[href]');
+    if (!(link instanceof HTMLAnchorElement)) return;
+    if (link.target && link.target !== '_self') return;
+    if (link.origin !== window.location.origin) return;
+
+    sessionStorage.setItem(skipMenuNavigationTransitionKey, 'true');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
 
   /**
