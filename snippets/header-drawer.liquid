@@ -201,8 +201,20 @@
                           assign render_cta_as_menu_item = false
                           assign rendered_cta_as_menu_item = false
                           if link.title == 'Shop' and cta_label != blank and cta_url != blank
-                            assign existing_cta_links = link.links | where: 'title', cta_label
-                            if existing_cta_links.size == 0
+                            assign cta_label_normalized = cta_label | strip | downcase
+                            assign cta_url_normalized = cta_url | split: '?' | first
+                            assign has_matching_cta_link = false
+
+                            for menu_link in link.links
+                              assign menu_link_title_normalized = menu_link.title | strip | downcase
+                              assign menu_link_url_normalized = menu_link.url | split: '?' | first
+                              if menu_link_title_normalized == cta_label_normalized or menu_link_url_normalized == cta_url_normalized
+                                assign has_matching_cta_link = true
+                                break
+                              endif
+                            endfor
+
+                            if has_matching_cta_link == false
                               assign render_cta_as_menu_item = true
                             endif
                           endif
@@ -299,14 +311,27 @@
                       assign render_cta_as_menu_item = false
                       assign rendered_cta_as_menu_item = false
                       if link.title == 'Shop' and cta_label != blank and cta_url != blank
-                        assign existing_cta_links = link.links | where: 'title', cta_label
-                        if existing_cta_links.size == 0
+                        assign cta_label_normalized = cta_label | strip | downcase
+                        assign cta_url_normalized = cta_url | split: '?' | first
+                        assign has_matching_cta_link = false
+
+                        for menu_link in link.links
+                          assign menu_link_title_normalized = menu_link.title | strip | downcase
+                          assign menu_link_url_normalized = menu_link.url | split: '?' | first
+                          if menu_link_title_normalized == cta_label_normalized or menu_link_url_normalized == cta_url_normalized
+                            assign has_matching_cta_link = true
+                            break
+                          endif
+                        endfor
+
+                        if has_matching_cta_link == false
                           assign render_cta_as_menu_item = true
                         endif
                       endif
                     %}
                     {%- for childlink in link.links -%}
-                      {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' %}
+                      {% assign childlink_url = childlink.url | split: '?' | first %}
+                      {% if block_settings.hide_empty_collection_links and childlink.type == 'collection_link' and childlink.object.all_products_count == 0 and childlink.object.template_suffix != 'with-portrait-cta' and childlink_url != '/collections/bark-studio' %}
                         {% continue %}
                       {% endif %}
                       <li

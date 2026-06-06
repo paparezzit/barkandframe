@@ -76,8 +76,20 @@
 
   assign render_cta_as_menu_item = false
   if parent_link.title == 'Shop' and cta_label != blank and cta_url != blank
-    assign existing_cta_links = parent_link.links | where: 'title', cta_label
-    if existing_cta_links.size == 0
+    assign cta_label_normalized = cta_label | strip | downcase
+    assign cta_url_normalized = cta_url | split: '?' | first
+    assign has_matching_cta_link = false
+
+    for menu_link in parent_link.links
+      assign menu_link_title_normalized = menu_link.title | strip | downcase
+      assign menu_link_url_normalized = menu_link.url | split: '?' | first
+      if menu_link_title_normalized == cta_label_normalized or menu_link_url_normalized == cta_url_normalized
+        assign has_matching_cta_link = true
+        break
+      endif
+    endfor
+
+    if has_matching_cta_link == false
       assign render_cta_as_menu_item = true
     endif
   endif
