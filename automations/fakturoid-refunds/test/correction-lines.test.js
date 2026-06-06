@@ -29,9 +29,9 @@ test('builds correction lines from refunded line items in target currency', () =
   assert.deepEqual(lines, [
     {
       name: 'Bloom | Crewneck - Black / S',
-      quantity: '-2',
+      quantity: '2',
       unit_name: 'ks',
-      unit_price: '250',
+      unit_price: '-250',
       vat_rate: '21',
     },
   ]);
@@ -59,9 +59,9 @@ test('builds correction lines from order adjustments', () => {
   assert.deepEqual(lines, [
     {
       name: 'Shipping refund',
-      quantity: '-1',
+      quantity: '1',
       unit_name: '',
-      unit_price: '100',
+      unit_price: '-100',
       vat_rate: '21',
     },
   ]);

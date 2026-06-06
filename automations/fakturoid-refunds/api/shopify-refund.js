@@ -291,9 +291,9 @@ export function buildCorrectionLines(refund, targetCurrency) {
     if (unitBase > 0) {
       lines.push({
         name: title,
-        quantity: String(-Math.max(quantity, 1)),
+        quantity: String(Math.max(quantity, 1)),
         unit_name: 'ks',
-        unit_price: String(unitBase),
+        unit_price: String(-unitBase),
         vat_rate: String(vatRate(base, tax)),
       });
     }
@@ -307,9 +307,9 @@ export function buildCorrectionLines(refund, targetCurrency) {
     if (amount > 0) {
       lines.push({
         name: adjustment.reason || adjustment.kind || 'Refund adjustment',
-        quantity: '-1',
+        quantity: '1',
         unit_name: '',
-        unit_price: String(roundMoney(amount)),
+        unit_price: String(-roundMoney(amount)),
         vat_rate: String(vatRate(base, tax)),
       });
     }
