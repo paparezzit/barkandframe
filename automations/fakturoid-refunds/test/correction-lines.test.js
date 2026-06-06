@@ -14,7 +14,7 @@ test('builds correction lines from refunded line items in target currency', () =
           },
           total_tax_set: {
             shop_money: { amount: '4.20', currency_code: 'EUR' },
-            presentment_money: { amount: '105.00', currency_code: 'CZK' },
+            presentment_money: { amount: '86.78', currency_code: 'CZK' },
           },
           line_item: {
             title: 'Bloom | Crewneck',
@@ -37,6 +37,32 @@ test('builds correction lines from refunded line items in target currency', () =
   ]);
 });
 
+test('treats Shopify tax-inclusive refund subtotals as gross amounts', () => {
+  const lines = buildCorrectionLines(
+    {
+      refund_line_items: [
+        {
+          quantity: 1,
+          subtotal_set: {
+            presentment_money: { amount: '5903.69', currency_code: 'CZK' },
+          },
+          total_tax_set: {
+            presentment_money: { amount: '1024.61', currency_code: 'CZK' },
+          },
+          line_item: {
+            title: 'Fine Art Paper',
+            variant_title: 'Oak / 50x70 cm',
+          },
+        },
+      ],
+    },
+    'CZK'
+  );
+
+  assert.equal(lines[0].unit_price, '-5903.69');
+  assert.equal(lines[0].vat_rate, '21');
+});
+
 test('builds correction lines from order adjustments', () => {
   const lines = buildCorrectionLines(
     {
@@ -48,7 +74,7 @@ test('builds correction lines from order adjustments', () => {
             presentment_money: { amount: '-100.00', currency_code: 'CZK' },
           },
           tax_amount_set: {
-            presentment_money: { amount: '-21.00', currency_code: 'CZK' },
+            presentment_money: { amount: '-17.36', currency_code: 'CZK' },
           },
         },
       ],

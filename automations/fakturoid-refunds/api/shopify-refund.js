@@ -92,7 +92,7 @@ export async function processRefund({ refund, shopDomain }) {
     order_number: orderName,
     issued_on: dateOnly(refund.created_at) || todayPrague(),
     taxable_fulfillment_due: dateOnly(refund.created_at) || todayPrague(),
-    vat_price_mode: 'without_vat',
+    vat_price_mode: 'from_total_with_vat',
     currency: originalInvoice.currency,
     exchange_rate: originalInvoice.exchange_rate,
     language: originalInvoice.language,
@@ -294,7 +294,7 @@ export function buildCorrectionLines(refund, targetCurrency) {
         quantity: String(Math.max(quantity, 1)),
         unit_name: 'ks',
         unit_price: String(-unitBase),
-        vat_rate: String(vatRate(base, tax)),
+        vat_rate: String(vatRateFromGross(base, tax)),
       });
     }
   }
@@ -310,7 +310,7 @@ export function buildCorrectionLines(refund, targetCurrency) {
         quantity: '1',
         unit_name: '',
         unit_price: String(-roundMoney(amount)),
-        vat_rate: String(vatRate(base, tax)),
+        vat_rate: String(vatRateFromGross(base, tax)),
       });
     }
   }
@@ -331,11 +331,15 @@ function moneyForCurrency(moneySet, currency) {
   return match ? Number(match.amount) : null;
 }
 
-function vatRate(base, tax) {
-  const baseNumber = Math.abs(Number(base));
+function vatRateFromGross(gross, tax) {
+  const grossNumber = Math.abs(Number(gross));
   const taxNumber = Math.abs(Number(tax));
-  if (!baseNumber || !taxNumber) return 0;
-  return roundMoney((taxNumber / baseNumber) * 100);
+  const netNumber = grossNumber - taxNumber;
+  if (!netNumber || netNumber <= 0 || !taxNumber) return 0;
+
+  const rawRate = roundMoney((taxNumber / netNumber) * 100);
+  const knownRate = [21, 15, 12, 10, 0].find((rate) => Math.abs(rate - rawRate) <= 0.5);
+  return knownRate ?? rawRate;
 }
 
 function normalizedOrderNumbers(orderName) {
