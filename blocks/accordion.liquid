@@ -1,13 +1,31 @@
 {% assign block_settings = block.settings %}
+{% liquid
+  assign summary_type_preset = block_settings.type_preset
+  if summary_type_preset == blank or summary_type_preset == 'paragraph'
+    assign summary_font_family = 'var(--baf-text-family)'
+    assign summary_font_style = 'normal'
+    assign summary_font_weight = 'var(--baf-text-weight)'
+    assign summary_font_size = 'var(--baf-text-medium-size)'
+    assign summary_font_line_height = '1.4'
+    assign summary_font_case = 'none'
+  else
+    assign summary_font_family = 'var(--font-' | append: summary_type_preset | append: '--family)'
+    assign summary_font_style = 'var(--font-' | append: summary_type_preset | append: '--style)'
+    assign summary_font_weight = 'var(--font-' | append: summary_type_preset | append: '--weight)'
+    assign summary_font_size = 'var(--font-' | append: summary_type_preset | append: '--size)'
+    assign summary_font_line_height = 'var(--font-' | append: summary_type_preset | append: '--line-height)'
+    assign summary_font_case = 'var(--font-' | append: summary_type_preset | append: '--case)'
+  endif
+%}
 <div
   class="accordion accordion--{{ block.id }} accordion--{{ block_settings.icon }} border-style spacing-style{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if block_settings.dividers %} accordion--dividers{% endif %}"
   style="
-    --summary-font-family: var(--font-{{ block_settings.type_preset }}--family);
-     --summary-font-style: var(--font-{{ block_settings.type_preset }}--style);
-     --summary-font-weight: var(--font-{{ block_settings.type_preset }}--weight);
-     --summary-font-size: var(--font-{{ block_settings.type_preset }}--size);
-     --summary-font-line-height: var(--font-{{ block_settings.type_preset }}--line-height);
-     --summary-font-case: var(--font-{{ block_settings.type_preset }}--case);
+    --summary-font-family: {{ summary_font_family }};
+    --summary-font-style: {{ summary_font_style }};
+    --summary-font-weight: {{ summary_font_weight }};
+    --summary-font-size: {{ summary_font_size }};
+    --summary-font-line-height: {{ summary_font_line_height }};
+    --summary-font-case: {{ summary_font_case }};
     {% render 'spacing-style', settings: block_settings %}
     {% render 'border-override', settings: block_settings %}
   "

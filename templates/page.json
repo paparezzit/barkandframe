@@ -16,8 +16,14 @@
           "name": "Title",
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
-            "type_preset": "h2",
-            "width": "100%"
+            "type_preset": "custom",
+            "width": "100%",
+            "font": "var(--baf-display-family)",
+            "font_size": "var(--baf-display-large-size)",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "balance"
           }
         },
         "page-content": {

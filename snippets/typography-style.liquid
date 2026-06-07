@@ -20,7 +20,11 @@
           When choosing to customize the font, picking a specific font size
           determines the type of text block.
         endcomment
-        if settings.font_size != ''
+        if settings.font_size contains '--baf-display'
+          assign type = 'display'
+        elsif settings.font_size contains '--baf-text'
+          assign type = 'body'
+        elsif settings.font_size != ''
           assign font_size_value = settings.font_size | split: 'rem' | first | times: 1.0
 
           if font_size_value > 4.5

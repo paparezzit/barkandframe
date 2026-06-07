@@ -774,16 +774,15 @@ body,
 
 /* Typography presets */
 
-h1,
 .h1.h1,
 .text-block.h1 > * {
-  font-family: var(--font-h1--family);
-  font-style: var(--font-h1--style);
-  font-weight: var(--font-h1--weight);
-  font-size: var(--font-h1--size);
-  line-height: var(--font-h1--line-height);
-  letter-spacing: var(--font-h1--letter-spacing);
-  text-transform: var(--font-h1--case);
+  font-family: var(--baf-display-family);
+  font-style: normal;
+  font-weight: var(--baf-display-weight);
+  font-size: var(--baf-display-extra-large-size);
+  line-height: var(--line-height--display-tight);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h1-color));
 }
 
@@ -795,16 +794,15 @@ h1,
   }
 }
 
-h2,
 .h2.h2,
 .text-block.h2 > * {
-  font-family: var(--font-h2--family);
-  font-style: var(--font-h2--style);
-  font-weight: var(--font-h2--weight);
-  font-size: var(--font-h2--size);
-  line-height: var(--font-h2--line-height);
-  letter-spacing: var(--font-h2--letter-spacing);
-  text-transform: var(--font-h2--case);
+  font-family: var(--baf-display-family);
+  font-style: normal;
+  font-weight: var(--baf-display-weight);
+  font-size: var(--baf-display-large-size);
+  line-height: var(--line-height--display-tight);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h2-color));
 }
 
@@ -816,17 +814,15 @@ h2,
   }
 }
 
-h3,
-.h3,
 .h3.h3,
 .text-block.h3 > * {
-  font-family: var(--font-h3--family);
-  font-style: var(--font-h3--style);
-  font-weight: var(--font-h3--weight);
-  font-size: var(--font-h3--size);
-  line-height: var(--font-h3--line-height);
-  letter-spacing: var(--font-h3--letter-spacing);
-  text-transform: var(--font-h3--case);
+  font-family: var(--baf-display-family);
+  font-style: normal;
+  font-weight: var(--baf-display-weight);
+  font-size: var(--baf-display-medium-size);
+  line-height: var(--line-height--display-tight);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h3-color));
 }
 
@@ -838,16 +834,15 @@ h3,
   }
 }
 
-h4,
 .h4.h4,
 .text-block.h4 > * {
-  font-family: var(--font-h4--family);
-  font-style: var(--font-h4--style);
-  font-weight: var(--font-h4--weight);
-  font-size: var(--font-h4--size);
-  line-height: var(--font-h4--line-height);
-  letter-spacing: var(--font-h4--letter-spacing);
-  text-transform: var(--font-h4--case);
+  font-family: var(--baf-display-family);
+  font-style: normal;
+  font-weight: var(--baf-display-weight);
+  font-size: var(--baf-display-small-size);
+  line-height: var(--line-height--display-tight);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h4-color));
 }
 
@@ -859,16 +854,15 @@ h4,
   }
 }
 
-h5,
 .h5.h5,
 .text-block.h5 > * {
-  font-family: var(--font-h5--family);
-  font-style: var(--font-h5--style);
-  font-weight: var(--font-h5--weight);
-  font-size: var(--font-h5--size);
-  line-height: var(--font-h5--line-height);
-  letter-spacing: var(--font-h5--letter-spacing);
-  text-transform: var(--font-h5--case);
+  font-family: var(--baf-display-family);
+  font-style: normal;
+  font-weight: var(--baf-display-weight);
+  font-size: var(--baf-display-extra-small-size);
+  line-height: var(--line-height--display-tight);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h5-color));
 }
 
@@ -880,16 +874,15 @@ h5,
   }
 }
 
-h6,
 .h6.h6,
 .text-block.h6 > * {
-  font-family: var(--font-h6--family);
-  font-style: var(--font-h6--style);
-  font-weight: var(--font-h6--weight);
-  font-size: var(--font-h6--size);
-  line-height: var(--font-h6--line-height);
-  letter-spacing: var(--font-h6--letter-spacing);
-  text-transform: var(--font-h6--case);
+  font-family: var(--baf-text-family);
+  font-style: normal;
+  font-weight: var(--baf-text-weight);
+  font-size: var(--baf-text-medium-size);
+  line-height: var(--line-height--body-normal);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color, var(--font-h6-color));
 }
 
@@ -2181,7 +2174,9 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
 }
 
 .drawer__title {
-  font-size: var(--font-h2--size);
+  font-family: var(--baf-text-bold-family);
+  font-size: var(--baf-text-bold-large-size);
+  font-weight: var(--baf-text-bold-weight);
   margin: 0;
 }
 
@@ -4335,6 +4330,7 @@ body{
   --baf-display-extra-small-size: 18px;
   --baf-text-family: var(--font-body--family);
   --baf-text-weight: 400;
+  --baf-text-bold-family: var(--baf-text-family);
   --baf-text-bold-weight: 700;
   --baf-text-large-size: 18px;
   --baf-text-medium-size: 14px;
@@ -4342,6 +4338,67 @@ body{
   --baf-text-bold-large-size: var(--baf-text-large-size);
   --baf-text-bold-medium-size: var(--baf-text-medium-size);
   --baf-text-bold-small-size: var(--baf-text-small-size);
+  --font-size--2xs: var(--baf-text-small-size);
+  --font-size--xs: var(--baf-text-medium-size);
+  --font-size--sm: var(--baf-text-medium-size);
+  --font-size--md: var(--baf-text-medium-size);
+  --font-size--lg: var(--baf-text-large-size);
+  --font-size--xl: var(--baf-display-small-size);
+  --font-size--2xl: var(--baf-display-small-size);
+  --font-size--3xl: var(--baf-display-medium-size);
+  --font-size--4xl: var(--baf-display-large-size);
+  --font-size--5xl: var(--baf-display-large-size);
+  --font-size--6xl: var(--baf-display-large-size);
+  --font-size--body-sm: var(--baf-text-medium-size);
+  --font-size--body-md: var(--baf-text-medium-size);
+  --font-paragraph--family: var(--baf-text-family);
+  --font-paragraph--style: normal;
+  --font-paragraph--weight: var(--baf-text-weight);
+  --font-paragraph--size: var(--baf-text-medium-size);
+  --font-paragraph--line-height: var(--line-height--body-normal);
+  --font-paragraph--case: none;
+  --font-h1--family: var(--baf-display-family);
+  --font-h1--style: normal;
+  --font-h1--weight: var(--baf-display-weight);
+  --font-h1--size: var(--baf-display-extra-large-size);
+  --font-h1--line-height: var(--line-height--display-tight);
+  --font-h1--letter-spacing: 0;
+  --font-h1--case: none;
+  --font-h2--family: var(--baf-display-family);
+  --font-h2--style: normal;
+  --font-h2--weight: var(--baf-display-weight);
+  --font-h2--size: var(--baf-display-large-size);
+  --font-h2--line-height: var(--line-height--display-tight);
+  --font-h2--letter-spacing: 0;
+  --font-h2--case: none;
+  --font-h3--family: var(--baf-display-family);
+  --font-h3--style: normal;
+  --font-h3--weight: var(--baf-display-weight);
+  --font-h3--size: var(--baf-display-medium-size);
+  --font-h3--line-height: var(--line-height--display-tight);
+  --font-h3--letter-spacing: 0;
+  --font-h3--case: none;
+  --font-h4--family: var(--baf-display-family);
+  --font-h4--style: normal;
+  --font-h4--weight: var(--baf-display-weight);
+  --font-h4--size: var(--baf-display-small-size);
+  --font-h4--line-height: var(--line-height--display-tight);
+  --font-h4--letter-spacing: 0;
+  --font-h4--case: none;
+  --font-h5--family: var(--baf-display-family);
+  --font-h5--style: normal;
+  --font-h5--weight: var(--baf-display-weight);
+  --font-h5--size: var(--baf-display-extra-small-size);
+  --font-h5--line-height: var(--line-height--display-tight);
+  --font-h5--letter-spacing: 0;
+  --font-h5--case: none;
+  --font-h6--family: var(--baf-text-family);
+  --font-h6--style: normal;
+  --font-h6--weight: var(--baf-text-weight);
+  --font-h6--size: var(--baf-text-medium-size);
+  --font-h6--line-height: var(--line-height--body-normal);
+  --font-h6--letter-spacing: 0;
+  --font-h6--case: none;
 }
 
 @media screen and (min-width: 750px) {
@@ -4373,7 +4430,7 @@ body{
   color: var(--brown);
 }
 
-h2, .text-block.h2 p{
+.h2.h2, .text-block.h2 p{
   font-family: "display", "Times New Roman", serif !important;
   font-weight: normal !important;
   color: var(--brown);
@@ -4548,9 +4605,9 @@ slideshow-component.slideshow--homepage{
 
     .product-title{
       p{
-        font-weight: 700;
-        font-size: 18px;
-        font-family: var(--font-h5--family) !important;
+        font-weight: var(--baf-text-bold-weight);
+        font-size: var(--baf-text-bold-large-size);
+        font-family: var(--baf-text-bold-family) !important;
       }
     }
   }

@@ -7,7 +7,7 @@
   style="{% render 'spacing-style', settings: block_settings %}"
   {{ block.shopify_attributes }}
 >
-  <h1 class="{{ block_settings.type_preset | default: 'h2' }}">
+  <h1{% if block_settings.type_preset != blank %} class="{{ block_settings.type_preset }}"{% endif %}>
     {%- if cart.empty? -%}
       {{ 'content.your_cart_is_empty' | t }}
     {%- else -%}
@@ -23,6 +23,12 @@
     display: inline-flex;
     align-items: center;
     gap: var(--gap-sm);
+    font-family: var(--baf-display-family);
+    font-weight: var(--baf-display-weight);
+    font-size: var(--baf-display-large-size);
+    line-height: 0.95;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .cart-title .cart-bubble {

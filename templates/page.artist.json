@@ -111,9 +111,9 @@
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h5",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
+                    "type_preset": "custom",
+                    "font": "var(--baf-text-bold-family)",
+                    "font_size": "var(--baf-text-bold-medium-size)",
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
@@ -135,11 +135,11 @@
                     "show_sale_price_first": true,
                     "show_installments": false,
                     "show_tax_info": false,
-                    "type_preset": "h6",
+                    "type_preset": "custom",
                     "width": "100%",
                     "alignment": "left",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
+                    "font": "var(--baf-text-family)",
+                    "font_size": "var(--baf-text-medium-size)",
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
@@ -147,7 +147,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "wrap": "pretty"
                   },
                   "blocks": {}
                 }
