@@ -4326,17 +4326,9 @@ body{
 }
 
 @media (hover: hover) {
-  .menu-list__link .menu-list__link-title,
-  .menu-drawer__menu-item .menu-drawer__menu-item-text {
-    opacity: 0.35;
-    transition: opacity 0.2s;
-  }
-
   .menu-list__link:hover .menu-list__link-title,
-  .menu-list__link--active .menu-list__link-title,
-  .menu-drawer__menu-item:hover .menu-drawer__menu-item-text,
-  .menu-drawer__menu-item--active .menu-drawer__menu-item-text {
-    opacity: 1;
+  .menu-drawer__menu-item:hover .menu-drawer__menu-item-text {
+    font-weight: 700;
   }
 }
 
