@@ -18,9 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.querySelectorAll("[data-parallax], .product-card--floating .image-block img").forEach(parallax => {
+  document.querySelectorAll("[data-parallax]").forEach(parallax => {
     const amount = parallax.dataset.parallax ? parallax.dataset.parallax : "-5vh";
     gsap.to(parallax, {y: amount, scrollTrigger: {
+        trigger: parallax,
+        start: "top bottom",
+        end: "+=200%",
+        scrub: true,
+        toggleActions: "play none reverse none"
+    }});
+  })
+
+  document.querySelectorAll(".product-card--floating .image-block").forEach(parallax => {
+    gsap.to(parallax, {"--floating-image-parallax-y": "-5vh", scrollTrigger: {
         trigger: parallax,
         start: "top bottom",
         end: "+=200%",
