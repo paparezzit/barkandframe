@@ -313,6 +313,7 @@
     /* Only show opaque background when hovering over menu items with children (mega menu)
        Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
     &:has(.mega-menu__list:hover),
+    &:has(header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])),
     &:has(.menu-list__link[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating])),
     &:has(.menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])) {
       --header-logo-display: unset;
@@ -343,6 +344,7 @@
     .header__row:not(
       :has(
           .mega-menu__list:hover,
+          header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating]),
           .menu-list__link[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating]),
           .menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])
         )
@@ -358,6 +360,10 @@
 
   .header--inherit-color-scheme-on-menu-open:has(.mega-menu__list:hover) .header__row,
   .header--inherit-color-scheme-on-menu-open:has(
+      header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating])
+    )
+    .header__row,
+  .header--inherit-color-scheme-on-menu-open:has(
       .menu-list__link[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating])
     )
     .header__row,
@@ -371,6 +377,13 @@
     --color-background-rgb: inherit;
     --color-border: inherit;
     --color-border-rgb: inherit;
+  }
+
+  @media (hover: hover) and (min-width: 750px) {
+    .header:has(header-menu .menu-list__link:not([aria-haspopup]):is(:hover, [aria-expanded='true'], [data-animating]))
+      .header__row {
+      box-shadow: var(--shadow-drawer);
+    }
   }
 
   .header-section {
