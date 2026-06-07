@@ -2476,6 +2476,7 @@
       .guideline-badge{
         aspect-ratio: 1;
         background: var(--guideline-badge-color);
+        border-radius: 0;
         bottom: -1px;
         box-shadow: 0 0 0 1px var(--guideline-badge-color);
         display: block;
@@ -2489,10 +2490,14 @@
       .guideline-badge::after{
         background: #fff;
         content: "";
-        inset: 0;
+        height: 46%;
+        left: calc(50% + 10px);
         position: absolute;
-        -webkit-mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
-        mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 46%;
+        -webkit-mask: var(--guideline-badge-icon) center / contain no-repeat;
+        mask: var(--guideline-badge-icon) center / contain no-repeat;
       }
 
       .image{
