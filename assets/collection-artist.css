@@ -139,8 +139,8 @@
   position: relative;
 }
 
-.artist-collection__products:has(.artist-collection__product-card:hover) .artist-collection__product-card:not(:hover) .artist-collection__product-image img {
-  opacity: .27;
+.artist-collection__products:has(.artist-collection__product-card:hover) .artist-collection__product-card:not(:hover) .artist-collection__product-image::after {
+  opacity: .73;
 }
 
 .artist-collection__product-card:nth-child(5n+2),
@@ -169,8 +169,22 @@
   position: relative;
   overflow: hidden;
   border-radius: 40px;
-  background: var(--cream, #f4efe5);
+  isolation: isolate;
+  background: var(--beige, #fffaf1);
   line-height: 0;
+}
+
+.artist-collection__product-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  border-radius: inherit;
+  background: var(--beige, #fffaf1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
 }
 
 .artist-collection__product-image img {
@@ -180,7 +194,6 @@
   display: block;
   object-fit: contain;
   border-radius: 40px;
-  transition: opacity .3s;
 }
 
 .artist-collection__product-name {
