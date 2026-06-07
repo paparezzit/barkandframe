@@ -62,7 +62,7 @@
     "edit_variants_in_theme_settings": "Edit variant styling in [theme settings](/editor?context=theme&category=variants)",
     "email_signups_create_customer_profiles": "Signups add [customer profiles](https://help.shopify.com/manual/customers)",
     "follow_on_shop_eligiblity": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/en/manual/online-store/themes/customizing-themes/add-shop-buttons)",
-    "gift_card_form_description": "Customers can send gift cards to a recipient's email with a personal message. [Learn more](https://help.shopify.com/manual/products/gift-card-products)",
+    "gift_card_form_description": "Customers can send gift cards to a recipient’s email with a personal message. [Learn more](https://help.shopify.com/manual/products/gift-card-products)",
     "fonts": "Fonts",
     "grid": "Grid",
     "grid_layout": "Grid layout",
@@ -123,7 +123,7 @@
     "size": "Size",
     "slideshow_width": "Slide width",
     "social_media": "Social media",
-    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store's [sender email address](https://admin.shopify.com/settings/notifications)",
+    "submissions_are_sent_to_store_email_address": "Submissions are sent to your store’s [sender email address](https://admin.shopify.com/settings/notifications)",
     "submit_button": "Submit button",
     "swatches": "Swatches",
     // Section header for text positioning settings

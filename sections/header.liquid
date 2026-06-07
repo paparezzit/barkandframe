@@ -99,7 +99,7 @@
 
   # Skip mobile search under specific conditions:
   # Always render if search_row is bottom
-  # Don't render when shop.customer_accounts_enabled is false and search_position is left and search_style is not none
+  # Don’t render when shop.customer_accounts_enabled is false and search_position is left and search_style is not none
   assign skip_mobile_search = false
   if shop.customer_accounts_enabled == false and section.settings.search_position == 'left' and search_style != 'none'
     assign skip_mobile_search = true

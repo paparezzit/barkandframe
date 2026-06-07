@@ -1,12 +1,12 @@
 {%- doc -%}
   Displays product images in a carousel.
   Settings allow for a full slideshow, showing only the first image, or showing the second image when hovering.
-  Note: When the product card itself is in a carousel layout, the card-gallery's carousel is disabled with JavaScript.
+  Note: When the product card itself is in a carousel layout, the card-gallery’s carousel is disabled with JavaScript.
 
   @param [children] - Additional content rendered below the card gallery
   @param [section] - The section object the snippet is rendered in
   @param [block] - The block object the snippet is rendered in
-  @param [has_applied_colour_filter] - Whether there's an applied colour filter
+  @param [has_applied_colour_filter] - Whether there’s an applied colour filter
 {%- enddoc -%}
 
 {% liquid
@@ -126,7 +126,7 @@
         assign show_arrows = true
       endif
 
-      # Don't overfetch media if we don't need to
+      # Don’t overfetch media if we don’t need to
       assign max_visible_slide_count = 1
       if settings.product_card_carousel
         assign max_visible_slide_count = 5
@@ -144,7 +144,7 @@
           if variant_images contains media.src
             assign attributes = 'variant-image'
             if combined_listing_count > 0
-              # hide all variant images of combined listings unless it's the first image or there are no generic media
+              # hide all variant images of combined listings unless it’s the first image or there are no generic media
               unless forloop.first and media.src == selected_variant_image or generic_media_size == 0
                 assign hidden = true
               endunless
@@ -154,13 +154,13 @@
                 assign hidden = true
               endunless
             elsif forloop.first == false
-              # hide all variant images that aren't the first one (when there are no combined listings or colour filters applied)
+              # hide all variant images that aren’t the first one (when there are no combined listings or colour filters applied)
               assign hidden = true
             endif
           endif
 
-          # Performance improvement: don't render more than 5 visible images into the slideshow
-          # We'll keep the images that we need for the variant images and hover next.
+          # Performance improvement: don’t render more than 5 visible images into the slideshow
+          # We’ll keep the images that we need for the variant images and hover next.
           if forloop.first
             assign visible_slide_count = 0
           endif

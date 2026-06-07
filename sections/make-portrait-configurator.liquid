@@ -490,8 +490,8 @@
 
         <div class="make-portrait__option-group" id="mp-pet-name-group">
           <div class="make-portrait__option-label-row">
-            <label class="make-portrait__option-label" for="mp-pet-name">Dog's name</label>
-            {%- capture pet_name_tooltip -%}<p>The image shown in the configurator is a preview template only. After you enter your pet's name, it will be carefully integrated into your final custom portrait design.</p>{%- endcapture -%}
+            <label class="make-portrait__option-label" for="mp-pet-name">Dog’s name</label>
+            {%- capture pet_name_tooltip -%}<p>The image shown in the configurator is a preview template only. After you enter your pet’s name, it will be carefully integrated into your final custom portrait design.</p>{%- endcapture -%}
             {%- render 'info-tooltip', tooltip_content: pet_name_tooltip -%}
           </div>
           <input
@@ -511,7 +511,7 @@
 
       {%- comment -%}------ STEP 4: Upload Photo ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="4" hidden>
-        <h2 class="make-portrait__step-title">Upload your dog's photo</h2>
+        <h2 class="make-portrait__step-title">Upload your dog’s photo</h2>
 
         <div class="photo-upload" id="mp-upload-area">
           <div class="photo-upload__zone" id="mp-upload-zone" role="button" tabindex="0" aria-label="Upload photo – click or drag and drop">
@@ -540,7 +540,7 @@
             Photo guidelines
           </h2>
           <div class="description">
-            Not sure which photo to pick? No worries. Here's what makes a good one.
+            Not sure which photo to pick? No worries. Here’s what makes a good one.
           </div>
           <div class="content">
             <div class="column column--good">
@@ -799,10 +799,10 @@
 
         <div class="tab-panel" id="tab-overview" data-tab="overview" role="tabpanel">
           <div class="tab-overview">
-            <h2 class="tab-overview__heading">It's that simple</h2>
+            <h2 class="tab-overview__heading">It’s that simple</h2>
             <img src="{{ 'make-portrait/overview01.png' | asset_url }}" alt="Size" loading="lazy">
             <p>
-              A portrait of your dog isn't just wall art. It's a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
+              A portrait of your dog isn’t just wall art. It’s a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
             <div class="tab-overview__composite" id="mp-overview-media">
               <figure class="tab-overview__image-card tab-overview__image-card--photo">

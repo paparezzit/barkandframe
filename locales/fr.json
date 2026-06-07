@@ -248,7 +248,7 @@
   "gift_cards": {
     "issued": {
       "how_to_use_gift_card": "Utiliser le code de la carte‑cadeau en ligne ou le code QR en boutique",
-      "title": "Voici le solde de votre carte‑cadeau {{ shop }} d'une valeur de {{ value }} !",
+      "title": "Voici le solde de votre carte‑cadeau {{ shop }} d’une valeur de {{ value }} !",
       "subtext": "Votre carte‑cadeau",
       "shop_link": "Visiter la boutique en ligne",
       "add_to_apple_wallet": "Ajouter à Apple Wallet",

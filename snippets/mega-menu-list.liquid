@@ -107,7 +107,7 @@
       if forloop.first or open_column_span == false
         assign open_column_span = true
 
-        # Don't allow orphan links in a column
+        # Don’t allow orphan links in a column
         assign break_after_modulo = link.links.size | modulo: links_before_wrap
         if break_after_modulo == 1
           assign links_before_wrap = links_before_wrap | minus: 1

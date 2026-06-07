@@ -103,7 +103,7 @@
         name="quantity"
         value="{% if variant_to_use.quantity_rule.min %}{{ variant_to_use.quantity_rule.min }}{% else %}1{% endif %}"
       >
-      {% comment %} If there is one variant option but it's swatches or if it's a single variant product, then use add to cart button {% endcomment %}
+      {% comment %} If there is one variant option but it’s swatches or if it’s a single variant product, then use add to cart button {% endcomment %}
       {%- if product.variants.size == 1 or product.options.size == 1 -%}
         {% render 'add-to-cart-button',
           add_to_cart_text: add_to_cart_text,

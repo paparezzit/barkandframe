@@ -96,7 +96,7 @@
 
   assign has_image_drop = sorted_media | has: 'media_type', 'image'
 
-  # Determine if we're in single column mode (carousel or grid with one column)
+  # Determine if we’re in single column mode (carousel or grid with one column)
   assign is_single_column = false
   if block_settings.media_presentation == 'carousel' or sorted_media.size == 1 or block_settings.media_presentation == 'grid' and block_settings.media_columns == 'one'
     assign is_single_column = true
@@ -179,7 +179,7 @@
       object-fit: cover;
     }
 
-    /* 3D models need special handling since they don't support object-fit */
+    /* 3D models need special handling since they don’t support object-fit */
     .product-media-container:not(.dialog-zoomed-gallery *) .product-media product-model model-viewer {
       width: 100%;
       height: 100%;

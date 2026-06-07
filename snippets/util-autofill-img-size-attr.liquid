@@ -38,10 +38,10 @@
   # Calculate breakpoints dynamically based on card size
   # Start with max columns and work down
   for i in (1..max_cols)
-    # Current number of columns we're calculating for
+    # Current number of columns we’re calculating for
     assign current_cols = max_cols | minus: i | plus: 1
 
-    # Skip if we're down to 1 column
+    # Skip if we’re down to 1 column
     if current_cols < 2
       break
     endif

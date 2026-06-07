@@ -246,7 +246,7 @@
       "title": "İşte {{ shop }} için {{ value }} tutarındaki hediye kartı bakiyeniz!",
       "subtext": "Hediye kartınız",
       "shop_link": "Online mağazayı ziyaret edin",
-      "add_to_apple_wallet": "Apple Wallet'a ekle",
+      "add_to_apple_wallet": "Apple Wallet’a ekle",
       "qr_image_alt": "QR kodu: Hediye kartını kullanmak için tarayın",
       "copy_code": "Hediye kartı kodunu kopyala",
       "expiration_date": "Sona erme tarihi: {{ expires_on }}",

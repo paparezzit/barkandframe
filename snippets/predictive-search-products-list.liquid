@@ -44,7 +44,7 @@
           assign limit = limit | default: 8
         %}
         {% comment %}
-          If we're searching for recently viewed products by id, we need to reorder the products.
+          If we’re searching for recently viewed products by id, we need to reorder the products.
           The order here comes from the search terms, and we display the products in the order of the ids.
         {% endcomment %}
         {% if order_ids != blank %}

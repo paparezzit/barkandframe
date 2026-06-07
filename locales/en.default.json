@@ -112,7 +112,7 @@
       "email": "Email",
       "phone": "Phone",
       "comment": "Comment",
-      "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
+      "post_success": "Thanks for contacting us. We’ll get back to you as soon as possible.",
       "error_heading": "Please adjust the following:"
     },
     "email_signup": {
@@ -240,7 +240,7 @@
     // Button to go from search preview to full search results page
     "search_results_view_all": "View all",
     "search_results_view_all_button": "View all",
-    // Label for customer's note to seller during checkout
+    // Label for customer’s note to seller during checkout
     "seller_note": "Special instructions",
     "shipping_policy": "Shipping calculated at checkout.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
@@ -284,7 +284,7 @@
   "gift_cards": {
     "issued": {
       "how_to_use_gift_card": "Use the gift card code online or QR code in-store",
-      "title": "Here's your {{ value }} gift card balance for {{ shop }}!",
+      "title": "Here’s your {{ value }} gift card balance for {{ shop }}!",
       "subtext": "Your gift card",
       "shop_link": "Visit online store",
       "add_to_apple_wallet": "Add to Apple Wallet",
@@ -304,7 +304,7 @@
     "blog_post_title": "Title",
     "blog_post_author": "Author",
     "blog_post_date": "Date",
-    "blog_post_description": "An excerpt of your blog post's content"
+    "blog_post_description": "An excerpt of your blog post’s content"
   },
   "products": {
     "product": {

@@ -59,7 +59,7 @@
         for option in product.options_with_values
           assign swatch_count = option.values | map: 'swatch' | compact | size
           if swatch_count > 1
-            # Multiple swatches exist but featured image doesn't match any
+            # Multiple swatches exist but featured image doesn’t match any
             assign no_swatch_selected = true
             break
           endif
@@ -226,7 +226,7 @@
     display: none;
   }
 
-  /* Hide "add" button for multi-variant product cards that don't show a swatches variant picker */
+  /* Hide "add" button for multi-variant product cards that don’t show a swatches variant picker */
   :is(.product-card):has(.quick-add__product-form-component--multi-variant):not(:has(swatches-variant-picker-component))
     .quick-add__button--add {
     display: none;

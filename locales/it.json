@@ -14,7 +14,7 @@
     "email_signup": {
       "label": "Email",
       "placeholder": "Indirizzo email",
-      "success": "Grazie per l'iscrizione!"
+      "success": "Grazie per l’iscrizione!"
     },
     "filter": "Filtro",
     "payment_methods": "Metodi di pagamento",
@@ -37,7 +37,7 @@
     "remove_item": "Rimuovi {{ title}}",
     "skip_to_text": "Vai direttamente al contenuto",
     "skip_to_product_info": "Passa alle informazioni sul prodotto",
-    "skip_to_results_list": "Passa all'elenco dei risultati",
+    "skip_to_results_list": "Passa all’elenco dei risultati",
     "new_window": "Si apre in una nuova finestra.",
     "slideshow_next": "Slide successiva",
     "slideshow_previous": "Slide precedente",
@@ -51,7 +51,7 @@
       "other": "{{ count }} filtri applicati",
       "many": "{{ count }} filtri applicati"
     },
-    "account": "Apri menu dell'account",
+    "account": "Apri menu dell’account",
     "cart": "Carrello",
     "cart_count": "Totale articoli nel carrello",
     "menu": "Menu",
@@ -66,7 +66,7 @@
     "inventory_status": "Stato delle scorte",
     "pause_video": "Metti video in pausa",
     "find_country": "Trova paese",
-    "localization_region_and_language": "Apri selettore dell'area geografica e della lingua",
+    "localization_region_and_language": "Apri selettore dell’area geografica e della lingua",
     "open_search_modal": "Apri ricerca",
     "decrease_quantity": "Diminuisci quantità",
     "increase_quantity": "Aumenta quantità",
@@ -186,7 +186,7 @@
     },
     "errors": "Errori",
     "search": "Ricerca",
-    "search_results_no_results_check_spelling": "Nessun risultato trovato per \"{{ terms }}\". Controlla l'ortografia o usa un'altra parola o frase.",
+    "search_results_no_results_check_spelling": "Nessun risultato trovato per \"{{ terms }}\". Controlla l’ortografia o usa un’altra parola o frase.",
     "featured_products": "Prodotti in primo piano",
     "no_products_found": "Nessun prodotto trovato.",
     "price_from": "Da {{ price }}",
@@ -229,7 +229,7 @@
     "shipping_policy": "Spese di spedizione calcolate al check-out.",
     "powered_by": "Questo negozio sarà ospitato su",
     "store_owner_link_html": "Il negozio è di tua proprietà? <a href=\"{{ link }}\">Accedi qui</a>",
-    "shipping_discount_error": "Gli sconti sulla spedizione vengono mostrati al momento del check-out dopo l'aggiunta di un indirizzo",
+    "shipping_discount_error": "Gli sconti sulla spedizione vengono mostrati al momento del check-out dopo l’aggiunta di un indirizzo",
     "recipient_form_send_to": "Invia a",
     "recipient_form_email_label": "Email del destinatario",
     "recipient_form_email_label_my_email": "La mia email",
@@ -241,7 +241,7 @@
     "recipient_form_send_on_label": "Spedisci il giorno (opzionale)",
     "recipient_form_fields_visible": "I campi del modulo destinatario sono ora visibili",
     "recipient_form_fields_hidden": "I campi del modulo destinatario sono ora nascosti",
-    "recipient_form_error": "Si è verificato un errore durante l'invio del modulo",
+    "recipient_form_error": "Si è verificato un errore durante l’invio del modulo",
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} caratteri utilizzati",
     "terms_and_policies": "Termini e politiche"
   },
@@ -275,7 +275,7 @@
       "add_to_cart": "Aggiungi al carrello",
       "added_to_cart": "Aggiunto al carrello",
       "adding_to_cart": "Aggiunta in corso...",
-      "add_to_cart_error": "Errore durante l'aggiunta al carrello",
+      "add_to_cart_error": "Errore durante l’aggiunta al carrello",
       "sold_out": "Esaurito",
       "unavailable": "Non disponibile"
     }

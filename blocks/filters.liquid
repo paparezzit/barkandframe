@@ -73,7 +73,7 @@
 
 {% if block_settings.enable_filtering or block_settings.enable_sorting or block_settings.enable_grid_density %}
   {% if block_settings.filter_style == 'vertical' %}
-    {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
+    {% # These elements are always rendered in the horizontal bar that’s why we apply the .facets--horizontal class %}
     <div
       class="facets facets--horizontal facets-controls-wrapper spacing-style"
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"

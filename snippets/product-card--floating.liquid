@@ -50,7 +50,7 @@
         for option in product.options_with_values
           assign swatch_count = option.values | map: 'swatch' | compact | size
           if swatch_count > 1
-            # Multiple swatches exist but featured image doesn't match any
+            # Multiple swatches exist but featured image doesn’t match any
             assign no_swatch_selected = true
             break
           endif

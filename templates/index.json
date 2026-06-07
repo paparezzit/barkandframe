@@ -2209,7 +2209,7 @@
                     "text_VAhHxC": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Yes. Any phone photo will do. Don't worry about the result. Before we start, our team checks every photo for quality, posture, and detail. If something's off, we'll reach out for a new one. Nothing goes into production until we know it'll give you a portrait worth keeping.</p>",
+                        "text": "<p>Yes. Any phone photo will do. Don’t worry about the result. Before we start, our team checks every photo for quality, posture, and detail. If something’s off, we’ll reach out for a new one. Nothing goes into production until we know it’ll give you a portrait worth keeping.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2322,7 +2322,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_dash_row",
                   "settings": {
-                    "heading": "What if I don't love it?",
+                    "heading": "What if I don’t love it?",
                     "open_by_default": false,
                     "icon": "none",
                     "image_upload": "shopify://shop_images/quality.svg",
@@ -2333,7 +2333,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>If your portrait arrives damaged or doesn't match your dog, write to us through our returns form. We'll find a solution.</p>",
+                        "text": "<p>If your portrait arrives damaged or doesn’t match your dog, write to us through our returns form. We’ll find a solution.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",

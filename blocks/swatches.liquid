@@ -87,7 +87,7 @@
     border-radius: 0;
 
     &::before {
-      /* This doesn't work in Safari without the counter-reset. https://stackoverflow.com/a/40179718 */
+      /* This doesn’t work in Safari without the counter-reset. https://stackoverflow.com/a/40179718 */
       counter-reset: overflow-count var(--overflow-count);
       content: '+' counter(overflow-count);
       line-height: 1;
