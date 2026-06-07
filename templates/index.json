@@ -20,7 +20,7 @@
             "title": "A portrait worthy\nof your dog.",
             "text": "Personalised dog wall art by our small studio of award-winning artists. From your photo.",
             "button_text": "Create your portrait",
-            "button_link": "shopify://pages/make-portrait"
+            "button_link": "shopify://pages/portrait"
           }
         },
         "slide_PebWGF": {
@@ -31,7 +31,7 @@
             "title": "The Father’s Day\ngift, by heart.",
             "text": "A personalised dog portrait, designed by our studio of award-winning artists.",
             "button_text": "Create your portrait",
-            "button_link": "shopify://pages/make-portrait"
+            "button_link": "shopify://pages/portrait"
           }
         },
         "slide_Mr3tKr": {
@@ -53,7 +53,7 @@
             "title": "Real artists. Real dogs. Real art.",
             "text": "Every portrait is designed by our award-winning artists. No shortcuts. Just art.",
             "button_text": "Create your portrait",
-            "button_link": "shopify://pages/make-portrait"
+            "button_link": "shopify://pages/portrait"
           }
         }
       },
@@ -88,7 +88,7 @@
         "main-text": "From photo to portrait.Still your dog.",
         "text": "Recognizable at first glance",
         "button_text": "Create portrait",
-        "button_link": "shopify://pages/make-portrait"
+        "button_link": "shopify://pages/portrait"
       }
     },
     "section_portrait-styles": {
@@ -107,7 +107,7 @@
       "settings": {
         "main-text": "It’s that simple",
         "button_text": "Create your portrait",
-        "button_link": "shopify://pages/make-portrait"
+        "button_link": "shopify://pages/portrait"
       }
     },
     "section_portrait-formats": {
@@ -282,7 +282,7 @@
         "main-text": "Your dog, in every form.",
         "subtitle": "Same dog. Same style. More places to love them.",
         "button_text": "View all formats",
-        "button_link": "shopify://pages/make-portrait"
+        "button_link": "shopify://pages/portrait"
       }
     },
     "section_dogstrust": {
@@ -2481,7 +2481,7 @@
       "settings": {
         "main-text": "The ones you love belong on the wall",
         "button_text": "Create your portrait",
-        "button_link": "shopify://pages/make-portrait"
+        "button_link": "shopify://pages/portrait"
       }
     },
     "section_insta-feed": {

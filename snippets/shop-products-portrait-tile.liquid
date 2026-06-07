@@ -9,7 +9,7 @@
   assign preset_framing = preset_framing | strip
   assign preset_color = preset_color | strip
 
-  assign portrait_url = '/pages/make-portrait?step=3'
+  assign portrait_url = '/pages/portrait?step=3'
   if style_id != blank
     assign style_id_encoded = style_id | url_encode
     assign portrait_url = portrait_url | append: '&style=' | append: style_id_encoded

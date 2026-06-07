@@ -79,7 +79,7 @@
         "photo_09"
       ],
       "settings": {
-        "button_url": "shopify://pages/make-portrait",
+        "button_url": "shopify://pages/portrait",
         "button_text": "Create your portrait"
       }
     }

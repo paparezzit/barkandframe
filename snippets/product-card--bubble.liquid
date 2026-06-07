@@ -102,7 +102,7 @@
     <a
       id="{{ product_card_id | md5 }}"
       {% unless onboarding %}
-        href="/pages/make-portrait?step=2&product={{ product.handle | url_encode }}"
+        href="/pages/portrait?step=2&product={{ product.handle | url_encode }}"
       {% endunless %}
       class="product-card__link"
       ref="productCardLink"
@@ -249,7 +249,7 @@
 
     const handle = card.dataset.productHandle;
     if (handle) {
-      const configuratorUrl = "/pages/make-portrait?step=2&product=" + encodeURIComponent(handle);
+      const configuratorUrl = "/pages/portrait?step=2&product=" + encodeURIComponent(handle);
       card.querySelectorAll("a.card-gallery__link, a.card-gallery__slide-link, .card-gallery a").forEach(link => {
         link.href = configuratorUrl;
       });

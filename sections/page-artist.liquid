@@ -52,7 +52,7 @@
             <div class="artists-page__styles">
               {%- for style in _portrait_styles -%}
                 {%- if style.artist.value.system.handle == artist_handle -%}
-                  <a href="/pages/make-portrait?style={{ style.style_id.value | url_encode }}"
+                  <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}"
                     class="artists-page__style-card"
                     data-image="{%- if style.preview_image.value -%}{{ style.preview_image.value | image_url: width: 400 }}{%- endif -%}"
                     data-name="{{ style.name.value | escape }}">
