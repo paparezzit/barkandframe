@@ -266,7 +266,10 @@
       .floating-images__holder{
         max-width: 1280px;
         gap: 0;
-        padding: 0;
+        --floating-position-inset: calc(var(--page-margin) * 2.4);
+        --floating-position-offset: 109px;
+        --floating-position-offset-small: 53px;
+        padding: 0 var(--floating-position-inset) 0;
 
         .product-card--floating{
           &:nth-child(5n+1){
@@ -284,12 +287,12 @@
           }
 
           &:nth-child(5n+3){
-            margin-left: 100px;
+            margin-left: var(--floating-position-offset);
             margin-top: -100px;
           }
 
           &:nth-child(5n+4){
-            margin-right: 50px;
+            margin-right: var(--floating-position-offset-small);
             margin-top: -100px;
 
             .product-title{
@@ -316,11 +319,11 @@
 
           &:nth-child(10n+8){
             margin-left: auto;
-            margin-right: 100px;
+            margin-right: var(--floating-position-offset);
           }
 
           &:nth-child(10n+9){
-            margin-left: 50px;
+            margin-left: var(--floating-position-offset-small);
             margin-right: 0;
           }
 
