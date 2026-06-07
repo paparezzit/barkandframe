@@ -13,6 +13,10 @@
 </style>
 
 <div class="section section--custom-slideshow">
+  {% assign first_slide = section.blocks | first %}
+  {% if first_slide.settings.title != blank %}
+    <h1 class="visually-hidden">{{ first_slide.settings.title | newline_to_br }}</h1>
+  {% endif %}
   <div 
     class="custom-slideshow"
     data-autoplay="{{ section.settings.autoplay }}"
@@ -22,10 +26,6 @@
       {% for block in section.blocks %}
         {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
         {% assign portrait_image_position_key = portrait_image_position | split: ' ' | first %}
-        {% assign slide_heading_tag = 'h2' %}
-        {% if forloop.first %}
-          {% assign slide_heading_tag = 'h1' %}
-        {% endif %}
         <div
           class="slide {% if forloop.first %}is-active{% endif %}"
           data-portrait-image-position="{{ portrait_image_position_key }}"
@@ -72,9 +72,9 @@
           {% endif %}
 
           <div class="slide-content">
-            <{{ slide_heading_tag }} class="slide__title">
+            <h2 class="slide__title">
               {{ block.settings.title | newline_to_br }}
-            </{{ slide_heading_tag }}>
+            </h2>
             <p class="slide__text">
               {{ block.settings.text }}
             </p>
@@ -179,13 +179,6 @@
     padding: 60px 0;
 
     .slide__title{
-      font-family: var(--font-h2--family);
-      font-style: var(--font-h2--style);
-      font-weight: var(--font-h2--weight);
-      font-size: var(--font-h2--size);
-      line-height: var(--font-h2--line-height);
-      letter-spacing: var(--font-h2--letter-spacing);
-      text-transform: var(--font-h2--case);
       max-width: 250px;
       color: var(--beige);
       margin: 0;
