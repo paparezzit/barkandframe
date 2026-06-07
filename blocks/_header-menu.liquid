@@ -528,7 +528,7 @@
     transition: opacity var(--submenu-animation-speed) var(--ease-out-cubic);
   }
 
-  header-menu[aria-expanded='true'] .header-menu__backdrop {
+  header-menu:has(.menu-list__link--shop[aria-expanded='true']) .header-menu__backdrop {
     opacity: .45;
     pointer-events: auto;
   }
