@@ -563,6 +563,7 @@
               </h3>
               <div class="guideline-image">
                 <img class="image" src="{{ 'bark-and-frame-photo-upload-example-good-jack-russell-sitting-eye-level-soft-light-clean.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+                <span class="guideline-badge" aria-hidden="true"></span>
               </div>
               <ul>
                 <li>Dog facing the camera at eye level</li>
@@ -578,6 +579,7 @@
               </h3>
               <div class="guideline-image">
                 <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-cafe-rotated-busy-background.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+                <span class="guideline-badge" aria-hidden="true"></span>
               </div>
               <ul>
                 <li>Angled face, not at eye level</li>
@@ -592,6 +594,7 @@
               </h3>
               <div class="guideline-image">
                 <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-profile-harsh-shadow-not-eye-level.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+                <span class="guideline-badge" aria-hidden="true"></span>
               </div>
               <ul>
                 <li>Head and neck not fully visible</li>
@@ -2462,41 +2465,44 @@
       .guideline-image{
         aspect-ratio: 1 / 1.08;
         border-radius: 20px;
+        isolation: isolate;
         overflow: hidden;
         position: relative;
         --guideline-badge-color: #EA3143;
         --guideline-badge-icon: var(--icon-cross-url);
 
-        &::before,
-        &::after{
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 25%;
-          aspect-ratio: 1;
-          z-index: 1;
-        }
+      }
 
-        &::before{
-          background: var(--guideline-badge-color);
-          border-radius: 0 28% 0 0;
-        }
+      .guideline-badge{
+        aspect-ratio: 1;
+        background: var(--guideline-badge-color);
+        bottom: -1px;
+        box-shadow: 0 0 0 1px var(--guideline-badge-color);
+        display: block;
+        left: -1px;
+        pointer-events: none;
+        position: absolute;
+        width: calc(25% + 1px);
+        z-index: 2;
+      }
 
-        &::after{
-          background: #fff;
-          -webkit-mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
-          mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
-          z-index: 2;
-        }
+      .guideline-badge::after{
+        background: #fff;
+        content: "";
+        inset: 0;
+        position: absolute;
+        -webkit-mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
+        mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
       }
 
       .image{
         display: block;
         height: 100%;
         object-fit: cover;
+        position: relative;
         vertical-align: top;
         width: 100%;
+        z-index: 0;
       }
 
       ul{
