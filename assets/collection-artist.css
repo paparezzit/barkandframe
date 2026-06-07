@@ -171,6 +171,7 @@
   border-radius: 40px;
   isolation: isolate;
   background: var(--beige, #fffaf1);
+  clip-path: inset(0 round 40px);
   line-height: 0;
 }
 
@@ -193,7 +194,7 @@
   max-width: 100%;
   display: block;
   object-fit: contain;
-  border-radius: 40px;
+  border-radius: 0;
 }
 
 .artist-collection__product-name {
