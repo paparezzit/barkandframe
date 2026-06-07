@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCorrectionLines } from '../api/shopify-refund.js';
+import { buildCorrectionLines, variableSymbolFromOrderName } from '../api/shopify-refund.js';
+
+test('uses Shopify order number without hash as variable symbol', () => {
+  assert.equal(variableSymbolFromOrderName('#1086'), '1086');
+  assert.equal(variableSymbolFromOrderName('1086'), '1086');
+});
 
 test('builds correction lines from refunded line items in target currency', () => {
   const lines = buildCorrectionLines(

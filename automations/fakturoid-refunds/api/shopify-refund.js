@@ -45,6 +45,7 @@ export async function processRefund({ refund, shopDomain }) {
 
   const order = await fetchShopifyOrder({ shopDomain, orderId });
   const orderName = order.name || `#${order.order_number}`;
+  const variableSymbol = variableSymbolFromOrderName(orderName);
   const fakturoid = await createFakturoidClient();
   const existingCorrection = await findExistingCorrection(fakturoid, refundId);
 
@@ -90,6 +91,7 @@ export async function processRefund({ refund, shopDomain }) {
     number_format_id: Number(requireEnv('FAKTUROID_CORRECTION_NUMBER_FORMAT_ID')),
     subject_id: originalInvoice.subject_id,
     order_number: orderName,
+    variable_symbol: variableSymbol,
     issued_on: dateOnly(refund.created_at) || todayPrague(),
     taxable_fulfillment_due: dateOnly(refund.created_at) || todayPrague(),
     vat_price_mode: 'from_total_with_vat',
@@ -351,6 +353,10 @@ function normalizeOrderNumber(value) {
   return String(value || '').trim();
 }
 
+export function variableSymbolFromOrderName(orderName) {
+  return normalizeOrderNumber(orderName).replace(/^#/, '');
+}
+
 function pickInvoiceFields(invoice) {
   if (!invoice) return null;
   return {
@@ -358,6 +364,7 @@ function pickInvoiceFields(invoice) {
     number: invoice.number,
     custom_id: invoice.custom_id,
     order_number: invoice.order_number,
+    variable_symbol: invoice.variable_symbol,
     document_type: invoice.document_type,
     correction_id: invoice.correction_id,
     number_format_id: invoice.number_format_id,
