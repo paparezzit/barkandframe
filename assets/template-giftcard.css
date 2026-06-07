@@ -65,12 +65,12 @@
 
 .gift-card__code,
 .gift-card__text-wrapper h1 {
-  font-size: var(--font-size--2xl);
+  font-size: 21px;
   margin-block-end: 0;
 }
 
 .gift-card__price h2 {
-  font-size: var(--font-size--5xl);
+  font-size: 54px;
   margin-block-end: var(--padding-4xl);
 }
 
