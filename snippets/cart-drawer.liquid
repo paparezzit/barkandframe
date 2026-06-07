@@ -57,9 +57,9 @@
             class="cart-drawer__content motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
-            <span class="cart-drawer__heading h3 cart-drawer__heading--empty">
+            <h2 class="cart-drawer__heading h3 cart-drawer__heading--empty">
               {{ 'content.your_cart_is_empty' | t }}
-            </span>
+            </h2>
 
             <div class="cart-drawer__items">
               {% render 'cart-products' %}
@@ -70,10 +70,10 @@
             class="cart-drawer__header"
             id="cart-drawer-header"
           >
-            <span class="cart-drawer__heading h3">
+            <h2 class="cart-drawer__heading h3">
               <span class="svg-wrapper cart-drawer__heading-icon">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
               {{ 'content.cart_title' | t }}
-            </span>
+            </h2>
 
             <button
               ref="closeButton"
@@ -365,6 +365,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    margin: 0;
   }
 
   .cart-drawer__heading-icon {

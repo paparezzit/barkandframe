@@ -15,7 +15,7 @@
           "type": "text",
           "name": "Title",
           "settings": {
-            "text": "<p>{{ closest.blog.title }}</p>",
+            "text": "<h1>{{ closest.blog.title }}</h1>",
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",

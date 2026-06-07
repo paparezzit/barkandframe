@@ -266,8 +266,12 @@
 
 .artist-collection__artist-name {
   margin: 0;
+  font-family: var(--font-paragraph--family);
   font-weight: 700;
   font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--brown);
 }
 

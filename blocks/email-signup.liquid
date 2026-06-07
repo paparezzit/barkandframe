@@ -7,9 +7,9 @@
   {{ block.shopify_attributes }}
 >
   {% if block_settings.heading != blank %}
-    <div class="email-signup__heading {{ block_settings.heading_preset }}">
+    <h2 class="email-signup__heading {{ block_settings.heading_preset }}">
       {{ block_settings.heading | escape }}
-    </div>
+    </h2>
   {% endif %}
   {%- form 'customer', class: 'email-signup__form spacing-style' %}
     <div

@@ -2,6 +2,7 @@
   Renders the artist "bubble" card used in the configurator and on the Artist page.
   @param {object} artist - Artist metaobject
 {%- enddoc -%}
+{%- assign heading_tag = heading_tag | default: 'h2' -%}
 <div class="artist-card">
   {%- if artist.photo.value != blank -%}
     <img
@@ -14,9 +15,9 @@
     >
   {%- endif -%}
   <div class="artist-card__body">
-    <div class="artist-card__heading">
+    <{{ heading_tag }} class="artist-card__heading">
       <strong class="artist-card__name">{{ artist.name.value }}</strong>
-    </div>
+    </{{ heading_tag }}>
     {%- unless about_long_only -%}
       {%- if artist.hero.value != blank -%}
         <p class="artist-card__description">{{ artist.hero.value | newline_to_br }}</p>
@@ -74,6 +75,14 @@
     .artist-card__heading{
       display: flex;
       gap: 15px;
+      margin: 0;
+      font-family: var(--font-paragraph--family);
+      font-size: var(--font-paragraph--size);
+      font-weight: var(--font-paragraph--weight);
+      line-height: var(--font-paragraph--line-height);
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--brown);
     }
   }
 

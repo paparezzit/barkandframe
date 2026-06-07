@@ -244,6 +244,7 @@
 </script>
 
 <div class="make-portrait section section--page-width" id="make-portrait-section">
+  <h1 class="visually-hidden">Create your portrait</h1>
   <div class="make-portrait__layout">
 
     {%- comment -%}--------------------------------------------------------------------------------
@@ -347,7 +348,7 @@
         </div>
 
         <div class="make-portrait__style-info" id="mp-style-info">
-          <p class="make-portrait__style-name" id="mp-style-name-display"></p>
+          <h3 class="make-portrait__style-name" id="mp-style-name-display"></h3>
           <div class="make-portrait__style-description" id="mp-style-description"></div>
         </div>
 
@@ -419,7 +420,7 @@
               {%- endif -%}
               {%- unless _type contains 'canvas' or _type contains 'paper' or _is_reserved_handle -%}
                 {%- unless _group_started -%}
-                  <p class="product-picker__category-label">Your portrait. Beyond the wall.</p>
+                  <span class="product-picker__category-label">Your portrait. Beyond the wall.</span>
                   {%- assign _group_started = true -%}
                 {%- endunless -%}
                 <button
@@ -457,7 +458,7 @@
         </div>
 
         <div class="make-portrait__option-group" id="mp-border-group">
-          <p class="make-portrait__option-label">Border</p>
+          <span class="make-portrait__option-label">Border</span>
           <div class="option-btn-grid" id="mp-border-grid" data-option-name="border">
             <button class="option-btn selected" data-border="no-border" data-value="no-border" type="button">No Border</button>
             <button class="option-btn" data-border="white-border" data-value="white-border" type="button">White Border</button>
@@ -466,7 +467,7 @@
 
         {%- comment -%}
         <div class="make-portrait__option-group">
-          <p class="make-portrait__option-label">Background</p>
+          <span class="make-portrait__option-label">Background</span>
           <div class="option-btn-grid" id="mp-background-grid" data-option-name="background">
             <button class="option-btn option-btn--small selected" data-background="classic" data-value="classic" type="button">Classic</button>
             <button class="option-btn option-btn--small" data-background="clear" data-value="clear" type="button">Clear</button>
@@ -476,7 +477,7 @@
         </div>
 
         <div class="make-portrait__option-group">
-          <p class="make-portrait__option-label">Number of dogs</p>
+          <span class="make-portrait__option-label">Number of dogs</span>
           <div class="option-btn-grid" id="mp-pets-grid" data-option-name="number-of-pets">
             <button class="option-btn option-btn--small selected" data-pet-count="1" data-value="1" type="button">1 pet</button>
             <button class="option-btn option-btn--small" data-pet-count="2" data-value="2" data-extra-usd="{{ section.settings.extra_pet_price | default: 9 | times: 1 }}" type="button">2 pets</button>
@@ -675,7 +676,7 @@
                   {%- endif -%}
                   <div class="donation-card__content">
                     {%- if block.settings.heading != blank -%}
-                      <p class="donation-card__heading">{{ block.settings.heading }}</p>
+                      <h4 class="donation-card__heading">{{ block.settings.heading }}</h4>
                     {%- endif -%}
                     {%- if block.settings.description != blank -%}
                       <p class="donation-card__description">{{ block.settings.description }}</p>
@@ -752,7 +753,7 @@
 
       <div class="make-portrait__action-bar" id="mp-action-bar">
         <div class="make-portrait__subtotal" id="mp-subtotal-panel">
-          <p class="subtotal__label__title">Subtotal</p>
+          <span class="subtotal__label__title">Subtotal</span>
           <div id="mp-order-summary" class="order-summary"></div>
           <div class="subtotal__row subtotal__row--total">
             <span class="subtotal__label__note">Free shipping over $100</span>
@@ -827,7 +828,7 @@
             {%- if a != blank -%}
               <div class="tab-artist-panel" data-style-id="{{ style.style_id.value }}" hidden>
 
-                {%- render 'artist-card', artist: a, about_long_only: true -%}
+                {%- render 'artist-card', artist: a, about_long_only: true, heading_tag: 'h3' -%}
 
                 {%- if style.story.value != blank -%}
                   <div class="artist-bio">{{ style.story.value | metafield_tag }}</div>
@@ -951,12 +952,12 @@
                     <div class="accordion-card__grid">
                       <div class="accordion-card__item">
                         <img src="{{ 'make-portrait/bark-and-frame-canvas-black-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Black frame" loading="lazy">
-                        <p class="accordion-card__item-name">Black</p>
+                        <h5 class="accordion-card__item-name">Black</h5>
                         <p class="accordion-card__item-desc">Defined edge, modern feel.</p>
                       </div>
                       <div class="accordion-card__item">
                         <img src="{{ 'make-portrait/bark-and-frame-canvas-white-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="White frame" loading="lazy">
-                        <p class="accordion-card__item-name">White</p>
+                        <h5 class="accordion-card__item-name">White</h5>
                         <p class="accordion-card__item-desc">Soft, minimal, blends in.</p>
                       </div>
                     </div>
@@ -968,12 +969,12 @@
                     <div class="accordion-card__grid">
                       <div class="accordion-card__item">
                         <img src="{{ 'make-portrait/bark-and-frame-canvas-oak-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Premium Oak frame" loading="lazy">
-                        <p class="accordion-card__item-name">Premium Oak</p>
+                        <h5 class="accordion-card__item-name">Premium Oak</h5>
                         <p class="accordion-card__item-desc">Light, warm, natural grain.<br>For paper portraits.</p>
                       </div>
                       <div class="accordion-card__item">
                         <img src="{{ 'make-portrait/bark-and-frame-canvas-walnut-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Walnut frame" loading="lazy">
-                        <p class="accordion-card__item-name">Premium Walnut</p>
+                        <h5 class="accordion-card__item-name">Premium Walnut</h5>
                         <p class="accordion-card__item-desc">Deep, rich, more weight.<br>For canvas portraits.</p>
                       </div>
                     </div>
@@ -1418,6 +1419,7 @@
   font-family: "display", serif;
   font-size: 21px;
   font-weight: 400;
+  line-height: 1.2;
   margin: 60px 0 0 !important;
 }
 
@@ -1460,6 +1462,10 @@
   font-family: "display", serif;
   font-size: 18px;
   font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  color: inherit;
   margin: 10px 0 5px !important;
   padding: 0 10px;
 }
@@ -1791,7 +1797,13 @@
 }
 
 .make-portrait__style-name {
+  font-family: var(--font-paragraph--family);
+  font-size: var(--font-paragraph--size);
   font-weight: 700;
+  line-height: var(--font-paragraph--line-height);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--brown);
   margin: 0 0 .8em;
 }
 
@@ -2682,7 +2694,11 @@
 .donation-card__heading {
   font-family: "display", serif;
   font-size: 21px;
+  font-weight: 400;
   line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  color: inherit;
   margin: 0;
 }
 
@@ -4097,7 +4113,7 @@
     // 2. Frame toggle
     var group = document.createElement('div');
     group.className = 'make-portrait__option-group';
-    var lbl = document.createElement('p');
+    var lbl = document.createElement('span');
     lbl.className = 'make-portrait__option-label';
     lbl.textContent = 'Framing';
     group.appendChild(lbl);
@@ -4317,7 +4333,7 @@
   function appendOptionGroup(opt, product, container, previousSelections) {
     var group = document.createElement('div');
     group.className = 'make-portrait__option-group';
-    var label = document.createElement('p');
+    var label = document.createElement('span');
     label.className = 'make-portrait__option-label';
     var optionLabelNames = { 'color': 'Frame Color' };
     label.textContent = optionLabelNames[opt.name.toLowerCase()] || opt.name;
@@ -4542,7 +4558,7 @@
     // 3. Framing - always "Framed", display only (no choice)
     var framingGroup = document.createElement('div');
     framingGroup.className = 'make-portrait__option-group';
-    var framingLabel = document.createElement('p');
+    var framingLabel = document.createElement('span');
     framingLabel.className = 'make-portrait__option-label';
     framingLabel.textContent = 'Framing';
     framingGroup.appendChild(framingLabel);

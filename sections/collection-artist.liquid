@@ -49,7 +49,7 @@
     </div>
 
     <div class="artist-collection__hero-outline" aria-hidden="true">
-      <p class="artist-collection__title">{{ collection.title }}</p>
+      <div class="artist-collection__title">{{ collection.title }}</div>
       {%- if artist and artist.signature.value != blank -%}
         <div class="artist-collection__signature">
           <span class="artist-collection__by">by</span>
@@ -81,7 +81,7 @@
           {%- endif -%}
           <div class="artist-collection__artist-text">
             {%- if artist.name.value != blank -%}
-              <p class="artist-collection__artist-name">{{ artist.name.value }}</p>
+              <h2 class="artist-collection__artist-name">{{ artist.name.value }}</h2>
             {%- endif -%}
             {%- if artist['about-long'].value != blank -%}
               <div class="rte artist-collection__artist-about">{{ artist['about-long'].value | newline_to_br }}</div>

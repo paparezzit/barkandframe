@@ -22,6 +22,10 @@
       {% for block in section.blocks %}
         {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
         {% assign portrait_image_position_key = portrait_image_position | split: ' ' | first %}
+        {% assign slide_heading_tag = 'h2' %}
+        {% if forloop.first %}
+          {% assign slide_heading_tag = 'h1' %}
+        {% endif %}
         <div
           class="slide {% if forloop.first %}is-active{% endif %}"
           data-portrait-image-position="{{ portrait_image_position_key }}"
@@ -68,9 +72,9 @@
           {% endif %}
 
           <div class="slide-content">
-            <h2 class="slide__title">
+            <{{ slide_heading_tag }} class="slide__title">
               {{ block.settings.title | newline_to_br }}
-            </h2>
+            </{{ slide_heading_tag }}>
             <p class="slide__text">
               {{ block.settings.text }}
             </p>

@@ -53,11 +53,11 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<h3>Collections</h3>",
+                "text": "<h1>Collections</h1>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "h3",
                 "font": "var(--font-body--family)",
                 "font_size": "",
                 "line_height": "normal",

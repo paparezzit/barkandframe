@@ -1,19 +1,34 @@
 
 
+{% liquid
+  assign product_title_tag = 'span'
+  assign product_title_is_page_heading = false
+  if request.page_type == 'product' and section.id == 'main'
+    assign product_title_tag = 'h1'
+    assign product_title_is_page_heading = true
+  endif
+%}
+
 {% if closest.product == blank %}
   {% assign text = 'placeholders.product_title' | t %}
-  {% assign product_title = '<p>' | append: text | append: '</p>' %}
+  {% capture product_title %}<{{ product_title_tag }}>{{ text }}</{{ product_title_tag }}>{% endcapture %}
   {% render 'text', fallback_text: product_title, block: block %}
 {% elsif closest.product != blank %}
-  {% assign product_title = '<p>' | append: closest.product.title | append: '</p>' %}
-  <a
-    class="contents user-select-text product-title"
-    ref="productTitleLink"
-    href="{% render 'product-card-variant-url', product: closest.product %}"
-    aria-hidden="true"
-  >
-    {% render 'text', fallback_text: product_title, block: block %}
-  </a>
+  {% capture product_title %}<{{ product_title_tag }}>{{ closest.product.title }}</{{ product_title_tag }}>{% endcapture %}
+  {% if product_title_is_page_heading %}
+    <div class="contents user-select-text product-title">
+      {% render 'text', fallback_text: product_title, block: block %}
+    </div>
+  {% else %}
+    <a
+      class="contents user-select-text product-title"
+      ref="productTitleLink"
+      href="{% render 'product-card-variant-url', product: closest.product %}"
+      aria-hidden="true"
+    >
+      {% render 'text', fallback_text: product_title, block: block %}
+    </a>
+  {% endif %}
 
 {% endif %}
 

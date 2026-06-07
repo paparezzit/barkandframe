@@ -1,11 +1,18 @@
 
 
+{% liquid
+  assign collection_title_tag = 'span'
+  if request.page_type == 'collection' and section.id == 'main'
+    assign collection_title_tag = 'h1'
+  endif
+%}
+
 {% if closest.collection == blank %}
   {% assign text = 'placeholders.collection_title' | t %}
-  {% assign collection_title = '<p>' | append: text | append: '</p>' %}
+  {% capture collection_title %}<{{ collection_title_tag }}>{{ text }}</{{ collection_title_tag }}>{% endcapture %}
   {% render 'text', fallback_text: collection_title, block: block %}
 {% elsif closest.collection != blank %}
-  {% assign collection_title = '<p>' | append: closest.collection.title | append: '</p>' %}
+  {% capture collection_title %}<{{ collection_title_tag }}>{{ closest.collection.title }}</{{ collection_title_tag }}>{% endcapture %}
   {% render 'text', fallback_text: collection_title, block: block %}
 {% endif %}
 

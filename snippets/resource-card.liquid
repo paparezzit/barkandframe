@@ -126,9 +126,9 @@
   </div>
 
   <div class="resource-card__content">
-    <p class="resource-card__title{% if style == 'overlay' %} h5{%else %} paragraph{% endif %}">
+    <span class="resource-card__title{% if style == 'overlay' %} h5{%else %} paragraph{% endif %}">
       {{- resource.title -}}
-    </p>
+    </span>
 
     {% if resource_type == 'product' %}
       {% render 'price', product_resource: resource, show_unit_price: true %}

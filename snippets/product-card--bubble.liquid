@@ -135,7 +135,7 @@
           pointer-events: auto;
         }
 
-        .product-title div p{
+        .product-title div > :is(p, span, h1, h2, h3, h4, h5, h6){
           width: fit-content;
           white-space: nowrap;
           text-align: center;
@@ -245,7 +245,7 @@
       formatsWrapper.classList.remove("hovered");
     });
 
-    card.style.width = card.querySelector(".product-title div p").offsetWidth + 24 + "px";
+    card.style.width = card.querySelector(".product-title div > :is(p, span, h1, h2, h3, h4, h5, h6)").offsetWidth + 24 + "px";
 
     const handle = card.dataset.productHandle;
     if (handle) {
