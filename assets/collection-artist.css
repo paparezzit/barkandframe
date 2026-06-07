@@ -137,10 +137,9 @@
   margin: 0;
   pointer-events: auto;
   position: relative;
-  transition: opacity .3s;
 }
 
-.artist-collection__products:has(.artist-collection__product-card:hover) .artist-collection__product-card:not(:hover) {
+.artist-collection__products:has(.artist-collection__product-card:hover) .artist-collection__product-card:not(:hover) .artist-collection__product-image img {
   opacity: .27;
 }
 
@@ -170,7 +169,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 40px;
-  background: var(--cream);
+  background: var(--cream, #f4efe5);
   line-height: 0;
 }
 
@@ -181,6 +180,7 @@
   display: block;
   object-fit: contain;
   border-radius: 40px;
+  transition: opacity .3s;
 }
 
 .artist-collection__product-name {

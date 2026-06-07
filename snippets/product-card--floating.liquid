@@ -111,7 +111,6 @@
     display: block;
     width: var(--floating-card-width, 300px);
     max-width: 60vw;
-    transition: opacity .3s;
 
     .product-card__content{
       position: relative;
@@ -132,6 +131,7 @@
       vertical-align: top;
       border-radius: 40px !important;
       overflow: hidden !important;
+      background: var(--cream, #f4efe5);
       aspect-ratio: var(--ratio) !important;
       line-height: 0;
       clip-path: inset(0 round 40px);
@@ -148,6 +148,7 @@
         border-radius: 40px !important;
         content-visibility: visible !important;
         contain-intrinsic-size: none !important;
+        transition: opacity .3s;
       }
     }
 

@@ -200,7 +200,10 @@
 
     &.hovered{
       product-card--floating:not(:hover){
-        opacity: .27;
+        .image-block__image,
+        .image-block img{
+          opacity: .27;
+        }
       }
     }
   }
@@ -218,6 +221,7 @@
     aspect-ratio: var(--ratio) !important;
     border-radius: 40px !important;
     overflow: hidden !important;
+    background: var(--cream, #f4efe5) !important;
     line-height: 0;
   }
 
@@ -231,6 +235,7 @@
     border-radius: 40px !important;
     content-visibility: visible !important;
     contain-intrinsic-size: none !important;
+    transition: opacity .3s;
   }
 
   @media(min-width: 1200px){
