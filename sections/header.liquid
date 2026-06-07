@@ -382,6 +382,7 @@
   @media (hover: hover) and (min-width: 750px) {
     .header:has(header-menu .menu-list__link:not([aria-haspopup]):is(:hover, [aria-expanded='true'], [data-animating]))
       .header__row {
+      border-bottom-color: transparent;
       box-shadow: var(--shadow-drawer);
     }
   }
@@ -580,10 +581,10 @@
   @media (hover: hover) {
     /* Column-specific dimming effect when any interactive element is hovered
       Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
-    .header__column:has(header-menu:hover),
-    .header__column:has(.header-actions__action:hover),
-    .header__column:has(.dropdown-localization__button:hover),
-    .header__column:has(.header__icon--menu:hover) {
+    .header__column:not(.header__column--right):has(header-menu:hover),
+    .header__column:not(.header__column--right):has(.header-actions__action:hover),
+    .header__column:not(.header__column--right):has(.dropdown-localization__button:hover),
+    .header__column:not(.header__column--right):has(.header__icon--menu:hover) {
       header-menu:not(:hover),
       .header-actions__action:not(:hover),
       .dropdown-localization__button:not(:hover),
