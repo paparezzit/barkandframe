@@ -561,7 +561,9 @@
               <h3 class="title">
                 Good
               </h3>
-              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-good-jack-russell-sitting-eye-level-soft-light-clean.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <div class="guideline-image">
+                <img class="image" src="{{ 'bark-and-frame-photo-upload-example-good-jack-russell-sitting-eye-level-soft-light-clean.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              </div>
               <ul>
                 <li>Dog facing the camera at eye level</li>
                 <li>Good lighting</li>
@@ -574,7 +576,9 @@
               <h3 class="title">
                 Bad
               </h3>
-              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-cafe-rotated-busy-background.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <div class="guideline-image">
+                <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-cafe-rotated-busy-background.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              </div>
               <ul>
                 <li>Angled face, not at eye level</li>
                 <li>Poor lighting, heavy shadows</li>
@@ -586,7 +590,9 @@
               <h3 class="title">
                 Bad
               </h3>
-              <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-profile-harsh-shadow-not-eye-level.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              <div class="guideline-image">
+                <img class="image" src="{{ 'bark-and-frame-photo-upload-example-skip-jack-russell-profile-harsh-shadow-not-eye-level.jpg' | asset_url }}" alt="Good photo example" loading="lazy">
+              </div>
               <ul>
                 <li>Head and neck not fully visible</li>
                 <li>Pet lying down</li>
@@ -2453,11 +2459,44 @@
         margin-bottom: 8px;
       }
 
-      .image{
+      .guideline-image{
         aspect-ratio: 1 / 1.08;
-        vertical-align: top;
-        object-fit: cover;
         border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        --guideline-badge-color: #EA3143;
+        --guideline-badge-icon: var(--icon-cross-url);
+
+        &::before,
+        &::after{
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: clamp(22px, 11%, 43px);
+          aspect-ratio: 1;
+          z-index: 1;
+        }
+
+        &::before{
+          background: var(--guideline-badge-color);
+          border-radius: 0 12px 0 0;
+        }
+
+        &::after{
+          background: #fff;
+          -webkit-mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
+          mask: var(--guideline-badge-icon) center / 46% auto no-repeat;
+          z-index: 2;
+        }
+      }
+
+      .image{
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        vertical-align: top;
+        width: 100%;
       }
 
       ul{
@@ -2486,6 +2525,11 @@
       }
 
       &.column--good{
+        .guideline-image{
+          --guideline-badge-color: #2DCA7C;
+          --guideline-badge-icon: var(--icon-checkmark-url);
+        }
+
         ul li::before{
           background-image: var(--icon-checkmark-url);
         }
