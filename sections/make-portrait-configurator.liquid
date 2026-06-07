@@ -27,14 +27,27 @@
   window.MakePortraitOverviewImages = {
     {%- for block in section.blocks -%}
       {%- if block.type == 'overview_style' and block.settings.style_id != blank -%}
-        {{ block.settings.style_id | strip | json }}: {
+        {%- assign _overview_style_id = block.settings.style_id | strip -%}
+        {%- assign _overview_style_name = block.settings.style_name | strip -%}
+        {%- assign _overview_style_preview = blank -%}
+        {%- assign _overview_style_alt = block.settings.style_name | default: '' -%}
+        {%- for style in _portrait_styles -%}
+          {%- assign _style_id = style.style_id.value | strip -%}
+          {%- assign _style_name = style.name.value | strip -%}
+          {%- if _style_id == _overview_style_id or _style_name == _overview_style_name -%}
+            {%- assign _overview_style_preview = style.preview_image.value -%}
+            {%- assign _overview_style_alt = style.name.value | default: block.settings.style_name | default: '' -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {{ _overview_style_id | json }}: {
           photo: {
             src: {%- if block.settings.photo_image != blank -%}{{ block.settings.photo_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
             alt: {{ block.settings.photo_image.alt | default: block.settings.style_name | default: '' | json }}
           },
           artist: {
-            src: {%- if block.settings.artist_image != blank -%}{{ block.settings.artist_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
-            alt: {{ block.settings.artist_image.alt | default: block.settings.style_name | default: '' | json }}
+            src: {%- if _overview_style_preview != blank -%}{{ _overview_style_preview | image_url: width: 520 | json }}{%- elsif block.settings.artist_image != blank -%}{{ block.settings.artist_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
+            alt: {{ _overview_style_alt | json }}
           },
           wall: {
             src: {%- if block.settings.wall_image != blank -%}{{ block.settings.wall_image | image_url: width: 1040 | json }}{%- else -%}null{%- endif -%},
@@ -3309,11 +3322,26 @@
     window.requestAnimationFrame(layoutOverviewComposite);
   }
 
+  function getSelectedStyleOverviewImage() {
+    if (state.style && state.style.imageUrl) {
+      return { src: state.style.imageUrl, alt: state.style.name || '' };
+    }
+
+    var styles = window.MakePortraitStyles || [];
+    for (var i = 0; i < styles.length; i++) {
+      if (styles[i] && styles[i].id === state.styleId && styles[i].imageUrl) {
+        return { src: styles[i].imageUrl, alt: styles[i].name || '' };
+      }
+    }
+
+    return null;
+  }
+
   function updateOverviewImages() {
     var overviewMap = window.MakePortraitOverviewImages || {};
     var bucket = overviewMap[state.styleId] || null;
     setOverviewImage('photo', bucket && bucket.photo);
-    setOverviewImage('artist', bucket && bucket.artist);
+    setOverviewImage('artist', (bucket && bucket.artist) || getSelectedStyleOverviewImage());
     setOverviewImage('wall', bucket && bucket.wall);
     window.requestAnimationFrame(layoutOverviewComposite);
   }
