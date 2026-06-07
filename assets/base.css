@@ -4327,6 +4327,8 @@ body{
 
 @media (hover: hover) {
   .menu-list__link:hover .menu-list__link-title,
+  header-menu .menu-list__link[aria-expanded='true'] .menu-list__link-title,
+  header-menu .menu-list__list-item:has(> .menu-list__submenu:hover) > .menu-list__link .menu-list__link-title,
   .menu-drawer__menu-item:hover .menu-drawer__menu-item-text {
     font-weight: 700;
   }
