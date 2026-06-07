@@ -73,6 +73,10 @@
     href="{{ block_settings.link }}"
     class="{{ class }}"
     style="{{ style }}"
+    {% if block_settings.link contains 'instagram.com' %}
+      target="_blank"
+      rel="noopener noreferrer"
+    {% endif %}
     {{ block.shopify_attributes }}
   >
     {{ image }}
