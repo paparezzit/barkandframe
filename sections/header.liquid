@@ -380,9 +380,15 @@
   }
 
   @media (hover: hover) and (min-width: 750px) {
-    .header:has(header-menu .menu-list__link:not([aria-haspopup]):is(:hover, [aria-expanded='true'], [data-animating]))
-      .header__row {
+    .header:has(header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating]))
+      .header__row,
+    .header:has(header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating]))
+      .header__row--top.divider--page-width .header__columns {
       border-bottom-color: transparent;
+    }
+
+    .header:has(header-menu .menu-list__link:is(:hover, [aria-expanded='true'], [data-animating]))
+      .header__row {
       box-shadow: var(--shadow-drawer);
     }
   }
