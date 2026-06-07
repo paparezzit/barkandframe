@@ -165,8 +165,6 @@
         {%- render 'header-menu' %}
       </div>
 
-      <div class="header-menu__backdrop"></div>
-
       <script
         src="{{ 'header-menu.js' | asset_url }}"
         type="module"
@@ -513,24 +511,6 @@
   .mega-menu__link--parent.mega-menu__link--active {
     color: var(--menu-parent-active-font-color);
     font-weight: bold;
-  }
-
-  .header-menu__backdrop {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    width: 100vw;
-    height: calc(100dvh - var(--header-height));
-    background-color: #fff;
-    z-index: var(--layer-heightened);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--submenu-animation-speed) var(--ease-out-cubic);
-  }
-
-  header-menu:has(.menu-list__link--shop[aria-expanded='true']) .header-menu__backdrop {
-    opacity: .45;
-    pointer-events: auto;
   }
 
   .mega-menu__cta {

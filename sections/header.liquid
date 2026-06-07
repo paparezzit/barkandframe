@@ -309,13 +309,7 @@
     background-color: transparent;
     z-index: var(--layer-overlay);
 
-    &[transparent='not-sticky'][data-sticky-state='active'],
-    /* Only show opaque background when hovering over menu items with children (mega menu)
-       Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
-    &:has(.menu-list__list-item--shop .mega-menu__list:hover),
-    &:has(header-menu .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating])),
-    &:has(.menu-list__link--shop[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating])),
-    &:has(.menu-list__list-item[slot='overflow'] .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating])) {
+    &[transparent='not-sticky'][data-sticky-state='active'] {
       --header-logo-display: unset;
       --header-logo-inverse-display: unset;
       --header-bg-color: unset;
@@ -341,14 +335,7 @@
   }
 
   :is(.header[transparent]:not([data-sticky-state='active']), .header[transparent='always'][data-sticky-state='active'])
-    .header__row:not(
-      :has(
-          .menu-list__list-item--shop .mega-menu__list:hover,
-          header-menu .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating]),
-          .menu-list__link--shop[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating]),
-          .menu-list__list-item[slot='overflow'] .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating])
-        )
-    ) {
+    .header__row {
     /* while transparent, header-row ignores its color-scheme settings, pull from the header-component */
     --color-foreground: inherit;
     --color-foreground-rgb: inherit;
@@ -356,27 +343,6 @@
     --color-border-rgb: inherit;
     --color-primary-button-background: inherit;
     --color-primary-button-text: inherit;
-  }
-
-  .header--inherit-color-scheme-on-menu-open:has(.menu-list__list-item--shop .mega-menu__list:hover) .header__row,
-  .header--inherit-color-scheme-on-menu-open:has(
-      header-menu .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating])
-    )
-    .header__row,
-  .header--inherit-color-scheme-on-menu-open:has(
-      .menu-list__link--shop[aria-haspopup]:is(:hover, [aria-expanded='true'], [data-animating])
-    )
-    .header__row,
-  .header--inherit-color-scheme-on-menu-open:has(
-      .menu-list__list-item[slot='overflow'] .menu-list__link--shop:is(:hover, [aria-expanded='true'], [data-animating])
-    )
-    .header__row {
-    --color-foreground: inherit;
-    --color-foreground-rgb: inherit;
-    --color-background: inherit;
-    --color-background-rgb: inherit;
-    --color-border: inherit;
-    --color-border-rgb: inherit;
   }
 
   @media (hover: hover) and (min-width: 750px) {

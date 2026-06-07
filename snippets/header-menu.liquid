@@ -74,7 +74,7 @@
     {% endif %}
     <li
       role="presentation"
-      class="menu-list__list-item{% if link_title == 'shop' %} menu-list__list-item--shop{% endif %}"
+      class="menu-list__list-item"
       on:focus="/activate"
       on:blur="/deactivate"
       on:pointerenter="/activate"
@@ -83,7 +83,7 @@
       <a
         href="{{ menu_link_url }}"
         data-skip-node-update="true"
-        class="menu-list__link{% if menu_link_active %} menu-list__link--active{% endif %}{% if link_title == 'shop' %} menu-list__link--shop{% endif %}"
+        class="menu-list__link{% if menu_link_active %} menu-list__link--active{% endif %}"
         {%- if link.links != blank -%}
           aria-controls="submenu-{{ forloop.index }}"
           aria-haspopup="true"
