@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const internalLinkHosts = new Set([
+    window.location.hostname,
+    "barkandframe.com",
+    "www.barkandframe.com",
+    "barkandframe.myshopify.com"
+  ]);
+
+  document.querySelectorAll("a[href]").forEach(anchor => {
+    let url;
+    try {
+      url = new URL(anchor.getAttribute("href"), window.location.href);
+    } catch {
+      return;
+    }
+
+    if (!["http:", "https:"].includes(url.protocol) || internalLinkHosts.has(url.hostname)) return;
+
+    anchor.setAttribute("target", "_blank");
+    const rel = new Set((anchor.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
+    rel.add("noopener");
+    rel.add("noreferrer");
+    anchor.setAttribute("rel", Array.from(rel).join(" "));
+  });
+
   const lenis = new Lenis();
   window.BarkFrameLenis = lenis;
 
