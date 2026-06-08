@@ -1,27 +1,29 @@
 <div class="dogstrust section section--page-width">
-  <div class="dogstrust__logo">
-    <img src="{{ 'koninklijke-hondenbescherming_logos.svg' | asset_url }}" alt="" width="126" height="126">
-  </div>
+  <div class="dogstrust__stage">
+    <div class="dogstrust__logo">
+      <img src="{{ 'koninklijke-hondenbescherming_logos.svg' | asset_url }}" alt="" width="126" height="126">
+    </div>
 
-  <div class="dogstrust__inner">
-    <div class="dogstrust__wrapper">
-      <div class="dogstrust__bg">
-        <img src="{{ 'bark-and-frame-foundation.png' | asset_url }}" alt="" data-parallax="-3vh" width="400" height="300">
-      </div>
-
-      <div class="dogstrust__content">
-        <h2 class="dogstrust__title">
-          {{ section.settings.title | replace: 'Every portrait makes a difference', 'Every portrait<br>makes a difference' }}
-        </h2>
-
-        <div class="dogstrust__text">
-          <p>{{ section.settings.text }}</p>
+    <div class="dogstrust__inner">
+      <div class="dogstrust__wrapper">
+        <div class="dogstrust__bg">
+          <img src="{{ 'bark-and-frame-foundation.png' | asset_url }}" alt="" data-parallax="-3vh" width="400" height="300">
         </div>
 
-        <div class="dogstrust__button">
-          <a href="{{ section.settings.button_url }}" class="button" target="_blank" rel="noopener noreferrer">
-            {{ section.settings.button_label }}
-          </a>
+        <div class="dogstrust__content">
+          <h2 class="dogstrust__title">
+            {{ section.settings.title | replace: 'Every portrait makes a difference', 'Every portrait<br>makes a difference' }}
+          </h2>
+
+          <div class="dogstrust__text">
+            <p>{{ section.settings.text }}</p>
+          </div>
+
+          <div class="dogstrust__button">
+            <a href="{{ section.settings.button_url }}" class="button" target="_blank" rel="noopener noreferrer">
+              {{ section.settings.button_label }}
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -51,6 +53,10 @@
   --site-content-margin: var(--page-margin);
   margin: 120px 0;
   position: relative;
+
+  .dogstrust__stage{
+    position: relative;
+  }
 
   .dogstrust__logo{
     position: absolute;
