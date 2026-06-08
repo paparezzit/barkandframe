@@ -127,30 +127,23 @@
     {%- endcapture -%}
 
     {%- if bestseller_count == 0 -%}
-      {%- assign fallback_bestseller_count = 0 -%}
       {%- capture bestseller_cards -%}
-        {%- paginate collection.products by 50 -%}
-          {%- for product in collection.products -%}
-            {%- if fallback_bestseller_count >= 10 -%}
-              {%- break -%}
-            {%- endif -%}
+        {%- assign default_bestseller_handles = 'give-love-cap,powered-by-dogs-t-shirt,powered-by-dogs-cap,bloom-crewneck,no-fart-no-love-t-shirt' | split: ',' -%}
+        {%- for handle in default_bestseller_handles -%}
+          {%- assign product = all_products[handle] -%}
+          {%- if product != blank -%}
+            {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+            <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+              {%- # theme-check-disable UniqueStaticBlockId -%}
+              {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+              {%- # theme-check-enable UniqueStaticBlockId -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
 
-            {%- liquid
-              assign product_type = product.type | downcase
-              assign product_title = product.title | downcase
-              assign is_merch = false
-
-              if product_type == 'cap' or product_title contains '| cap' or product_title contains ' cap'
-                assign is_merch = true
-              elsif product_type contains 't-shirt' or product_type contains 't shirt' or product_title contains '| t-shirt' or product_title contains '| t shirt'
-                assign is_merch = true
-              elsif product_type contains 'crewneck' or product_type contains 'crew neck' or product_title contains '| crewneck' or product_title contains '| crew neck'
-                assign is_merch = true
-              endif
-            -%}
-
-            {%- if is_merch -%}
-              {%- assign fallback_bestseller_count = fallback_bestseller_count | plus: 1 -%}
+        {%- if bestseller_count == 0 -%}
+          {%- for product in collection.products limit: 5 -%}
+            {%- if product != blank -%}
               <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
                 {%- # theme-check-disable UniqueStaticBlockId -%}
                 {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
@@ -158,7 +151,7 @@
               </li>
             {%- endif -%}
           {%- endfor -%}
-        {%- endpaginate -%}
+        {%- endif -%}
       {%- endcapture -%}
     {%- endif -%}
 
@@ -170,7 +163,7 @@
 
         <div class="shop-products__rail" data-shop-products-rail>
           <ul class="shop-products__rail-track" role="list">
-            {%- for i in (1..6) -%}
+            {%- for i in (1..4) -%}
               {{ bestseller_cards }}
             {%- endfor -%}
           </ul>
@@ -210,7 +203,7 @@
 {% stylesheet %}
   .shop-products {
     --shop-products-grid-gap: 20px;
-    --shop-products-card-width: calc((100% - (var(--shop-products-grid-gap) * 3)) / 4);
+    --shop-products-card-width: calc((100vw - (var(--shop-products-grid-gap) * 3)) / 4);
     padding-block: var(--padding-block-start) var(--padding-block-end);
     background: var(--beige);
   }
@@ -504,7 +497,7 @@
     }
 
     .shop-products {
-      --shop-products-card-width: calc((100% - (var(--shop-products-grid-gap) * 2)) / 3);
+      --shop-products-card-width: calc((100vw - (var(--shop-products-grid-gap) * 2)) / 3);
     }
 
     .shop-products__product-grid {
@@ -519,7 +512,7 @@
 
     .shop-products {
       --shop-products-grid-gap: 12px;
-      --shop-products-card-width: calc((100% - var(--shop-products-grid-gap)) / 2);
+      --shop-products-card-width: calc((100vw - var(--shop-products-grid-gap)) / 2);
     }
 
     .shop-products__hero-title {
