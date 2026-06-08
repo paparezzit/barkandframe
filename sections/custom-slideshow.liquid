@@ -1,7 +1,7 @@
 {% assign slide_speed = section.settings.autoplay_speed | default: 4 %}
 {% assign has_video = false %}
 {% for block in section.blocks %}
-  {% if block.settings.video != blank or block.settings.video_url != blank %}
+  {% if block.settings.video != blank or block.settings.video_url != blank or block.settings.portrait_video_url != blank %}
     {% assign has_video = true %}
     {% break %}
   {% endif %}
@@ -26,6 +26,14 @@
       {% for block in section.blocks %}
         {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
         {% assign portrait_image_position_key = portrait_image_position | split: ' ' | first %}
+        {% assign has_landscape_video = false %}
+        {% assign has_portrait_video = false %}
+        {% if block.settings.video != blank or block.settings.video_url != blank %}
+          {% assign has_landscape_video = true %}
+        {% endif %}
+        {% if block.settings.portrait_video_url != blank %}
+          {% assign has_portrait_video = true %}
+        {% endif %}
         <div
           class="slide {% if forloop.first %}is-active{% endif %}"
           data-portrait-image-position="{{ portrait_image_position_key }}"
@@ -33,33 +41,38 @@
           {{ block.shopify_attributes }}
         >
 
-          {% if block.settings.video != blank %}
+          {% if has_landscape_video or has_portrait_video %}
             <div class="slide-image">
-              <video
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="auto"
-                class="slide-video"
-              >
-                {% for source in block.settings.video.sources %}
-                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
-                {% endfor %}
-              </video>
-            </div>
-          {% elsif block.settings.video_url != blank %}
-            <div class="slide-image">
-              <video
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="auto"
-                class="slide-video"
-              >
-                <source src="{{ block.settings.video_url }}" type="video/mp4">
-              </video>
+              {% if has_landscape_video %}
+                <video
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="auto"
+                  class="slide-video slide-video--landscape{% unless has_portrait_video %} slide-video--all{% endunless %}"
+                >
+                  {% if block.settings.video != blank %}
+                    {% for source in block.settings.video.sources %}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {% endfor %}
+                  {% else %}
+                    <source src="{{ block.settings.video_url }}" type="video/mp4">
+                  {% endif %}
+                </video>
+              {% endif %}
+              {% if has_portrait_video %}
+                <video
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="auto"
+                  class="slide-video slide-video--portrait{% unless has_landscape_video %} slide-video--all{% endunless %}"
+                >
+                  <source src="{{ block.settings.portrait_video_url }}" type="video/mp4">
+                </video>
+              {% endif %}
             </div>
           {% elsif block.settings.image %}
             <div class="slide-image">
@@ -163,6 +176,10 @@
     height: 100%;
     object-fit: cover;
     object-position: right;
+  }
+
+  .custom-slideshow .slide-video--portrait {
+    display: none;
   }
 
   .custom-slideshow .slide-content {
@@ -463,6 +480,14 @@
   }
 
   @media (orientation: portrait) {
+    .custom-slideshow .slide-video--landscape:not(.slide-video--all) {
+      display: none;
+    }
+
+    .custom-slideshow .slide-video--portrait {
+      display: block;
+    }
+
     .custom-slideshow .slide .slide-image img,
     .custom-slideshow .slide .slide-image video {
       object-position: var(--slide-image-position-portrait, center center) !important;
@@ -495,6 +520,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideStartedAt = 0;
   let remainingSlideTime = speed;
   let autoplayPaused = false;
+  const portraitMedia = window.matchMedia("(orientation: portrait)");
+
+  function videoMatchesViewport(video) {
+    const hasPortraitAlternative = Boolean(video.closest(".slide")?.querySelector(".slide-video--portrait"));
+    if (video.classList.contains("slide-video--portrait")) return portraitMedia.matches;
+    if (video.classList.contains("slide-video--landscape") && hasPortraitAlternative) return !portraitMedia.matches;
+    return true;
+  }
 
   function scheduleNextSlide(duration = speed) {
     if (!autoplay) return;
@@ -515,12 +548,12 @@ document.addEventListener("DOMContentLoaded", () => {
     slides.forEach((slide, idx) => {
       const active = idx === i;
       slide.classList.toggle("is-active", active);
-      const video = slide.querySelector("video");
-      if (video) {
+      const videos = slide.querySelectorAll("video");
+      videos.forEach(video => {
         video.muted = !soundOn;
-        if (active) { video.currentTime = 0; video.play().catch(() => {}); }
+        if (active && videoMatchesViewport(video)) { video.currentTime = 0; video.play().catch(() => {}); }
         else video.pause();
-      }
+      });
     });
 
     dots.forEach((dot, idx) => {
@@ -617,11 +650,14 @@ document.addEventListener("DOMContentLoaded", () => {
       soundToggle.setAttribute("aria-pressed", soundOn ? "true" : "false");
       soundToggle.setAttribute("aria-label", soundOn ? "Turn sound off" : "Turn sound on");
       slides.forEach(slide => {
-        const video = slide.querySelector("video");
-        if (video) video.muted = !soundOn;
+        slide.querySelectorAll("video").forEach(video => {
+          video.muted = !soundOn;
+        });
       });
     });
   }
+
+  portraitMedia.addEventListener?.("change", () => showSlide(index, false));
 
   showSlide(index);
 });
@@ -661,6 +697,11 @@ document.addEventListener("DOMContentLoaded", () => {
           "type": "text",
           "id": "video_url",
           "label": "Video URL"
+        },
+        {
+          "type": "text",
+          "id": "portrait_video_url",
+          "label": "Portrait video URL"
         },
         {
           "type": "image_picker",
