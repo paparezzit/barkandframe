@@ -242,12 +242,14 @@
 
   .floating-images__holder product-card--floating.product-card--floating .image-block__image{
     display: block !important;
+    position: absolute !important;
+    inset: 0;
     width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
     aspect-ratio: var(--ratio) !important;
-    object-fit: contain !important;
-    position: relative !important;
+    object-fit: cover !important;
+    object-position: center;
     z-index: 1;
     border-radius: 40px !important;
     content-visibility: visible !important;

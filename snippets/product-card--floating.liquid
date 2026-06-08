@@ -154,13 +154,14 @@
       .image-block__image,
       img{
         display: block !important;
-        height: auto !important;
+        position: absolute;
+        inset: 0;
+        height: 100% !important;
         width: 100% !important;
-        max-width: 100% !important;
+        max-width: none !important;
         aspect-ratio: var(--ratio) !important;
-        object-fit: contain !important;
+        object-fit: cover !important;
         object-position: center;
-        position: relative;
         z-index: 1;
         border-radius: 40px !important;
         content-visibility: visible !important;
