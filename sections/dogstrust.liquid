@@ -154,10 +154,15 @@
   @media(max-width: 749px){
     --site-content-margin: var(--page-margin) !important;
 
+    .dogstrust__stage{
+      grid-column: 1 / -1;
+      margin-inline: var(--page-margin);
+    }
+
     .dogstrust__inner{
       position: relative;
       aspect-ratio: auto;
-      height: 185vw;
+      height: 165vw;
       min-height: 720px;
       max-height: 820px;
     }
@@ -261,12 +266,17 @@
     max-width: none;
     width: 100%;
 
+    .dogstrust__stage{
+      grid-column: 1 / -1;
+      margin-inline: var(--page-margin);
+    }
+
     .dogstrust__inner{
       position: relative;
       aspect-ratio: auto;
-      height: 72vw;
+      height: 78vw;
       min-height: 620px;
-      max-height: 760px;
+      max-height: 840px;
     }
 
     .dogstrust__wrapper{
