@@ -24,7 +24,7 @@ export class ProductCard extends Component {
   }
 
   get isInProductListing() {
-    return this.closest('.product-grid, .shop-products__product-grid, .shop-products__rail-track') !== null;
+    return this.closest('.product-grid, .shop-products__product-grid, .shop-products__rail-track, .more-from__grid') !== null;
   }
 
   /**
