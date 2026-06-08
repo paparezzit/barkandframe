@@ -1,20 +1,68 @@
 
+{%- liquid
+  assign portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
+  assign default_cta_style = blank
+
+  for style in portrait_styles
+    assign style_id = style.style_id.value | strip
+    assign style_name = style.name.value | strip
+    if style_id == 'the_gentleman' or style_name == 'The Gentleman'
+      assign default_cta_style = style
+      break
+    endif
+  endfor
+-%}
+
 <section class="more-from section section--page-width">
   <h2 class="more-from__title">{{ section.settings.title }}</h2>
 
   <div class="more-from__grid">
 
     <a href="{{ section.settings.cta_link }}" class="more-from__cta">
-      {%- if section.settings.cta_image != blank -%}
-        <div class="more-from__cta-img">
+      {%- assign has_cta_style_images = false -%}
+      <div class="more-from__cta-img" data-more-from-style-cycler>
+        {%- if default_cta_style != blank -%}
+          {%- assign default_style_image = default_cta_style.visualizator.value | default: default_cta_style.visualizer_image.value | default: default_cta_style.preview_image.value -%}
+          {%- if default_style_image != blank -%}
+            {%- assign has_cta_style_images = true -%}
+            <img
+              class="more-from__cta-style-img is-active"
+              src="{{ default_style_image | image_url: width: 800 }}"
+              alt="{{ default_cta_style.name.value | default: section.settings.cta_label | escape }}"
+              loading="lazy"
+              width="800"
+            >
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- for style in portrait_styles -%}
+          {%- assign style_id = style.style_id.value | strip -%}
+          {%- assign style_name = style.name.value | strip -%}
+          {%- unless style_id == 'the_gentleman' or style_name == 'The Gentleman' -%}
+            {%- assign style_image = style.visualizator.value | default: style.visualizer_image.value | default: style.preview_image.value -%}
+            {%- if style_image != blank -%}
+              {%- assign has_cta_style_images = true -%}
+              <img
+                class="more-from__cta-style-img"
+                src="{{ style_image | image_url: width: 800 }}"
+                alt="{{ style.name.value | default: section.settings.cta_label | escape }}"
+                loading="lazy"
+                width="800"
+              >
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+
+        {%- if has_cta_style_images == false and section.settings.cta_image != blank -%}
           <img
+            class="more-from__cta-style-img is-active"
             src="{{ section.settings.cta_image | image_url: width: 800 }}"
             alt="{{ section.settings.cta_label | escape }}"
             loading="lazy"
             width="800"
           >
-        </div>
-      {%- endif -%}
+        {%- endif -%}
+      </div>
       <div class="more-from__cta-body">
         <span class="more-from__cta-label">{{ section.settings.cta_label }}</span>
       </div>
@@ -74,20 +122,34 @@
 .more-from__cta {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   text-decoration: none;
   color: var(--brown);
   transition: opacity var(--hover-transition-duration) var(--hover-transition-timing), transform var(--hover-transition-duration) var(--hover-transition-timing);
   height: 100%;
 }
 
-.more-from__cta-img img {
+.more-from__cta-img {
   width: 100%;
   aspect-ratio: 100 / 126;
-  object-fit: cover;
-  display: block;
+  position: relative;
+  overflow: hidden;
   background-color: var(--cream);
   border-radius: 40px;
+}
+
+.more-from__cta-style-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.more-from__cta-style-img.is-active {
+  opacity: 1;
 }
 
 .more-from__cta-label {
@@ -131,6 +193,52 @@
   }
 }
 {% endstylesheet %}
+
+<script>
+  (() => {
+    if (window.__bafMoreFromStyleCyclerBound) return;
+    window.__bafMoreFromStyleCyclerBound = true;
+
+    const timers = new WeakMap();
+
+    const setActiveImage = (holder, index) => {
+      const images = holder.querySelectorAll('.more-from__cta-style-img');
+      if (!images.length) return;
+      images.forEach((image, imageIndex) => image.classList.toggle('is-active', imageIndex === index));
+      holder.dataset.activeStyleIndex = String(index);
+    };
+
+    const resetCycler = (holder) => {
+      const timer = timers.get(holder);
+      if (timer) window.clearInterval(timer);
+      timers.delete(holder);
+      setActiveImage(holder, 0);
+    };
+
+    document.addEventListener('pointerenter', (event) => {
+      const holder = event.target.closest('[data-more-from-style-cycler]');
+      if (!holder || event.pointerType !== 'mouse' || timers.has(holder)) return;
+
+      const images = holder.querySelectorAll('.more-from__cta-style-img');
+      if (images.length < 2) return;
+
+      let index = 0;
+      const cycle = () => {
+        index = (index + 1) % images.length;
+        setActiveImage(holder, index);
+      };
+
+      cycle();
+      timers.set(holder, window.setInterval(cycle, 700));
+    }, true);
+
+    document.addEventListener('pointerleave', (event) => {
+      const holder = event.target.closest('[data-more-from-style-cycler]');
+      if (!holder || event.pointerType !== 'mouse') return;
+      resetCycler(holder);
+    }, true);
+  })();
+</script>
 
 {% schema %}
 {
