@@ -59,6 +59,7 @@
 
     .dogstrust__bg{
       position: relative;
+      z-index: 1;
 
       img{
         position: absolute;
@@ -75,6 +76,8 @@
     .dogstrust__content{
       padding: 30px 30px 30px 10px;
       margin: auto;
+      position: relative;
+      z-index: 2;
     }
 
     .dogstrust__title{
@@ -152,6 +155,20 @@
   @media(min-width: 1200px){
     .dogstrust__wrapper{
       grid-template-columns: 5fr 6fr;
+
+      .dogstrust__bg{
+        overflow: hidden;
+
+        img{
+          position: static;
+          width: calc(100% + 75px);
+          max-width: none;
+          height: calc(108% + 100px);
+          margin: -100px 0 0 -75px;
+          object-fit: cover;
+          object-position: right center;
+        }
+      }
 
       .dogstrust__content{
         padding: 30px 80px 30px 0;
