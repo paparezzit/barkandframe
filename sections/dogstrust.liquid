@@ -1,4 +1,8 @@
 <div class="dogstrust section section--page-width">
+  <div class="dogstrust__logo">
+    <img src="{{ 'koninklijke-hondenbescherming_logos.svg' | asset_url }}" alt="" width="126" height="126">
+  </div>
+
   <div class="dogstrust__inner">
     <div class="dogstrust__wrapper">
       <div class="dogstrust__bg">
@@ -47,6 +51,21 @@
   --site-content-margin: var(--page-margin);
   margin: 120px 0;
   position: relative;
+
+  .dogstrust__logo{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    img{
+      display: block;
+      width: 72px;
+      height: auto;
+    }
+  }
 
   .dogstrust__inner {
     background: var(--purple);
@@ -159,6 +178,12 @@
   @media(min-width: 750px){
     margin: 180px auto;
     max-width: 920px;
+
+    .dogstrust__logo{
+      img{
+        width: 96px;
+      }
+    }
 
     .dogstrust__inner{
       aspect-ratio: 845/467;
