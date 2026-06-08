@@ -67,7 +67,7 @@
       "name": "Fade Slideshow",
       "settings": {
         "autoplay": true,
-        "autoplay_speed": 8
+        "autoplay_speed": 11
       }
     },
     "section_artist-intro": {
