@@ -185,7 +185,7 @@
             <div class="pickup-availability__column">
               <h4 class="pickup-location__h4">{{ closest.product.title }}</h4>
               <p class="pickup-location__text-sm">
-                {{ closest.product.selected_or_first_available_variant.title }}
+                {{ closest.product.selected_or_first_available_variant.title | replace: '2XL', 'XXL' }}
               </p>
             </div>
             <button

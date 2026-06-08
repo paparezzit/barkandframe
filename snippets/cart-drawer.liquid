@@ -184,10 +184,18 @@
                                   <div class="cart-drawer__upsell-card-variant-wrap">
                                     <select class="cart-drawer__upsell-card-variant">
                                       {%- for variant in upsell_product.variants -%}
+                                        {%- liquid
+                                          assign variant_size = variant.option2 | strip
+                                          if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
+                                            unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
+                                              continue
+                                            endunless
+                                          endif
+                                        -%}
                                         <option
                                           value="{{ variant.id }}"
                                           {% unless variant.available %}disabled{% endunless %}
-                                        >{{ variant.title }}</option>
+                                        >{{ variant.title | replace: '2XL', 'XXL' }}</option>
                                       {%- endfor -%}
                                     </select>
                                     <span class="cart-drawer__upsell-card-variant-chevron">

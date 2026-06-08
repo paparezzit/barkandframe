@@ -29,6 +29,10 @@
     {%- assign shopify_color = variant.option1 | strip -%}
     {%- assign color = shopify_color -%}
     {%- assign size = variant.option2 | strip -%}
+    {%- assign printful_size = size -%}
+    {%- if size == 'XXL' -%}
+      {%- assign printful_size = '2XL' -%}
+    {%- endif -%}
 
     {%- if product_type == 'Crewneck' and shopify_color == 'Heather Grey' -%}
       {%- assign color = 'Carbon Grey' -%}
@@ -40,7 +44,7 @@
       {%- when 'Crewneck' -%}
         {%- case color -%}
           {%- when 'Black' -%}
-            {%- case size -%}
+            {%- case printful_size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 11254 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 11255 -%}
               {%- when 'L' -%}{%- assign printful_variant_id = 11256 -%}
@@ -49,7 +53,7 @@
               {%- when '3XL' -%}{%- assign printful_variant_id = 13258 -%}
             {%- endcase -%}
           {%- when 'Carbon Grey' -%}
-            {%- case size -%}
+            {%- case printful_size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 11244 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 11245 -%}
               {%- when 'L' -%}{%- assign printful_variant_id = 11246 -%}
@@ -61,7 +65,7 @@
       {%- when 'T-Shirt' -%}
         {%- case color -%}
           {%- when 'Black' -%}
-            {%- case size -%}
+            {%- case printful_size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 21000 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 21006 -%}
               {%- when 'L' -%}{%- assign printful_variant_id = 21012 -%}
@@ -69,7 +73,7 @@
               {%- when '2XL' -%}{%- assign printful_variant_id = 21024 -%}
             {%- endcase -%}
           {%- when 'Heather Grey' -%}
-            {%- case size -%}
+            {%- case printful_size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 21002 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 21008 -%}
               {%- when 'L' -%}{%- assign printful_variant_id = 21014 -%}
@@ -77,7 +81,7 @@
               {%- when '2XL' -%}{%- assign printful_variant_id = 21026 -%}
             {%- endcase -%}
           {%- when 'White' -%}
-            {%- case size -%}
+            {%- case printful_size -%}
               {%- when 'S' -%}{%- assign printful_variant_id = 21005 -%}
               {%- when 'M' -%}{%- assign printful_variant_id = 21011 -%}
               {%- when 'L' -%}{%- assign printful_variant_id = 21017 -%}
@@ -172,7 +176,7 @@
           "production_line": {{ production_line | json }},
         {%- endif -%}
         "product_color": {{ color | json }},
-        "size": {{ size | json }},
+        "size": {{ printful_size | json }},
         "artwork_colorway": {{ artwork_colorway | json }},
         "production_name": {{ production_name | json }},
         "printful_variant_id": {{ printful_variant_id }}

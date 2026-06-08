@@ -89,6 +89,16 @@
               {{ product_option.name | escape }}
             </legend>
             {%- for product_option_value in product_option.values -%}
+              {%- liquid
+                assign option_value_raw = product_option_value | strip
+                assign option_name_handle = product_option.name | handleize
+                if option_name_handle == 'size' and product_resource.type == 'Crewneck' or option_name_handle == 'size' and product_resource.type == 'T-Shirt'
+                  unless option_value_raw == 'S' or option_value_raw == 'M' or option_value_raw == 'L' or option_value_raw == 'XL' or option_value_raw == '2XL' or option_value_raw == 'XXL'
+                    continue
+                  endunless
+                endif
+              -%}
+              {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
@@ -117,7 +127,7 @@
                   type="radio"
                   name="{{ product_option.name | escape }}-{{ block.id }}-{{ product_resource.id }}"
                   value="{{ product_option_value | escape }}"
-                  aria-label="{{ product_option_value.name }}"
+                  aria-label="{{ display_option_value }}"
                   {% if product_option_value.available == false %}
                     aria-disabled="true"
                   {% endif %}
@@ -142,9 +152,9 @@
                     mode: 'unscaled',
                     color_name: product_option_value.name,
                   %}
-                  <span class="variant-option__swatch-name">{{ product_option_value.name | replace: ' ', '<br>' }}</span>
+                  <span class="variant-option__swatch-name">{{ display_option_value | replace: ' ', '<br>' }}</span>
                 {% else %}
-                  <span class="variant-option__button-label__text">{{ product_option_value | escape }}</span>
+                  <span class="variant-option__button-label__text">{{ display_option_value | escape }}</span>
                 {% endif %}
                 {% render 'strikethrough-variant', product_option: product_option_value %}
               </label>
@@ -194,6 +204,16 @@
                 class="variant-option__select"
               >
                 {%- for product_option_value in product_option.values -%}
+                  {%- liquid
+                    assign option_value_raw = product_option_value | strip
+                    assign option_name_handle = product_option.name | handleize
+                    if option_name_handle == 'size' and product_resource.type == 'Crewneck' or option_name_handle == 'size' and product_resource.type == 'T-Shirt'
+                      unless option_value_raw == 'S' or option_value_raw == 'M' or option_value_raw == 'L' or option_value_raw == 'XL' or option_value_raw == '2XL' or option_value_raw == 'XXL'
+                        continue
+                      endunless
+                    endif
+                  -%}
+                  {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
                   <option
                     value="{{ product_option_value | escape }}"
                     data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
@@ -205,9 +225,9 @@
                     {% endif %}
                   >
                     {% if product_option_value.available == false %}
-                      {{ product_option_value | escape }} - {{ 'content.unavailable' | t }}
+                      {{ display_option_value | escape }} - {{ 'content.unavailable' | t }}
                     {% else %}
-                      {{ product_option_value | escape }}
+                      {{ display_option_value | escape }}
                     {% endif %}
                   </option>
                 {%- endfor -%}

@@ -34,6 +34,16 @@
         {%- endif %}
       </legend>
       {%- for product_option_value in product_option.values -%}
+        {%- liquid
+          assign option_value_raw = product_option_value | strip
+          assign option_name_handle = product_option.name | handleize
+          if option_name_handle == 'size' and product_resource.type == 'Crewneck' or option_name_handle == 'size' and product_resource.type == 'T-Shirt'
+            unless option_value_raw == 'S' or option_value_raw == 'M' or option_value_raw == 'L' or option_value_raw == 'XL' or option_value_raw == '2XL' or option_value_raw == 'XXL'
+              continue
+            endunless
+          endif
+        -%}
+        {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
         {% if product_option_value.size > longest_value and option_id_attribute %}
           {% assign longest_value = product_option_value.size %}
         {% endif %}
@@ -60,7 +70,7 @@
             type="radio"
             name="{{ product_option.name | escape }}-{{ block.id }}-{{ product_resource.id }}"
             value="{{ product_option_value | escape }}"
-            aria-label="{{ product_option_value.name }}"
+            aria-label="{{ display_option_value }}"
             data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
             data-option-value-id="{{ product_option_value.id }}"
             data-option-media-id="{{ featured_media.id }}"
@@ -80,7 +90,7 @@
           {% if variant_style == 'swatch' %}
             {% render 'swatch', swatch: product_option_value.swatch, variant_image: featured_media %}
           {% else %}
-            <span>{{ product_option_value | escape }}</span>
+            <span>{{ display_option_value | escape }}</span>
           {% endif %}
           {% render 'strikethrough-variant', product_option: product_option_value %}
         </label>
