@@ -24,7 +24,7 @@ export class ProductCard extends Component {
   }
 
   get isInProductListing() {
-    return this.closest('.product-grid, .shop-products__product-grid') !== null;
+    return this.closest('.product-grid, .shop-products__product-grid, .shop-products__rail-track') !== null;
   }
 
   /**
@@ -312,8 +312,6 @@ export class ProductCard extends Component {
    * @param {string} id - The id of the variant to preview.
    */
   previewVariant(id) {
-    if (this.isInProductListing) return;
-
     const { slideshow } = this.refs;
 
     if (!slideshow) return;
@@ -327,8 +325,6 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOver = (event) => {
-    if (this.isInProductListing) return;
-
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -350,8 +346,6 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOut = (event) => {
-    if (this.isInProductListing) return;
-
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -368,8 +362,6 @@ export class ProductCard extends Component {
    * @param {MouseEvent} event
    */
   #handleSwatchClick = (event) => {
-    if (this.isInProductListing) return;
-
     if (!(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -519,97 +511,6 @@ export class ProductCard extends Component {
 
 if (!customElements.get('product-card')) {
   customElements.define('product-card', ProductCard);
-}
-
-const productCardSwatchLabelSelector = 'swatches-variant-picker-component .variant-option__button-label';
-
-function getProductCardSwatchTarget(event) {
-  if (!(event.target instanceof Element)) return null;
-
-  const swatchLabel = event.target.closest(productCardSwatchLabelSelector);
-  if (!swatchLabel) return null;
-
-  const card = swatchLabel.closest('product-card');
-  if (!card) return null;
-
-  const input = swatchLabel.querySelector(
-    'input[data-first-available-or-first-variant-id], input[data-variant-id]'
-  );
-
-  return { card, swatchLabel, input };
-}
-
-function navigateToProductCardSwatch(event, productUrl, variantId) {
-  const url = new URL(productUrl, window.location.origin);
-  url.searchParams.set('variant', variantId);
-
-  const shouldOpenInNewTab =
-    event instanceof MouseEvent && (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1);
-
-  event.preventDefault();
-  event.stopImmediatePropagation();
-
-  if (shouldOpenInNewTab) {
-    window.open(url.href, '_blank');
-  } else {
-    window.location.href = url.href;
-  }
-}
-
-if (!window.__bafProductCardSwatchesBound) {
-  window.__bafProductCardSwatchesBound = true;
-
-  document.addEventListener(
-    'pointerover',
-    (event) => {
-      if (!(event instanceof PointerEvent) || event.pointerType !== 'mouse') return;
-
-      const target = getProductCardSwatchTarget(event);
-      if (!target) return;
-      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
-      if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
-
-      const mediaId =
-        target.swatchLabel.getAttribute('data-media-id') ||
-        target.input?.getAttribute('data-option-media-id');
-      if (mediaId && typeof target.card.previewVariant === 'function') target.card.previewVariant(mediaId);
-    },
-    true
-  );
-
-  document.addEventListener(
-    'pointerout',
-    (event) => {
-      if (!(event instanceof PointerEvent) || event.pointerType !== 'mouse') return;
-
-      const target = getProductCardSwatchTarget(event);
-      if (!target) return;
-      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
-      if (event.relatedTarget instanceof Node && target.swatchLabel.contains(event.relatedTarget)) return;
-
-      if (typeof target.card.resetVariant === 'function') target.card.resetVariant();
-    },
-    true
-  );
-
-  document.addEventListener(
-    'click',
-    (event) => {
-      const target = getProductCardSwatchTarget(event);
-      if (!target || !(target.input instanceof HTMLInputElement)) return;
-      if (target.card.closest('.product-grid, .shop-products__product-grid')) return;
-
-      const variantId = target.input.dataset.firstAvailableOrFirstVariantId || target.input.dataset.variantId;
-      if (!variantId) return;
-
-      const picker = target.input.closest('swatches-variant-picker-component');
-      const productUrl = picker?.getAttribute('data-product-url') || target.card.refs?.productCardLink?.href;
-      if (!productUrl) return;
-
-      navigateToProductCardSwatch(event, productUrl, variantId);
-    },
-    true
-  );
 }
 
 /**
