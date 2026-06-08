@@ -112,9 +112,11 @@
       </div>
     </section>
 
+    {%- assign bestseller_count = 0 -%}
     {%- capture bestseller_cards -%}
       {%- for product in section.settings.bestseller_products limit: 10 -%}
         {%- if product != blank -%}
+          {%- assign bestseller_count = bestseller_count | plus: 1 -%}
           <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
             {%- # theme-check-disable UniqueStaticBlockId -%}
             {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
@@ -123,6 +125,42 @@
         {%- endif -%}
       {%- endfor -%}
     {%- endcapture -%}
+
+    {%- if bestseller_count == 0 -%}
+      {%- assign fallback_bestseller_count = 0 -%}
+      {%- capture bestseller_cards -%}
+        {%- paginate collection.products by 50 -%}
+          {%- for product in collection.products -%}
+            {%- if fallback_bestseller_count >= 10 -%}
+              {%- break -%}
+            {%- endif -%}
+
+            {%- liquid
+              assign product_type = product.type | downcase
+              assign product_title = product.title | downcase
+              assign is_merch = false
+
+              if product_type == 'cap' or product_title contains '| cap' or product_title contains ' cap'
+                assign is_merch = true
+              elsif product_type contains 't-shirt' or product_type contains 't shirt' or product_title contains '| t-shirt' or product_title contains '| t shirt'
+                assign is_merch = true
+              elsif product_type contains 'crewneck' or product_type contains 'crew neck' or product_title contains '| crewneck' or product_title contains '| crew neck'
+                assign is_merch = true
+              endif
+            -%}
+
+            {%- if is_merch -%}
+              {%- assign fallback_bestseller_count = fallback_bestseller_count | plus: 1 -%}
+              <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+                {%- # theme-check-disable UniqueStaticBlockId -%}
+                {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+                {%- # theme-check-enable UniqueStaticBlockId -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endpaginate -%}
+      {%- endcapture -%}
+    {%- endif -%}
 
     {%- if bestseller_cards != blank -%}
       <section id="shop-products-bestseller" class="shop-products__bestseller shop-products__anchor">
