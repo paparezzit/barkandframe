@@ -405,7 +405,9 @@
 
   .shop-products__rail {
     width: 100vw;
+    margin-block-start: calc(-1 * var(--hover-lift-amount));
     margin-inline: calc((100% - 100vw) / 2);
+    padding-block-start: var(--hover-lift-amount);
     overflow-x: auto;
     cursor: grab;
     scrollbar-width: none;
