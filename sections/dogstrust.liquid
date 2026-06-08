@@ -38,6 +38,8 @@
     -webkit-mask-image: url({{ 'dogstrust-mask--mobile.svg' | asset_url }});
     mask-image: url({{ 'dogstrust-mask--mobile.svg' | asset_url }});
     mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
   }
 
   @media(min-width: 750px){
@@ -121,6 +123,10 @@
       .button{
         white-space: nowrap;
         display: inline-block;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+        white-space: normal;
         background-color: var(--beige);
         border: 1px solid var(--beige);
         color: var(--brown);
@@ -148,6 +154,8 @@
 
     .dogstrust__inner{
       position: relative;
+      aspect-ratio: 500/900;
+      min-height: 620px;
     }
 
     .dogstrust__wrapper{
@@ -159,7 +167,7 @@
 
       .dogstrust__content{
         position: absolute;
-        top: 25%;
+        top: 22%;
         left: 40%;
         width: 60%;
         box-sizing: border-box;
@@ -176,10 +184,15 @@
       }
 
       .dogstrust__button{
-        width: 166.667%;
-        margin-left: -66.667%;
+        width: 100%;
+        margin-left: 0;
         text-align: center;
       }
+    }
+
+    .dogstrust__image{
+      right: -8px;
+      bottom: -36px;
     }
   }
 
