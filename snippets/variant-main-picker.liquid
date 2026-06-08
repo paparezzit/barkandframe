@@ -98,7 +98,40 @@
                   endunless
                 endif
               -%}
-              {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
+              {%- liquid
+                assign display_option_value = product_option_value | replace: '2XL', 'XXL'
+                if option_name_handle == 'color' or option_name_handle == 'colour'
+                  case product_resource.type
+                    when 'Cap'
+                      case option_value_raw
+                        when 'Black'
+                          assign display_option_value = 'Onyx'
+                        when 'Oyster'
+                          assign display_option_value = 'Biscuit'
+                      endcase
+                    when 'T-Shirt'
+                      case option_value_raw
+                        when 'Black'
+                          assign display_option_value = 'Onyx'
+                        when 'Heather Grey'
+                          assign display_option_value = 'Greyhound'
+                        when 'Pure White'
+                          assign display_option_value = 'White'
+                        when 'White'
+                          assign display_option_value = 'White'
+                      endcase
+                    when 'Crewneck'
+                      case option_value_raw
+                        when 'Black'
+                          assign display_option_value = 'Onyx'
+                        when 'Carbon Grey'
+                          assign display_option_value = 'Greyhound'
+                        when 'Heather Grey'
+                          assign display_option_value = 'Greyhound'
+                      endcase
+                  endcase
+                endif
+              -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
@@ -213,7 +246,40 @@
                       endunless
                     endif
                   -%}
-                  {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
+                  {%- liquid
+                    assign display_option_value = product_option_value | replace: '2XL', 'XXL'
+                    if option_name_handle == 'color' or option_name_handle == 'colour'
+                      case product_resource.type
+                        when 'Cap'
+                          case option_value_raw
+                            when 'Black'
+                              assign display_option_value = 'Onyx'
+                            when 'Oyster'
+                              assign display_option_value = 'Biscuit'
+                          endcase
+                        when 'T-Shirt'
+                          case option_value_raw
+                            when 'Black'
+                              assign display_option_value = 'Onyx'
+                            when 'Heather Grey'
+                              assign display_option_value = 'Greyhound'
+                            when 'Pure White'
+                              assign display_option_value = 'White'
+                            when 'White'
+                              assign display_option_value = 'White'
+                          endcase
+                        when 'Crewneck'
+                          case option_value_raw
+                            when 'Black'
+                              assign display_option_value = 'Onyx'
+                            when 'Carbon Grey'
+                              assign display_option_value = 'Greyhound'
+                            when 'Heather Grey'
+                              assign display_option_value = 'Greyhound'
+                          endcase
+                      endcase
+                    endif
+                  -%}
                   <option
                     value="{{ product_option_value | escape }}"
                     data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"

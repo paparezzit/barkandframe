@@ -65,6 +65,40 @@
         {% capture children %}
           {%- for product_option_value in product_option.values -%}
             {% liquid
+              assign option_value_raw = product_option_value | strip
+              assign display_option_value = product_option_value
+              if option_name_lower == 'color' or option_name_lower == 'colour'
+                case product_resource.type
+                  when 'Cap'
+                    case option_value_raw
+                      when 'Black'
+                        assign display_option_value = 'Onyx'
+                      when 'Oyster'
+                        assign display_option_value = 'Biscuit'
+                    endcase
+                  when 'T-Shirt'
+                    case option_value_raw
+                      when 'Black'
+                        assign display_option_value = 'Onyx'
+                      when 'Heather Grey'
+                        assign display_option_value = 'Greyhound'
+                      when 'Pure White'
+                        assign display_option_value = 'White'
+                      when 'White'
+                        assign display_option_value = 'White'
+                    endcase
+                  when 'Crewneck'
+                    case option_value_raw
+                      when 'Black'
+                        assign display_option_value = 'Onyx'
+                      when 'Carbon Grey'
+                        assign display_option_value = 'Greyhound'
+                      when 'Heather Grey'
+                        assign display_option_value = 'Greyhound'
+                    endcase
+                endcase
+              endif
+
               # We look for the right featured media to show when hovering/clicking on the swatch.
               # Most of the time there should be an image associated to the option-value.
               assign featured_media = product_option_value.variant.featured_media
@@ -116,7 +150,7 @@
                   type="radio"
                   name="{{ product_option.name | escape }}-{{ product_resource.id }}-swatch"
                   value="{{ product_option_value | escape }}"
-                  aria-label="{{ product_option_value.name }}"
+                  aria-label="{{ display_option_value }}"
                   data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
                   data-option-media-id="{{ featured_media.id }}"
                   data-option-value-id="{{ product_option_value.id }}"

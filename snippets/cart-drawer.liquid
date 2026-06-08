@@ -186,16 +186,25 @@
                                       {%- for variant in upsell_product.variants -%}
                                         {%- liquid
                                           assign variant_size = variant.option2 | strip
+                                          assign display_variant_title = variant.title | replace: '2XL', 'XXL'
                                           if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
                                             unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
                                               continue
                                             endunless
                                           endif
+                                          case upsell_product.type
+                                            when 'Cap'
+                                              assign display_variant_title = display_variant_title | replace: 'Black', 'Onyx' | replace: 'Oyster', 'Biscuit'
+                                            when 'T-Shirt'
+                                              assign display_variant_title = display_variant_title | replace: 'Black', 'Onyx' | replace: 'Heather Grey', 'Greyhound' | replace: 'Pure White', 'White'
+                                            when 'Crewneck'
+                                              assign display_variant_title = display_variant_title | replace: 'Black', 'Onyx' | replace: 'Carbon Grey', 'Greyhound' | replace: 'Heather Grey', 'Greyhound'
+                                          endcase
                                         -%}
                                         <option
                                           value="{{ variant.id }}"
                                           {% unless variant.available %}disabled{% endunless %}
-                                        >{{ variant.title | replace: '2XL', 'XXL' }}</option>
+                                        >{{ display_variant_title }}</option>
                                       {%- endfor -%}
                                     </select>
                                     <span class="cart-drawer__upsell-card-variant-chevron">

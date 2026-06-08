@@ -30,7 +30,42 @@
       <legend>
         {{ product_option.name | escape -}}
         {%- if variant_style == 'swatch' and product_resource.options_with_values.size > 1 -%}
-          <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
+          {%- liquid
+            assign selected_display_value = product_option.selected_value
+            assign option_name_handle = product_option.name | handleize
+            if option_name_handle == 'color' or option_name_handle == 'colour'
+              case product_resource.type
+                when 'Cap'
+                  case selected_display_value
+                    when 'Black'
+                      assign selected_display_value = 'Onyx'
+                    when 'Oyster'
+                      assign selected_display_value = 'Biscuit'
+                  endcase
+                when 'T-Shirt'
+                  case selected_display_value
+                    when 'Black'
+                      assign selected_display_value = 'Onyx'
+                    when 'Heather Grey'
+                      assign selected_display_value = 'Greyhound'
+                    when 'Pure White'
+                      assign selected_display_value = 'White'
+                    when 'White'
+                      assign selected_display_value = 'White'
+                  endcase
+                when 'Crewneck'
+                  case selected_display_value
+                    when 'Black'
+                      assign selected_display_value = 'Onyx'
+                    when 'Carbon Grey'
+                      assign selected_display_value = 'Greyhound'
+                    when 'Heather Grey'
+                      assign selected_display_value = 'Greyhound'
+                  endcase
+              endcase
+            endif
+          -%}
+          <span class="variant-option__swatch-value">{{ selected_display_value }}</span>
         {%- endif %}
       </legend>
       {%- for product_option_value in product_option.values -%}
@@ -43,7 +78,40 @@
             endunless
           endif
         -%}
-        {% assign display_option_value = product_option_value | replace: '2XL', 'XXL' %}
+        {%- liquid
+          assign display_option_value = product_option_value | replace: '2XL', 'XXL'
+          if option_name_handle == 'color' or option_name_handle == 'colour'
+            case product_resource.type
+              when 'Cap'
+                case option_value_raw
+                  when 'Black'
+                    assign display_option_value = 'Onyx'
+                  when 'Oyster'
+                    assign display_option_value = 'Biscuit'
+                endcase
+              when 'T-Shirt'
+                case option_value_raw
+                  when 'Black'
+                    assign display_option_value = 'Onyx'
+                  when 'Heather Grey'
+                    assign display_option_value = 'Greyhound'
+                  when 'Pure White'
+                    assign display_option_value = 'White'
+                  when 'White'
+                    assign display_option_value = 'White'
+                endcase
+              when 'Crewneck'
+                case option_value_raw
+                  when 'Black'
+                    assign display_option_value = 'Onyx'
+                  when 'Carbon Grey'
+                    assign display_option_value = 'Greyhound'
+                  when 'Heather Grey'
+                    assign display_option_value = 'Greyhound'
+                endcase
+            endcase
+          endif
+        -%}
         {% if product_option_value.size > longest_value and option_id_attribute %}
           {% assign longest_value = product_option_value.size %}
         {% endif %}
