@@ -266,16 +266,19 @@
 
   @media(min-width: 750px) and (max-width: 1399px) and (orientation: portrait){
     --site-content-margin: var(--page-margin) !important;
+    display: block;
     max-width: none;
-    width: 100%;
+    width: 100vw;
+    margin: 180px 0;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
 
     .dogstrust__stage{
-      grid-column: 1 / -1;
       display: block;
-      width: 100vw;
+      width: 100%;
       max-width: none;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
+      margin-left: 0;
+      margin-right: 0;
       padding-inline: 0;
     }
 
@@ -283,6 +286,8 @@
       position: relative;
       width: 100%;
       max-width: none;
+      margin-left: 0;
+      margin-right: 0;
       aspect-ratio: auto;
       height: 86vw;
       min-height: 700px;
@@ -290,6 +295,8 @@
     }
 
     .dogstrust__wrapper{
+      width: 100%;
+      max-width: none;
       grid-template-columns: 46% 40%;
       position: relative;
       z-index: 1;
