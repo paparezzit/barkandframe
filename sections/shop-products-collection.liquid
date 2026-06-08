@@ -5,6 +5,7 @@
   assign cap_count = 0
   assign tshirt_count = 0
   assign crewneck_count = 0
+  assign bestseller_count = 0
 -%}
 
 {%- paginate collection.products by 50 -%}
@@ -46,6 +47,36 @@
   {%- endfor -%}
 {%- endpaginate -%}
 
+{%- capture bestseller_cards -%}
+  {%- for product in section.settings.bestseller_products limit: 10 -%}
+    {%- if product != blank -%}
+      {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+      <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+        {%- # theme-check-disable UniqueStaticBlockId -%}
+        {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+        {%- # theme-check-enable UniqueStaticBlockId -%}
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if bestseller_count == 0 -%}
+  {%- capture bestseller_cards -%}
+    {%- assign default_bestseller_handles = 'give-love-cap,powered-by-dogs-t-shirt,powered-by-dogs-cap,bloom-crewneck,no-fart-no-love-t-shirt' | split: ',' -%}
+    {%- for handle in default_bestseller_handles -%}
+      {%- assign product = all_products[handle] -%}
+      {%- if product != blank -%}
+        {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+        <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+          {%- # theme-check-disable UniqueStaticBlockId -%}
+          {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+          {%- # theme-check-enable UniqueStaticBlockId -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+{%- endif -%}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
 <section
@@ -54,7 +85,7 @@
 >
   <nav class="shop-products__nav" aria-label="Shop products sections">
     <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
-    <a class="shop-products__nav-link" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>
+    {%- if bestseller_cards != blank -%}<a class="shop-products__nav-link" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>{%- endif -%}
     {%- if cap_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
     {%- if tshirt_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-tshirt">{{ section.settings.tshirt_title }}</a>{%- endif -%}
     {%- if crewneck_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-crewneck">{{ section.settings.crewneck_title }}</a>{%- endif -%}
@@ -112,49 +143,6 @@
       </div>
     </section>
 
-    {%- assign bestseller_count = 0 -%}
-    {%- capture bestseller_cards -%}
-      {%- for product in section.settings.bestseller_products limit: 10 -%}
-        {%- if product != blank -%}
-          {%- assign bestseller_count = bestseller_count | plus: 1 -%}
-          <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
-            {%- # theme-check-disable UniqueStaticBlockId -%}
-            {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
-            {%- # theme-check-enable UniqueStaticBlockId -%}
-          </li>
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endcapture -%}
-
-    {%- if bestseller_count == 0 -%}
-      {%- capture bestseller_cards -%}
-        {%- assign default_bestseller_handles = 'give-love-cap,powered-by-dogs-t-shirt,powered-by-dogs-cap,bloom-crewneck,no-fart-no-love-t-shirt' | split: ',' -%}
-        {%- for handle in default_bestseller_handles -%}
-          {%- assign product = all_products[handle] -%}
-          {%- if product != blank -%}
-            {%- assign bestseller_count = bestseller_count | plus: 1 -%}
-            <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
-              {%- # theme-check-disable UniqueStaticBlockId -%}
-              {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
-              {%- # theme-check-enable UniqueStaticBlockId -%}
-            </li>
-          {%- endif -%}
-        {%- endfor -%}
-
-        {%- if bestseller_count == 0 -%}
-          {%- for product in collection.products limit: 5 -%}
-            {%- if product != blank -%}
-              <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
-                {%- # theme-check-disable UniqueStaticBlockId -%}
-                {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
-                {%- # theme-check-enable UniqueStaticBlockId -%}
-              </li>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- endif -%}
-      {%- endcapture -%}
-    {%- endif -%}
-
     {%- if bestseller_cards != blank -%}
       <section id="shop-products-bestseller" class="shop-products__bestseller shop-products__anchor">
         <h2 class="shop-products__section-title shop-products__section-title--center">
@@ -163,7 +151,7 @@
 
         <div class="shop-products__rail" data-shop-products-rail>
           <ul class="shop-products__rail-track" role="list">
-            {%- for i in (1..4) -%}
+            {%- for i in (1..8) -%}
               {{ bestseller_cards }}
             {%- endfor -%}
           </ul>
@@ -203,7 +191,7 @@
 {% stylesheet %}
   .shop-products {
     --shop-products-grid-gap: 20px;
-    --shop-products-card-width: calc((100vw - (var(--shop-products-grid-gap) * 3)) / 4);
+    --shop-products-card-width: calc((min(var(--page-content-width), calc(100vw - (var(--site-content-margin) * 2))) - (var(--shop-products-grid-gap) * 3)) / 4);
     padding-block: var(--padding-block-start) var(--padding-block-end);
     background: var(--beige);
   }
@@ -383,10 +371,21 @@
   }
 
   .shop-products__bestseller {
+    position: relative;
+    isolation: isolate;
     margin: clamp(100px, 16vw, 244px) auto 0;
     padding: 76px 0 92px;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 360px;
+    background: transparent;
+  }
+
+  .shop-products__bestseller::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
     background: #f4efe5;
   }
 
@@ -405,6 +404,8 @@
   }
 
   .shop-products__rail {
+    width: 100vw;
+    margin-inline: calc((100% - 100vw) / 2);
     overflow-x: auto;
     cursor: grab;
     scrollbar-width: none;
@@ -431,21 +432,10 @@
 
   .shop-products__rail-item {
     flex: 0 0 var(--shop-products-card-width);
+    width: var(--shop-products-card-width);
+    min-width: 0;
+    max-width: var(--shop-products-card-width);
     transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
-  }
-
-  .shop-products__rail-track product-card .card-gallery slideshow-arrows,
-  .shop-products__rail-track product-card .card-gallery slideshow-controls,
-  .shop-products__rail-track product-card product-swatches {
-    display: none;
-  }
-
-  .shop-products__rail-track product-card .card-gallery slideshow-component {
-    pointer-events: none;
-  }
-
-  .shop-products__rail-track product-card .card-gallery a {
-    pointer-events: auto;
   }
 
   .shop-products__product-section {
@@ -497,7 +487,7 @@
     }
 
     .shop-products {
-      --shop-products-card-width: calc((100vw - (var(--shop-products-grid-gap) * 2)) / 3);
+      --shop-products-card-width: calc((min(var(--page-content-width), calc(100vw - (var(--site-content-margin) * 2))) - (var(--shop-products-grid-gap) * 2)) / 3);
     }
 
     .shop-products__product-grid {
@@ -512,7 +502,7 @@
 
     .shop-products {
       --shop-products-grid-gap: 12px;
-      --shop-products-card-width: calc((100vw - var(--shop-products-grid-gap)) / 2);
+      --shop-products-card-width: calc((min(var(--page-content-width), calc(100vw - (var(--site-content-margin) * 2))) - var(--shop-products-grid-gap)) / 2);
     }
 
     .shop-products__hero-title {
@@ -586,15 +576,20 @@
         frame = window.requestAnimationFrame(tick);
       };
 
-      rail.addEventListener('mouseenter', () => {
+      const pauseRail = () => {
         paused = true;
-      });
+      };
 
-      rail.addEventListener('mouseleave', () => {
+      const resumeRail = () => {
         paused = false;
         dragging = false;
         rail.classList.remove('is-dragging');
-      });
+      };
+
+      rail.addEventListener('mouseenter', pauseRail);
+      rail.addEventListener('pointerenter', pauseRail);
+      rail.addEventListener('mouseleave', resumeRail);
+      rail.addEventListener('pointerleave', resumeRail);
 
       rail.addEventListener('pointerdown', (event) => {
         dragging = true;
