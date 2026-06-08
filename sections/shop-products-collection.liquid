@@ -112,30 +112,28 @@
       </div>
     </section>
 
-    {%- if section.settings.bestseller_products != blank -%}
+    {%- capture bestseller_cards -%}
+      {%- for product in section.settings.bestseller_products limit: 10 -%}
+        {%- if product != blank -%}
+          <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+            {%- # theme-check-disable UniqueStaticBlockId -%}
+            {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+            {%- # theme-check-enable UniqueStaticBlockId -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- if bestseller_cards != blank -%}
       <section id="shop-products-bestseller" class="shop-products__bestseller shop-products__anchor">
         <h2 class="shop-products__section-title shop-products__section-title--center">
           {{ section.settings.bestseller_title }}
         </h2>
 
-        {%- capture bestseller_cards -%}
-          {%- for product in section.settings.bestseller_products limit: 5 -%}
-            <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
-              {%- # theme-check-disable UniqueStaticBlockId -%}
-              {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
-              {%- # theme-check-enable UniqueStaticBlockId -%}
-            </li>
-            {%- unless forloop.last -%}<!--@split-->{%- endunless -%}
-          {%- endfor -%}
-        {%- endcapture -%}
-        {%- assign bestseller_items = bestseller_cards | split: '<!--@split-->' -%}
-
         <div class="shop-products__rail" data-shop-products-rail>
           <ul class="shop-products__rail-track" role="list">
-            {%- for i in (1..2) -%}
-              {%- for item in bestseller_items -%}
-                {{ item }}
-              {%- endfor -%}
+            {%- for i in (1..6) -%}
+              {{ bestseller_cards }}
             {%- endfor -%}
           </ul>
         </div>
@@ -173,6 +171,8 @@
 
 {% stylesheet %}
   .shop-products {
+    --shop-products-grid-gap: 20px;
+    --shop-products-card-width: calc((100% - (var(--shop-products-grid-gap) * 3)) / 4);
     padding-block: var(--padding-block-start) var(--padding-block-end);
     background: var(--beige);
   }
@@ -391,16 +391,30 @@
 
   .shop-products__rail-track {
     display: flex;
-    gap: 20px;
+    gap: var(--shop-products-grid-gap);
     width: max-content;
     margin: 0;
-    padding: 0 20px;
+    padding: 0;
     list-style: none;
   }
 
   .shop-products__rail-item {
-    flex: 0 0 303px;
+    flex: 0 0 var(--shop-products-card-width);
     transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
+  }
+
+  .shop-products__rail-track product-card .card-gallery slideshow-arrows,
+  .shop-products__rail-track product-card .card-gallery slideshow-controls,
+  .shop-products__rail-track product-card product-swatches {
+    display: none;
+  }
+
+  .shop-products__rail-track product-card .card-gallery slideshow-component {
+    pointer-events: none;
+  }
+
+  .shop-products__rail-track product-card .card-gallery a {
+    pointer-events: auto;
   }
 
   .shop-products__product-section {
@@ -451,6 +465,10 @@
       --portrait-card-width: calc((100% - (var(--portrait-grid-gap) * 2)) / 3);
     }
 
+    .shop-products {
+      --shop-products-card-width: calc((100% - (var(--shop-products-grid-gap) * 2)) / 3);
+    }
+
     .shop-products__product-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -459,6 +477,11 @@
   @media screen and (max-width: 749px) {
     .shop-products__custom {
       padding-top: 68px;
+    }
+
+    .shop-products {
+      --shop-products-grid-gap: 12px;
+      --shop-products-card-width: calc((100% - var(--shop-products-grid-gap)) / 2);
     }
 
     .shop-products__hero-title {
@@ -485,12 +508,7 @@
     }
 
     .shop-products__rail-track {
-      gap: 12px;
-      padding-inline: 12px;
-    }
-
-    .shop-products__rail-item {
-      flex-basis: min(72vw, 303px);
+      gap: var(--shop-products-grid-gap);
     }
 
     .shop-products__product-section {
@@ -499,7 +517,7 @@
 
     .shop-products__product-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 42px 12px;
+      gap: 42px var(--shop-products-grid-gap);
     }
   }
 {% endstylesheet %}
@@ -772,7 +790,7 @@
       "type": "product_list",
       "id": "bestseller_products",
       "label": "Bestseller products",
-      "limit": 5
+      "limit": 10
     },
     {
       "type": "text",
