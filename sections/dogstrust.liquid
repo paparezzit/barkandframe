@@ -63,11 +63,12 @@
       img{
         position: absolute;
         top: -20%;
-        left: -18%;
-        width: 118%;
+        left: calc(-18% + 100px);
+        width: auto;
+        max-width: none;
         height: 128%;
-        object-fit: cover;
-        object-position: right center;
+        object-fit: contain;
+        object-position: left center;
       }
     }
 
