@@ -121,20 +121,28 @@
   @media(max-width: 749px){
     --site-content-margin: var(--page-margin) !important;
 
+    .dogstrust__inner{
+      position: relative;
+    }
+
     .dogstrust__wrapper{
-      grid-template-columns: 1fr 2fr;
+      display: block;
+      position: relative;
 
       .dogstrust__content{
-        grid-column: 2;
-        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 33.333%;
+        width: 66.667%;
         box-sizing: border-box;
-        margin: auto 0;
+        margin: 0;
         padding: 30px var(--page-margin) 30px 0;
+        transform: translateY(-50%);
       }
 
       .dogstrust__title,
       .dogstrust__text{
-        max-width: 100%;
+        width: 100%;
       }
     }
   }
@@ -179,6 +187,14 @@
     --site-content-margin: var(--page-margin) !important;
     max-width: none;
     width: 100%;
+
+    .dogstrust__wrapper{
+      .dogstrust__bg{
+        img{
+          left: calc(-18% - 75px);
+        }
+      }
+    }
   }
 
   @media(min-width: 1200px){
