@@ -283,10 +283,12 @@
 
     .dogstrust__inner{
       position: relative;
-      width: 100%;
-      max-width: none;
-      margin-left: 0;
-      margin-right: 0;
+      left: 50%;
+      width: 100vw !important;
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      transform: translateX(-50%);
       aspect-ratio: auto;
       height: 86vw;
       min-height: 700px;
@@ -294,8 +296,8 @@
     }
 
     .dogstrust__wrapper{
-      width: 100%;
-      max-width: none;
+      width: 100vw !important;
+      max-width: none !important;
       grid-template-columns: 46% 40%;
       position: relative;
       z-index: 1;
