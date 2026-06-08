@@ -21,6 +21,9 @@
     <a href="{{ section.settings.cta_link }}" class="more-from__cta">
       {%- assign has_cta_style_images = false -%}
       <div class="more-from__cta-img" data-more-from-style-cycler>
+        <span class="more-from__cta-chip more-from__cta-chip--style" data-more-from-style-label>The Gentleman</span>
+        <span class="more-from__cta-chip more-from__cta-chip--product">Canvas Unframed</span>
+
         {%- if default_cta_style != blank -%}
           {%- assign default_style_image = default_cta_style.visualizator.value | default: default_cta_style.visualizer_image.value | default: default_cta_style.preview_image.value -%}
           {%- if default_style_image != blank -%}
@@ -31,6 +34,7 @@
               alt="{{ default_cta_style.name.value | default: section.settings.cta_label | escape }}"
               loading="lazy"
               width="800"
+              data-style-name="{{ default_cta_style.name.value | default: 'The Gentleman' | escape }}"
             >
           {%- endif -%}
         {%- endif -%}
@@ -48,6 +52,7 @@
                 alt="{{ style.name.value | default: section.settings.cta_label | escape }}"
                 loading="lazy"
                 width="800"
+                data-style-name="{{ style.name.value | escape }}"
               >
             {%- endif -%}
           {%- endunless -%}
@@ -60,6 +65,7 @@
             alt="{{ section.settings.cta_label | escape }}"
             loading="lazy"
             width="800"
+            data-style-name="{{ section.settings.cta_label | escape }}"
           >
         {%- endif -%}
       </div>
@@ -133,16 +139,17 @@
   aspect-ratio: 100 / 126;
   position: relative;
   overflow: hidden;
-  background-color: var(--cream);
+  background-color: #F4EFE5;
   border-radius: 40px;
 }
 
 .more-from__cta-style-img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  top: 15%;
+  left: 17%;
+  width: 66%;
+  height: 72%;
+  object-fit: contain;
   display: block;
   opacity: 0;
   transition: opacity 0.18s ease;
@@ -150,6 +157,35 @@
 
 .more-from__cta-style-img.is-active {
   opacity: 1;
+}
+
+.more-from__cta-chip {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  min-width: 34%;
+  max-width: calc(100% - 32px);
+  padding: 3px 24px;
+  border-radius: 1000px;
+  color: var(--brown);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.more-from__cta-chip--style {
+  top: 0;
+  background-color: var(--purple);
+}
+
+.more-from__cta-chip--product {
+  top: 31px;
+  background-color: var(--green);
+  color: var(--beige);
+  font-weight: 700;
 }
 
 .more-from__cta-label {
@@ -206,6 +242,9 @@
       if (!images.length) return;
       images.forEach((image, imageIndex) => image.classList.toggle('is-active', imageIndex === index));
       holder.dataset.activeStyleIndex = String(index);
+
+      const label = holder.querySelector('[data-more-from-style-label]');
+      if (label) label.textContent = images[index]?.dataset.styleName || 'The Gentleman';
     };
 
     const resetCycler = (holder) => {
