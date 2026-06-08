@@ -7,7 +7,7 @@
 
       <div class="dogstrust__content">
         <h2 class="dogstrust__title">
-          {{ section.settings.title }}
+          {{ section.settings.title | replace: 'Every portrait makes a difference', 'Every portrait<br>makes a difference' }}
         </h2>
 
         <div class="dogstrust__text">
@@ -101,6 +101,7 @@
 
         &:hover{
           background-color: var(--purple);
+          border-color: var(--brown);
         }
       }
     }
