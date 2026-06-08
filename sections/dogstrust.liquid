@@ -15,7 +15,7 @@
         </div>
 
         <div class="dogstrust__button">
-          <a href="{{ section.settings.button_url }}" class="button">
+          <a href="{{ section.settings.button_url }}" class="button" target="_blank" rel="noopener noreferrer">
             {{ section.settings.button_label }}
           </a>
         </div>
@@ -118,6 +118,27 @@
     }
   }
 
+  @media(max-width: 749px){
+    --site-content-margin: var(--page-margin) !important;
+
+    .dogstrust__wrapper{
+      grid-template-columns: 1fr 2fr;
+
+      .dogstrust__content{
+        grid-column: 2;
+        width: 100%;
+        box-sizing: border-box;
+        margin: auto 0;
+        padding: 30px var(--page-margin) 30px 0;
+      }
+
+      .dogstrust__title,
+      .dogstrust__text{
+        max-width: 100%;
+      }
+    }
+  }
+
   @media(min-width: 750px){
     margin: 180px auto;
     max-width: 920px;
@@ -152,6 +173,12 @@
         width: 240px;
       }
     }
+  }
+
+  @media(min-width: 750px) and (max-width: 1199px){
+    --site-content-margin: var(--page-margin) !important;
+    max-width: none;
+    width: 100%;
   }
 
   @media(min-width: 1200px){
