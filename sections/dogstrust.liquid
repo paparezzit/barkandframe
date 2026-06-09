@@ -50,6 +50,13 @@
       mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
     }
   }
+
+  @media(min-width: 750px) and (max-width: 1399px) and (orientation: portrait){
+    .dogstrust__inner {
+      -webkit-mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
+      mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
+    }
+  }
 </style>
 
 {% stylesheet %}
@@ -289,8 +296,8 @@
       margin-left: 0 !important;
       margin-right: 0 !important;
       transform: translateX(-50%);
-      -webkit-mask-size: 175% 100%;
-      mask-size: 175% 100%;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
       aspect-ratio: auto;
       height: 86vw;
       min-height: 700px;
