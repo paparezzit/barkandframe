@@ -57,7 +57,7 @@
             class="cart-drawer__content motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
-            <h2 class="cart-drawer__heading h3 cart-drawer__heading--empty">
+            <h2 class="cart-drawer__heading cart-drawer__heading--empty">
               {{ 'content.your_cart_is_empty' | t }}
             </h2>
 
@@ -70,7 +70,7 @@
             class="cart-drawer__header"
             id="cart-drawer-header"
           >
-            <h2 class="cart-drawer__heading h3">
+            <h2 class="cart-drawer__heading">
               <span class="svg-wrapper cart-drawer__heading-icon">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
               {{ 'content.cart_title' | t }}
             </h2>
@@ -225,18 +225,9 @@
                       {%- endif -%}
                     {%- endfor -%}
                   </div>
-                  {%- if upsell_count > 1 -%}
-                    <div class="cart-drawer__upsell-dots">
-                      {%- for i in (1..upsell_count) -%}
-                        <button
-                          class="cart-drawer__upsell-dot{% if forloop.first %} is-active{% endif %}"
-                          data-dot-index="{{ forloop.index0 }}"
-                          aria-label="Product {{ forloop.index }}"
-                          type="button"
-                        ></button>
-                      {%- endfor -%}
-                    </div>
-                  {%- endif -%}
+                  <div class="cart-drawer__upsell-scrollbar" aria-hidden="true">
+                    <span class="cart-drawer__upsell-scrollbar-thumb"></span>
+                  </div>
                 </div>
               {%- endif -%}
 
@@ -328,45 +319,59 @@
       };
     }
 
-    // Dots: click → scroll to card, scroll → update active dot
-    document.addEventListener('click', (e) => {
-      const dot = e.target.closest('.cart-drawer__upsell-dot');
-      if (!dot) return;
-      const index = Number(dot.dataset.dotIndex);
-      const upsell = dot.closest('.cart-drawer__upsell');
-      const container = upsell?.querySelector('.cart-drawer__upsell-products');
-      const cards = container?.querySelectorAll('.cart-drawer__upsell-card');
-      if (!cards?.[index]) return;
-      container.scrollTo({ left: cards[index].offsetLeft - container.offsetLeft, behavior: 'smooth' });
-    });
+    function updateUpsellScrollbar(container) {
+      const scrollbar = container.closest('.cart-drawer__upsell')?.querySelector('.cart-drawer__upsell-scrollbar');
+      const thumb = scrollbar?.querySelector('.cart-drawer__upsell-scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
 
-    function initUpsellDots(container) {
-      const upsell = container.closest('.cart-drawer__upsell');
-      const dots = upsell?.querySelectorAll('.cart-drawer__upsell-dot');
-      if (!dots?.length) return;
-      const cards = container.querySelectorAll('.cart-drawer__upsell-card');
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      if (maxScroll <= 0) {
+        thumb.style.width = '100%';
+        thumb.style.transform = 'translateX(0)';
+        return;
+      }
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const index = Array.from(cards).indexOf(entry.target);
-            if (index === -1) return;
-            dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
-          });
-        },
-        { root: container, threshold: 0.5 }
-      );
-
-      cards.forEach((card) => observer.observe(card));
+      const trackWidth = scrollbar.clientWidth;
+      const thumbWidth = Math.max((container.clientWidth / container.scrollWidth) * trackWidth, 34);
+      const left = ((trackWidth - thumbWidth) * container.scrollLeft) / maxScroll;
+      thumb.style.width = `${thumbWidth}px`;
+      thumb.style.transform = `translateX(${left}px)`;
     }
 
-    document.querySelectorAll('.cart-drawer__upsell-products').forEach(initUpsellDots);
+    function initUpsellScrollbars() {
+      document.querySelectorAll('.cart-drawer__upsell-products').forEach((container) => {
+        if (container.dataset.scrollbarReady === 'true') {
+          updateUpsellScrollbar(container);
+          return;
+        }
 
-    // Re-init after cart section re-renders
-    document.addEventListener('cart:refresh', () => {
-      document.querySelectorAll('.cart-drawer__upsell-products').forEach(initUpsellDots);
-    });
+        container.dataset.scrollbarReady = 'true';
+        updateUpsellScrollbar(container);
+        container.addEventListener('scroll', () => updateUpsellScrollbar(container), { passive: true });
+        container.addEventListener('wheel', (event) => {
+          if (event.target.closest('button, select, input, textarea')) return;
+
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          if (maxScroll <= 0) return;
+
+          const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+          if (!delta) return;
+
+          const atStart = container.scrollLeft <= 0 && delta < 0;
+          const atEnd = container.scrollLeft >= maxScroll - 1 && delta > 0;
+          if (atStart || atEnd) return;
+
+          event.preventDefault();
+          container.scrollLeft += delta;
+          updateUpsellScrollbar(container);
+        }, { passive: false });
+      });
+    }
+
+    initUpsellScrollbars();
+    window.addEventListener('resize', initUpsellScrollbars);
+    document.addEventListener('cart:update', () => requestAnimationFrame(initUpsellScrollbars));
+    document.addEventListener('cart:refresh', () => requestAnimationFrame(initUpsellScrollbars));
   })();
 </script>
 
@@ -383,6 +388,10 @@
     align-items: center;
     gap: 10px;
     margin: 0;
+    font-family: var(--font-paragraph--family, var(--font-body--family));
+    font-size: var(--baf-text-medium-size);
+    font-weight: 400;
+    line-height: 1.2;
   }
 
   .cart-drawer__heading-icon {
@@ -429,10 +438,6 @@
     top: 0;
     z-index: 1;
 
-    .cart-drawer__heading {
-      font-size: 14px;
-    }
-
     .close-button {
       width: var(--minimum-touch-target);
       height: var(--minimum-touch-target);
@@ -453,6 +458,15 @@
   .cart-drawer__dialog {
     overflow: hidden;
     width: 440px !important;
+  }
+
+  .cart-drawer__dialog::backdrop {
+    background: rgba(255, 255, 255, 0.81);
+    backdrop-filter: none;
+  }
+
+  .cart-drawer__dialog[open]::backdrop {
+    animation: none;
   }
 
   .cart-drawer__inner {
@@ -490,8 +504,12 @@
     display: flex;
     overflow-x: auto;
     scrollbar-width: none;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     padding: 0 20px;
+  }
+
+  .cart-drawer__upsell-products::-webkit-scrollbar {
+    display: none;
   }
 
   .cart-drawer__upsell-card__wrapper{
@@ -625,36 +643,22 @@
     }
   }
 
-  .cart-drawer__upsell-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px 0;
-  }
-
-  .cart-drawer__upsell-dot {
+  .cart-drawer__upsell-scrollbar {
     height: 2px;
-    width: 100%;
-    flex: 1;
-    padding: 10px 0;
-    cursor: pointer;
-    opacity: .27;
-    border: 0;
-    background-color: transparent;
-    transition: opacity 0.2s;
-
-    &::after{
-      height: 2px;
-      width: 100%;
-      content: "";
-      background-color: var(--brown);
-      border-radius: 1000px;
-      display: block;
-    }
-
-    &.is-active {
-      opacity: 1;
-    }
+    margin: 12px 20px 0;
+    background: rgb(76 68 63 / 0.18);
+    border-radius: 1000px;
+    overflow: hidden;
   }
+
+  .cart-drawer__upsell-scrollbar-thumb {
+    display: block;
+    height: 100%;
+    width: 34px;
+    background: var(--brown);
+    border-radius: 1000px;
+    transform: translateX(0);
+    transition: width 0.1s linear;
+  }
+
 {% endstylesheet %}
