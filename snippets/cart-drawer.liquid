@@ -364,6 +364,14 @@
       });
     }
 
+    function refreshUpsellScrollbars() {
+      initUpsellScrollbars();
+      requestAnimationFrame(() => {
+        initUpsellScrollbars();
+        requestAnimationFrame(initUpsellScrollbars);
+      });
+    }
+
     document.addEventListener('wheel', (event) => {
       const upsell = event.target.closest('.cart-drawer__upsell');
       if (!upsell || event.target.closest('button, select, input, textarea')) return;
@@ -415,10 +423,16 @@
       activeScrollbarDrag = null;
     });
 
-    initUpsellScrollbars();
-    window.addEventListener('resize', initUpsellScrollbars);
-    document.addEventListener('cart:update', () => requestAnimationFrame(initUpsellScrollbars));
-    document.addEventListener('cart:refresh', () => requestAnimationFrame(initUpsellScrollbars));
+    document.querySelectorAll('.cart-drawer__dialog').forEach((dialog) => {
+      new MutationObserver(() => {
+        if (dialog.hasAttribute('open')) refreshUpsellScrollbars();
+      }).observe(dialog, { attributes: true, attributeFilter: ['open'] });
+    });
+
+    refreshUpsellScrollbars();
+    window.addEventListener('resize', refreshUpsellScrollbars);
+    document.addEventListener('cart:update', refreshUpsellScrollbars);
+    document.addEventListener('cart:refresh', refreshUpsellScrollbars);
   })();
 </script>
 
