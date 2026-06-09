@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   document.querySelectorAll(".product-card--floating .image-block").forEach(parallax => {
-    gsap.to(parallax, {"--floating-image-parallax-y": "-3.3vh", scrollTrigger: {
+    gsap.to(parallax, {"--floating-image-parallax-y": "-5vh", scrollTrigger: {
         trigger: parallax,
         start: "top bottom",
         end: "+=200%",
