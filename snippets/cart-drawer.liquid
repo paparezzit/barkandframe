@@ -54,7 +54,7 @@
           </div>
 
           <div
-            class="cart-drawer__content motion-reduce"
+            class="cart-drawer__content cart-drawer__content--empty motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
             <h2 class="cart-drawer__heading cart-drawer__heading--empty">
@@ -539,6 +539,18 @@
     height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
+  }
+
+  .cart-drawer__content--empty {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+  }
+
+  .cart-drawer__content--empty .cart-drawer__heading {
+    justify-content: center;
   }
 
   .cart-drawer__summary {
