@@ -274,7 +274,7 @@
       display: block;
       position: relative;
       left: 50%;
-      width: 100vw;
+      width: calc(100vw - (var(--page-margin) * 2));
       max-width: none;
       margin: 0;
       padding-inline: 0;
@@ -284,7 +284,7 @@
     .dogstrust__inner{
       position: relative;
       left: 50%;
-      width: 100vw !important;
+      width: calc(100vw - (var(--page-margin) * 2)) !important;
       max-width: none !important;
       margin-left: 0 !important;
       margin-right: 0 !important;
@@ -298,7 +298,7 @@
     }
 
     .dogstrust__wrapper{
-      width: 100vw !important;
+      width: calc(100vw - (var(--page-margin) * 2)) !important;
       max-width: none !important;
       grid-template-columns: 46% 40%;
       position: relative;
