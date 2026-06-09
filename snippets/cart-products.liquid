@@ -228,7 +228,16 @@
                             {%- unless forloop.first -%}
                               {%- assign clean_detail_part = detail_part | strip -%}
                               {%- if clean_detail_part != blank -%}
-                                <p>{{ clean_detail_part }}</p>
+                                {%- assign detail_label = blank -%}
+                                {%- case forloop.index -%}
+                                  {%- when 2 -%}
+                                    {%- assign detail_label = 'Border' -%}
+                                  {%- when 3 -%}
+                                    {%- assign detail_label = 'Framing' -%}
+                                  {%- when 4 -%}
+                                    {%- assign detail_label = 'Frame color' -%}
+                                {%- endcase -%}
+                                <p>{% if detail_label != blank %}{{ detail_label }}: {% endif %}{{ clean_detail_part }}</p>
                               {%- endif -%}
                             {%- endunless -%}
                           {%- endfor -%}
