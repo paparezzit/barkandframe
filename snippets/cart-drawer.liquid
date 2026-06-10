@@ -57,12 +57,14 @@
             class="cart-drawer__content cart-drawer__content--empty motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
-            <h2 class="cart-drawer__heading cart-drawer__heading--empty">
-              {{ 'content.your_cart_is_empty' | t }}
-            </h2>
+            <div class="cart-drawer__empty-state">
+              <h2 class="cart-drawer__heading cart-drawer__heading--empty">
+                {{ 'content.your_cart_is_empty' | t }}
+              </h2>
 
-            <div class="cart-drawer__items">
-              {% render 'cart-products' %}
+              <div class="cart-drawer__items">
+                {% render 'cart-products' %}
+              </div>
             </div>
           </div>
         {%- else -%}
@@ -533,6 +535,7 @@
   .cart-drawer__inner {
     height: 100%;
     overflow: hidden;
+    position: relative;
   }
 
   .cart-drawer__content {
@@ -542,14 +545,25 @@
   }
 
   .cart-drawer__content--empty {
-    height: 100%;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    inset: 0;
+    height: auto;
+    display: grid;
+    place-items: center;
     text-align: center;
     padding: 80px 40px;
   }
 
+  .cart-drawer__empty-state {
+    width: 100%;
+  }
+
   .cart-drawer__content--empty .cart-drawer__heading {
+    justify-content: center;
+  }
+
+  .cart-drawer__content--empty .cart-drawer__items {
+    display: flex;
     justify-content: center;
   }
 
