@@ -57,6 +57,10 @@ footer.shopify-section-group-footer-group{
       line-height: 18px !important;
       padding: 2.5em 0 1em;
 
+      &:hover{
+        color: var(--brown);
+      }
+
       .menu__heading__default{
         font-family: var(--baf-text-family);
         font-size: var(--baf-text-bold-large-size);
@@ -79,6 +83,15 @@ footer.shopify-section-group-footer-group{
 
       .menu__item + .menu__item{
         margin-block-start: 5px;
+      }
+
+      .menu__item a{
+        transition: font-weight .12s ease;
+      }
+
+      .menu__item a:hover,
+      .menu__item a:focus-visible{
+        font-weight: var(--baf-text-bold-weight);
       }
     }
   }
