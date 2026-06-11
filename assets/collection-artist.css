@@ -1,7 +1,7 @@
 .artist-collection {
   margin-left: auto;
   margin-right: auto;
-  --artist-info-top-offset: clamp(18px, 4svh, 40px);
+  --artist-info-top-offset: clamp(96px, 18svh, 170px);
   --artist-products-peek: clamp(110px, 18svh, 220px);
 }
 
@@ -364,7 +364,7 @@
 
 @media screen and (min-width: 1200px) {
   .artist-collection {
-    --artist-info-top-offset: clamp(24px, 5svh, 56px);
+    --artist-info-top-offset: clamp(120px, 18svh, 200px);
     --artist-products-peek: clamp(150px, 20svh, 280px);
   }
 
