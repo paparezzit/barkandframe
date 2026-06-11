@@ -1,8 +1,15 @@
 .artist-collection {
   margin-left: auto;
   margin-right: auto;
-  --artist-info-top-offset: clamp(96px, 18svh, 170px);
+  --artist-title-size: clamp(48px, 8vw, 96px);
+  --artist-hero-stack-height: var(--artist-title-size);
+  --artist-title-top-y: calc(var(--header-height) + ((100svh - var(--header-height) - var(--artist-hero-stack-height)) / 2));
+  --artist-info-center-y: calc((var(--header-height) + var(--artist-title-top-y)) / 2);
   --artist-products-peek: clamp(110px, 18svh, 220px);
+}
+
+.artist-collection:has(.artist-collection__hero .artist-collection__signature) {
+  --artist-hero-stack-height: calc(var(--artist-title-size) + var(--artist-title-size) + 10px);
 }
 
 .artist-collection__nav {
@@ -87,7 +94,7 @@
 
 .artist-collection__title {
   font-family: "display", serif;
-  font-size: clamp(48px, 8vw, 96px);
+  font-size: var(--artist-title-size);
   line-height: 1;
   color: var(--brown);
   font-weight: 400;
@@ -103,7 +110,7 @@
 
 .artist-collection__by {
   font-family: "display", serif;
-  font-size: clamp(48px, 8vw, 96px);
+  font-size: var(--artist-title-size);
   line-height: 1;
   color: var(--brown);
   font-weight: 400;
@@ -237,14 +244,15 @@
 .artist-collection__info {
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: clamp(24px, 7svh, 100px);
   padding: 0 var(--page-margin);
   width: min(var(--page-width), 100%);
-  margin: calc(-100dvh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
-  min-height: calc(100svh - var(--header-height) - var(--artist-info-top-offset) - var(--artist-products-peek));
+  margin: calc(-100dvh + var(--header-height) + var(--artist-info-center-y)) auto 0;
+  min-height: calc(100svh - var(--artist-info-center-y) - var(--artist-products-peek));
   box-sizing: border-box;
   position: relative;
   z-index: 2;
+  transform: translateY(-50%);
 }
 
 .artist-collection__info + .artist-collection__products {
@@ -364,7 +372,6 @@
 
 @media screen and (min-width: 1200px) {
   .artist-collection {
-    --artist-info-top-offset: clamp(120px, 18svh, 200px);
     --artist-products-peek: clamp(150px, 20svh, 280px);
   }
 
