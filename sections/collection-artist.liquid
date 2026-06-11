@@ -219,51 +219,6 @@
 
 </div>
 
-<script>
-  (() => {
-    const updateArtistCollectionInfo = () => {
-      document.querySelectorAll('.artist-collection').forEach((section) => {
-        const title = section.querySelector('.artist-collection__hero .artist-collection__title');
-        const info = section.querySelector('.artist-collection__info');
-        const wrapper = section.querySelector('.artist-collection__wrapper') || section;
-        if (!title || !info) return;
-
-        const bodyStyles = getComputedStyle(document.body);
-        const rootStyles = getComputedStyle(document.documentElement);
-        const headerHeight =
-          parseFloat(bodyStyles.getPropertyValue('--header-height')) ||
-          parseFloat(rootStyles.getPropertyValue('--header-height')) ||
-          0;
-        const titleTop = title.getBoundingClientRect().top;
-        const wrapperTop = wrapper.getBoundingClientRect().top;
-        const infoCenter = ((headerHeight + titleTop) / 2) - wrapperTop;
-
-        section.style.setProperty('--artist-info-center-y', `${infoCenter}px`);
-      });
-    };
-
-    let frame;
-    const scheduleArtistCollectionInfo = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateArtistCollectionInfo);
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', scheduleArtistCollectionInfo, { once: true });
-    } else {
-      scheduleArtistCollectionInfo();
-    }
-
-    window.addEventListener('load', scheduleArtistCollectionInfo);
-    window.addEventListener('resize', scheduleArtistCollectionInfo);
-    document.addEventListener('shopify:section:load', scheduleArtistCollectionInfo);
-
-    if (document.fonts) {
-      document.fonts.ready.then(scheduleArtistCollectionInfo);
-    }
-  })();
-</script>
-
 {% schema %}
 {
   "name": "Artist Collection",
