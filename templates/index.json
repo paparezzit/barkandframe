@@ -24,17 +24,6 @@
             "button_link": "shopify://pages/portrait"
           }
         },
-        "slide_PebWGF": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/bark-and-frame-father-son-holding-framed-border-collie-indigo-style-portrait-walnut-frame-living-room-banner.jpg",
-            "portrait_image_position": "78% center",
-            "title": "The Father’s Day\ngift, by heart.",
-            "text": "A personalised dog portrait, designed by our studio of award-winning artists.",
-            "button_text": "Create your portrait",
-            "button_link": "shopify://pages/portrait"
-          }
-        },
         "slide_Mr3tKr": {
           "type": "slide",
           "settings": {
@@ -60,7 +49,6 @@
       },
       "block_order": [
         "slide_YWDk6k",
-        "slide_PebWGF",
         "slide_Mr3tKr",
         "slide_banner_04"
       ],
