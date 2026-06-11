@@ -310,13 +310,13 @@
   .localization-form__list-item:focus {
     --button-color: var(--color-primary-hover);
 
-    background-color: rgb(var(--color-primary-hover-rgb) / var(--opacity-8));
+    background-color: #fffaf1;
   }
 
   .localization-form__list-item[aria-current='true'] {
     --button-color: var(--color-primary-active);
 
-    background-color: rgb(var(--color-primary-hover-rgb) / var(--opacity-10));
+    background-color: #f4efe5;
   }
 
   .localization-form__list-item-disabled {
@@ -409,6 +409,7 @@
     scroll-padding: var(--padding-xs) 0;
     overflow-y: auto;
     white-space: nowrap;
+    color: var(--color-foreground);
 
     /* Hide scrollbar which would cause extra right padding in Safari */
     scrollbar-width: none;
@@ -419,7 +420,10 @@
   }
 
   dropdown-localization-component .localization-form__list {
-    max-height: 20.5rem;
+    max-height: min(20.5rem, calc(100vh - 160px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .localization-wrapper {
@@ -457,6 +461,7 @@
     text-align: start;
     cursor: pointer;
     transition: background-color var(--animation-speed) var(--animation-easing);
+    color: var(--color-foreground);
 
     .country {
       flex: 1;
@@ -464,7 +469,14 @@
     }
 
     &:hover {
-      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-8));
+      background-color: #fffaf1;
+    }
+
+    &:focus,
+    &:focus-visible,
+    &[aria-selected='true'],
+    &[aria-current='true'] {
+      background-color: #f4efe5;
     }
 
     &[aria-current='true'] {
@@ -495,6 +507,7 @@
     padding: var(--padding-xs);
     border-bottom: var(--style-border-width) solid transparent;
     transition: border-color var(--animation-values);
+    color: var(--color-foreground);
   }
 
   .country-filter.is-scrolled {
@@ -514,6 +527,8 @@
     overflow-y: auto;
     max-height: 100%;
     flex-grow: 1;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .language-selector {
@@ -610,6 +625,7 @@
     color: var(--color-input-text);
     background-color: var(--color-input-background);
     outline-offset: -1px;
+    border-radius: var(--style-border-radius-inputs);
 
     @media screen and (min-width: 750px) {
       height: 36px;
@@ -686,7 +702,17 @@
   }
 
   dropdown-localization-component .country-filter__input {
-    border: none;
+    border: 1px solid transparent;
+    color: var(--color-foreground);
+    background-color: #fffaf1;
+    border-radius: 8px;
+  }
+
+  dropdown-localization-component .country-filter__input:focus,
+  dropdown-localization-component .country-filter__input:focus-visible {
+    outline: none;
+    border-color: var(--color-foreground);
+    background-color: #f4efe5;
   }
 
   dropdown-localization-component .localization-form__list-item {
@@ -696,8 +722,10 @@
   dropdown-localization-component .localization-wrapper {
     box-shadow: var(--shadow-popover);
     border: var(--style-border-popover);
-    background-color: var(--color-background);
-    max-height: 27.5rem;
+    background-color: #fffaf1;
+    color: var(--color-foreground);
+    max-height: min(27.5rem, calc(100vh - 120px));
+    overflow: hidden;
     position: absolute;
     top: calc(100% + 10px);
     z-index: calc(var(--layer-header-menu) + 1);
