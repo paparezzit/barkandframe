@@ -431,6 +431,8 @@ class DropdownLocalizationComponent extends Component {
 
     this.addEventListener('keyup', this.#handleKeyUp);
     document.addEventListener('click', this.#handleClickOutside);
+    this.refs.panel.addEventListener('wheel', this.#handlePanelWheel, { passive: false, capture: true });
+    this.refs.panel.addEventListener('touchmove', this.#handlePanelTouchMove, { passive: true, capture: true });
 
     this.refs.panel.removeAttribute('hidden');
     this.refs.button.setAttribute('aria-expanded', 'true');
@@ -449,6 +451,8 @@ class DropdownLocalizationComponent extends Component {
 
     this.removeEventListener('keyup', this.#handleKeyUp);
     document.removeEventListener('click', this.#handleClickOutside);
+    this.refs.panel.removeEventListener('wheel', this.#handlePanelWheel, { capture: true });
+    this.refs.panel.removeEventListener('touchmove', this.#handlePanelTouchMove, { capture: true });
 
     this.refs.button?.setAttribute('aria-expanded', 'false');
     this.refs.panel.setAttribute('hidden', '');
@@ -472,6 +476,33 @@ class DropdownLocalizationComponent extends Component {
   #updateWidth() {
     this.style.setProperty('--width', `${this.refs.localizationForm.offsetWidth}px`);
   }
+
+  /**
+   * Keeps trackpad and mouse-wheel scrolling inside the open dropdown.
+   *
+   * @param {WheelEvent} event - The wheel event object.
+   */
+  #handlePanelWheel = (event) => {
+    const panel = this.refs.panel;
+
+    if (this.isHidden || !panel) return;
+
+    event.stopPropagation();
+    event.preventDefault();
+    panel.scrollTop += event.deltaY;
+    panel.scrollLeft += event.deltaX;
+  };
+
+  /**
+   * Keeps touch scrolling events from bubbling to the page while inside the dropdown.
+   *
+   * @param {TouchEvent} event - The touch event object.
+   */
+  #handlePanelTouchMove = (event) => {
+    if (this.isHidden || !this.refs.panel) return;
+
+    event.stopPropagation();
+  };
 
   /**
    * Handles the keyup event.

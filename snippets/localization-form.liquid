@@ -310,7 +310,7 @@
   .localization-form__list-item:focus {
     --button-color: var(--color-primary-hover);
 
-    background-color: #fffaf1;
+    background-color: #f9f3ea;
   }
 
   .localization-form__list-item[aria-current='true'] {
@@ -469,7 +469,7 @@
     }
 
     &:hover {
-      background-color: #fffaf1;
+      background-color: #f9f3ea;
     }
 
     &:focus,
@@ -582,7 +582,7 @@
   }
 
   dropdown-localization-component .localization-form__select:hover {
-    background-color: rgb(var(--color-primary-hover-rgb) / var(--opacity-8));
+    background-color: #f9f3ea;
   }
 
   .language-selector .svg-wrapper.icon-caret {
@@ -609,12 +609,28 @@
   }
 
   .localization-form .icon-checkmark {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+    width: 18px;
+    height: 18px;
   }
 
   .localization-form .svg-wrapper.icon-checkmark {
     visibility: hidden;
+    color: #4c443f;
+    position: relative;
+  }
+
+  .localization-form .svg-wrapper.icon-checkmark svg {
+    display: none;
+  }
+
+  .localization-form .svg-wrapper.icon-checkmark::before {
+    background-color: currentColor;
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    -webkit-mask: url({{ 'icon-checkmark--green.svg' | asset_url }}) center / contain no-repeat;
+    mask: url({{ 'icon-checkmark--green.svg' | asset_url }}) center / contain no-repeat;
   }
 
   .localization-form__list-item[aria-current='true'] .svg-wrapper.icon-checkmark {
@@ -709,7 +725,7 @@
   dropdown-localization-component .country-filter__input {
     border: 1px solid transparent;
     color: #4c443f;
-    background-color: #fff;
+    background-color: #fffaf1;
     border-radius: 8px;
   }
 
@@ -727,15 +743,17 @@
   dropdown-localization-component .localization-wrapper {
     box-shadow: var(--shadow-popover);
     border: var(--style-border-popover);
-    background-color: #fff;
+    background-color: #fffaf1;
     color: #4c443f;
     max-height: min(27.5rem, calc(100vh - 120px));
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
     position: absolute;
     top: calc(100% + 10px);
     z-index: calc(var(--layer-header-menu) + 1);
+    border-radius: 0 0 var(--style-border-radius-popover) var(--style-border-radius-popover);
   }
 
   dropdown-localization-component .localization-wrapper.right-bound {
@@ -768,7 +786,7 @@
     )
     .localization-form__currency {
     opacity: 1;
-    color: var(--color-foreground-muted);
+    color: rgb(76 68 63 / 70%);
     transition: opacity var(--animation-speed-slow) var(--animation-easing);
     visibility: visible;
   }
