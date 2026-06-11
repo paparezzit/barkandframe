@@ -609,28 +609,28 @@
   }
 
   .localization-form .icon-checkmark {
-    width: 18px;
-    height: 18px;
+    width: 1em;
+    height: 1em;
   }
 
   .localization-form .svg-wrapper.icon-checkmark {
-    visibility: hidden;
     color: #4c443f;
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 1em;
+    visibility: hidden;
   }
 
   .localization-form .svg-wrapper.icon-checkmark svg {
-    display: none;
+    display: block;
+    height: 1em;
+    width: 1em;
   }
 
-  .localization-form .svg-wrapper.icon-checkmark::before {
-    background-color: currentColor;
-    content: "";
-    display: block;
-    height: 100%;
-    width: 100%;
-    -webkit-mask: url({{ 'icon-checkmark--green.svg' | asset_url }}) center / contain no-repeat;
-    mask: url({{ 'icon-checkmark--green.svg' | asset_url }}) center / contain no-repeat;
+  .localization-form .svg-wrapper.icon-checkmark path {
+    stroke: currentColor;
+    stroke-width: 3px;
   }
 
   .localization-form__list-item[aria-current='true'] .svg-wrapper.icon-checkmark {
