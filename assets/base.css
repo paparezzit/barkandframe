@@ -4801,6 +4801,21 @@ slideshow-component.slideshow--homepage{
     gap: 80px;
   }
 
+  .faq-intro-copy{
+    align-self: center;
+    margin-top: -30px;
+    margin-bottom: 30px;
+    text-align: center;
+
+    p{
+      text-align: center;
+    }
+  }
+
+  .faq-contact-us-section{
+    margin-top: 40px;
+  }
+
   .image-block{
     display: none;
   }
@@ -5035,6 +5050,10 @@ slideshow-component.slideshow--homepage{
 
     h3{
       font-size: 36px;
+    }
+
+    .faq-contact-us-section{
+      margin-top: 60px;
     }
   }
 
