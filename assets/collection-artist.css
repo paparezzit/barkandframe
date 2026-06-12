@@ -237,7 +237,7 @@
 .artist-collection__info {
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 50px;
   padding: 0 var(--page-margin);
   width: min(var(--page-width), 100%);
   margin: calc(-100dvh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
