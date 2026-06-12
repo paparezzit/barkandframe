@@ -421,18 +421,12 @@
     margin-inline: calc((100% - 100vw) / 2);
     padding-block-start: var(--hover-lift-amount);
     overflow-x: auto;
-    cursor: grab;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
 
   .shop-products__rail::-webkit-scrollbar {
     display: none;
-  }
-
-  .shop-products__rail.is-dragging {
-    cursor: grabbing;
-    scroll-behavior: auto;
   }
 
   .shop-products__rail-track {
@@ -575,9 +569,6 @@
 
       let frame = null;
       let paused = false;
-      let dragging = false;
-      let startX = 0;
-      let startScroll = 0;
       const speed = 0.45;
 
       const getLoopPoint = () => track.scrollWidth / 2;
@@ -590,7 +581,7 @@
       };
 
       const tick = () => {
-        if (!paused && !dragging) {
+        if (!paused) {
           rail.scrollLeft += speed;
           normalizeScroll();
         }
@@ -603,43 +594,12 @@
 
       const resumeRail = () => {
         paused = false;
-        dragging = false;
-        rail.classList.remove('is-dragging');
       };
 
       rail.addEventListener('mouseenter', pauseRail);
       rail.addEventListener('pointerenter', pauseRail);
       rail.addEventListener('mouseleave', resumeRail);
       rail.addEventListener('pointerleave', resumeRail);
-
-      rail.addEventListener('pointerdown', (event) => {
-        dragging = true;
-        paused = true;
-        startX = event.clientX;
-        startScroll = rail.scrollLeft;
-        rail.classList.add('is-dragging');
-        rail.setPointerCapture(event.pointerId);
-      });
-
-      rail.addEventListener('pointermove', (event) => {
-        if (!dragging) return;
-        event.preventDefault();
-        rail.scrollLeft = startScroll - (event.clientX - startX);
-        normalizeScroll();
-      });
-
-      const endDrag = (event) => {
-        if (!dragging) return;
-        dragging = false;
-        paused = false;
-        rail.classList.remove('is-dragging');
-        if (rail.hasPointerCapture(event.pointerId)) {
-          rail.releasePointerCapture(event.pointerId);
-        }
-      };
-
-      rail.addEventListener('pointerup', endDrag);
-      rail.addEventListener('pointercancel', endDrag);
 
       frame = window.requestAnimationFrame(tick);
 
