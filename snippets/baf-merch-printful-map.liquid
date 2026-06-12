@@ -159,8 +159,12 @@
         {%- assign production_name = design_name | append: ' | ' | append: product_name | append: ' | Black Embroidery' -%}
       {%- endif -%}
 
-      {%- assign cap_front_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_front-' | append: cap_front_artwork | append: '_' | append: cap_thread_slug | append: '.png' -%}
-      {%- assign cap_back_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_back-' | append: cap_back_artwork | append: '_' | append: cap_thread_slug | append: '.png' -%}
+      {%- assign cap_front_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_front_' | append: cap_thread_slug | append: '.png' -%}
+      {%- if design_name == 'Give Love' -%}
+        {%- assign cap_back_artwork_file = design_slug | append: '_' | append: cap_product_slug | append: '_back_' | append: cap_thread_slug | append: '.png' -%}
+      {%- else -%}
+        {%- assign cap_back_artwork_file = 'back-side_' | append: cap_product_slug | append: '_back_' | append: cap_thread_slug | append: '.png' -%}
+      {%- endif -%}
       {%- if cap_thread_code == blank -%}
         {%- assign has_cap_production = false -%}
       {%- endif -%}
