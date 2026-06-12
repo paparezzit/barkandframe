@@ -4805,6 +4805,12 @@ slideshow-component.slideshow--homepage{
   --faq-illustration-scale: 1;
 }
 
+@media(max-width: 749px){
+  .page-contact{
+    --faq-illustration-size: 162.5px;
+  }
+}
+
 .page-contact .faq-section-basics{
   --faq-illustration-scale: 0.6;
 }
@@ -5194,11 +5200,7 @@ slideshow-component.slideshow--homepage{
   }
 }
 
-@media(min-width: 1200px){
-  .page-contact{
-    --faq-illustration-size: 300px;
-  }
-
+@media(min-width: 900px){
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
@@ -5211,5 +5213,11 @@ slideshow-component.slideshow--homepage{
   .page-contact .faq-contact-us-section > .group-block-content > .group-block,
   .page-contact .faq-contact-us-section > .group-block-content > .image-block{
     order: 0;
+  }
+}
+
+@media(min-width: 1200px){
+  .page-contact{
+    --faq-illustration-size: 300px;
   }
 }
