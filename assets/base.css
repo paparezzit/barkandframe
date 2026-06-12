@@ -4705,13 +4705,14 @@ slideshow-component.slideshow--homepage{
           width: 36px;
           height: 36px;
           background-color: var(--beige);
-          border-radius: 0;
+          border-radius: 50%;
           position: absolute;
           right: 10px;
           top: 10px;
           
           svg path{
             stroke: var(--brown);
+            stroke-linecap: butt;
           }
         }
       }
