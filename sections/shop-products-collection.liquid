@@ -651,11 +651,15 @@
     if (navSections.length) {
       let navTicking = false;
 
-      const updateActiveNav = () => {
+      const getNavOffset = () => {
         const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
         const nav = document.querySelector('.shop-products__nav');
         const navHeight = nav ? nav.offsetHeight : 0;
-        const probeY = window.scrollY + headerHeight + navHeight + 24;
+        return headerHeight + navHeight + 12;
+      };
+
+      const updateActiveNav = () => {
+        const probeY = window.scrollY + getNavOffset() + 12;
         let activeItem = navSections[0];
 
         navSections.forEach((item) => {
@@ -677,6 +681,23 @@
       };
 
       updateActiveNav();
+      navSections.forEach((item) => {
+        item.link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const sectionTop = item.section.getBoundingClientRect().top + window.scrollY;
+
+          window.scrollTo({
+            top: Math.max(sectionTop - getNavOffset(), 0),
+            behavior: 'smooth',
+          });
+
+          navLinks.forEach((link) => {
+            link.classList.toggle('is-active', link === item.link);
+          });
+
+          window.history.replaceState(null, '', item.link.getAttribute('href'));
+        });
+      });
       window.addEventListener('scroll', onNavScroll, { passive: true });
       window.addEventListener('resize', onNavScroll);
       document.addEventListener('shopify:section:unload', () => {
