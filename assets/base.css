@@ -4832,7 +4832,7 @@ slideshow-component.slideshow--homepage{
 .page-contact .faq-intro-copy{
   align-self: center;
   text-align: center;
-  transform: translateY(-120px) !important;
+  transform: none !important;
   padding-bottom: 40px !important;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -4843,7 +4843,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact .image-block{
-  display: none;
+  display: flex;
 }
 
 .page-contact .faq-contact-us-section{
@@ -4878,6 +4878,7 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .group-block,
 .page-contact .faq-contact-us-section > .group-block-content > .group-block{
+  order: 1;
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
@@ -4885,6 +4886,7 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
 .page-contact .faq-contact-us-section > .group-block-content > .image-block{
+  order: 0;
   width: auto !important;
   max-width: 100% !important;
   justify-content: center;
@@ -5202,5 +5204,12 @@ slideshow-component.slideshow--homepage{
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
     column-gap: 0 !important;
     row-gap: 56px !important;
+  }
+
+  .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .group-block,
+  .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
+  .page-contact .faq-contact-us-section > .group-block-content > .group-block,
+  .page-contact .faq-contact-us-section > .group-block-content > .image-block{
+    order: 0;
   }
 }
