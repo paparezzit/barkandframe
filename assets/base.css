@@ -4804,7 +4804,7 @@ slideshow-component.slideshow--homepage{
   .faq-intro-copy{
     align-self: center;
     text-align: center;
-    transform: translateY(-40px);
+    transform: translateY(-120px);
     padding-bottom: 40px;
 
     p{
@@ -4816,7 +4816,7 @@ slideshow-component.slideshow--homepage{
     margin-top: 40px;
 
     .image-block{
-      transform: translateX(-30px);
+      transform: translateX(-10px);
     }
   }
 
@@ -4826,7 +4826,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact .faq-intro-copy{
-  transform: translateY(-40px) !important;
+  transform: translateY(-120px) !important;
   padding-bottom: 40px !important;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -4840,7 +4840,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact > .group-block:has(.section-faq) + .group-block:has(.section-faq){
-  margin-top: 27px !important;
+  margin-top: 38px !important;
 }
 
 .page-contact > .group-block:has(.section-faq) .section-faq,
@@ -5065,7 +5065,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .page-contact > .group-block:has(.section-faq) + .group-block:has(.section-faq){
-    margin-top: 40px !important;
+    margin-top: 56px !important;
   }
 
   .page-contact > .group-block:has(.section-faq) > .image-block{
