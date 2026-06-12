@@ -766,7 +766,7 @@
           "type": "group",
           "name": "t:names.group",
           "settings": {
-            "custom_class": "custom-class",
+            "custom_class": "faq-section-quality",
             "link": "",
             "open_in_new_tab": false,
             "content_direction": "row",

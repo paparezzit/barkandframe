@@ -4810,6 +4810,10 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact .faq-section-photos{
+  --faq-illustration-scale: 0.81;
+}
+
+.page-contact .faq-section-quality{
   --faq-illustration-scale: 0.9;
 }
 
@@ -4818,7 +4822,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact .faq-contact-us-section{
-  --faq-illustration-scale: 1.6;
+  --faq-illustration-scale: 1.12;
 }
 
 .page-contact .faq-intro-copy{
