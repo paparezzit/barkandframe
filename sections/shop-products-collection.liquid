@@ -81,7 +81,7 @@
 
 <section
   class="shop-products section color-{{ section.settings.color_scheme }}"
-  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end | times: 2 }}px;"
 >
   <nav class="shop-products__nav section section--page-width" aria-label="Shop products sections" data-baf-scroll-subnav>
     <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
@@ -385,7 +385,7 @@
   .shop-products__bestseller {
     position: relative;
     isolation: isolate;
-    margin: clamp(100px, 16vw, 244px) auto 0;
+    margin: clamp(200px, 32vw, 488px) auto 0;
     padding: 76px 0 92px;
     overflow: visible;
     border-radius: 360px;
@@ -447,7 +447,7 @@
   }
 
   .shop-products__product-section {
-    margin-top: 112px;
+    margin-top: 224px;
   }
 
   .shop-products__product-grid {
@@ -526,7 +526,7 @@
     }
 
     .shop-products__bestseller {
-      margin-top: 84px;
+      margin-top: 168px;
       padding: 52px 0 64px;
       border-radius: 80px;
     }
@@ -541,7 +541,7 @@
     }
 
     .shop-products__product-section {
-      margin-top: 76px;
+      margin-top: 152px;
     }
 
     .shop-products__product-grid {
