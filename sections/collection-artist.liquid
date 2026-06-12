@@ -18,7 +18,7 @@
 <div class="artist-collection">
 
   {%- if nav_links.size > 0 -%}
-    <nav class="artist-collection__nav section section--page-width">
+    <nav class="artist-collection__nav section section--page-width" data-baf-scroll-subnav>
       {%- for link in nav_links -%}
         <a
           href="{{ link.url }}"
@@ -218,6 +218,8 @@
   </div>
 
 </div>
+
+{{ 'baf-scroll-subnav.js' | asset_url | script_tag }}
 
 {% schema %}
 {

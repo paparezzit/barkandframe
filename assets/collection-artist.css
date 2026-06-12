@@ -11,13 +11,25 @@
   gap: 0;
   box-sizing: border-box;
   justify-content: flex-start;
+  position: sticky;
+  top: var(--header-height, 0);
+  z-index: 7;
   width: 100vw;
   margin-inline: calc((100% - 100vw) / 2);
   padding: 10px 0 0;
+  background: var(--beige);
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  will-change: transform;
+}
+
+.artist-collection__nav.is-hidden-on-scroll {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(-100% - 1px));
 }
 
 .artist-collection__nav::before,

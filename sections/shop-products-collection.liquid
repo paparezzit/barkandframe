@@ -83,7 +83,7 @@
   class="shop-products section color-{{ section.settings.color_scheme }}"
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
 >
-  <nav class="shop-products__nav" aria-label="Shop products sections">
+  <nav class="shop-products__nav section section--page-width" aria-label="Shop products sections" data-baf-scroll-subnav>
     <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
     {%- if bestseller_cards != blank -%}<a class="shop-products__nav-link" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>{%- endif -%}
     {%- if cap_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
@@ -211,13 +211,25 @@
     justify-content: flex-start;
     gap: 0;
     box-sizing: border-box;
+    position: sticky;
+    top: var(--header-height, 0);
+    z-index: 7;
     width: 100vw;
     margin-inline: calc((100% - 100vw) / 2);
     padding: 10px 0 0;
+    background: var(--beige);
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    will-change: transform;
+  }
+
+  .shop-products__nav.is-hidden-on-scroll {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(calc(-100% - 1px));
   }
 
   .shop-products__nav::before,
@@ -549,6 +561,13 @@
   (() => {
     const rails = document.querySelectorAll('[data-shop-products-rail]');
     const stickyButton = document.querySelector('.collection-sticky-btn');
+    const navLinks = Array.from(document.querySelectorAll('.shop-products__nav-link[href^="#shop-products-"]'));
+    const navSections = navLinks
+      .map((link) => ({
+        link,
+        section: document.querySelector(link.getAttribute('href')),
+      }))
+      .filter((item) => item.section);
 
     rails.forEach((rail) => {
       const track = rail.querySelector('.shop-products__rail-track');
@@ -629,6 +648,43 @@
       }, { once: true });
     });
 
+    if (navSections.length) {
+      let navTicking = false;
+
+      const updateActiveNav = () => {
+        const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
+        const nav = document.querySelector('.shop-products__nav');
+        const navHeight = nav ? nav.offsetHeight : 0;
+        const probeY = window.scrollY + headerHeight + navHeight + 24;
+        let activeItem = navSections[0];
+
+        navSections.forEach((item) => {
+          const sectionTop = item.section.getBoundingClientRect().top + window.scrollY;
+          if (sectionTop <= probeY) activeItem = item;
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.toggle('is-active', link === activeItem.link);
+        });
+
+        navTicking = false;
+      };
+
+      const onNavScroll = () => {
+        if (navTicking) return;
+        navTicking = true;
+        window.requestAnimationFrame(updateActiveNav);
+      };
+
+      updateActiveNav();
+      window.addEventListener('scroll', onNavScroll, { passive: true });
+      window.addEventListener('resize', onNavScroll);
+      document.addEventListener('shopify:section:unload', () => {
+        window.removeEventListener('scroll', onNavScroll);
+        window.removeEventListener('resize', onNavScroll);
+      }, { once: true });
+    }
+
     if (!stickyButton) return;
 
     let lastScrollY = window.scrollY;
@@ -661,6 +717,8 @@
     }, { once: true });
   })();
 </script>
+
+{{ 'baf-scroll-subnav.js' | asset_url | script_tag }}
 
 {% schema %}
 {
