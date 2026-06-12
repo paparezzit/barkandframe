@@ -43,12 +43,23 @@ footer.shopify-section-group-footer-group{
   .logo-block{
     background-color: var(--beige);
     width: 120px;
-    height: 60px;
-    border-radius: 0 0 var(--baf-radius-xl) var(--baf-radius-xl);
+    height: 120px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    .logo-block__image-wrapper{
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
 
     .logo-block__image{
-      height: 100%;
-      margin-top: -10px;
+      width: auto;
+      max-width: 80%;
+      max-height: 47px;
+      margin-top: 0;
     }
   }
 
@@ -149,10 +160,10 @@ footer.shopify-section-group-footer-group{
 
     .logo-block{
       width: 160px;
-      height: 80px;
+      height: 160px;
 
       .logo-block__image{
-        margin-top: -15px
+        max-height: 54px;
       }
     }
 
