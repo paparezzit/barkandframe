@@ -143,7 +143,7 @@
     flex-direction: column;
     gap: 80px;
     padding: 60px var(--page-margin) 0;
-    max-width: calc(1060px + (2 * var(--page-margin)));
+    max-width: calc(1413px + (2 * var(--page-margin)));
     margin: 0 auto;
   }
 
@@ -170,11 +170,13 @@
   }
 
   .artists-page__styles-title {
-    font-size: 14px;
+    font-family: var(--baf-text-family);
+    font-size: var(--baf-text-medium-size);
+    font-weight: var(--baf-text-weight);
     color: var(--brown);
     margin: 0;
     flex: .7;
-    line-height: 36px;
+    line-height: 1.2;
   }
 
   .artists-page__styles {
@@ -208,6 +210,9 @@
     border: 1px solid var(--brown);
     border-radius: 1000px;
     background-color: transparent;
+    min-height: 0;
+    padding-block: 8px;
+    line-height: 1;
   }
 
   .artists-page__collection-btn:hover {
