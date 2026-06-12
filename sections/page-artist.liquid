@@ -91,6 +91,7 @@
   </div>
   {%- endunless -%}
 
+  <div class="artists-page__end-spacer" aria-hidden="true"></div>
 </div>
 
 <div class="artists-overlay" id="artists-overlay"></div>
@@ -141,9 +142,13 @@
     display: flex;
     flex-direction: column;
     gap: 80px;
-    padding: 60px var(--page-margin) 100px;
+    padding: 60px var(--page-margin) 0;
     max-width: calc(1060px + (2 * var(--page-margin)));
     margin: 0 auto;
+  }
+
+  .artists-page__end-spacer {
+    height: 240px;
   }
 
   .artists-page__item {
@@ -310,6 +315,12 @@
       .artists-page__item{
         width: calc(50% - 40px);
       }
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .artists-page__end-spacer {
+      height: 160px;
     }
   }
 

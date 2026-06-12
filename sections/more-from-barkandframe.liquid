@@ -82,11 +82,13 @@
     {%- endfor -%}
 
   </div>
+
+  <div class="more-from__end-spacer" aria-hidden="true"></div>
 </section>
 
 {% stylesheet %}
 .more-from {
-  padding: 80px 0 100px;
+  padding: 80px 0 0;
   color: var(--brown);
 }
 
@@ -101,6 +103,10 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 60px 20px;
   align-items: start;
+}
+
+.more-from__end-spacer {
+  height: 240px;
 }
 
 .more-from__product-card {
@@ -189,7 +195,13 @@
 
 @media (min-width: 1200px) {
   .more-from {
-    padding: 100px 0 120px;
+    padding: 100px 0 0;
+  }
+}
+
+@media (max-width: 749px) {
+  .more-from__end-spacer {
+    height: 160px;
   }
 }
 {% endstylesheet %}
