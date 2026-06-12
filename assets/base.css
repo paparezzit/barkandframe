@@ -4800,6 +4800,11 @@ slideshow-component.slideshow--homepage{
   gap: 80px;
 }
 
+.page-contact{
+  --faq-illustration-size: 250px;
+  --faq-illustration-scale: 1;
+}
+
 .page-contact .faq-section-basics{
   --faq-illustration-scale: 0.6;
 }
@@ -4872,18 +4877,17 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
 .page-contact .faq-contact-us-section > .group-block-content > .image-block{
+  width: auto !important;
   max-width: 100% !important;
   justify-content: center;
   justify-self: center;
   min-width: 0;
-  transform: scale(var(--faq-illustration-scale, 1));
-  transform-origin: center;
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block img,
 .page-contact .faq-contact-us-section > .group-block-content > .image-block img{
-  width: 60%;
-  max-width: 250px;
+  width: calc(var(--faq-illustration-size) * var(--faq-illustration-scale)) !important;
+  max-width: 100% !important;
   height: auto !important;
   object-fit: contain;
 }
@@ -5117,8 +5121,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .page-contact .image-block img{
-    max-width: 250px;
-    width: 60%;
+    max-width: 100%;
     margin: auto;
   }
 
@@ -5182,6 +5185,10 @@ slideshow-component.slideshow--homepage{
 }
 
 @media(min-width: 1200px){
+  .page-contact{
+    --faq-illustration-size: 300px;
+  }
+
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
