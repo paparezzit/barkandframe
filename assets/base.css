@@ -4509,7 +4509,7 @@ slideshow-component.slideshow--homepage{
   position: relative;
 
   slideshow-container{
-    border-radius: var(--baf-radius-xl);
+    border-radius: calc(var(--baf-radius-xl) + 40px);
     overflow: hidden;
   }
 

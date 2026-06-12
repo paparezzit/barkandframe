@@ -135,7 +135,7 @@
 
       .cta-section__inner{
         border-radius: var(--baf-radius-pill-surface);
-        height: 70dvh;
+        height: 93.33dvh;
         padding: 0 160px;
         margin: 0;
         width: auto;
@@ -147,6 +147,14 @@
           line-height: 96px;
           max-width: 780px;
         }
+      }
+    }
+  }
+
+  @media(max-width: 989px) and (orientation: portrait){
+    .cta-section{
+      .cta-section__inner{
+        border-radius: calc(var(--baf-radius-xl) + 40px);
       }
     }
   }

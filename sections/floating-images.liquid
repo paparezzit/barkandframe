@@ -266,6 +266,7 @@
 
         .floating-images__content__inner{
           border-radius: var(--baf-radius-pill-surface);
+          height: 93.33dvh;
         }
 
         .floating-images__title{
@@ -370,6 +371,16 @@
 
       .floating-images-title .title_svg{
         
+      }
+    }
+  }
+
+  @media(max-width: 989px) and (orientation: portrait){
+    .floating-images{
+      .floating-images__content{
+        .floating-images__content__inner{
+          border-radius: calc(var(--baf-radius-xl) + 40px);
+        }
       }
     }
   }
