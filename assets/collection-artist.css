@@ -120,7 +120,7 @@
   flex-direction: column;
   gap: 60px;
   align-items: flex-start;
-  padding: 0 calc(var(--page-margin) * 2) 160vh;
+  padding: 0 calc(var(--page-margin) * 2) 80vh;
   max-width: 1280px;
   margin: -33dvh auto 0;
   position: relative;
@@ -379,7 +379,7 @@
     --artist-position-inset: calc(var(--page-margin) * 2.4);
     --artist-position-offset: 109px;
     --artist-position-offset-small: 53px;
-    padding: 0 var(--artist-position-inset) 160vh;
+    padding: 0 var(--artist-position-inset) 80vh;
   }
 
   .artist-collection__product-card:nth-child(5n+1) .artist-collection__product-name {
