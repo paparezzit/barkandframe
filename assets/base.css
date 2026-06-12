@@ -4919,10 +4919,6 @@ slideshow-component.slideshow--homepage{
 }
 
 @media(max-width: 1199px){
-  .contact-form-section > .custom-section-content{
-    grid-column: 1 / -1;
-  }
-
   .contact-form-section > .custom-section-content > .section-content-wrapper,
   .contact-form-section .contact-form{
     width: 100% !important;
