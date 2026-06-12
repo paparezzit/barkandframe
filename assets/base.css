@@ -4800,6 +4800,10 @@ slideshow-component.slideshow--homepage{
   gap: 80px;
 }
 
+.page-contact{
+  --faq-illustration-size: 250px;
+}
+
 .page-contact .faq-intro-copy{
   align-self: center;
   text-align: center;
@@ -4848,9 +4852,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .group-block,
-.page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
-.page-contact .faq-contact-us-section > .group-block-content > .group-block,
-.page-contact .faq-contact-us-section > .group-block-content > .image-block{
+.page-contact .faq-contact-us-section > .group-block-content > .group-block{
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
@@ -4858,8 +4860,19 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
 .page-contact .faq-contact-us-section > .group-block-content > .image-block{
+  width: auto !important;
+  max-width: 100% !important;
   justify-content: center;
-  justify-self: stretch;
+  justify-self: center;
+  min-width: 0;
+}
+
+.page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block img,
+.page-contact .faq-contact-us-section > .group-block-content > .image-block img{
+  width: var(--faq-illustration-size) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: contain;
 }
 
 .contact-form-section{
@@ -5079,7 +5092,7 @@ slideshow-component.slideshow--homepage{
     display: flex !important;
     align-items: center;
     justify-content: center;
-    justify-self: stretch;
+    justify-self: center;
   }
 
   .page-contact > .section-content-wrapper{
@@ -5091,8 +5104,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .page-contact .image-block img{
-    max-width: 250px;
-    width: 60%;
+    max-width: 100%;
     margin: auto;
   }
 
@@ -5156,6 +5168,10 @@ slideshow-component.slideshow--homepage{
 }
 
 @media(min-width: 1200px){
+  .page-contact{
+    --faq-illustration-size: 300px;
+  }
+
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
