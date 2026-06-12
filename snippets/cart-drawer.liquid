@@ -602,11 +602,14 @@
   }
 
   .cart-drawer__upsell-card__wrapper{
-    flex: 0 0 calc(100% - 40px);
+    flex: 0 0 auto;
+    min-width: calc(100% - 40px);
   }
 
   .cart-drawer__upsell-card {
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
     display: flex;
     flex-direction: row;
     gap: 15px;
@@ -614,7 +617,9 @@
     border-radius: 20px;
     padding: 15px;
     align-items: flex-start;
-    height: 150px;
+    min-height: 150px;
+    height: auto;
+    box-sizing: border-box;
   }
 
   .cart-drawer__upsell-card-image-link {
@@ -633,10 +638,11 @@
   }
 
   .cart-drawer__upsell-card-content {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    min-width: 180px;
+    width: max-content;
     height: 100%;
   }
 
@@ -675,6 +681,8 @@
     gap: 8px;
     margin-top: auto;
     padding-top: 8px;
+    width: max-content;
+    min-width: max-content;
   }
 
   .cart-drawer__upsell-card-variant-wrap {
