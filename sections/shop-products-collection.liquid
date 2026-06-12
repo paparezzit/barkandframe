@@ -179,6 +179,8 @@
         <ul class="shop-products__product-grid" role="list">{{ crewneck_cards }}</ul>
       </section>
     {%- endif -%}
+
+    <div class="shop-products__end-spacer" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -201,10 +203,8 @@
     margin-inline: auto;
   }
 
-  .shop-products__inner::after {
-    content: "";
-    display: block;
-    height: 120px;
+  .shop-products__end-spacer {
+    height: 240px;
   }
 
   .shop-products__anchor {
@@ -479,11 +479,11 @@
   }
 
   .collection-sticky-btn {
-    position: sticky;
+    position: fixed;
     bottom: 20px;
     left: 50%;
     z-index: 100;
-    margin-bottom: 60px;
+    margin: 0;
     transform: translateX(-50%);
     white-space: nowrap;
     background-color: var(--beige);
@@ -553,6 +553,10 @@
     .shop-products__product-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 42px var(--shop-products-grid-gap);
+    }
+
+    .shop-products__end-spacer {
+      height: 160px;
     }
   }
 {% endstylesheet %}
