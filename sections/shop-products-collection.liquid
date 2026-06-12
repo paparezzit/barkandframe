@@ -81,7 +81,7 @@
 
 <section
   class="shop-products section color-{{ section.settings.color_scheme }}"
-  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end | times: 2 }}px;"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
 >
   <nav class="shop-products__nav section section--page-width" aria-label="Shop products sections" data-baf-scroll-subnav>
     <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
@@ -192,7 +192,7 @@
   .shop-products {
     --shop-products-grid-gap: 20px;
     --shop-products-card-width: calc((min(var(--page-content-width), calc(100vw - (var(--site-content-margin) * 2))) - (var(--shop-products-grid-gap) * 3)) / 4);
-    padding-block: var(--padding-block-start) var(--padding-block-end);
+    padding-block: var(--padding-block-start) max(calc(var(--padding-block-end) * 2), 120px);
     background: var(--beige);
   }
 
