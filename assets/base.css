@@ -4854,11 +4854,13 @@ slideshow-component.slideshow--homepage{
   justify-self: center;
   width: 100% !important;
   justify-content: center;
+  min-width: 0;
 }
 
 .page-contact > .group-block:has(.section-faq) > .group-block{
   width: 100% !important;
   max-width: none !important;
+  min-width: 0;
 }
 
 .contact-form-section{
@@ -5119,6 +5121,7 @@ slideshow-component.slideshow--homepage{
       > .image-block{
         width: 100% !important;
         max-width: none !important;
+        min-width: 0;
       }
 
       > .image-block{
@@ -5174,13 +5177,13 @@ slideshow-component.slideshow--homepage{
 
 @media(min-width: 1200px){
   .page-contact > .group-block:has(.section-faq){
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 50%) minmax(0, 50%);
     column-gap: 0 !important;
     row-gap: 56px !important;
   }
 
   .page-contact .faq-contact-us-section{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: minmax(0, 50%) minmax(0, 50%) !important;
     column-gap: 0 !important;
     row-gap: 56px !important;
   }
