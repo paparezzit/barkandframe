@@ -107,7 +107,7 @@
 
 {% stylesheet %}
   product-card--floating{
-    border-radius: 40px;
+    border-radius: var(--baf-radius-md);
     display: block;
     width: var(--floating-card-width, 300px);
     max-width: 60vw;
@@ -120,7 +120,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      border-radius: 40px;
+      border-radius: var(--baf-radius-md);
       display: block;
     }
 
@@ -145,7 +145,7 @@
         inset: 0;
         z-index: 0;
         display: block;
-        border-radius: 40px;
+        border-radius: var(--baf-radius-md);
         background: var(--beige, #fffaf1);
         pointer-events: none;
         transform: translateY(var(--floating-image-parallax-y));
@@ -163,7 +163,7 @@
         object-fit: cover !important;
         object-position: center;
         z-index: 1;
-        border-radius: 40px !important;
+        border-radius: var(--baf-radius-md) !important;
         content-visibility: visible !important;
         contain-intrinsic-size: none !important;
         transform: translateY(var(--floating-image-parallax-y));

@@ -74,7 +74,7 @@
   padding: 0;
   background: none;
   cursor: zoom-in;
-  border-radius: 60px;
+  border-radius: var(--baf-radius-lg);
   overflow: hidden;
   grid-column: span 2;
   background-color: var(--beige);

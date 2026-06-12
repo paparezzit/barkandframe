@@ -469,6 +469,12 @@
     --style-border-radius-inputs: {{ settings.inputs_border_radius }}px;
     --style-border-radius-buttons-primary: {{ settings.button_border_radius_primary }}px;
     --style-border-radius-buttons-secondary: {{ settings.button_border_radius_secondary }}px;
+    --baf-radius-xl: 80px;
+    --baf-radius-lg: 60px;
+    --baf-radius-md: 40px;
+    --baf-radius-sm: 20px;
+    --baf-radius-oval: 360px;
+    --baf-radius-pill-surface: 270px;
     --style-border-width-primary: {{ settings.primary_button_border_width }}px;
     --style-border-width-secondary: {{ settings.secondary_button_border_width }}px;
     --style-border-width-inputs: {{ settings.input_border_width }}px;
@@ -647,6 +653,28 @@
 
     /* Brand colors */
     --cream: #f4efe5;
+  }
+
+  @media screen and (max-width: 989px) {
+    :root {
+      --baf-radius-xl: 60px;
+      --baf-radius-lg: 45px;
+      --baf-radius-md: 30px;
+      --baf-radius-sm: 16px;
+      --baf-radius-oval: 240px;
+      --baf-radius-pill-surface: 200px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    :root {
+      --baf-radius-xl: 42px;
+      --baf-radius-lg: 32px;
+      --baf-radius-md: 24px;
+      --baf-radius-sm: 14px;
+      --baf-radius-oval: 160px;
+      --baf-radius-pill-surface: 140px;
+    }
   }
 
   @media screen and (min-width: 750px) {
