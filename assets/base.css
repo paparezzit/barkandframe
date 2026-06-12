@@ -4802,6 +4802,23 @@ slideshow-component.slideshow--homepage{
 
 .page-contact{
   --faq-illustration-size: 250px;
+  --faq-illustration-scale: 1;
+}
+
+.page-contact .faq-section-basics{
+  --faq-illustration-scale: 0.6;
+}
+
+.page-contact .faq-section-photos{
+  --faq-illustration-scale: 0.9;
+}
+
+.page-contact .faq-section-pricing{
+  --faq-illustration-scale: 0.85;
+}
+
+.page-contact .faq-contact-us-section{
+  --faq-illustration-scale: 1.6;
 }
 
 .page-contact .faq-intro-copy{
@@ -4869,7 +4886,7 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block img,
 .page-contact .faq-contact-us-section > .group-block-content > .image-block img{
-  width: var(--faq-illustration-size) !important;
+  width: calc(var(--faq-illustration-size) * var(--faq-illustration-scale)) !important;
   max-width: 100% !important;
   height: auto !important;
   object-fit: contain;
