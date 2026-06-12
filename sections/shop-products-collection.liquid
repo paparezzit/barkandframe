@@ -192,13 +192,19 @@
   .shop-products {
     --shop-products-grid-gap: 20px;
     --shop-products-card-width: calc((min(var(--page-content-width), calc(100vw - (var(--site-content-margin) * 2))) - (var(--shop-products-grid-gap) * 3)) / 4);
-    padding-block: var(--padding-block-start) 120px;
+    padding-block: var(--padding-block-start) 0;
     background: var(--beige);
   }
 
   .shop-products__inner {
     width: 100%;
     margin-inline: auto;
+  }
+
+  .shop-products__inner::after {
+    content: "";
+    display: block;
+    height: 120px;
   }
 
   .shop-products__anchor {
