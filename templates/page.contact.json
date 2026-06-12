@@ -16,7 +16,7 @@
           "type": "text",
           "name": "t:names.title",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
+            "text": "<h1>Frequently<br>asked questions</h1>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -79,32 +79,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_JCxadp": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h2>Frequently Asked Questions</h2>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "text_LnTTWx": {
               "type": "text",
               "name": "t:names.text",
@@ -133,7 +107,6 @@
             }
           },
           "block_order": [
-            "text_JCxadp",
             "text_LnTTWx"
           ]
         },
@@ -402,7 +375,7 @@
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
-                "custom_width": 40,
+                "custom_width": 32,
                 "width_mobile": "fill",
                 "custom_width_mobile": 100,
                 "height": "fit",
@@ -2609,7 +2582,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/contact_3a4aa205-09e1-48fd-9cc5-ba0dcd820c1a.svg",
+                "image": "shopify://shop_images/contact_dog.svg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",

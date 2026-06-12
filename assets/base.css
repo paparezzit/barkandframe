@@ -4807,7 +4807,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .contact-form-section{
-  margin: 80px 0 40px;
+  margin: 160px 0 80px;
 
   h3{
     font-family: "display", serif;
@@ -5039,7 +5039,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .contact-form-section{
-    margin: 140px 0;
+    margin: 280px 0;
 
     h3{
       font-size: 36px;
