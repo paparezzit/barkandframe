@@ -4821,6 +4821,10 @@ slideshow-component.slideshow--homepage{
   --faq-illustration-scale: 0.85;
 }
 
+.page-contact .image-block--image_qBCQUB{
+  --faq-illustration-scale: 0.88;
+}
+
 .page-contact .faq-contact-us-section{
   --faq-illustration-scale: 1.12;
 }
