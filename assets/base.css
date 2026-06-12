@@ -4929,13 +4929,16 @@ slideshow-component.slideshow--homepage{
 /* ——— Contact form: type selector ——— */
 .cf-type-selector {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-content: stretch;
   gap: 10px;
 }
 
 .cf-type-option {
   cursor: pointer;
   display: flex;
+  flex: 1;
+  min-width: 0;
 }
 
 .cf-type-radio {
@@ -4956,6 +4959,8 @@ slideshow-component.slideshow--homepage{
   background: var(--cream);
   transition: background 0.15s, color 0.15s;
   white-space: nowrap;
+  width: 100%;
+  text-align: center;
 }
 
 .cf-type-radio:checked + .cf-type-label {
@@ -5176,17 +5181,9 @@ slideshow-component.slideshow--homepage{
 
     .cf-type-selector{
       gap: 20px;
-      flex-wrap: nowrap;
-      align-content: stretch;
 
       .cf-type-option{
-        flex: 1;
         margin: 0 !important;
-
-        .cf-type-label{
-          width: 100%;
-          text-align: center;
-        }
       }
     }
 
