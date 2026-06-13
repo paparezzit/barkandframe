@@ -366,7 +366,28 @@
 
   {% if render_slideshow_arrows %}
     {% capture slideshow_arrows %}
-      {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style, icon_shape: settings.icons_shape %}
+      <slideshow-arrows class="product-gallery__arrows" position="center">
+        <button
+          class="slideshow-control slideshow-control--previous button button-unstyled button-unstyled--transparent"
+          aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+          on:click="/previous"
+          ref="previous"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <button
+          class="slideshow-control slideshow-control--next button button-unstyled button-unstyled--transparent"
+          aria-label="{{ 'accessibility.slideshow_next' | t }}"
+          on:click="/next"
+          ref="next"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </slideshow-arrows>
     {% endcapture %}
   {% endif %}
 
@@ -377,7 +398,8 @@
     slide_count: sorted_media.size,
     slideshow_arrows: slideshow_arrows,
     arrows_position: icons_position,
-    controls: controls,
+    controls: '',
+    infinite: true,
     attributes: 'disable-mouse-drag'
   %}
 
@@ -853,6 +875,47 @@
         }
       }
     }
+  }
+
+  .product-gallery__arrows{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    inset: 0;
+    padding-inline: 20px;
+    pointer-events: none;
+    mix-blend-mode: normal !important;
+  }
+
+  .product-gallery__arrows .slideshow-control{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-height: 0;
+    padding: 0;
+    border: none;
+    border-radius: 100%;
+    background: var(--cream);
+    color: var(--brown);
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .product-gallery__arrows .slideshow-control[disabled]{
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .product-gallery__arrows svg{
+    opacity: .45;
+    transition: opacity .2s;
+  }
+
+  .product-gallery__arrows .slideshow-control:hover svg{
+    opacity: 1;
   }
 
   @media(min-width: 750px){
