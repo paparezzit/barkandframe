@@ -1,4 +1,4 @@
-<div class="floating-images" style="--floating-outline-title-offset: -11.4px;">
+<div class="floating-images">
   <div class="floating-images__content">
     <div class="floating-images__content__inner">
       <div class="floating-images__icon">
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="floating-images__fake-title" style="top: calc(var(--header-height) + var(--floating-outline-title-offset)) !important; transform: none !important;" aria-hidden="true">
+  <div class="floating-images__fake-title" aria-hidden="true">
     <svg class="fake-title__svg" width=400 height="90" viewBox="0 0 400 90">
       <text x="200" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
         <tspan x="200" dy="0">Bark &amp; Frame,</tspan><tspan x="200" dy="35">beyond portraits.</tspan>
@@ -39,76 +39,6 @@
 </div>
 
 {% javascript %}
-  (function () {
-    function initFloatingImagesOutlineSync() {
-      document.querySelectorAll('.floating-images').forEach(function (section) {
-        if (section.dataset.outlineSyncReady === 'true') return;
-
-        var realTitle = section.querySelector('.floating-images__content .title__svg');
-        var fakeTitle = section.querySelector('.floating-images__fake-title .fake-title__svg');
-        if (!realTitle || !fakeTitle) return;
-
-        section.dataset.outlineSyncReady = 'true';
-        var ticking = false;
-
-        function currentOffset() {
-          var value = section.style.getPropertyValue('--floating-outline-title-offset') ||
-            getComputedStyle(section).getPropertyValue('--floating-outline-title-offset') ||
-            '0';
-          var parsed = parseFloat(value);
-          return isFinite(parsed) ? parsed : 0;
-        }
-
-        function update() {
-          ticking = false;
-
-          var sectionRect = section.getBoundingClientRect();
-          if (sectionRect.bottom < 0 || sectionRect.top > window.innerHeight) return;
-
-          var realRect = realTitle.getBoundingClientRect();
-          var fakeRect = fakeTitle.getBoundingClientRect();
-          var delta = realRect.top - fakeRect.top;
-          if (Math.abs(delta) < 0.25) return;
-
-          section.style.setProperty('--floating-outline-title-offset', (currentOffset() + delta).toFixed(2) + 'px');
-        }
-
-        function requestUpdate() {
-          if (ticking) return;
-          ticking = true;
-          window.requestAnimationFrame(update);
-        }
-
-        requestUpdate();
-        window.addEventListener('resize', requestUpdate);
-        window.addEventListener('load', requestUpdate);
-
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(requestUpdate);
-        }
-
-        if ('ResizeObserver' in window) {
-          new ResizeObserver(requestUpdate).observe(section);
-        }
-
-        if ('IntersectionObserver' in window) {
-          new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) requestUpdate();
-            });
-          }).observe(section);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initFloatingImagesOutlineSync);
-    } else {
-      initFloatingImagesOutlineSync();
-    }
-
-    document.addEventListener('shopify:section:load', initFloatingImagesOutlineSync);
-  })();
 {% endjavascript %}
 
 {% stylesheet %}
@@ -123,7 +53,7 @@
       margin: 0 auto;
       min-height: calc(100dvh - var(--header-height));
       position: sticky;
-      top: calc(var(--header-height) + var(--floating-outline-title-offset));
+      top: var(--header-height);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -153,6 +83,7 @@
         width: min(400px, 80vw);
 
         svg {
+          display: block;
           width: min(400px, 80vw);
           height: auto;
         }
@@ -179,7 +110,7 @@
       font-size: 36px;
       font-family: "display", "Times New Roman", serif !important;
       position: sticky;
-      top: var(--header-height);
+      top: calc(var(--header-height) + var(--floating-outline-title-offset));
       height: calc(100dvh - var(--header-height));
       display: flex;
       align-items: center;
@@ -188,7 +119,7 @@
       padding-top: 0;
       color: #fff;
       margin-top: calc(-100dvh + var(--header-height));
-      z-index: 1;
+      z-index: 50;
       pointer-events: none;
 
       svg {
@@ -204,6 +135,8 @@
       gap: 60px;
       margin: -33dvh auto 0;
       pointer-events: none;
+      position: relative;
+      z-index: 2;
 
       product-card--floating{
         pointer-events: auto;
