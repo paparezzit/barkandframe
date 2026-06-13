@@ -2799,6 +2799,8 @@
   object-fit: cover;
   object-position: center right;
   max-width: none;
+  transform: translateY(var(--donation-image-parallax, 0px));
+  will-change: transform;
 }
 
 .donation-card__content {
@@ -3507,6 +3509,39 @@
         var offset = clamp(distanceFromCenter * item.strength, -12, 12);
         item.el.style.setProperty('--overview-label-parallax', offset.toFixed(2) + 'px');
       });
+    }
+
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+  }
+
+  function initDonationImageParallax() {
+    var frame = document.querySelector('.donation-card__image-frame');
+    var image = frame && frame.querySelector('.donation-card__image');
+    if (!frame || !image || !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var ticking = false;
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function update() {
+      ticking = false;
+      var rect = frame.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+      var frameCenter = rect.top + rect.height / 2;
+      var viewportCenter = window.innerHeight / 2;
+      var offset = clamp((viewportCenter - frameCenter) * 0.035, -12, 12);
+      image.style.setProperty('--donation-image-parallax', offset.toFixed(2) + 'px');
     }
 
     function requestUpdate() {
@@ -5728,6 +5763,7 @@
     initTabs();
     initSmartSticky();
     initOverviewLabelParallax();
+    initDonationImageParallax();
 
     // Resume banner
     var urlParams = new URLSearchParams(window.location.search);
