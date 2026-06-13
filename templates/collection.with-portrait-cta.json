@@ -69,7 +69,7 @@
       }
     },
     "main": {
-      "type": "shop-products-collection",
+      "type": "shop-bestsellers-collection",
       "blocks": {
         "filters": {
           "type": "filters",
@@ -267,9 +267,9 @@
         "bestseller_title": "Bestseller",
         "bestseller_products": [
           "shopify://products/give-love-cap",
-          "shopify://products/powered-by-dogs-t-shirt",
-          "shopify://products/more-dog-is-more-dog-cap",
           "shopify://products/sunday-ride-t-shirt",
+          "shopify://products/more-dog-is-more-dog-cap",
+          "shopify://products/powered-by-dogs-t-shirt",
           "shopify://products/chill-vibes-crewneck"
         ],
         "cap_title": "Cap",

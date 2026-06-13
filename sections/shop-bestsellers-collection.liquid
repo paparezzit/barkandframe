@@ -60,6 +60,23 @@
   {%- endfor -%}
 {%- endcapture -%}
 
+{%- if bestseller_count == 0 -%}
+  {%- capture bestseller_cards -%}
+    {%- assign default_bestseller_handles = 'give-love-cap,sunday-ride-t-shirt,more-dog-is-more-dog-cap,powered-by-dogs-t-shirt,chill-vibes-crewneck' | split: ',' -%}
+    {%- for handle in default_bestseller_handles -%}
+      {%- assign product = all_products[handle] -%}
+      {%- if product != blank -%}
+        {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+        <li class="shop-products__rail-item" data-product-id="{{ product.id }}">
+          {%- # theme-check-disable UniqueStaticBlockId -%}
+          {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+          {%- # theme-check-enable UniqueStaticBlockId -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+{%- endif -%}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
 <section
@@ -697,7 +714,7 @@
 
 {% schema %}
 {
-  "name": "Shop products layout",
+  "name": "Shop bestsellers layout",
   "enabled_on": {
     "templates": ["collection"]
   },
