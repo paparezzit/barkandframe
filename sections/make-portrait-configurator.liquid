@@ -685,7 +685,7 @@
           {%- for block in section.blocks -%}
             {%- if block.type == 'donation' -%}
               <div class="donation-card" {{ block.shopify_attributes }}>
-                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'DogsTrust' }}</h3>
+                <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'Koninklijke Hondenbescherming' }}</h3>
                 <div class="donation-card__inner">
                   {%- if block.settings.image -%}
                     <img
@@ -6294,7 +6294,7 @@
           "type": "text",
           "id": "title",
           "label": "Section title",
-          "default": "DogsTrust"
+          "default": "Koninklijke Hondenbescherming"
         },
         {
           "type": "image_picker",

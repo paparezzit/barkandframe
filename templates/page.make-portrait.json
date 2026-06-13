@@ -31,10 +31,10 @@
         "donation_enNYcj": {
           "type": "donation",
           "settings": {
-            "title": "DogsTrust",
+            "title": "Koninklijke Hondenbescherming",
             "image": "shopify://shop_images/dogstrust.png",
             "heading": "Spread the love",
-            "description": "Support dogs in need with a contribution. Your support goes to the DogsTrust organization.",
+            "description": "Support dogs in need with a contribution. Your support goes to the Koninklijke Hondenbescherming organization.",
             "amounts": "10, 50, 100"
           }
         },
