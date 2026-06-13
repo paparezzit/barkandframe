@@ -823,7 +823,23 @@
         <div class="tab-panel" id="tab-overview" data-tab="overview" role="tabpanel">
           <div class="tab-overview">
             <h2 class="tab-overview__heading">It’s that simple</h2>
-            <img src="{{ 'make-portrait/overview01.png' | asset_url }}" alt="Size" loading="lazy">
+            <div class="tab-overview__steps" aria-label="How it works">
+              <div class="tab-overview__step">
+                <h3 class="tab-overview__step-pill">Choose your style</h3>
+                <p class="tab-overview__step-title">Pick the one that feels like them</p>
+                <img class="tab-overview__step-img" src="{{ 'illustrations/01.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
+              </div>
+              <div class="tab-overview__step">
+                <h3 class="tab-overview__step-pill">Pick product &amp; details</h3>
+                <p class="tab-overview__step-title">Choose how it looks and feels</p>
+                <img class="tab-overview__step-img" src="{{ 'illustrations/02.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
+              </div>
+              <div class="tab-overview__step">
+                <h3 class="tab-overview__step-pill">Upload your photo</h3>
+                <p class="tab-overview__step-title">Any phone photo will do</p>
+                <img class="tab-overview__step-img" src="{{ 'illustrations/03.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
+              </div>
+            </div>
             <p>
               A portrait of your dog isn’t just wall art. It’s a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
@@ -1264,40 +1280,48 @@
 }
 
 .tab-overview__steps {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 60px;
 }
 
 .tab-overview__step {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  text-align: center;
 }
 
 .tab-overview__step-pill {
   display: inline-block;
   background: var(--green);
   color: var(--cream);
+  font-family: var(--baf-text-family);
   font-size: var(--baf-text-small-size);
-  padding: 3px 10px;
+  line-height: 1;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-weight: 600;
+  font-weight: var(--baf-text-weight);
+  margin: 0;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .tab-overview__step-title {
-  font-family: var(--baf-text-bold-family);
-  font-size: var(--baf-text-bold-large-size);
-  font-weight: var(--baf-text-bold-weight);
-  margin: 0;
+  font-family: var(--baf-display-family);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: .95;
+  margin: 22px 0 0;
 }
 
 .tab-overview__step-img {
   width: 100%;
-  max-width: 180px;
-  margin-top: 6px;
+  max-width: 116px;
+  height: auto;
+  margin-top: 18px;
 }
 
 .tab-overview__body {
