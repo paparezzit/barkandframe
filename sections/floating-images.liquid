@@ -26,11 +26,29 @@
   </div>
 
   <div class="floating-images__fake-title" aria-hidden="true">
-    <svg class="fake-title__svg" width=400 height="90" viewBox="0 0 400 90">
-      <text x="200" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
-        <tspan x="200" dy="0">Bark &amp; Frame,</tspan><tspan x="200" dy="35">beyond portraits.</tspan>
-      </text>
-    </svg>
+    <div class="floating-images__fake-title__inner">
+      <div class="floating-images__icon floating-images__fake-spacer">
+        <img src="{{ 'logo-icon.svg' | asset_url }}" alt="" width="800" height="800">
+      </div>
+
+      <div class="floating-images__title">
+        <svg class="fake-title__svg" width=400 height="90" viewBox="0 0 400 90">
+          <text x="200" y="30" text-anchor="middle" fill="transparent" stroke="#4C443F" stroke-width="1">
+            <tspan x="200" dy="0">Bark &amp; Frame,</tspan><tspan x="200" dy="35">beyond portraits.</tspan>
+          </text>
+        </svg>
+      </div>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="floating-images__subtitle floating-images__fake-spacer">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      <div class="floating-images__button floating-images__fake-spacer">
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
   </div>
 
   <div class="floating-images__holder" data-parallax="-20dvh">
@@ -115,17 +133,54 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      padding-top: 0;
+      padding: 0 var(--page-margin);
       color: #fff;
       margin-top: calc(-100dvh + var(--header-height));
       z-index: 1;
       pointer-events: none;
-      transform: translate(0px, -11px);
+    }
 
-      svg {
-        width: min(400px, 80vw);
-        height: auto;
-      }
+    .floating-images__fake-title__inner{
+      padding: 40px 20px;
+      width: 100%;
+      height: 70dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-images__fake-title .floating-images__icon img{
+      height: 70px;
+    }
+
+    .floating-images__fake-title .floating-images__title{
+      line-height: 36px;
+      font-size: 36px;
+      margin: 30px auto 0;
+      width: min(400px, 80vw);
+    }
+
+    .floating-images__fake-title svg{
+      width: min(400px, 80vw);
+      height: auto;
+    }
+
+    .floating-images__fake-title .floating-images__subtitle {
+      margin: 0 auto 40px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .floating-images__fake-title .floating-images__button{
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .floating-images__fake-spacer{
+      visibility: hidden;
     }
 
     .floating-images__holder{
@@ -357,6 +412,22 @@
             margin-left: auto;
           }
         }
+      }
+
+      .floating-images__fake-title{
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-inline: 0;
+      }
+
+      .floating-images__fake-title__inner{
+        height: 77.78dvh;
+      }
+
+      .floating-images__fake-title .floating-images__title{
+        margin: 120px 0 50px;
+        max-width: 600px;
       }
 
       .floating-images__fake-title{
