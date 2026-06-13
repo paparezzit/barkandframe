@@ -4,7 +4,7 @@
       {%- assign title_parts = section.settings.title | split: '. ' -%}
       <h2 class="artist-intro__title">
         {%- if title_parts.size > 1 -%}
-          {{- title_parts.first -}}.<br class="artist-intro__title-break">
+          {{- title_parts.first -}}.<span class="artist-intro__title-space"> </span><br class="artist-intro__title-break">
           {%- for title_part in title_parts -%}
             {%- unless forloop.first -%}
               {{- title_part -}}{%- unless forloop.last -%}. {% endunless -%}
@@ -101,6 +101,10 @@
     display: none;
   }
 
+  .artist-intro__title-space {
+    display: inline;
+  }
+
   .artist-intro__text {
     color: var(--brown);
     font-family: var(--baf-text-bold-family);
@@ -160,6 +164,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    .artist-intro__title-space {
+      display: none;
+    }
+
     .artist-intro__title-break {
       display: initial;
     }
