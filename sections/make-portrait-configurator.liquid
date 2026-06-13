@@ -687,13 +687,15 @@
               <div class="donation-card" {{ block.shopify_attributes }}>
                 <h3 class="make-portrait__addons-title">{{ block.settings.title | default: 'Koninklijke Hondenbescherming' }}</h3>
                 <div class="donation-card__inner">
-                  <img
-                    class="donation-card__image"
-                    src="{{ 'bark-and-frame-foundation.png' | asset_url }}"
-                    width="150" height="150"
-                    alt=""
-                    loading="lazy"
-                  >
+                  <div class="donation-card__image-frame">
+                    <img
+                      class="donation-card__image"
+                      src="{{ 'bark-and-frame-foundation.png' | asset_url }}"
+                      width="150" height="150"
+                      alt=""
+                      loading="lazy"
+                    >
+                  </div>
                   <div class="donation-card__content">
                     {%- if block.settings.heading != blank -%}
                       <h4 class="donation-card__heading">{{ block.settings.heading }}</h4>
@@ -2780,11 +2782,23 @@
   overflow: hidden;
 }
 
+.donation-card__image-frame {
+  width: 30%;
+  flex: 0 0 30%;
+  overflow: hidden;
+  position: relative;
+}
+
 .donation-card__image {
-  width: calc(30% + 40px);
-  margin-left: -15px;
+  display: block;
+  position: absolute;
+  top: -15px;
+  left: -30px;
+  width: calc(100% + 30px);
+  height: calc(100% + 30px);
   object-fit: cover;
   object-position: center right;
+  max-width: none;
 }
 
 .donation-card__content {
