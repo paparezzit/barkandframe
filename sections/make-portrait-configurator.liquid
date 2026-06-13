@@ -607,7 +607,11 @@
         {%- assign has_addons = false -%}
         {%- assign has_donation = false -%}
         {%- for block in section.blocks -%}
-          {%- if block.type == 'addon' or block.type == 'prints' -%}{%- assign has_addons = true -%}{%- endif -%}
+          {%- if block.type == 'prints' -%}
+            {%- assign has_addons = true -%}
+          {%- elsif block.type == 'addon' and block.settings.name != 'Skip the queue' -%}
+            {%- assign has_addons = true -%}
+          {%- endif -%}
           {%- if block.type == 'donation' -%}{%- assign has_donation = true -%}{%- endif -%}
         {%- endfor -%}
 
@@ -615,7 +619,7 @@
           <div class="make-portrait__addons">
             <h3 class="make-portrait__addons-title">Customize your order</h3>
             {%- for block in section.blocks -%}
-              {%- if block.type == 'addon' -%}
+              {%- if block.type == 'addon' and block.settings.name != 'Skip the queue' -%}
                 <label class="addon-item" {{ block.shopify_attributes }}>
                   <input
                     type="checkbox"
