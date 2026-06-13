@@ -2877,7 +2877,7 @@
   color: var(--brown);
   position: relative;
   overflow: visible;
-  z-index: 0;
+  z-index: 1;
 }
 
 .make-portrait__subtotal::before {
@@ -2885,13 +2885,14 @@
   position: absolute;
   left: 18px;
   right: 18px;
-  top: -8px;
-  height: 8px;
+  top: 0;
+  height: 10px;
   background: #000;
   border-radius: 999px;
   filter: blur(8px);
   opacity: 0.08;
   pointer-events: none;
+  transform: translateY(-8px);
   z-index: -1;
 }
 
