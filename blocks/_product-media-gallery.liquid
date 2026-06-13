@@ -894,7 +894,8 @@
     width: 36px;
     height: 36px;
     min-height: 0;
-    padding: 0;
+    box-sizing: border-box;
+    padding: 0 !important;
     border: none;
     border-radius: 100%;
     background: var(--cream);
@@ -910,6 +911,10 @@
   }
 
   .product-gallery__arrows svg{
+    display: block;
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
     opacity: .45;
     transition: opacity .2s;
   }
