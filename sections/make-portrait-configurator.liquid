@@ -776,7 +776,7 @@
           <span class="subtotal__label__title">Subtotal</span>
           <div id="mp-order-summary" class="order-summary"></div>
           <div class="subtotal__row subtotal__row--total">
-            <span class="subtotal__label__note">Free shipping over $100</span>
+            <span class="subtotal__label__note">Free shipping over <span id="mp-free-shipping-threshold">{{ 10000 | money_without_trailing_zeros }}</span></span>
             <span class="subtotal__price">
               <span id="mp-subtotal-prefix">from </span><span class="subtotal__price__amount" id="mp-subtotal-price">—</span>
             </span>
@@ -3355,6 +3355,7 @@
   var PET_NAME_USD     = window.MakePortraitPetNameUSD     || 5;
   var PRINTS_BASE_EUR  = window.MakePortraitPrintsBaseEUR  || 30;
   var PRINTS_EXTRA_EUR = window.MakePortraitPrintsExtraEUR || 20;
+  var FREE_SHIPPING_EUR = 100;
   var FX_RATE          = 1;
   var EXTRA_PET_PRICE  = EXTRA_PET_USD * 100;
   var PET_NAME_PRICE   = PET_NAME_USD  * 100;
@@ -4442,6 +4443,12 @@
       btn.dataset.donation = converted;
       btn.textContent = formatMoney(converted);
     });
+  }
+
+  function updateFreeShippingThreshold(rate) {
+    var thresholdEl = $('mp-free-shipping-threshold');
+    if (!thresholdEl) return;
+    thresholdEl.textContent = formatMoney(Math.round(FREE_SHIPPING_EUR * rate) * 100);
   }
 
   function normalizeOptions(rawOptions) {
@@ -5874,6 +5881,7 @@
     PET_NAME_PRICE  = Math.round(PET_NAME_USD  * rate) * 100;
     initCustomOptionImages();
     initStep4Pricing(rate);
+    updateFreeShippingThreshold(rate);
     updateSubtotals();
 
     // Pet name
