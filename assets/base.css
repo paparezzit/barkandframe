@@ -5227,3 +5227,8 @@ slideshow-component.slideshow--homepage{
     --faq-illustration-size: 300px;
   }
 }
+
+.floating-images .floating-images__fake-title{
+  top: calc(var(--header-height) + var(--floating-outline-title-offset)) !important;
+  transform: none !important;
+}
