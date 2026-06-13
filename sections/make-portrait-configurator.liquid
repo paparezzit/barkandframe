@@ -3540,7 +3540,7 @@
 
       var frameCenter = rect.top + rect.height / 2;
       var viewportCenter = window.innerHeight / 2;
-      var offset = clamp((viewportCenter - frameCenter) * 0.035, -12, 12);
+      var offset = clamp((viewportCenter - frameCenter) * -0.014, -12, 12);
       image.style.setProperty('--donation-image-parallax', offset.toFixed(2) + 'px');
     }
 
