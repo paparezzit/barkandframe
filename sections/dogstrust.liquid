@@ -35,20 +35,12 @@
 
 <style>
   .dogstrust__inner {
-    -webkit-mask-image: url({{ 'dogstrust-mask--vertical.svg' | asset_url }});
-    mask-image: url({{ 'dogstrust-mask--vertical.svg' | asset_url }});
+    -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     -webkit-mask-position: center top;
     mask-position: center top;
-  }
-
-  @media(min-width: 1400px), (min-width: 750px) and (orientation: landscape){
-    .dogstrust__inner {
-      -webkit-mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
-      mask-image: url({{ 'dogstrust-mask.svg' | asset_url }});
-    }
   }
 </style>
 
@@ -388,6 +380,78 @@
 }
 
 {% endstylesheet %}
+
+<script>
+  (() => {
+    const horizontalQuery = window.matchMedia('(min-width: 1400px), (min-width: 750px) and (orientation: landscape)');
+    const bandRatio = 203 / 467;
+    const stepRatio = 132 / 467;
+
+    function getDogstrustMaskUrl(width, height, isHorizontal) {
+      const rects = [];
+
+      if (isHorizontal) {
+        const bandHeight = height * bandRatio;
+        const radius = bandHeight / 2;
+
+        [0, height * stepRatio, height * stepRatio * 2].forEach((top) => {
+          rects.push(`<rect x="0" y="${top}" width="${width}" height="${bandHeight}" rx="${radius}" ry="${radius}" fill="white"/>`);
+        });
+      } else {
+        const bandWidth = width * bandRatio;
+        const radius = bandWidth / 2;
+
+        [0, width * stepRatio, width * stepRatio * 2].forEach((left) => {
+          rects.push(`<rect x="${left}" y="0" width="${bandWidth}" height="${height}" rx="${radius}" ry="${radius}" fill="white"/>`);
+        });
+      }
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${rects.join('')}</svg>`;
+      return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+    }
+
+    function applyDogstrustMask() {
+      document.querySelectorAll('.dogstrust__inner').forEach((inner) => {
+        const rect = inner.getBoundingClientRect();
+        const width = Math.round(rect.width);
+        const height = Math.round(rect.height);
+
+        if (!width || !height) return;
+
+        const maskUrl = getDogstrustMaskUrl(width, height, horizontalQuery.matches);
+
+        inner.style.setProperty('-webkit-mask-image', maskUrl);
+        inner.style.setProperty('mask-image', maskUrl);
+      });
+    }
+
+    let dogstrustMaskFrame = null;
+
+    function scheduleDogstrustMask() {
+      cancelAnimationFrame(dogstrustMaskFrame);
+      dogstrustMaskFrame = requestAnimationFrame(() => {
+        applyDogstrustMask();
+        requestAnimationFrame(applyDogstrustMask);
+      });
+    }
+
+    scheduleDogstrustMask();
+    window.addEventListener('load', scheduleDogstrustMask);
+    window.addEventListener('resize', scheduleDogstrustMask, { passive: true });
+    document.addEventListener('shopify:section:load', scheduleDogstrustMask);
+
+    if (horizontalQuery.addEventListener) {
+      horizontalQuery.addEventListener('change', scheduleDogstrustMask);
+    } else {
+      horizontalQuery.addListener(scheduleDogstrustMask);
+    }
+
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(scheduleDogstrustMask);
+      document.querySelectorAll('.dogstrust__inner').forEach((inner) => observer.observe(inner));
+    }
+  })();
+</script>
 
 {% schema %}
 {
