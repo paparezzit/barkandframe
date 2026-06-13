@@ -2873,9 +2873,20 @@
   margin: 0 0 20px;
   background-color: var(--cream);
   border-radius: 20px;
-  box-shadow: 0 -4px 20px rgb(var(--color-shadow-rgb) / 0.12);
   padding: 15px 20px;
   color: var(--brown);
+  position: relative;
+}
+
+.make-portrait__subtotal::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 0;
+  height: 1px;
+  box-shadow: 0 -4px 20px rgb(var(--color-shadow-rgb) / 0.04);
+  pointer-events: none;
 }
 
 .subtotal__row {
