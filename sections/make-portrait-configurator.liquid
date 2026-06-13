@@ -2873,10 +2873,26 @@
   margin: 0 0 20px;
   background-color: var(--cream);
   border-radius: 20px;
-  box-shadow: 0 -4px 20px rgb(0 0 0 / 0.03);
-  clip-path: inset(-24px 0 0 0);
   padding: 15px 20px;
   color: var(--brown);
+  position: relative;
+  overflow: visible;
+  z-index: 0;
+}
+
+.make-portrait__subtotal::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 18px;
+  background: rgb(var(--color-shadow-rgb) / 0.08);
+  border-radius: 20px 20px 0 0;
+  filter: blur(12px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .subtotal__row {
