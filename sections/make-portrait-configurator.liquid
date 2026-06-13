@@ -2583,6 +2583,8 @@
 
 /* ------ Add prints ------ */
 .addon-item--prints {
+  --prints-addon-radius: 20px;
+  border-radius: var(--prints-addon-radius);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -2604,7 +2606,7 @@
   height: 100%;
   padding: 15px 20px;
   background-color: var(--cream);
-  border-radius: 10px;
+  border-radius: var(--prints-addon-radius);
   display: flex;
   align-items: center;
 
