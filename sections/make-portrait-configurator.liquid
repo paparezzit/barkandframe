@@ -505,7 +505,7 @@
         <div class="make-portrait__option-group" id="mp-pet-name-group">
           <div class="make-portrait__option-label-row">
             <label class="make-portrait__option-label" for="mp-pet-name">Dog’s name</label>
-            {%- capture pet_name_tooltip -%}<p>The image shown in the configurator is a preview template only. After you enter your pet’s name, it will be carefully integrated into your final custom portrait design.</p>{%- endcapture -%}
+            {%- capture pet_name_tooltip -%}<p>The image is a preview template only. Your dog's name will be added to the final portrait. Max 8 characters.</p>{%- endcapture -%}
             {%- render 'info-tooltip', tooltip_content: pet_name_tooltip -%}
           </div>
           <input
@@ -513,7 +513,7 @@
             type="text"
             id="mp-pet-name"
             placeholder="Alister"
-            maxlength="40"
+            maxlength="8"
           >
           <div class="make-portrait__pet-name-fee" id="mp-pet-name-fee" hidden>
             <span>Add name</span>
