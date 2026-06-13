@@ -44,6 +44,7 @@
 
 {% stylesheet %}
   .floating-images{
+    --floating-outline-title-offset: -11px;
     color: var(--brown);
     margin: 0 0 120px;
     text-align: center;
@@ -120,7 +121,7 @@
       margin-top: calc(-100dvh + var(--header-height));
       z-index: 1;
       pointer-events: none;
-      transform: translate(0px, -11px);
+      transform: translateY(var(--floating-outline-title-offset));
 
       svg {
         width: min(400px, 80vw);
@@ -372,6 +373,12 @@
       .floating-images-title .title_svg{
         
       }
+    }
+  }
+
+  @media(max-width: 1199px){
+    .floating-images{
+      --floating-outline-title-offset: 0px;
     }
   }
 
