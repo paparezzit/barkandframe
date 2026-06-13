@@ -28,6 +28,9 @@
             </a>
           {%- endfor -%}
         </div>
+        <div class="portrait-grid-scrollbar" aria-hidden="true">
+          <span class="portrait-grid-scrollbar__thumb"></span>
+        </div>
 
         <div class="portrait-selector">
           <p class="portrait-selector__text">
@@ -91,9 +94,17 @@
 
   .portrait-grid{
     margin: 40px -20px 20px;
-    overflow-y: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
     white-space: nowrap;
     gap: 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+
+    &::-webkit-scrollbar{
+      display: none;
+    }
 
     .portrait{
       position: relative;
@@ -152,6 +163,37 @@
         }
       }
     }
+  }
+
+  .portrait-grid-scrollbar{
+    position: relative;
+    height: 22px;
+    margin: 0 20px 24px;
+    cursor: pointer;
+  }
+
+  .portrait-grid-scrollbar::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    height: 2px;
+    background: rgb(76 68 63 / 0.18);
+    border-radius: 1000px;
+  }
+
+  .portrait-grid-scrollbar__thumb{
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 10px;
+    height: 2px;
+    width: 34px;
+    background: var(--brown);
+    border-radius: 1000px;
+    transform: translateX(0);
+    transition: width 0.1s linear;
   }
 
   .portrait-selector{
@@ -280,6 +322,10 @@
         }
       }
 
+      .portrait-grid-scrollbar{
+        display: none;
+      }
+
       .portrait-selector{
         flex: 4;
       }
@@ -290,7 +336,10 @@
     margin: 90px 0; 
 
     .portrait-styles__inner{
-      padding: 130px 150px 100px
+      --portrait-styles-cta-top: 1064px;
+      min-height: 1208px;
+      padding: 130px 150px 100px;
+      position: relative;
     }
 
     .portrait-styles__title{
@@ -333,6 +382,14 @@
         }
       }
     }
+
+    .portrait-styles__button{
+      position: absolute;
+      top: var(--portrait-styles-cta-top);
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+    }
   }
 }
 
@@ -341,6 +398,9 @@
 {% javascript %}
   const headers = document.querySelectorAll(".accordion-header");
   const portraits = document.querySelectorAll(".portrait-grid .portrait");
+  const portraitGrid = document.querySelector(".portrait-grid");
+  const portraitGridScrollbar = document.querySelector(".portrait-grid-scrollbar");
+  const portraitGridThumb = portraitGridScrollbar?.querySelector(".portrait-grid-scrollbar__thumb");
 
   function closeItem(item){
 
@@ -405,6 +465,80 @@
     });
 
   });
+
+  function updatePortraitGridScrollbar(){
+    if (!portraitGrid || !portraitGridScrollbar || !portraitGridThumb) return;
+
+    const maxScroll = portraitGrid.scrollWidth - portraitGrid.clientWidth;
+
+    if (maxScroll <= 0) {
+      portraitGridScrollbar.hidden = true;
+      portraitGridThumb.style.width = "100%";
+      portraitGridThumb.style.transform = "translateX(0)";
+      return;
+    }
+
+    portraitGridScrollbar.hidden = false;
+
+    const trackWidth = portraitGridScrollbar.clientWidth;
+    const thumbWidth = Math.max((portraitGrid.clientWidth / portraitGrid.scrollWidth) * trackWidth, 34);
+    const left = ((trackWidth - thumbWidth) * portraitGrid.scrollLeft) / maxScroll;
+
+    portraitGridThumb.style.width = `${thumbWidth}px`;
+    portraitGridThumb.style.transform = `translateX(${left}px)`;
+  }
+
+  function scrollPortraitGridFromScrollbar(clientX){
+    if (!portraitGrid || !portraitGridScrollbar || !portraitGridThumb) return;
+
+    const maxScroll = portraitGrid.scrollWidth - portraitGrid.clientWidth;
+    if (maxScroll <= 0) return;
+
+    const rect = portraitGridScrollbar.getBoundingClientRect();
+    const thumbWidth = portraitGridThumb.offsetWidth || 34;
+    const usableWidth = Math.max(rect.width - thumbWidth, 1);
+    const progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+    portraitGrid.scrollLeft = progress * maxScroll;
+    updatePortraitGridScrollbar();
+  }
+
+  function refreshPortraitGridScrollbar(){
+    updatePortraitGridScrollbar();
+    requestAnimationFrame(() => {
+      updatePortraitGridScrollbar();
+      requestAnimationFrame(updatePortraitGridScrollbar);
+    });
+  }
+
+  let activePortraitGridScrollbar = false;
+
+  portraitGrid?.addEventListener("scroll", updatePortraitGridScrollbar, { passive: true });
+
+  portraitGridScrollbar?.addEventListener("pointerdown", event => {
+    activePortraitGridScrollbar = true;
+    portraitGridScrollbar.setPointerCapture?.(event.pointerId);
+    scrollPortraitGridFromScrollbar(event.clientX);
+    event.preventDefault();
+  });
+
+  document.addEventListener("pointermove", event => {
+    if (!activePortraitGridScrollbar) return;
+    scrollPortraitGridFromScrollbar(event.clientX);
+    event.preventDefault();
+  });
+
+  document.addEventListener("pointerup", () => {
+    activePortraitGridScrollbar = false;
+  });
+
+  document.addEventListener("pointercancel", () => {
+    activePortraitGridScrollbar = false;
+  });
+
+  window.addEventListener("resize", refreshPortraitGridScrollbar);
+  window.addEventListener("load", refreshPortraitGridScrollbar);
+  refreshPortraitGridScrollbar();
 {% endjavascript %}
 
 {% schema %}
