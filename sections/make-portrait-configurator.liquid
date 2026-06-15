@@ -4646,9 +4646,6 @@
           extraEl.textContent = '+' + formatMoney(Math.round(parseFloat(extraUsd) * EXTRA_PET_PRICE / EXTRA_PET_USD));
           btn.appendChild(extraEl);
         }
-        if (optName === 'border' && value === 'no-border') {
-          addOptionBadge(btn, 'Bestseller');
-        }
       });
     });
     // Update pet name fee display amount
@@ -4844,9 +4841,6 @@
           cDelta.textContent = '+ ' + formatMoney(delta);
           btn.appendChild(cDelta);
         }
-        if (usesStep3BestsellerBadges(product) && String(value).toLowerCase().includes('black')) {
-          addOptionBadge(btn, 'Bestseller');
-        }
       } else if (imgUrl) {
         applyImageToBtn(btn, imgUrl, value);
       } else {
@@ -4986,7 +4980,6 @@
     } else {
       framedBtn.textContent = 'Framed';
     }
-    addOptionBadge(framedBtn, 'Bestseller');
     framingGrid.appendChild(framedBtn);
     framingGroup.appendChild(framingGrid);
     var secondaryContainer = container2 || container;
