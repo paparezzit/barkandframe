@@ -2184,11 +2184,10 @@
 }
 
 .option-btn--size {
+  position: relative;
   background-color: var(--cream);
   border-radius: 20px;
   border: 0;
-  box-shadow: inset 0 0 0 0 transparent;
-  transition: box-shadow .2s;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -2196,10 +2195,6 @@
   overflow: hidden;
   min-width: 80px;
   margin-bottom: 20px;
-
-  &.selected, &:hover {
-    box-shadow: var(--mp-choice-ring);
-  }
 
   .option-btn__img {
     border: 0;
@@ -2231,6 +2226,28 @@
     display: block;
     font-weight: 500;
   }
+}
+
+.option-btn--size::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0 transparent;
+  pointer-events: none;
+  transition: box-shadow .2s;
+  z-index: 3;
+}
+
+.option-btn--size:hover::after,
+.option-btn--size.selected::after {
+  box-shadow: var(--mp-choice-ring);
+}
+
+.option-btn--size.option-btn--with-img::after {
+  width: auto;
+  aspect-ratio: auto;
+  border-radius: inherit;
 }
 
 .option-btn__extra-price {
