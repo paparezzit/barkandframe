@@ -30,12 +30,14 @@
               endif
             -%}
             <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait{% if is_soon_style %} portrait--soon{% endif %}" data-style="{{ cat_handles }}">
-              {%- if is_bestseller_style -%}
-                <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
-              {%- endif -%}
               <span class="portrait__image">
-                {%- if style.preview_image.value -%}
-                  <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
+                <span class="portrait__media">
+                  {%- if style.preview_image.value -%}
+                    <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
+                  {%- endif -%}
+                </span>
+                {%- if is_bestseller_style -%}
+                  <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
                 {%- endif -%}
               </span>
               {%- if is_soon_style -%}
@@ -146,9 +148,17 @@
         height: 100%;
         width: 100%;
         border-radius: 20px;
+        display: block;
+      }
+
+      .portrait__media{
+        position: relative;
+        display: block;
+        height: 100%;
+        width: 100%;
+        border-radius: inherit;
         overflow: hidden;
         transition: opacity .3s, transform .3s;
-        display: block;
 
         &::before{
           content: "";
@@ -215,7 +225,7 @@
       }
 
       &.portrait--soon{
-        .portrait__image img{
+        .portrait__media img{
           opacity: 0.45;
         }
       }
@@ -385,7 +395,7 @@
 
         &:hover{
           .portrait:not(:hover){
-            .portrait__image{
+            .portrait__media{
               opacity: .27;
             }
 
@@ -397,7 +407,7 @@
 
           .portrait:hover{
             z-index: 4;
-            .portrait__image{
+            .portrait__media{
               opacity: 1;
               transform: scale(var(--portrait-hover-scale));
             }
