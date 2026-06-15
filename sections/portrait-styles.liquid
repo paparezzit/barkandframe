@@ -37,10 +37,10 @@
                 {%- if style.preview_image.value -%}
                   <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
                 {%- endif -%}
+                {%- if is_soon_style -%}
+                  <span class="portrait__soon" aria-hidden="true">Soon</span>
+                {%- endif -%}
               </span>
-              {%- if is_soon_style -%}
-                <span class="portrait__soon" aria-hidden="true">Soon</span>
-              {%- endif -%}
               <span class="portrait__label">{{ style.name.value }}</span>
             </a>
           {%- endfor -%}
