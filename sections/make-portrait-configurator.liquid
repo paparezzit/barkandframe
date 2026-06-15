@@ -2929,6 +2929,13 @@
   border-radius: 20px;
   align-items: stretch;
   overflow: hidden;
+  box-shadow: inset 0 0 0 0 transparent;
+  cursor: pointer;
+  transition: box-shadow .2s;
+}
+
+.donation-card.is-selected .donation-card__inner {
+  box-shadow: var(--mp-choice-ring);
 }
 
 .donation-card__image-frame {
@@ -2995,13 +3002,13 @@
   padding: 5px 8px;
   width: auto;
   text-align: center;
-  box-shadow: inset 0 0 0 0 transparent;
-  transition: box-shadow .2s;
+  transition: background .2s, color .2s;
   white-space: nowrap;
 }
 
 .donation-card__amounts .option-btn:hover, .donation-card__amounts .option-btn.selected{
-  box-shadow: var(--mp-choice-ring);
+  background: var(--brown);
+  color: var(--beige);
 }
 
 .donation-card__amounts .donation-card__custom {
@@ -6174,6 +6181,13 @@
     });
 
     // Donation amounts
+    function updateDonationCardState() {
+      document.querySelectorAll('.donation-card').forEach(function (card) {
+        var hasSelection = card.querySelector('.donation-card__amounts .option-btn.selected');
+        card.classList.toggle('is-selected', !!hasSelection);
+      });
+    }
+
     function clearDonationSelection() {
       document.querySelectorAll('.donation-card__amounts .option-btn').forEach(function (b) {
         b.classList.remove('selected');
@@ -6181,10 +6195,12 @@
       var customInput = document.querySelector('.donation-card__custom-input');
       if (customInput) customInput.value = '';
       state.donation = 0;
+      updateDonationCardState();
     }
 
     document.querySelectorAll('.donation-card__amounts .option-btn:not(.donation-card__custom)').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (event) {
+        event.stopPropagation();
         var val = parseInt(btn.dataset.donation, 10);
         if (btn.classList.contains('selected')) {
           clearDonationSelection();
@@ -6192,7 +6208,24 @@
           clearDonationSelection();
           btn.classList.add('selected');
           state.donation = val;
+          updateDonationCardState();
         }
+        updateSubtotals();
+      });
+    });
+
+    document.querySelectorAll('.donation-card__inner').forEach(function (cardInner) {
+      cardInner.addEventListener('click', function (event) {
+        if (event.target.closest('.donation-card__amounts')) return;
+        var card = cardInner.closest('.donation-card');
+        var selected = card && card.querySelector('.donation-card__amounts .option-btn.selected');
+        if (selected) return;
+        var firstBtn = card && card.querySelector('.donation-card__amounts .option-btn[data-donation]');
+        if (!firstBtn) return;
+        clearDonationSelection();
+        firstBtn.classList.add('selected');
+        state.donation = parseInt(firstBtn.dataset.donation, 10) || 0;
+        updateDonationCardState();
         updateSubtotals();
       });
     });
@@ -6206,6 +6239,7 @@
           b.classList.remove('selected');
         });
         customDonationLabel.classList.add('selected');
+        updateDonationCardState();
       });
 
       customDonationInput.addEventListener('input', function () {
@@ -6213,12 +6247,14 @@
         if (!isFinite(raw) || raw < 1) {
           state.donation = 0;
           customDonationLabel.classList.remove('selected');
+          updateDonationCardState();
           updateSubtotals();
           return;
         }
         var cents = Math.round(Math.abs(raw)) * 100;
         state.donation = cents;
         customDonationLabel.classList.add('selected');
+        updateDonationCardState();
         updateSubtotals();
       });
 
@@ -6228,6 +6264,7 @@
           customDonationInput.value = '';
           customDonationLabel.classList.remove('selected');
           state.donation = 0;
+          updateDonationCardState();
           updateSubtotals();
         } else {
           customDonationInput.value = Math.round(Math.abs(raw));
