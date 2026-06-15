@@ -4973,6 +4973,11 @@
     }
     var categoryNames = { canvas: 'Canvas', paper: 'Fine Art Paper' };
     if (state.productCategory) return categoryNames[state.productCategory] || state.productCategory;
+    if (state.productHandle === FRAMED_POSTER_HANDLE) return categoryNames.paper;
+    if (state.productHandle) {
+      var matchedProduct = PRODUCTS.filter(function (p) { return p.handle === state.productHandle; })[0];
+      if (matchedProduct) return matchedProduct.title;
+    }
     if (state.product) return state.product.title;
     return '';
   }
