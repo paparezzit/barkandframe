@@ -140,6 +140,7 @@
       }
 
       .portrait__image{
+        position: relative;
         height: 100%;
         width: 100%;
         border-radius: 20px;
@@ -199,6 +200,16 @@
         pointer-events: none;
         background: var(--brown);
         color: var(--beige);
+        isolation: isolate;
+      }
+
+      .portrait__soon::before{
+        content: "";
+        position: absolute;
+        inset: -2px -4px;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--beige);
       }
 
       &.portrait--soon{
@@ -387,6 +398,10 @@
             .portrait__image{
               opacity: 1;
               transform: scale(1.55);
+            }
+
+            .portrait__soon{
+              transform: translate(-50%, -50%) scale(0.6452);
             }
 
             .portrait__label{
