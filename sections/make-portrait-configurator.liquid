@@ -2923,18 +2923,28 @@
 
 /* ------ Donation card ------ */
 .donation-card__inner {
+  position: relative;
   display: flex;
   gap: 0;
   background: var(--purple);
   border-radius: 20px;
   align-items: stretch;
   overflow: hidden;
-  box-shadow: inset 0 0 0 0 transparent;
   cursor: pointer;
-  transition: box-shadow .2s;
 }
 
-.donation-card.is-selected .donation-card__inner {
+.donation-card__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0 transparent;
+  pointer-events: none;
+  transition: box-shadow .2s;
+  z-index: 3;
+}
+
+.donation-card.is-selected .donation-card__inner::after {
   box-shadow: var(--mp-choice-ring);
 }
 
@@ -6219,7 +6229,11 @@
         if (event.target.closest('.donation-card__amounts')) return;
         var card = cardInner.closest('.donation-card');
         var selected = card && card.querySelector('.donation-card__amounts .option-btn.selected');
-        if (selected) return;
+        if (selected) {
+          clearDonationSelection();
+          updateSubtotals();
+          return;
+        }
         var firstBtn = card && card.querySelector('.donation-card__amounts .option-btn[data-donation]');
         if (!firstBtn) return;
         clearDonationSelection();
@@ -6310,6 +6324,12 @@
         } else {
           deselectPrints();
         }
+        updateSubtotals();
+      });
+
+      printOptions.addEventListener('click', function (event) {
+        if (event.target.closest('#mp-prints-grid .option-btn')) return;
+        deselectPrints();
         updateSubtotals();
       });
     }
