@@ -120,11 +120,72 @@
                         endif
                       -%}
                       {%- if upsell_product != blank -%}
-                        {%- assign first_variant = upsell_product.selected_or_first_available_variant -%}
                         {%- liquid
-                          assign upsell_original_price = upsell_product.price
+                          assign upsell_default_color = ''
+                          case upsell_product.type
+                            when 'T-Shirt'
+                              assign upsell_default_color = section.settings.cart_upsell_default_tshirt_color | default: 'Black'
+                            when 'Crewneck'
+                              assign upsell_default_color = section.settings.cart_upsell_default_crewneck_color | default: 'Heather Grey'
+                            when 'Cap'
+                              assign upsell_default_color = section.settings.cart_upsell_default_cap_color | default: 'Black'
+                          endcase
+
+                          assign selected_upsell_variant = blank
+                          for variant in upsell_product.variants
+                            assign variant_size = variant.option2 | strip
+                            if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
+                              unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
+                                continue
+                              endunless
+                            endif
+
+                            assign variant_color = variant.option1 | strip
+                            if selected_upsell_variant == blank and variant.available and upsell_default_color != blank and variant_color == upsell_default_color
+                              assign selected_upsell_variant = variant
+                              break
+                            endif
+                          endfor
+
+                          if selected_upsell_variant == blank
+                            assign selected_upsell_variant = upsell_product.selected_or_first_available_variant
+                          endif
+
+                          assign first_variant = selected_upsell_variant
+                          assign selected_upsell_color = first_variant.option1 | strip
+                          assign selected_upsell_size = first_variant.option2 | strip
+                          assign upsell_card_image = first_variant.featured_image | default: upsell_product.featured_image
+                          assign upsell_original_price = first_variant.price | default: upsell_product.price
                           assign upsell_sale_price = upsell_original_price | times: upsell_discount_multiplier | divided_by: 100.0
                           assign upsell_sale_price = upsell_sale_price | divided_by: 100.0 | round | times: 100
+
+                          assign upsell_seen_colors = ''
+                          assign upsell_color_count = 0
+                          assign upsell_seen_sizes = ''
+                          assign upsell_size_count = 0
+                          for variant in upsell_product.variants
+                            assign variant_size = variant.option2 | strip
+                            if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
+                              unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
+                                continue
+                              endunless
+                            endif
+
+                            assign variant_color = variant.option1 | strip
+                            assign variant_color_marker = '|' | append: variant_color | append: '|'
+                            unless upsell_seen_colors contains variant_color_marker
+                              assign upsell_seen_colors = upsell_seen_colors | append: variant_color_marker
+                              assign upsell_color_count = upsell_color_count | plus: 1
+                            endunless
+
+                            assign variant_size_marker = '|' | append: variant_size | append: '|'
+                            if variant_size != blank
+                              unless upsell_seen_sizes contains variant_size_marker
+                                assign upsell_seen_sizes = upsell_seen_sizes | append: variant_size_marker
+                                assign upsell_size_count = upsell_size_count | plus: 1
+                              endunless
+                            endif
+                          endfor
                         -%}
                         {%- capture upsell_merch_order_items -%}
                           {%- render 'baf-merch-printful-map', product: upsell_product -%}
@@ -143,11 +204,11 @@
                               tabindex="-1"
                               aria-hidden="true"
                             >
-                              {%- if upsell_product.featured_image -%}
+                              {%- if upsell_card_image -%}
                                 {{-
-                                  upsell_product.featured_image
+                                  upsell_card_image
                                   | image_url: width: 300
-                                  | image_tag: loading: 'lazy', widths: '150, 300', alt: upsell_product.featured_image.alt
+                                  | image_tag: loading: 'lazy', widths: '150, 300', alt: upsell_card_image.alt
                                   | escape
                                 -}}
                               {%- endif -%}
@@ -164,17 +225,59 @@
                               </div>
                               <div class="cart-drawer__upsell-card-actions">
                                 {%- if upsell_product.variants.size > 1 -%}
+                                  <select class="cart-drawer__upsell-card-variant" hidden aria-hidden="true" tabindex="-1">
+                                    {%- for variant in upsell_product.variants -%}
+                                      {%- liquid
+                                        assign variant_size = variant.option2 | strip
+                                        if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
+                                          unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
+                                            continue
+                                          endunless
+                                        endif
+
+                                        assign variant_color = variant.option1 | strip
+                                        assign variant_image = variant.featured_image | default: upsell_product.featured_image
+                                        assign variant_original_price = variant.price
+                                        assign variant_sale_price = variant_original_price | times: upsell_discount_multiplier | divided_by: 100.0
+                                        assign variant_sale_price = variant_sale_price | divided_by: 100.0 | round | times: 100
+                                      -%}
+                                      <option
+                                        value="{{ variant.id }}"
+                                        data-color="{{ variant_color | escape }}"
+                                        data-size="{{ variant_size | escape }}"
+                                        data-price="{{ variant_sale_price | money_without_trailing_zeros | escape }}"
+                                        data-compare="{{ variant_original_price | money_without_trailing_zeros | escape }}"
+                                        {% if variant_image %}
+                                          data-image="{{ variant_image | image_url: width: 300 }}"
+                                          data-image-srcset="{{ variant_image | image_url: width: 150 }} 150w, {{ variant_image | image_url: width: 300 }} 300w"
+                                          data-image-alt="{{ variant_image.alt | default: upsell_product.title | escape }}"
+                                        {% endif %}
+                                        {% unless variant.available %}disabled{% endunless %}
+                                        {% if variant.id == first_variant.id %}selected{% endif %}
+                                      ></option>
+                                    {%- endfor -%}
+                                  </select>
+                                {%- endif -%}
+                                {%- if upsell_color_count > 1 -%}
                                   <div class="cart-drawer__upsell-card-variant-wrap">
-                                    <select class="cart-drawer__upsell-card-variant">
+                                    <select class="cart-drawer__upsell-card-select cart-drawer__upsell-card-color" data-upsell-color-select aria-label="Color">
+                                      {%- assign rendered_upsell_colors = '' -%}
                                       {%- for variant in upsell_product.variants -%}
                                         {%- liquid
                                           assign variant_size = variant.option2 | strip
-                                          assign display_variant_title = variant.title | replace: '2XL', 'XXL'
                                           if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
                                             unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
                                               continue
                                             endunless
                                           endif
+
+                                          assign variant_color = variant.option1 | strip
+                                          assign variant_color_marker = '|' | append: variant_color | append: '|'
+                                          if rendered_upsell_colors contains variant_color_marker
+                                            continue
+                                          endif
+                                          assign rendered_upsell_colors = rendered_upsell_colors | append: variant_color_marker
+                                          assign display_variant_title = variant_color
                                           case upsell_product.type
                                             when 'Cap'
                                               assign display_variant_title = display_variant_title | replace: 'Black', 'Onyx' | replace: 'Oyster', 'Biscuit'
@@ -185,9 +288,39 @@
                                           endcase
                                         -%}
                                         <option
-                                          value="{{ variant.id }}"
-                                          {% unless variant.available %}disabled{% endunless %}
+                                          value="{{ variant_color | escape }}"
+                                          {% if variant_color == selected_upsell_color %}selected{% endif %}
                                         >{{ display_variant_title }}</option>
+                                      {%- endfor -%}
+                                    </select>
+                                    <span class="cart-drawer__upsell-card-variant-chevron">
+                                      {{- 'icon-caret.svg' | inline_asset_content -}}
+                                    </span>
+                                  </div>
+                                {%- endif -%}
+                                {%- if upsell_size_count > 1 -%}
+                                  <div class="cart-drawer__upsell-card-variant-wrap">
+                                    <select class="cart-drawer__upsell-card-select cart-drawer__upsell-card-size" data-upsell-size-select aria-label="Size">
+                                      {%- assign rendered_upsell_sizes = '' -%}
+                                      {%- for variant in upsell_product.variants -%}
+                                        {%- liquid
+                                          assign variant_size = variant.option2 | strip
+                                          if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
+                                            unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
+                                              continue
+                                            endunless
+                                          endif
+                                          assign variant_size_marker = '|' | append: variant_size | append: '|'
+                                          if rendered_upsell_sizes contains variant_size_marker
+                                            continue
+                                          endif
+                                          assign rendered_upsell_sizes = rendered_upsell_sizes | append: variant_size_marker
+                                          assign display_variant_size = variant_size | replace: '2XL', 'XXL'
+                                        -%}
+                                        <option
+                                          value="{{ variant_size | escape }}"
+                                          {% if variant_size == selected_upsell_size %}selected{% endif %}
+                                        >{{ display_variant_size }}</option>
                                       {%- endfor -%}
                                     </select>
                                     <span class="cart-drawer__upsell-card-variant-chevron">
@@ -226,11 +359,10 @@
 <script>
   (function () {
     document.addEventListener('change', (e) => {
-      const select = e.target.closest('.cart-drawer__upsell-card-variant');
+      const select = e.target.closest('.cart-drawer__upsell-card-select');
       if (!select) return;
       const card = select.closest('.cart-drawer__upsell-card');
-      const btn = card?.querySelector('[data-upsell-add]');
-      if (btn) btn.dataset.variantId = select.value;
+      updateUpsellCardVariant(card);
     });
 
     document.addEventListener('click', async (e) => {
@@ -300,6 +432,59 @@
           ? { _baf_production: JSON.stringify(merchOrderItem.production) }
           : {}),
       };
+    }
+
+    function updateUpsellCardVariant(card) {
+      if (!card) return;
+
+      const colorSelect = card.querySelector('[data-upsell-color-select]');
+      const sizeSelect = card.querySelector('[data-upsell-size-select]');
+      const variantSelect = card.querySelector('.cart-drawer__upsell-card-variant');
+      const variantOptions = Array.from(variantSelect?.options || []);
+      if (!variantOptions.length) return;
+
+      const selectedColor = colorSelect?.value || '';
+      const selectedSize = sizeSelect?.value || '';
+      let selectedOption = variantOptions.find((option) => {
+        if (option.disabled) return false;
+        return (!selectedColor || option.dataset.color === selectedColor)
+          && (!selectedSize || option.dataset.size === selectedSize);
+      });
+
+      if (!selectedOption) {
+        selectedOption = variantOptions.find((option) => {
+          if (option.disabled) return false;
+          return !selectedColor || option.dataset.color === selectedColor;
+        });
+      }
+
+      if (!selectedOption) {
+        selectedOption = variantOptions.find((option) => !option.disabled) || variantOptions[0];
+      }
+
+      if (!selectedOption) return;
+
+      variantSelect.value = selectedOption.value;
+
+      if (sizeSelect && selectedOption.dataset.size) {
+        sizeSelect.value = selectedOption.dataset.size;
+      }
+
+      const btn = card.querySelector('[data-upsell-add]');
+      if (btn) btn.dataset.variantId = selectedOption.value;
+
+      const image = card.querySelector('.cart-drawer__upsell-card-image-link img');
+      if (image && selectedOption.dataset.image) {
+        image.src = selectedOption.dataset.image;
+        if (selectedOption.dataset.imageSrcset) image.srcset = selectedOption.dataset.imageSrcset;
+        if (selectedOption.dataset.imageAlt) image.alt = selectedOption.dataset.imageAlt;
+      }
+
+      const price = card.querySelector('.cart-drawer__upsell-card-price');
+      if (price && selectedOption.dataset.price) price.textContent = selectedOption.dataset.price;
+
+      const compare = card.querySelector('.cart-drawer__upsell-card-compare');
+      if (compare && selectedOption.dataset.compare) compare.textContent = selectedOption.dataset.compare;
     }
 
     function updateUpsellScrollbar(container) {
@@ -670,7 +855,7 @@
     flex-shrink: 0;
   }
 
-  .cart-drawer__upsell-card-variant {
+  .cart-drawer__upsell-card-select {
     appearance: none;
     background: var(--cream);
     border: none;
@@ -682,8 +867,8 @@
     color: inherit;
   }
 
-  .cart-drawer__upsell-card-variant:focus,
-  .cart-drawer__upsell-card-variant:focus-visible,
+  .cart-drawer__upsell-card-select:focus,
+  .cart-drawer__upsell-card-select:focus-visible,
   .cart-drawer__upsell-card-add:focus,
   .cart-drawer__upsell-card-add:focus-visible,
   .cart-drawer__upsell-card-title:focus,

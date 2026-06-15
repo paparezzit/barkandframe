@@ -122,7 +122,10 @@
           "doggery-squad-crewneck",
           "more-dog-is-more-dog-cap"
         ],
-        "cart_upsell_discount_percent": 15
+        "cart_upsell_discount_percent": 15,
+        "cart_upsell_default_tshirt_color": "Black",
+        "cart_upsell_default_crewneck_color": "Heather Grey",
+        "cart_upsell_default_cap_color": "Black"
       }
     }
   },
