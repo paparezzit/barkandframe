@@ -184,6 +184,7 @@
         text-transform: uppercase;
         white-space: nowrap;
         pointer-events: none;
+        transition: top .3s, left .3s, opacity .3s;
       }
 
       .portrait__badge--bestseller{
@@ -397,6 +398,11 @@
             .portrait__image{
               opacity: 1;
               transform: scale(1.55);
+            }
+
+            .portrait__badge{
+              top: -27.5%;
+              left: -27.5%;
             }
 
             .portrait__label{
