@@ -118,9 +118,9 @@
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default",
         "cart_upsell_products": [
-          "shopify://products/chill-vibes-t-shirt",
-          "shopify://products/doggery-squad-crewneck",
-          "shopify://products/more-dog-is-more-dog-cap"
+          "chill-vibes-t-shirt",
+          "doggery-squad-crewneck",
+          "more-dog-is-more-dog-cap"
         ],
         "cart_upsell_discount_percent": 15
       }

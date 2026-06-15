@@ -112,6 +112,13 @@
                 <div class="cart-drawer__upsell">
                   <div class="cart-drawer__upsell-products">
                     {%- for upsell_product in upsell_products -%}
+                      {%- liquid
+                        assign upsell_product_handle = upsell_product.handle | default: upsell_product
+                        assign upsell_product_handle = upsell_product_handle | remove: 'shopify://products/'
+                        if upsell_product.title == blank and upsell_product_handle != blank
+                          assign upsell_product = all_products[upsell_product_handle]
+                        endif
+                      -%}
                       {%- if upsell_product != blank -%}
                         {%- assign first_variant = upsell_product.selected_or_first_available_variant -%}
                         {%- liquid
