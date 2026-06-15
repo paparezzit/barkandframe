@@ -110,6 +110,7 @@
               -%}
               {%- if upsell_products != blank -%}
                 <div class="cart-drawer__upsell">
+                  <h2 class="cart-drawer__upsell-heading">Add and save</h2>
                   <div class="cart-drawer__upsell-products">
                     {%- for upsell_product in upsell_products -%}
                       {%- liquid
@@ -751,6 +752,15 @@
     padding: 30px 0 15px;
     background: var(--cream);
     width: 100%;
+  }
+
+  .cart-drawer__upsell-heading {
+    margin: 0 20px 12px;
+    color: inherit;
+    font-family: var(--baf-display-family);
+    font-size: var(--baf-display-extra-small-size);
+    font-weight: var(--baf-display-weight);
+    line-height: 1;
   }
 
   .cart-drawer__upsell-products {
