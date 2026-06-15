@@ -1,8 +1,6 @@
 {%- liquid
   assign portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
   assign portrait_categories = shop.metaobjects.portrait_category.values
-  assign portrait_hover_scale = 1.55
-  assign portrait_hover_edge_offset = portrait_hover_scale | minus: 1 | times: 50
 -%}
 
 <div class="portrait-styles section section--page-width">
@@ -98,8 +96,8 @@
 
 {% stylesheet %}
 .portrait-styles{
-  --portrait-hover-scale: {{ portrait_hover_scale }};
-  --portrait-hover-edge-offset: -{{ portrait_hover_edge_offset }}%;
+  --portrait-hover-scale: 1.55;
+  --portrait-hover-edge-offset: -27.5%;
   margin: 120px 0;
 
   .portrait-styles__inner{
