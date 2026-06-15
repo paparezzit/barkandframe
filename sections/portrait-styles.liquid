@@ -21,11 +21,15 @@
             {%- liquid
               assign portrait_style_name = style.name.value
               assign is_bestseller_style = false
+              assign is_soon_style = false
               if portrait_style_name == 'La Parisienne' or portrait_style_name == 'La Parisien' or portrait_style_name == 'Pure Portrait' or portrait_style_name == 'Studio Pencil'
                 assign is_bestseller_style = true
               endif
+              if portrait_style_name == 'Atelier Sketch'
+                assign is_soon_style = true
+              endif
             -%}
-            <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait" data-style="{{ cat_handles }}">
+            <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait{% if is_soon_style %} portrait--soon{% endif %}" data-style="{{ cat_handles }}">
               {%- if is_bestseller_style -%}
                 <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
               {%- endif -%}
@@ -34,6 +38,9 @@
                   <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
                 {%- endif -%}
               </span>
+              {%- if is_soon_style -%}
+                <span class="portrait__soon" aria-hidden="true">Soon</span>
+              {%- endif -%}
               <span class="portrait__label">{{ style.name.value }}</span>
             </a>
           {%- endfor -%}
@@ -172,6 +179,38 @@
         color: var(--beige);
       }
 
+      .portrait__soon{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        transform: translate(-50%, -50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 15px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        background: var(--brown);
+        color: var(--beige);
+      }
+
+      &.portrait--soon{
+        .portrait__image{
+          opacity: 0.45;
+        }
+
+        .portrait__label{
+          opacity: 0.36;
+        }
+      }
+
       .portrait__label{
         background-color: var(--beige);
         color: var(--green);
@@ -197,6 +236,10 @@
         }
 
         .portrait__badge{
+          opacity: 0;
+        }
+
+        .portrait__soon{
           opacity: 0;
         }
       }
