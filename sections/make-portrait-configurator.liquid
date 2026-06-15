@@ -2035,6 +2035,10 @@
   pointer-events: none;
 }
 
+.option-btn--size .option-btn__badge {
+  z-index: 5;
+}
+
 .option-btn__badge--bestseller {
   background: var(--green);
   color: var(--beige);
@@ -2195,6 +2199,16 @@
   background-color: var(--cream);
 }
 
+.option-btn-grid[data-option-name="frame"] .option-btn__img,
+.option-btn-grid[data-option-name="border"] .option-btn__img {
+  border-radius: 20px;
+}
+
+.option-btn-grid[data-option-name="frame"] .option-btn--with-img::after,
+.option-btn-grid[data-option-name="border"] .option-btn--with-img::after {
+  border-radius: 20px;
+}
+
 .option-btn .option-btn__label {
   text-align: left;
   font-weight: 700;
@@ -2236,7 +2250,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  overflow: visible;
+  overflow: hidden;
   min-width: 80px;
   margin-bottom: 20px;
 
@@ -2247,7 +2261,6 @@
     object-fit: cover;
     display: block;
     flex-shrink: 0;
-    border-radius: 20px 20px 0 0;
   }
 
   .option-btn__label {
@@ -2293,10 +2306,6 @@
   width: auto;
   aspect-ratio: auto;
   border-radius: inherit;
-}
-
-.option-btn--size .option-btn__badge {
-  top: -8px;
 }
 
 .option-btn__extra-price {
