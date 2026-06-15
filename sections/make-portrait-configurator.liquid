@@ -384,11 +384,11 @@
                 {%- assign _canvas_min_price = _cf.price_min -%}
               {%- endif -%}
               <button
-                class="product-picker__item product-picker__item--category"
+                class="product-picker__item product-picker__item--category selected"
                 data-category="canvas"
                 data-min-price="{{ _canvas_min_price }}"
                 role="option"
-                aria-selected="false"
+                aria-selected="true"
               >
                 <span class="product-picker__badge product-picker__badge--bestseller" aria-hidden="true">Bestseller</span>
                 {%- if _canvas_img -%}
@@ -1981,6 +1981,17 @@
   }
 }
 
+.product-picker__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0 transparent;
+  pointer-events: none;
+  transition: box-shadow 0.2s;
+  z-index: 2;
+}
+
 .product-picker__badge {
   position: absolute;
   top: 0;
@@ -2072,6 +2083,11 @@
 }
 
 .product-picker__item:hover, .product-picker__item.selected {
+  box-shadow: none;
+}
+
+.product-picker__item:hover::after,
+.product-picker__item.selected::after {
   box-shadow: var(--mp-choice-ring);
 }
 
