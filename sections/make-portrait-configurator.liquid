@@ -390,6 +390,7 @@
                 role="option"
                 aria-selected="false"
               >
+                <span class="product-picker__badge product-picker__badge--bestseller" aria-hidden="true">Bestseller</span>
                 {%- if _canvas_img -%}
                   <img src="{{ _canvas_img | image_url: width: 200 }}" width="200" height="200" alt="Print on Canvas" loading="lazy">
                 {%- else -%}
@@ -1935,6 +1936,7 @@
 }
 
 .product-picker__item {
+  position: relative;
   background: transparent;
   border: 2px solid var(--cream);
   border-radius: 30px;
@@ -1952,6 +1954,30 @@
     border-color: transparent;
     background-color: var(--cream);
   }
+}
+
+.product-picker__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 15px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.product-picker__badge--bestseller {
+  background: var(--green);
+  color: var(--beige);
 }
 
 .product-picker__item img {
