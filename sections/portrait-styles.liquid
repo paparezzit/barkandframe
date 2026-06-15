@@ -18,7 +18,17 @@
               {%- unless forloop.first -%}{%- assign cat_handles = cat_handles | append: ' ' -%}{%- endunless -%}
               {%- assign cat_handles = cat_handles | append: cat.system.handle -%}
             {%- endfor -%}
+            {%- liquid
+              assign portrait_style_name = style.name.value
+              assign is_bestseller_style = false
+              if portrait_style_name == 'La Parisienne' or portrait_style_name == 'La Parisien' or portrait_style_name == 'Pure Portrait' or portrait_style_name == 'Studio Pencil'
+                assign is_bestseller_style = true
+              endif
+            -%}
             <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait" data-style="{{ cat_handles }}">
+              {%- if is_bestseller_style -%}
+                <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
+              {%- endif -%}
               <span class="portrait__image">
                 {%- if style.preview_image.value -%}
                   <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
@@ -138,6 +148,30 @@
         }
       }
 
+      .portrait__badge{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 15px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .portrait__badge--bestseller{
+        background: var(--green);
+        color: var(--beige);
+      }
+
       .portrait__label{
         background-color: var(--beige);
         color: var(--green);
@@ -160,6 +194,10 @@
         .portrait__label{
           opacity: 0;
           pointer-events: none;
+        }
+
+        .portrait__badge{
+          opacity: 0;
         }
       }
     }
