@@ -4426,12 +4426,6 @@
         if (val !== undefined) previousSelections[opt.name.toLowerCase()] = val;
       });
     }
-    if (initialSelections) {
-      Object.keys(initialSelections).forEach(function (key) {
-        previousSelections[key.toLowerCase()] = initialSelections[key];
-      });
-    }
-
     if (!handle) {
       var c = $('mp-options-container');
       if (c) c.innerHTML = '<p class="make-portrait__error-note">Product handle not configured.</p>';
@@ -4446,6 +4440,7 @@
         state.variantId = null;
         state.variant = null;
         state.selectedOptions = {};
+        mergeOptionSelectionsByName(product, initialSelections, previousSelections);
         renderFrameUI(product, handles, choice, previousSelections);
         if (ctaStep3) ctaStep3.disabled = false;
         updateSubtotals();
@@ -4455,6 +4450,19 @@
         var c = $('mp-options-container');
         if (c) c.innerHTML = '<p class="make-portrait__error-note">Failed to load product.</p>';
       });
+  }
+
+  function mergeOptionSelectionsByName(product, selections, target) {
+    if (!selections) return target || {};
+    target = target || {};
+    normalizeOptions(product ? product.options : []).forEach(function (opt) {
+      var val = selections[opt.position];
+      if (val !== undefined) target[opt.name.toLowerCase()] = val;
+    });
+    Object.keys(selections).forEach(function (key) {
+      if (!/^\d+$/.test(key)) target[key.toLowerCase()] = selections[key];
+    });
+    return target;
   }
 
   function renderFrameUI(product, handles, currentChoice, previousSelections) {
@@ -5849,16 +5857,40 @@
     updateSubtotals();
   }
 
+  function getCanvasChoiceFromHandle(handle) {
+    if (handle === CANVAS_HANDLES.unframed) return 'unframed';
+    if (handle === CANVAS_HANDLES.framed) return 'framed';
+    return null;
+  }
+
+  function isCanvasDraft(saved) {
+    return !!saved && (
+      saved.productCategory === 'canvas' ||
+      !!saved.canvasFrameChoice ||
+      !!getCanvasChoiceFromHandle(saved.productHandle)
+    );
+  }
+
   function restoreDraft(saved) {
     _pendingRestore = saved;
     if (saved.styleId) selectStyle(saved.styleId);
-    if (saved.productHandle) {
-      selectProduct(saved.productHandle);
-    } else if (saved.productCategory === 'canvas') {
+
+    if (isCanvasDraft(saved)) {
+      var choice = saved.canvasFrameChoice || getCanvasChoiceFromHandle(saved.productHandle) || 'framed';
       selectCategory('canvas');
       _pendingRestore = null;
-      goToStep(Math.min(saved.step || 2, 2));
+      if (saved.step >= 3) {
+        buildFrameUI(CANVAS_HANDLES, choice, saved.selectedOptions);
+        goToStep(3);
+      } else {
+        goToStep(saved.step || 2);
+      }
       applyRestoredStatics(saved);
+    } else if (saved.productCategory === 'paper' && !saved.productHandle && FRAMED_POSTER_HANDLE) {
+      saved.productHandle = FRAMED_POSTER_HANDLE;
+      selectProduct(FRAMED_POSTER_HANDLE);
+    } else if (saved.productHandle) {
+      selectProduct(saved.productHandle);
     } else {
       _pendingRestore = null;
       applyRestoredStatics(saved);
