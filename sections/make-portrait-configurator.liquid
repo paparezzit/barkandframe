@@ -1104,6 +1104,7 @@
 {% stylesheet %}
 
 .make-portrait {
+  --mp-choice-ring: inset 0 0 0 2px var(--green);
   padding: 40px 0 100px;
   font-family: var(--font-body--family);
   color: var(--brown);
@@ -1788,8 +1789,9 @@
   object-fit: cover;
   display: block;
   border-radius: 11px;
-  transition: border-color 0.2s;
-  border: 2px solid transparent;
+  border: 0;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow 0.2s;
 }
 
 .style-picker__name {
@@ -1840,7 +1842,7 @@
 
 .style-picker__item.selected img,
 .style-picker__item.selected .style-picker__placeholder {
-  border-color: var(--green);
+  box-shadow: var(--mp-choice-ring);
 }
 
 .style-picker__item.selected .style-picker__name{
@@ -1938,7 +1940,7 @@
 .product-picker__item {
   position: relative;
   background: transparent;
-  border: 2px solid var(--cream);
+  border: 0;
   border-radius: 30px;
   padding: 15px 20px;
   cursor: pointer;
@@ -1952,7 +1954,6 @@
   font-family: var(--font-body--family);
 
   &.product-picker__item--category{
-    border-color: transparent;
     background-color: var(--cream);
   }
 }
@@ -2048,8 +2049,7 @@
 }
 
 .product-picker__item:hover, .product-picker__item.selected {
-  border-color: transparent;
-  box-shadow: inset 0 0 0 2px var(--green);
+  box-shadow: var(--mp-choice-ring);
 }
 
 /* ------ Options ------ */
@@ -2105,8 +2105,9 @@
   object-fit: contain;
   display: block;
   flex-shrink: 0;
-  border: 2px solid transparent;
-  transition: border .2s;
+  border: 0;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow .2s;
   border-radius: 10px;
   background-color: var(--cream);
 }
@@ -2134,7 +2135,7 @@
 
 .option-btn:hover, .option-btn.selected {
   .option-btn__img{
-    border-color: var(--green);
+    box-shadow: var(--mp-choice-ring);
   }
 
   .option-btn__label{
@@ -2145,8 +2146,9 @@
 .option-btn--size {
   background-color: var(--cream);
   border-radius: 20px;
-  border: 2px solid transparent;
-  transition: border .2s;
+  border: 0;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow .2s;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -2156,7 +2158,7 @@
   margin-bottom: 20px;
 
   &.selected, &:hover {
-    border-color: var(--green);
+    box-shadow: var(--mp-choice-ring);
   }
 
   .option-btn__img {
@@ -2240,20 +2242,21 @@
 /* Text input */
 .make-portrait__text-input {
   width: 100%;
-  border: 2px solid transparent;
+  border: 0;
   border-radius: 20px;
   padding: 10px 14px;
   font-size: 36px;
   color: var(--brown);
   background: #fff;
   outline: none;
-  transition: border-color 0.2s;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow 0.2s, background 0.2s;
   display: block;
   background: var(--cream);
   font-family: "display", serif;
 
   &:hover, &:focus{
-    border-color: var(--green);
+    box-shadow: var(--mp-choice-ring);
     background: var(--cream);
   }
 
@@ -2264,7 +2267,7 @@
 }
 
 .make-portrait__text-input:focus {
-  border-color: var(--green);
+  box-shadow: var(--mp-choice-ring);
 }
 
 .make-portrait__pet-name-fee {
@@ -2749,8 +2752,9 @@
   border-radius: 20px;
   margin-bottom: 10px;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.2s, background 0.2s;
+  border: 0;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow 0.2s, background 0.2s;
   background: var(--cream);
   display: block;
 }
@@ -2793,7 +2797,7 @@
 }
 
 .addon-item:hover, .addon-item:has(.addon-item__check:checked){
-  border-color: var(--green);
+  box-shadow: var(--mp-choice-ring);
 
   .addon-item__name, .addon-item__description{
     opacity: 1;
@@ -2866,7 +2870,7 @@
 
 .donation-card__amounts .option-btn {
   background: var(--beige);
-  border: 2px solid transparent;
+  border: 0;
   color: var(--brown);
   border-radius: 10px;
   font-family: "display", serif;
@@ -2874,12 +2878,13 @@
   padding: 5px 8px;
   width: auto;
   text-align: center;
-  transition: border .2s;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: box-shadow .2s;
   white-space: nowrap;
 }
 
 .donation-card__amounts .option-btn:hover, .donation-card__amounts .option-btn.selected{
-  border-color: var(--green);
+  box-shadow: var(--mp-choice-ring);
 }
 
 .donation-card__amounts .donation-card__custom {
