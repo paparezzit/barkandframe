@@ -22,11 +22,15 @@
               assign portrait_style_name = style.name.value
               assign is_bestseller_style = false
               assign is_soon_style = false
+              assign is_studio_choice_style = false
               if portrait_style_name == 'La Parisienne' or portrait_style_name == 'La Parisien' or portrait_style_name == 'Pure Portrait' or portrait_style_name == 'Studio Pencil'
                 assign is_bestseller_style = true
               endif
               if portrait_style_name == 'Atelier Sketch'
                 assign is_soon_style = true
+              endif
+              if portrait_style_name == 'Studio Pop'
+                assign is_studio_choice_style = true
               endif
             -%}
             <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait{% if is_soon_style %} portrait--soon{% endif %}" data-style="{{ cat_handles }}">
@@ -38,6 +42,9 @@
                 </span>
                 {%- if is_bestseller_style -%}
                   <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
+                {%- endif -%}
+                {%- if is_studio_choice_style -%}
+                  <span class="portrait__badge portrait__badge--studio-choice" aria-hidden="true">STUDIO CHOICE</span>
                 {%- endif -%}
               </span>
               {%- if is_soon_style -%}
@@ -202,6 +209,11 @@
       .portrait__badge--bestseller{
         background: var(--green);
         color: var(--beige);
+      }
+
+      .portrait__badge--studio-choice{
+        background: var(--purple);
+        color: var(--brown);
       }
 
       .portrait__soon{
