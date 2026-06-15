@@ -2772,7 +2772,15 @@
       border-radius: 5px;
       margin-bottom: 5px;
       height: 25px;
-      transition: background .2s, color .2s;
+      box-shadow: inset 0 0 0 0 transparent;
+      transition: background .2s, color .2s, box-shadow .2s;
+    }
+
+    &:hover,
+    &.selected{
+      .option-btn__count{
+        box-shadow: var(--mp-choice-ring);
+      }
     }
 
     &.selected{
@@ -2796,6 +2804,8 @@
       height: 25px;
       padding: 0;
       margin-bottom: 5px;
+      box-shadow: inset 0 0 0 0 transparent;
+      transition: box-shadow .2s;
     }
 
     .make-portrait__prints-custom-price{
@@ -2804,6 +2814,10 @@
     }
 
     &.selected{
+      .make-portrait__prints-custom-input{
+        box-shadow: var(--mp-choice-ring);
+      }
+
       .make-portrait__prints-custom-price{
         opacity: 1;
       }
