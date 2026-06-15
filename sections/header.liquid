@@ -1081,24 +1081,20 @@
       "content": "Cart upsell"
     },
     {
-      "type": "product",
-      "id": "cart_upsell_product_1",
-      "label": "Product 1"
+      "type": "product_list",
+      "id": "cart_upsell_products",
+      "label": "Products",
+      "limit": 50
     },
     {
-      "type": "product",
-      "id": "cart_upsell_product_2",
-      "label": "Product 2"
-    },
-    {
-      "type": "product",
-      "id": "cart_upsell_product_3",
-      "label": "Product 3"
-    },
-    {
-      "type": "product",
-      "id": "cart_upsell_product_4",
-      "label": "Product 4"
+      "type": "range",
+      "id": "cart_upsell_discount_percent",
+      "label": "Discount",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 15
     }
   ],
   "presets": []

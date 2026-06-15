@@ -104,47 +104,21 @@
               class="cart-drawer__summary"
             >
               {%- liquid
-                assign upsell_p1 = section.settings.cart_upsell_product_1
-                assign upsell_p2 = section.settings.cart_upsell_product_2
-                assign upsell_p3 = section.settings.cart_upsell_product_3
-                assign upsell_p4 = section.settings.cart_upsell_product_4
-                assign has_upsell = false
-                assign upsell_count = 0
-                if upsell_p1 != blank
-                  assign has_upsell = true
-                  assign upsell_count = upsell_count | plus: 1
-                endif
-                if upsell_p2 != blank
-                  assign has_upsell = true
-                  assign upsell_count = upsell_count | plus: 1
-                endif
-                if upsell_p3 != blank
-                  assign has_upsell = true
-                  assign upsell_count = upsell_count | plus: 1
-                endif
-                if upsell_p4 != blank
-                  assign has_upsell = true
-                  assign upsell_count = upsell_count | plus: 1
-                endif
+                assign upsell_products = section.settings.cart_upsell_products
+                assign upsell_discount_percent = section.settings.cart_upsell_discount_percent | default: 15
+                assign upsell_discount_multiplier = 100 | minus: upsell_discount_percent
               -%}
-              {%- if has_upsell -%}
+              {%- if upsell_products != blank -%}
                 <div class="cart-drawer__upsell">
                   <div class="cart-drawer__upsell-products">
-                    {%- for product in (1..4) -%}
-                      {%- liquid
-                        case forloop.index
-                          when 1
-                            assign upsell_product = upsell_p1
-                          when 2
-                            assign upsell_product = upsell_p2
-                          when 3
-                            assign upsell_product = upsell_p3
-                          when 4
-                            assign upsell_product = upsell_p4
-                        endcase
-                      -%}
+                    {%- for upsell_product in upsell_products -%}
                       {%- if upsell_product != blank -%}
                         {%- assign first_variant = upsell_product.selected_or_first_available_variant -%}
+                        {%- liquid
+                          assign upsell_original_price = upsell_product.price
+                          assign upsell_sale_price = upsell_original_price | times: upsell_discount_multiplier | divided_by: 100.0
+                          assign upsell_sale_price = upsell_sale_price | divided_by: 100.0 | round | times: 100
+                        -%}
                         {%- capture upsell_merch_order_items -%}
                           {%- render 'baf-merch-printful-map', product: upsell_product -%}
                         {%- endcapture -%}
@@ -176,10 +150,10 @@
                                 {{- upsell_product.title -}}
                               </a>
                               <div class="cart-drawer__upsell-card-prices">
-                                {%- if upsell_product.compare_at_price > upsell_product.price -%}
-                                  <s class="cart-drawer__upsell-card-compare">{{- upsell_product.compare_at_price | money -}}</s>
+                                <span class="cart-drawer__upsell-card-price price">{{ upsell_sale_price | money_without_trailing_zeros }}</span>
+                                {%- if upsell_discount_percent > 0 -%}
+                                  <s class="cart-drawer__upsell-card-compare compare-at-price">{{- upsell_original_price | money_without_trailing_zeros -}}</s>
                                 {%- endif -%}
-                                <span class="cart-drawer__upsell-card-price">{{ upsell_product.price | money }}</span>
                               </div>
                               <div class="cart-drawer__upsell-card-actions">
                                 {%- if upsell_product.variants.size > 1 -%}
@@ -671,7 +645,6 @@
 
   .cart-drawer__upsell-card-compare {
     font-size: 14px;
-    opacity: .45;
     text-decoration: line-through;
   }
 
