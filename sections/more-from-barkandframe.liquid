@@ -212,12 +212,30 @@
     window.__bafMoreFromStyleCyclerBound = true;
 
     const timers = new WeakMap();
+    const desktopQuery = window.matchMedia('(min-width: 1200px)');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
 
     const setActiveImage = (holder, index) => {
       const images = holder.querySelectorAll('.more-from__cta-style-img');
       if (!images.length) return;
       images.forEach((image, imageIndex) => image.classList.toggle('is-active', imageIndex === index));
       holder.dataset.activeStyleIndex = String(index);
+    };
+
+    const startCycler = (holder, resetFirst = false) => {
+      if (timers.has(holder)) return;
+
+      const images = holder.querySelectorAll('.more-from__cta-style-img');
+      if (images.length < 2) return;
+
+      let index = resetFirst ? 0 : Number(holder.dataset.activeStyleIndex || 0);
+      const cycle = () => {
+        index = (index + 1) % images.length;
+        setActiveImage(holder, index);
+      };
+
+      cycle();
+      timers.set(holder, window.setInterval(cycle, 700));
     };
 
     const resetCycler = (holder) => {
@@ -227,28 +245,32 @@
       setActiveImage(holder, 0);
     };
 
+    const syncAutoCyclers = () => {
+      const shouldAutoCycle = !desktopQuery.matches && motionQuery.matches;
+      document.querySelectorAll('[data-more-from-style-cycler]').forEach((holder) => {
+        if (shouldAutoCycle) {
+          startCycler(holder, true);
+        } else {
+          resetCycler(holder);
+        }
+      });
+    };
+
     document.addEventListener('pointerenter', (event) => {
       const holder = event.target.closest('[data-more-from-style-cycler]');
-      if (!holder || event.pointerType !== 'mouse' || timers.has(holder)) return;
-
-      const images = holder.querySelectorAll('.more-from__cta-style-img');
-      if (images.length < 2) return;
-
-      let index = 0;
-      const cycle = () => {
-        index = (index + 1) % images.length;
-        setActiveImage(holder, index);
-      };
-
-      cycle();
-      timers.set(holder, window.setInterval(cycle, 700));
+      if (!holder || !desktopQuery.matches || !motionQuery.matches || event.pointerType !== 'mouse') return;
+      startCycler(holder, true);
     }, true);
 
     document.addEventListener('pointerleave', (event) => {
       const holder = event.target.closest('[data-more-from-style-cycler]');
-      if (!holder || event.pointerType !== 'mouse') return;
+      if (!holder || !desktopQuery.matches || event.pointerType !== 'mouse') return;
       resetCycler(holder);
     }, true);
+
+    desktopQuery.addEventListener('change', syncAutoCyclers);
+    motionQuery.addEventListener('change', syncAutoCyclers);
+    syncAutoCyclers();
   })();
 </script>
 
