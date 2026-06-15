@@ -1,6 +1,8 @@
 {%- liquid
   assign portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
   assign portrait_categories = shop.metaobjects.portrait_category.values
+  assign portrait_hover_scale = 1.55
+  assign portrait_hover_edge_offset = portrait_hover_scale | minus: 1 | times: 50
 -%}
 
 <div class="portrait-styles section section--page-width">
@@ -96,6 +98,8 @@
 
 {% stylesheet %}
 .portrait-styles{
+  --portrait-hover-scale: {{ portrait_hover_scale }};
+  --portrait-hover-edge-offset: -{{ portrait_hover_edge_offset }}%;
   margin: 120px 0;
 
   .portrait-styles__inner{
@@ -397,12 +401,12 @@
             z-index: 4;
             .portrait__image{
               opacity: 1;
-              transform: scale(1.55);
+              transform: scale(var(--portrait-hover-scale));
             }
 
             .portrait__badge{
-              top: calc(-27.5% + 8px);
-              left: calc(-27.5% + 8px);
+              top: var(--portrait-hover-edge-offset);
+              left: var(--portrait-hover-edge-offset);
             }
 
             .portrait__label{
