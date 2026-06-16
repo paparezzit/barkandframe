@@ -156,31 +156,11 @@
 
     .dogstrust__inner{
       position: relative;
-      overflow: visible;
       aspect-ratio: auto;
       height: auto;
       min-height: 0;
       max-height: none;
-      background: transparent;
-      -webkit-mask-image: none !important;
-      mask-image: none !important;
-    }
-
-    .dogstrust__inner::before{
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
       background: var(--purple);
-      -webkit-mask-image: var(--dogstrust-mask-image);
-      mask-image: var(--dogstrust-mask-image);
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
-      -webkit-mask-position: center top;
-      mask-position: center top;
     }
 
     .dogstrust__wrapper{
@@ -201,8 +181,8 @@
 
         img{
           top: -100px;
-          left: 25px;
-          width: calc(100% + 75px);
+          left: -35px;
+          width: calc(100% + 135px);
           height: calc(108% + 100px);
           object-fit: cover;
           object-position: right center;
@@ -447,7 +427,6 @@
 
         inner.style.setProperty('-webkit-mask-image', maskUrl);
         inner.style.setProperty('mask-image', maskUrl);
-        inner.style.setProperty('--dogstrust-mask-image', maskUrl);
       });
     }
 
