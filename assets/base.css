@@ -57,13 +57,7 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);
   scroll-behavior: auto !important;
-  /* Safari rubber-band backdrop: page color at the top, footer color only at the bottom. */
-  background: linear-gradient(
-    to bottom,
-    var(--beige) 0 40%,
-    var(--baf-footer-overscroll-background, var(--purple)) 40% 100%
-  );
-  background-attachment: fixed;
+  background-color: var(--baf-footer-overscroll-background, var(--purple));
 }
 
 html[scroll-lock] {
