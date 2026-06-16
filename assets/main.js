@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fixedLayerMedia = window.matchMedia('(max-width: 989px), (hover: none), (pointer: coarse)');
-  const artistMobileFlowMedia = window.matchMedia('(max-width: 749px)');
+  const artistMobileIntroMedia = window.matchMedia('(max-width: 749px)');
   const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection'));
   let fixedLayerFrame = null;
 
@@ -101,7 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const layerHeight = parseFloat(section.style.getPropertyValue('--baf-layer-height')) || 0;
       const sectionTop = section.getBoundingClientRect().top + scrollY;
       const sectionHeight = section.offsetHeight;
-      const start = sectionTop - top;
+      let start = sectionTop - top;
+      if (artistMobileIntroMedia.matches && section.classList.contains('artist-collection')) {
+        const info = section.querySelector('.artist-collection__info');
+        if (info) {
+          const infoBottom = info.getBoundingClientRect().bottom + scrollY;
+          start = Math.max(start, infoBottom - top);
+        }
+      }
       const end = sectionTop + sectionHeight - layerHeight - top;
 
       if (scrollY >= end) {
@@ -125,9 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const layerHeight = Math.max(1, Math.round(getStableViewportHeight() - top));
 
     fixedLayerRoots.forEach(section => {
-      const enabledForSection = enabled && !(artistMobileFlowMedia.matches && section.classList.contains('artist-collection'));
-
-      if (!enabledForSection) {
+      if (!enabled) {
         section.classList.remove('baf-fixed-layer');
         section.style.removeProperty('--baf-layer-top');
         section.style.removeProperty('--baf-layer-height');
@@ -169,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setStableScrollMetrics();
     measureFixedLayers();
   });
-  artistMobileFlowMedia.addEventListener?.('change', () => {
+  artistMobileIntroMedia.addEventListener?.('change', () => {
     setStableScrollMetrics();
     measureFixedLayers();
   });
