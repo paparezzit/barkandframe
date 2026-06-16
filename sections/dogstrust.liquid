@@ -22,7 +22,7 @@
 
           <div class="dogstrust__button">
             <a href="{{ section.settings.button_url }}" class="button" target="_blank" rel="noopener noreferrer">
-              {{ section.settings.button_label }}
+              {{ section.settings.button_label | replace: 'Koninklijke Hondenbescherming', 'Koninklijke<br class="dogstrust__button-break">Hondenbescherming' }}
             </a>
           </div>
         </div>
@@ -44,10 +44,18 @@
     mask-position: center top;
   }
 
+  .dogstrust__button-break {
+    display: none;
+  }
+
   @media(max-width: 749px){
     .dogstrust__text-shape {
       -webkit-shape-outside: url("{{ 'bark-and-frame-foundation.png' | asset_url }}");
       shape-outside: url("{{ 'bark-and-frame-foundation.png' | asset_url }}");
+    }
+
+    .dogstrust__button-break {
+      display: block;
     }
   }
 </style>
@@ -269,9 +277,9 @@
         text-align: center;
 
         .button{
-          width: 100%;
-          min-width: 0;
-          max-width: 100%;
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: 100% !important;
           padding-left: 20px;
           padding-right: 20px;
           line-height: 1.22;
