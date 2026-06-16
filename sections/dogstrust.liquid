@@ -157,17 +157,18 @@
     .dogstrust__inner{
       position: relative;
       aspect-ratio: auto;
-      height: 120vw;
-      min-height: 500px;
-      max-height: 560px;
+      height: auto;
+      min-height: 0;
+      max-height: none;
     }
 
     .dogstrust__wrapper{
       display: grid;
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 42% 58%;
       position: relative;
       z-index: 1;
-      padding-top: 18px;
+      min-height: 120vw;
+      padding-top: 0;
       box-sizing: border-box;
 
       .dogstrust__bg{
@@ -188,13 +189,13 @@
       }
 
       .dogstrust__content{
-        position: absolute;
-        top: 20%;
-        left: 42%;
-        width: 52%;
+        grid-column: 2;
+        position: relative;
+        z-index: 2;
+        width: auto;
         box-sizing: border-box;
         margin: 0;
-        padding: 30px 0;
+        padding: clamp(96px, 24vw, 124px) 0;
         transform: none;
       }
 
