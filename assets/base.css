@@ -5281,6 +5281,95 @@ slideshow-component.slideshow--homepage{
   margin-top: 14px;
 }
 
+.contact-company-info {
+  width: min(560px, calc(100vw - 48px));
+  aspect-ratio: 1 / 1;
+  margin: 120px auto 0;
+  border-radius: 50%;
+  background: #F4EFE5;
+  color: var(--brown);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(44px, 6vw, 76px);
+}
+
+.contact-company-info__inner {
+  width: 100%;
+  max-width: 330px;
+}
+
+.contact-company-info__icon {
+  line-height: 0;
+  margin-bottom: 18px;
+}
+
+.contact-company-info__icon img {
+  width: 46px;
+  height: auto;
+}
+
+.contact-company-info__title {
+  margin: 0 0 54px;
+  color: var(--brown);
+  font-family: var(--baf-text-bold-family);
+  font-size: var(--baf-text-bold-medium-size);
+  font-weight: var(--baf-text-bold-weight);
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.contact-company-info__group {
+  margin: 0;
+}
+
+.contact-company-info__group + .contact-company-info__group {
+  margin-top: 30px;
+}
+
+.contact-company-info p {
+  margin: 0;
+  color: var(--brown);
+  font-family: var(--baf-text-family);
+  font-size: var(--baf-text-small-size);
+  font-weight: var(--baf-text-weight);
+  line-height: 1.18;
+}
+
+.contact-company-info strong {
+  font-family: var(--baf-text-bold-family);
+  font-weight: var(--baf-text-bold-weight);
+}
+
+@media(max-width: 749px){
+  .contact-company-info {
+    width: min(420px, calc(100vw - 32px));
+    margin-top: 64px;
+    padding: 38px 30px;
+  }
+
+  .contact-company-info__inner {
+    max-width: 270px;
+  }
+
+  .contact-company-info__icon {
+    margin-bottom: 14px;
+  }
+
+  .contact-company-info__icon img {
+    width: 38px;
+  }
+
+  .contact-company-info__title {
+    margin-bottom: 36px;
+  }
+
+  .contact-company-info__group + .contact-company-info__group {
+    margin-top: 22px;
+  }
+}
+
 @media(min-width: 750px){
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
