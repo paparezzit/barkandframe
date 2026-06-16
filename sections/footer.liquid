@@ -43,29 +43,9 @@ footer.shopify-section-group-footer-group{
   overflow: visible;
   padding: 0 20px;
 
-  &::before{
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-color: var(--purple);
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
   > .section-background,
   > .section{
     border-radius: inherit;
-  }
-
-  > .section-background{
-    display: none;
-  }
-
-  > .section{
-    position: relative;
-    z-index: 1;
-    background: transparent !important;
   }
 
   .logo-block{
@@ -188,6 +168,26 @@ footer.shopify-section-group-footer-group{
       color: var(--brown);
     }
   }
+}
+
+footer.shopify-section-group-footer-group::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--purple);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+footer.shopify-section-group-footer-group > .section-background{
+  display: none !important;
+}
+
+footer.shopify-section-group-footer-group > .section{
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
 }
 
 @media(min-width: 750px){
