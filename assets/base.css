@@ -4952,6 +4952,10 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.contact-form-section.contact-page-form-section{
+  margin-top: 0;
+}
+
 .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
   width: 20% !important;
   max-width: 20% !important;
