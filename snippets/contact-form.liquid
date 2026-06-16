@@ -213,6 +213,49 @@
   var photoUrls = [];
   var pendingUploads = 0;
   var failedUploads = 0;
+  var SCROLL_STORAGE_KEY = 'bafContactFormScroll:{{ form_id }}';
+
+  function saveScrollPosition() {
+    try {
+      sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify({
+        path: window.location.pathname,
+        x: window.pageXOffset || document.documentElement.scrollLeft || 0,
+        y: window.pageYOffset || document.documentElement.scrollTop || 0,
+        time: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  function restoreScrollPosition() {
+    var data;
+    try {
+      data = JSON.parse(sessionStorage.getItem(SCROLL_STORAGE_KEY) || 'null');
+      sessionStorage.removeItem(SCROLL_STORAGE_KEY);
+    } catch (e) {
+      data = null;
+    }
+    if (!data || data.path !== window.location.pathname || Date.now() - data.time > 600000) return;
+
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    if (window.location.hash) {
+      window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    }
+
+    var left = Number(data.x) || 0;
+    var top = Number(data.y) || 0;
+    var restore = function () {
+      window.scrollTo(left, top);
+    };
+
+    restore();
+    requestAnimationFrame(function () {
+      restore();
+      requestAnimationFrame(restore);
+    });
+    setTimeout(restore, 120);
+  }
 
   function updateSubmitButton() {
     var btn = document.querySelector('.cf-submit');
@@ -433,6 +476,7 @@
           e.preventDefault();
           return;
         }
+        saveScrollPosition();
         if (photoUrls.length > 0) {
           var ta = document.getElementById('cf-textarea');
           if (ta) {
@@ -469,8 +513,12 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () {
+      restoreScrollPosition();
+      init();
+    });
   } else {
+    restoreScrollPosition();
     init();
   }
 })();
