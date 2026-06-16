@@ -61,9 +61,33 @@
             }
           },
           "block_order": []
+        },
+        "image_contact_dog_intro": {
+          "type": "image",
+          "name": "t:names.image",
+          "settings": {
+            "image": "shopify://shop_images/contact_dog.svg",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "custom",
+            "custom_width": 100,
+            "width_mobile": "custom",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
+        "image_contact_dog_intro",
         "text_KepUC3",
         "contact_form_UwiCkQ"
       ],
@@ -94,7 +118,7 @@
         "gradient_direction": "to top",
         "padding-block-start": 0,
         "padding-block-end": 70,
-        "custom-class": "contact-form-section"
+        "custom-class": "contact-form-section contact-page-form-section"
       }
     }
   },

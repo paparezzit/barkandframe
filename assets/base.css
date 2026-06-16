@@ -4946,6 +4946,18 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.contact-page-form-section .image-block--image_contact_dog_intro{
+  width: min(280px, 70vw) !important;
+  margin: 0 auto 32px !important;
+  justify-content: center;
+}
+
+.contact-page-form-section .image-block--image_contact_dog_intro img{
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain;
+}
+
 @media(max-width: 1199px){
   .contact-form-section > .custom-section-content > .section-content-wrapper,
   .contact-form-section .contact-form{
