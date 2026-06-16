@@ -5203,7 +5203,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .cf-additional-info__heading {
-  font-weight: var(--font-paragraph--weight-bold);
+  font-weight: var(--baf-text-bold-weight);
 }
 
 .cf-additional-info a {
