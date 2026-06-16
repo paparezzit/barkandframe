@@ -107,15 +107,20 @@
   }
 
   .search-modal__content predictive-search-component {
+    --product-corner-radius: 8px;
+    --card-corner-radius: 8px;
     --resource-card-corner-radius: 8px;
   }
 
   .search-modal__content .predictive-search-results__card {
     border-radius: 8px;
+    overflow: hidden;
   }
 
   .search-modal__content .predictive-search-results__card:is(:hover, :focus-within, [aria-selected='true']) {
     background-color: #f9f3ea;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .search-modal__content :is(
