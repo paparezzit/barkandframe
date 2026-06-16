@@ -117,6 +117,12 @@
     margin-block-start: 40px;
   }
 
+  .search-modal__content .predictive-search-results__products > .recently-viewed-wrapper + .predictive-search-results__title,
+  .search-modal__content :is(.predictive-search-results__products, .predictive-search-results__wrapper, slideshow-component)
+    + :is(.predictive-search-results__products, .predictive-search-results__wrapper, slideshow-component) {
+    margin-block-start: 40px;
+  }
+
   .search-modal__content .predictive-search__icon {
     left: calc(var(--search-modal-inner-gap) + var(--margin-xl));
 
