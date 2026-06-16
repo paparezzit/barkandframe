@@ -175,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelectorAll("[data-parallax]").forEach(parallax => {
-    if (isTouchScroll && parallax.closest('.dogstrust')) return;
-
     const amount = parallax.dataset.parallax ? parallax.dataset.parallax : "-5vh";
     gsap.to(parallax, {y: amount, scrollTrigger: {
         trigger: parallax,
