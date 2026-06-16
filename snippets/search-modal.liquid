@@ -45,19 +45,32 @@
   .search-modal__content {
     /* Approx set the top so when the content is at max height, the modal is centered */
     --search-modal-inner-gap: var(--padding-xl);
-    --modal-top-margin: calc(50dvh - var(--modal-max-height) / 2 - 2rem);
-    --modal-width: 66dvw;
+    --search-modal-viewport-gap: clamp(16px, 4svw, 48px);
+    --modal-top-margin: calc(50svh - var(--modal-max-height) / 2 - 2rem);
+    --modal-width: min(1020px, 66svw, calc(100svw - (var(--search-modal-viewport-gap) * 2)));
 
     padding: 0;
     border: 1px solid transparent;
     border-radius: var(--search-border-radius);
     background: #fffaf1;
     color: #4c443f;
+    box-sizing: border-box;
+    max-width: calc(100svw - (var(--search-modal-viewport-gap) * 2));
     overflow: hidden;
+    overflow-x: hidden;
+    overscroll-behavior-x: contain;
 
     @media screen and (min-width: 750px) {
       width: var(--modal-width);
       margin-block-start: var(--modal-top-margin);
+    }
+
+    @media screen and (max-width: 749px) {
+      width: 100svw;
+      max-width: 100svw;
+      height: 100svh;
+      max-height: 100svh;
+      margin: 0;
     }
   }
 
@@ -67,12 +80,16 @@
   }
 
   .search-modal__content predictive-search-component,
+  .search-modal__content .predictive-search-form,
   .search-modal__content .predictive-search-form__content,
   .search-modal__content .predictive-search-form__content-wrapper,
   .search-modal__content .predictive-search-form__header,
   .search-modal__content .predictive-search-form__header-inner {
+    min-width: 0;
+    max-width: 100%;
     background: #fffaf1;
     color: #4c443f;
+    overflow-x: hidden;
   }
 
   .search-modal__content .predictive-search-form__header,
@@ -120,6 +137,29 @@
 
   .search-modal__content .predictive-search-results__inner > * + * {
     margin-block-start: 40px;
+  }
+
+  .search-modal__content :is(
+    .predictive-search-dropdown,
+    .predictive-search-results__inner,
+    .predictive-search-results__products,
+    .recently-viewed-wrapper,
+    .predictive-search-results__wrapper,
+    .predictive-search-results__wrapper-products,
+    slideshow-component,
+    slideshow-slides
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-modal__content :is(
+    .predictive-search-results__products,
+    .recently-viewed-wrapper,
+    .predictive-search-results__wrapper-products
+  ) {
+    overflow-x: hidden;
   }
 
   .search-modal__content .predictive-search-results__products > .recently-viewed-wrapper + .predictive-search-results__title,

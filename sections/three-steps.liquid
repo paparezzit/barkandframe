@@ -76,18 +76,13 @@
 
 {% javascript %}
   (function () {
-    if (window.BAFThreeStepsCheckpointReady) return;
-    window.BAFThreeStepsCheckpointReady = true;
+    if (window.BAFThreeStepsPinReady) return;
+    window.BAFThreeStepsPinReady = true;
 
     var media = window.matchMedia('(max-width: 749px)');
-    var observers = [];
-
-    function disconnectObservers() {
-      observers.forEach(function (observer) {
-        observer.disconnect();
-      });
-      observers = [];
-    }
+    var pinTop = 96;
+    var scenes = [];
+    var ticking = false;
 
     function setActiveStep(scene, activeIndex) {
       scene.querySelectorAll('.three-steps__step').forEach(function (step, index) {
@@ -95,48 +90,85 @@
       });
     }
 
-    function initThreeStepsCheckpoints() {
-      disconnectObservers();
+    function clearPinState(scene) {
+      scene.classList.remove('is-pin-active', 'is-pin-after');
+    }
 
-      document.querySelectorAll('[data-three-steps-pin]').forEach(function (scene) {
-        if (!media.matches) {
-          scene.querySelectorAll('.three-steps__step').forEach(function (step) {
+    function measureScenes() {
+      scenes = Array.prototype.map.call(document.querySelectorAll('[data-three-steps-pin]'), function (scene) {
+        var pin = scene.querySelector('.three-steps__pin');
+
+        clearPinState(scene);
+        setActiveStep(scene, 0);
+
+        return {
+          element: scene,
+          top: scene.getBoundingClientRect().top + (window.pageYOffset || 0),
+          height: scene.offsetHeight,
+          pinHeight: pin ? pin.offsetHeight : 0
+        };
+      });
+
+      updatePins();
+    }
+
+    function updatePins() {
+      ticking = false;
+
+      if (!media.matches) {
+        scenes.forEach(function (item) {
+          clearPinState(item.element);
+          item.element.querySelectorAll('.three-steps__step').forEach(function (step) {
             step.classList.remove('is-active');
           });
+        });
+        return;
+      }
+
+      var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+      scenes.forEach(function (item) {
+        var scene = item.element;
+        var start = item.top - pinTop;
+        var end = item.top + item.height - item.pinHeight - pinTop;
+        var travel = Math.max(end - start, 1);
+
+        if (scrollY < start) {
+          clearPinState(scene);
+          setActiveStep(scene, 0);
           return;
         }
 
-        setActiveStep(scene, 0);
+        if (scrollY >= end) {
+          scene.classList.remove('is-pin-active');
+          scene.classList.add('is-pin-after');
+          setActiveStep(scene, 2);
+          return;
+        }
 
-        var observer = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-
-            var index = Number(entry.target.dataset.threeStepsCheckpoint || 0);
-            setActiveStep(scene, index);
-          });
-        }, {
-          root: null,
-          rootMargin: '-45% 0px -45% 0px',
-          threshold: 0
-        });
-
-        scene.querySelectorAll('[data-three-steps-checkpoint]').forEach(function (checkpoint) {
-          observer.observe(checkpoint);
-        });
-
-        observers.push(observer);
+        scene.classList.add('is-pin-active');
+        scene.classList.remove('is-pin-after');
+        setActiveStep(scene, Math.min(2, Math.floor(((scrollY - start) / travel) * 3)));
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initThreeStepsCheckpoints, { once: true });
-    } else {
-      initThreeStepsCheckpoints();
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updatePins);
     }
 
-    media.addEventListener?.('change', initThreeStepsCheckpoints);
-    window.addEventListener('pageshow', initThreeStepsCheckpoints);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', measureScenes, { once: true });
+    } else {
+      measureScenes();
+    }
+
+    media.addEventListener?.('change', measureScenes);
+    window.addEventListener('load', measureScenes);
+    window.addEventListener('pageshow', measureScenes);
+    window.addEventListener('orientationchange', measureScenes);
+    window.addEventListener('scroll', requestUpdate, { passive: true });
   })();
 {% endjavascript %}
 
@@ -213,14 +245,16 @@
     }
 
     .three-steps__wrapper{
-      min-height: calc(300svh - 96px);
+      min-height: 300svh;
       position: relative;
       padding-top: 0;
     }
 
     .three-steps__pin{
-      position: sticky;
-      top: 96px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
       height: calc(100svh - 116px);
       min-height: 0;
       display: grid;
@@ -228,6 +262,19 @@
       align-items: center;
       padding: 0 0 max(12px, env(safe-area-inset-bottom));
       box-sizing: border-box;
+    }
+
+    .three-steps__wrapper.is-pin-active .three-steps__pin{
+      position: fixed;
+      top: 96px;
+      right: 20px;
+      left: 20px;
+      z-index: var(--layer-flat, 1);
+    }
+
+    .three-steps__wrapper.is-pin-after .three-steps__pin{
+      top: auto;
+      bottom: 0;
     }
 
     .three-steps__title{
@@ -303,29 +350,7 @@
     }
 
     .three-steps__checkpoints{
-      display: block;
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .three-steps__checkpoint{
-      position: absolute;
-      right: 0;
-      left: 0;
-      height: 100svh;
-    }
-
-    .three-steps__checkpoint:nth-child(1){
-      top: 0;
-    }
-
-    .three-steps__checkpoint:nth-child(2){
-      top: 100svh;
-    }
-
-    .three-steps__checkpoint:nth-child(3){
-      top: 200svh;
+      display: none;
     }
   }
 
