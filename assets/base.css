@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html {
+  background-color: var(--purple);
+}
+
 body {
   color: var(--color-foreground);
   background: var(--color-background);
