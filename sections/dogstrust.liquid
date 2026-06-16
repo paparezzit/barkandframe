@@ -176,11 +176,17 @@
     }
 
     .dogstrust__wrapper{
+      --dogstrust-mobile-image-width: calc(((100vw - (var(--page-margin) * 2)) * 0.276) + 308px);
+      --dogstrust-mobile-image-height: calc(((100vw - (var(--page-margin) * 2)) * 0.3686) + 411px);
+      --dogstrust-mobile-image-top: clamp(206px, 55.4vw, 236px);
+      --dogstrust-mobile-shape-left: calc((var(--page-margin) * -1) - 85px);
+      --dogstrust-mobile-shape-top: 61px;
+      --dogstrust-mobile-button-top: 185px;
       display: grid;
       grid-template-columns: 42% 58%;
       position: relative;
       z-index: 1;
-      min-height: max(120vw, var(--dogstrust-mobile-layout-height, 120vw));
+      min-height: max(120vw, calc(var(--dogstrust-mobile-image-top) + var(--dogstrust-mobile-image-height) - 40px));
       padding-top: 0;
       box-sizing: border-box;
 
@@ -195,7 +201,7 @@
           top: var(--dogstrust-mobile-image-top, 180px);
           bottom: auto;
           left: -85px;
-          width: calc(60% + 308px);
+          width: var(--dogstrust-mobile-image-width);
           height: auto;
           object-fit: contain;
           object-position: right bottom;
@@ -233,10 +239,10 @@
       .dogstrust__text-shape{
         display: block;
         float: left;
-        width: var(--dogstrust-mobile-shape-width, 0px);
+        width: var(--dogstrust-mobile-image-width);
         max-width: none;
         height: auto;
-        margin: var(--dogstrust-mobile-shape-top, 0px) 0 calc(var(--dogstrust-mobile-shape-height, 0px) * -1) var(--dogstrust-mobile-shape-left, 0px);
+        margin: var(--dogstrust-mobile-shape-top) 0 calc(var(--dogstrust-mobile-image-height) * -1) var(--dogstrust-mobile-shape-left);
         opacity: 0;
         shape-margin: 5px;
         shape-image-threshold: 0.08;
@@ -252,7 +258,7 @@
         display: block;
         position: absolute;
         z-index: 3;
-        top: var(--dogstrust-mobile-button-top, 0px);
+        top: var(--dogstrust-mobile-button-top);
         left: 42%;
         right: 12px;
         width: auto;
@@ -443,11 +449,9 @@
 
 <script>
   (() => {
-    const mobileQuery = window.matchMedia('(max-width: 749px)');
     const horizontalQuery = window.matchMedia('(min-width: 1400px), (min-width: 750px) and (orientation: landscape)');
     const bandRatio = 203 / 467;
     const stepRatio = 132 / 467;
-    const imageAlphaTopRatio = 592 / 3312;
 
     function getDogstrustMaskUrl(width, height, isHorizontal) {
       const rects = [];
@@ -472,89 +476,6 @@
       return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
     }
 
-    function getContainedImageRect(img) {
-      const rect = img.getBoundingClientRect();
-      const naturalWidth = img.naturalWidth || 2480;
-      const naturalHeight = img.naturalHeight || 3312;
-      const aspect = naturalWidth / naturalHeight;
-      let width = rect.width;
-      let height = width / aspect;
-
-      if (height > rect.height && rect.height > 0) {
-        height = rect.height;
-        width = height * aspect;
-      }
-
-      return {
-        left: rect.right - width,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.top + height,
-        width,
-        height,
-      };
-    }
-
-    function applyDogstrustMobileLayout() {
-      document.querySelectorAll('.dogstrust__wrapper').forEach((wrapper) => {
-        const img = wrapper.querySelector('.dogstrust__bg img');
-        const content = wrapper.querySelector('.dogstrust__content');
-        const text = wrapper.querySelector('.dogstrust__text');
-        const paragraph = wrapper.querySelector('.dogstrust__text p');
-        const shape = wrapper.querySelector('.dogstrust__text-shape');
-        const buttonWrap = wrapper.querySelector('.dogstrust__button');
-        const button = wrapper.querySelector('.dogstrust__button .button');
-
-        if (!img || !content || !text || !paragraph || !shape || !buttonWrap || !button) return;
-
-        if (!mobileQuery.matches) {
-          wrapper.style.removeProperty('--dogstrust-mobile-layout-height');
-          wrapper.style.removeProperty('--dogstrust-mobile-image-top');
-          wrapper.style.removeProperty('--dogstrust-mobile-shape-width');
-          wrapper.style.removeProperty('--dogstrust-mobile-shape-height');
-          wrapper.style.removeProperty('--dogstrust-mobile-shape-left');
-          wrapper.style.removeProperty('--dogstrust-mobile-shape-top');
-          content.style.removeProperty('--dogstrust-mobile-button-top');
-          return;
-        }
-
-        wrapper.style.removeProperty('--dogstrust-mobile-layout-height');
-
-        for (let i = 0; i < 3; i += 1) {
-          const wrapperRect = wrapper.getBoundingClientRect();
-          const paragraphRect = paragraph.getBoundingClientRect();
-          const imageRect = getContainedImageRect(img);
-          const desiredVisibleTop = paragraphRect.bottom - wrapperRect.top - 40;
-          const imageTop = Math.max(0, desiredVisibleTop - (imageRect.height * imageAlphaTopRatio) + 80);
-
-          wrapper.style.setProperty('--dogstrust-mobile-image-top', `${Math.round(imageTop)}px`);
-
-          const movedImageRect = getContainedImageRect(img);
-          const textRect = text.getBoundingClientRect();
-
-          wrapper.style.setProperty('--dogstrust-mobile-shape-width', `${Math.round(movedImageRect.width)}px`);
-          wrapper.style.setProperty('--dogstrust-mobile-shape-height', `${Math.round(movedImageRect.height)}px`);
-          wrapper.style.setProperty('--dogstrust-mobile-shape-left', `${Math.round(movedImageRect.left - textRect.left)}px`);
-          wrapper.style.setProperty('--dogstrust-mobile-shape-top', `${Math.round(movedImageRect.top - textRect.top)}px`);
-        }
-
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const contentRect = content.getBoundingClientRect();
-        const paragraphRect = paragraph.getBoundingClientRect();
-        const imageRect = getContainedImageRect(img);
-        const buttonTop = Math.round(paragraphRect.bottom - contentRect.top + 8);
-
-        content.style.setProperty('--dogstrust-mobile-button-top', `${buttonTop}px`);
-
-        const buttonHeight = button.getBoundingClientRect().height;
-        const buttonBottom = (contentRect.top - wrapperRect.top) + buttonTop + buttonHeight;
-        const imageHiddenBottom = imageRect.bottom - wrapperRect.top - 90;
-        const minHeight = Math.ceil(Math.max(window.innerWidth * 1.2, buttonBottom + 84, imageHiddenBottom) + 50);
-
-        wrapper.style.setProperty('--dogstrust-mobile-layout-height', `${minHeight}px`);
-      });
-    }
-
     function applyDogstrustMask() {
       document.querySelectorAll('.dogstrust__inner').forEach((inner) => {
         const rect = inner.getBoundingClientRect();
@@ -575,12 +496,7 @@
     function scheduleDogstrustMask() {
       cancelAnimationFrame(dogstrustMaskFrame);
       dogstrustMaskFrame = requestAnimationFrame(() => {
-        applyDogstrustMobileLayout();
         applyDogstrustMask();
-        requestAnimationFrame(() => {
-          applyDogstrustMobileLayout();
-          applyDogstrustMask();
-        });
       });
     }
 
@@ -593,17 +509,6 @@
       horizontalQuery.addEventListener('change', scheduleDogstrustMask);
     } else {
       horizontalQuery.addListener(scheduleDogstrustMask);
-    }
-
-    if (mobileQuery.addEventListener) {
-      mobileQuery.addEventListener('change', scheduleDogstrustMask);
-    } else {
-      mobileQuery.addListener(scheduleDogstrustMask);
-    }
-
-    if ('ResizeObserver' in window) {
-      const observer = new ResizeObserver(scheduleDogstrustMask);
-      document.querySelectorAll('.dogstrust__inner').forEach((inner) => observer.observe(inner));
     }
   })();
 </script>
