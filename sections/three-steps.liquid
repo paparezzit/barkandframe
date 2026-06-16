@@ -1,10 +1,17 @@
 <div class="three-steps section section--page-width">
   <div class=three-steps__inner>
-    <div class="three-steps__wrapper" data-three-steps-pin>
+    <div class="three-steps__wrapper">
       <div class="three-steps__pin">
         <h2 class="three-steps__title">
           {{ section.settings.main-text }}
         </h2>
+        {% if section.settings.button_text != blank %}
+          <div class="three-steps__button three-steps__button--sticky">
+            <a href="{{ section.settings.button_link }}" class="button">
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
         <div class="three-steps__content">
           <div class="three-steps__step">
             <div class="three-steps__step__content">
@@ -52,7 +59,7 @@
     </div>
 
     {% if section.settings.button_text != blank %}
-      <div class="three-steps__button">
+      <div class="three-steps__button three-steps__button--end">
         <a href="{{ section.settings.button_link }}" class="button">
           {{ section.settings.button_text }}
         </a>
@@ -61,71 +68,6 @@
     
   </div>
 </div>
-
-{% javascript %}
-  (function () {
-    if (window.BAFThreeStepsPinReady) return;
-    window.BAFThreeStepsPinReady = true;
-
-    var media = window.matchMedia('(max-width: 749px)');
-    var frame = null;
-
-    function clamp(value, min, max) {
-      return Math.min(Math.max(value, min), max);
-    }
-
-    function clearStepStyles(scene) {
-      scene.querySelectorAll('.three-steps__step').forEach(function (step) {
-        step.style.opacity = '';
-        step.style.transform = '';
-        step.style.pointerEvents = '';
-      });
-    }
-
-    function updatePinnedSteps() {
-      frame = null;
-
-      document.querySelectorAll('[data-three-steps-pin]').forEach(function (scene) {
-        var steps = Array.from(scene.querySelectorAll('.three-steps__step'));
-        if (!media.matches || steps.length < 2) {
-          clearStepStyles(scene);
-          return;
-        }
-
-        var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
-        var scrollDistance = Math.max(scene.offsetHeight - viewportHeight, 1);
-        var progress = clamp((scene.getBoundingClientRect().top * -1) / scrollDistance, 0, 1);
-        var stepProgress = progress * (steps.length - 1);
-
-        steps.forEach(function (step, index) {
-          var opacity = clamp(1 - Math.abs(stepProgress - index), 0, 1);
-          step.style.opacity = opacity.toFixed(3);
-          step.style.transform = 'translate3d(0, ' + ((1 - opacity) * 18).toFixed(1) + 'px, 0)';
-          step.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
-        });
-      });
-    }
-
-    function queuePinnedStepsUpdate() {
-      if (frame !== null) return;
-      frame = window.requestAnimationFrame(updatePinnedSteps);
-    }
-
-    function initPinnedSteps() {
-      updatePinnedSteps();
-      window.addEventListener('scroll', queuePinnedStepsUpdate, { passive: true });
-      window.addEventListener('resize', queuePinnedStepsUpdate, { passive: true });
-      window.addEventListener('orientationchange', queuePinnedStepsUpdate, { passive: true });
-      media.addEventListener?.('change', queuePinnedStepsUpdate);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPinnedSteps, { once: true });
-    } else {
-      initPinnedSteps();
-    }
-  })();
-{% endjavascript %}
 
 {% stylesheet %}
 .three-steps{
@@ -186,54 +128,70 @@
     }
   }
 
+  .three-steps__button--sticky{
+    display: none;
+  }
+
   @media(max-width: 749px){
     .three-steps__inner{
-      padding: 0 20px 0;
+      padding: 0 20px 20px;
     }
 
     .three-steps__wrapper{
-      min-height: calc(300svh - var(--header-height, 0px));
       position: relative;
+      padding-top: 48px;
     }
 
     .three-steps__pin{
-      position: sticky;
-      top: var(--header-height, 0px);
-      min-height: calc(100svh - var(--header-height, 0px));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 44px 0;
-      box-sizing: border-box;
+      position: static;
+      min-height: 0;
+      padding: 0;
     }
 
     .three-steps__title{
-      margin: 0 0 36px;
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 24px);
+      z-index: 5;
+      margin: 0 0 30px;
       line-height: 1;
     }
 
     .three-steps__content{
-      display: grid;
-      grid-template: "step" 1fr / 1fr;
-      align-items: center;
-      min-height: 360px;
+      display: block;
+      min-height: 0;
     }
 
     .three-steps__step{
-      grid-area: step;
-      margin: 0;
-      opacity: 0;
-      pointer-events: none;
-      will-change: opacity, transform;
-    }
-
-    .three-steps__step:first-child{
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 26svh);
+      z-index: 1;
+      min-height: 330px;
+      margin: 0 0 70svh;
+      padding: 24px 0 16px;
+      background: var(--beige);
       opacity: 1;
       pointer-events: auto;
     }
 
-    .three-steps__button{
-      margin-top: 10px;
+    .three-steps__step:nth-child(2){
+      z-index: 2;
+    }
+
+    .three-steps__step:nth-child(3){
+      z-index: 3;
+      margin-bottom: 18px;
+    }
+
+    .three-steps__button--sticky{
+      display: block;
+      position: sticky;
+      top: calc(100svh - 92px);
+      z-index: 8;
+      margin: 0 0 22px;
+    }
+
+    .three-steps__button--end{
+      display: none;
     }
   }
 
