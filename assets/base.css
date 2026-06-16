@@ -4953,7 +4953,8 @@ slideshow-component.slideshow--homepage{
 }
 
 .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
-  width: min(93px, 23vw) !important;
+  width: 33.333% !important;
+  max-width: 33.333% !important;
   margin: 0 auto 32px !important;
   justify-content: center;
 }
