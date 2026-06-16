@@ -5284,7 +5284,7 @@ slideshow-component.slideshow--homepage{
 .contact-company-info {
   width: min(560px, calc(100vw - 48px));
   aspect-ratio: 1 / 1;
-  margin: 120px auto 0;
+  margin: 170px auto 0;
   border-radius: 50%;
   background: #F4EFE5;
   color: var(--brown);
@@ -5349,7 +5349,7 @@ slideshow-component.slideshow--homepage{
 @media(max-width: 749px){
   .contact-company-info {
     width: min(420px, calc(100vw - 32px));
-    margin-top: 64px;
+    margin-top: 114px;
     padding: 38px 30px;
   }
 
