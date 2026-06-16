@@ -5351,6 +5351,10 @@ slideshow-component.slideshow--homepage{
     width: calc(100vw - (var(--page-margin) * 2));
     max-width: none;
     margin-top: 114px;
+    position: relative;
+    left: 50%;
+    margin-left: calc(-50vw + var(--page-margin));
+    margin-right: calc(-50vw + var(--page-margin));
     padding: 38px 30px;
   }
 
