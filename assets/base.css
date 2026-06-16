@@ -349,6 +349,11 @@ p:empty {
   flex: 1;
 }
 
+footer.shopify-section-group-footer-group {
+  background-color: var(--beige);
+  isolation: isolate;
+}
+
 /* Set up page widths & margins */
 .page-width-wide,
 .page-width-normal,
