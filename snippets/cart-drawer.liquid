@@ -247,6 +247,7 @@
                                         data-size="{{ variant_size | escape }}"
                                         data-price="{{ variant_sale_price | money_without_trailing_zeros | escape }}"
                                         data-compare="{{ variant_original_price | money_without_trailing_zeros | escape }}"
+                                        data-sale-price="{{ variant_sale_price }}"
                                         {% if variant_image %}
                                           data-image="{{ variant_image | image_url: width: 300 }}"
                                           data-image-srcset="{{ variant_image | image_url: width: 150 }} 150w, {{ variant_image | image_url: width: 300 }} 300w"
@@ -332,6 +333,7 @@
                                   class="cart-drawer__upsell-card-add"
                                   data-upsell-add
                                   data-variant-id="{{ first_variant.id }}"
+                                  data-sale-price="{{ upsell_sale_price }}"
                                   type="button"
                                 >Add</button>
                               </div>
@@ -379,7 +381,15 @@
         const body = { id: Number(variantId), quantity: 1 };
         const card = btn.closest('.cart-drawer__upsell-card');
         const merchOrderItem = getMerchOrderItem(card, variantId);
+        const salePrice = parsePositiveInteger(btn.dataset.salePrice);
         if (merchOrderItem) body.properties = getMerchLineProperties(merchOrderItem);
+        if (salePrice > 0) {
+          body.properties = {
+            ...(body.properties || {}),
+            _Sale_Price: String(salePrice),
+            _custom_price_shop: String(salePrice),
+          };
+        }
         if (sectionId) body.sections = sectionId;
 
         const res = await fetch('/cart/add.js', {
@@ -434,6 +444,11 @@
       };
     }
 
+    function parsePositiveInteger(value) {
+      const number = Number.parseInt(value, 10);
+      return Number.isFinite(number) && number > 0 ? number : 0;
+    }
+
     function updateUpsellCardVariant(card) {
       if (!card) return;
 
@@ -471,7 +486,14 @@
       }
 
       const btn = card.querySelector('[data-upsell-add]');
-      if (btn) btn.dataset.variantId = selectedOption.value;
+      if (btn) {
+        btn.dataset.variantId = selectedOption.value;
+        if (selectedOption.dataset.salePrice) {
+          btn.dataset.salePrice = selectedOption.dataset.salePrice;
+        } else {
+          delete btn.dataset.salePrice;
+        }
+      }
 
       const image = card.querySelector('.cart-drawer__upsell-card-image-link img');
       if (image && selectedOption.dataset.image) {

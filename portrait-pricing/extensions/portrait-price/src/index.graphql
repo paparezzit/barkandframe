@@ -3,6 +3,9 @@ query Input {
   cart {
     lines {
       id
+      salePrice: attribute(key: "_Sale_Price") {
+        value
+      }
       shopCurrencyPrice: attribute(key: "_custom_price_shop") {
         value
       }

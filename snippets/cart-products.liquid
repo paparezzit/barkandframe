@@ -154,7 +154,7 @@
                 >
                   {%- liquid
                     assign _is_custom_portrait = false
-                    if item.properties['_custom_price'] != blank or item.properties['_custom_price_shop'] != blank
+                    if item.properties['Product'] != blank and item.properties['Details'] != blank
                       assign _is_custom_portrait = true
                     endif
                     assign _cart_item_title = item.product.title
@@ -386,7 +386,10 @@
                   headers="productTotal"
                 >
                   {%- liquid
-                    assign cp = item.properties['_custom_price_shop'] | times: 1
+                    assign cp = item.properties['_Sale_Price'] | times: 1
+                    if cp <= 0
+                      assign cp = item.properties['_custom_price_shop'] | times: 1
+                    endif
                     if cp <= 0
                       assign cp = item.properties['_custom_price'] | times: 1
                     endif
@@ -397,6 +400,8 @@
                     if cp > 0 and don > 0
                       assign product_price_share = cp | minus: don
                       assign line_price = item.final_line_price | times: product_price_share | divided_by: cp
+                    elsif cp > 0
+                      assign line_price = cp | times: item.quantity
                     else
                       assign line_price = item.final_line_price
                     endif
@@ -421,7 +426,10 @@
             {%- assign donation_row_title = '' -%}
             {%- for item in cart.items -%}
               {%- liquid
-                assign cp = item.properties['_custom_price_shop'] | times: 1
+                assign cp = item.properties['_Sale_Price'] | times: 1
+                if cp <= 0
+                  assign cp = item.properties['_custom_price_shop'] | times: 1
+                endif
                 if cp <= 0
                   assign cp = item.properties['_custom_price'] | times: 1
                 endif

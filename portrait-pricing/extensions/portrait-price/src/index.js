@@ -6,13 +6,14 @@ export default function run(input) {
     : 1;
 
   for (const line of input.cart.lines) {
-    const value = line.shopCurrencyPrice?.value ?? line.legacyPrice?.value;
+    const value = line.salePrice?.value ?? line.shopCurrencyPrice?.value ?? line.legacyPrice?.value;
     if (!value) continue;
 
     const cents = parseInt(value, 10);
     if (!cents || cents <= 0) continue;
 
-    const priceCents = line.shopCurrencyPrice?.value
+    const hasShopCurrencyPrice = Boolean(line.salePrice?.value ?? line.shopCurrencyPrice?.value);
+    const priceCents = hasShopCurrencyPrice
       ? Math.round(cents * rate)
       : cents;
     const amount = (priceCents / 100).toFixed(2);
