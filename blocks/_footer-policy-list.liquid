@@ -51,10 +51,11 @@
 
   .policy_list {
     li {
-      border-radius: calc(var(--style-border-radius-popover) - 8px);
+      border-radius: 8px;
+      transition: background-color var(--animation-speed) var(--animation-easing);
 
       a {
-        color: var(--color-foreground);
+        color: #4c443f;
         display: inline-block;
         padding: 8px;
         text-align: start;
@@ -64,8 +65,12 @@
         text-transform: var(--text-transform, none);
       }
 
-      &:is(:hover, :focus-within) {
-        background: rgb(var(--color-foreground-rgb) / 0.15);
+      &:hover {
+        background-color: #f9f3ea;
+      }
+
+      &:focus-within {
+        background-color: #f4efe5;
       }
     }
   }
@@ -75,10 +80,9 @@
     inset: unset;
     bottom: calc(anchor(top) + 1rem);
     left: anchor(left);
-    border-radius: var(--style-border-radius-popover);
-    background: linear-gradient(var(--color-background) 0 100%),
-      linear-gradient(rgb(var(--color-background-rgb) / 0.15) 0 100%);
-    background-clip: padding-box, border-box;
+    border-radius: 10px;
+    background: #fffaf1;
+    color: #4c443f;
     border: 1px solid #0000;
     box-shadow: var(--shadow-popover);
     padding: 8px;
