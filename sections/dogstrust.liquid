@@ -191,37 +191,27 @@
       }
 
       .dogstrust__content{
-        grid-column: 1 / -1;
+        grid-column: 2;
         position: relative;
         z-index: 2;
-        width: 100%;
+        width: auto;
         box-sizing: border-box;
         margin: 0;
-        padding: clamp(96px, 24vw, 124px) var(--page-margin) clamp(72px, 18vw, 104px);
+        padding: clamp(96px, 24vw, 124px) 0 clamp(72px, 18vw, 104px);
         transform: none;
-      }
-
-      .dogstrust__content::before{
-        content: '';
-        float: left;
-        width: min(68%, 270px);
-        height: clamp(420px, 132vw, 620px);
-        margin-top: clamp(300px, 102vw, 460px);
-        shape-outside: polygon(0 0, 58% 0, 68% 8%, 72% 18%, 85% 28%, 95% 40%, 100% 56%, 88% 72%, 76% 86%, 62% 100%, 0 100%);
-        shape-margin: 3px;
       }
 
       .dogstrust__title,
       .dogstrust__text{
         width: 100%;
         box-sizing: border-box;
-        padding-right: 0;
+        padding-right: var(--page-margin);
       }
 
       .dogstrust__button{
-        width: auto;
+        width: 100%;
         margin-left: 0;
-        padding-right: 0;
+        padding-right: var(--page-margin);
         box-sizing: border-box;
         text-align: center;
 
