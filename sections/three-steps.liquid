@@ -1,6 +1,6 @@
 <div class="three-steps section section--page-width">
   <div class=three-steps__inner>
-    <div class="three-steps__wrapper">
+    <div class="three-steps__wrapper" data-three-steps-pin>
       <div class="three-steps__pin">
         <h2 class="three-steps__title">
           {{ section.settings.main-text }}
@@ -13,7 +13,7 @@
           </div>
         {% endif %}
         <div class="three-steps__content">
-          <div class="three-steps__step">
+          <div class="three-steps__step is-active">
             <div class="three-steps__step__content">
               <h3 class="three-steps__step__title">
                 Choose your style
@@ -56,6 +56,11 @@
           </div>
         </div>
       </div>
+      <div class="three-steps__checkpoints" aria-hidden="true">
+        <span class="three-steps__checkpoint" data-three-steps-checkpoint="0"></span>
+        <span class="three-steps__checkpoint" data-three-steps-checkpoint="1"></span>
+        <span class="three-steps__checkpoint" data-three-steps-checkpoint="2"></span>
+      </div>
     </div>
 
     {% if section.settings.button_text != blank %}
@@ -68,6 +73,72 @@
     
   </div>
 </div>
+
+{% javascript %}
+  (function () {
+    if (window.BAFThreeStepsCheckpointReady) return;
+    window.BAFThreeStepsCheckpointReady = true;
+
+    var media = window.matchMedia('(max-width: 749px)');
+    var observers = [];
+
+    function disconnectObservers() {
+      observers.forEach(function (observer) {
+        observer.disconnect();
+      });
+      observers = [];
+    }
+
+    function setActiveStep(scene, activeIndex) {
+      scene.querySelectorAll('.three-steps__step').forEach(function (step, index) {
+        step.classList.toggle('is-active', index === activeIndex);
+      });
+    }
+
+    function initThreeStepsCheckpoints() {
+      disconnectObservers();
+
+      document.querySelectorAll('[data-three-steps-pin]').forEach(function (scene) {
+        if (!media.matches) {
+          scene.querySelectorAll('.three-steps__step').forEach(function (step) {
+            step.classList.remove('is-active');
+          });
+          return;
+        }
+
+        setActiveStep(scene, 0);
+
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+
+            var index = Number(entry.target.dataset.threeStepsCheckpoint || 0);
+            setActiveStep(scene, index);
+          });
+        }, {
+          root: null,
+          rootMargin: '-45% 0px -45% 0px',
+          threshold: 0
+        });
+
+        scene.querySelectorAll('[data-three-steps-checkpoint]').forEach(function (checkpoint) {
+          observer.observe(checkpoint);
+        });
+
+        observers.push(observer);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThreeStepsCheckpoints, { once: true });
+    } else {
+      initThreeStepsCheckpoints();
+    }
+
+    media.addEventListener?.('change', initThreeStepsCheckpoints);
+    window.addEventListener('pageshow', initThreeStepsCheckpoints);
+  })();
+{% endjavascript %}
 
 {% stylesheet %}
 .three-steps{
@@ -132,66 +203,103 @@
     display: none;
   }
 
+  .three-steps__checkpoints{
+    display: none;
+  }
+
   @media(max-width: 749px){
     .three-steps__inner{
       padding: 0 20px 20px;
     }
 
     .three-steps__wrapper{
+      min-height: calc(300svh - var(--header-height, 0px));
       position: relative;
-      padding-top: 48px;
+      padding-top: 0;
     }
 
     .three-steps__pin{
-      position: static;
-      min-height: 0;
-      padding: 0;
+      position: sticky;
+      top: var(--header-height, 0px);
+      min-height: calc(100svh - var(--header-height, 0px));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 44px 0;
+      box-sizing: border-box;
     }
 
     .three-steps__title{
-      position: sticky;
-      top: calc(var(--header-height, 0px) + 24px);
-      z-index: 5;
-      margin: 0 0 30px;
+      position: relative;
+      z-index: 2;
+      margin: 0 0 28px;
       line-height: 1;
     }
 
     .three-steps__content{
-      display: block;
-      min-height: 0;
+      display: grid;
+      grid-template: "step" 1fr / 1fr;
+      align-items: center;
+      min-height: 350px;
+      position: relative;
     }
 
     .three-steps__step{
-      position: sticky;
-      top: calc(var(--header-height, 0px) + 26svh);
+      grid-area: step;
+      position: relative;
       z-index: 1;
       min-height: 330px;
-      margin: 0 0 70svh;
+      margin: 0;
       padding: 24px 0 16px;
       background: var(--beige);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 260ms ease, visibility 0ms linear 260ms;
+    }
+
+    .three-steps__step.is-active{
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
-    }
-
-    .three-steps__step:nth-child(2){
-      z-index: 2;
-    }
-
-    .three-steps__step:nth-child(3){
-      z-index: 3;
-      margin-bottom: 18px;
+      transition-delay: 0ms;
     }
 
     .three-steps__button--sticky{
       display: block;
-      position: sticky;
-      top: calc(100svh - 92px);
-      z-index: 8;
-      margin: 0 0 22px;
+      position: relative;
+      z-index: 2;
+      margin: 0 0 20px;
     }
 
     .three-steps__button--end{
       display: none;
+    }
+
+    .three-steps__checkpoints{
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .three-steps__checkpoint{
+      position: absolute;
+      right: 0;
+      left: 0;
+      height: 100svh;
+    }
+
+    .three-steps__checkpoint:nth-child(1){
+      top: 0;
+    }
+
+    .three-steps__checkpoint:nth-child(2){
+      top: 100svh;
+    }
+
+    .three-steps__checkpoint:nth-child(3){
+      top: 200svh;
     }
   }
 
