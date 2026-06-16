@@ -32,6 +32,12 @@
   </div>
 </div>
 
+{% style %}
+  :root {
+    --baf-footer-overscroll-background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
+  }
+{% endstyle %}
+
 {% stylesheet %}
 footer.shopify-section-group-footer-group{
   width: 100%;

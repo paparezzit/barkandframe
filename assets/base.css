@@ -57,11 +57,11 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);
   scroll-behavior: auto !important;
-  /* Safari rubber-band backdrop: beige at the top, purple only at the bottom. */
+  /* Safari rubber-band backdrop: page color at the top, footer color only at the bottom. */
   background: linear-gradient(
     to bottom,
     var(--beige) 0 40%,
-    var(--purple) 40% 100%
+    var(--baf-footer-overscroll-background, var(--purple)) 40% 100%
   );
   background-attachment: fixed;
 }
@@ -4397,6 +4397,7 @@ text-component {
   --brown: #4C443F;
   --green: #899800;
   --purple: #DBDBFF;
+  --baf-footer-overscroll-background: var(--purple);
   --color-black: var(--brown);
 }
 
