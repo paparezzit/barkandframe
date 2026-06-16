@@ -176,12 +176,11 @@
     }
 
     .dogstrust__wrapper{
-      --dogstrust-mobile-image-lift: 40px;
       display: grid;
       grid-template-columns: 42% 58%;
       position: relative;
       z-index: 1;
-      min-height: 120vw;
+      min-height: max(120vw, var(--dogstrust-mobile-layout-height, 120vw));
       padding-top: 0;
       box-sizing: border-box;
 
@@ -193,11 +192,11 @@
         overflow: visible;
 
         img{
-          top: auto;
-          bottom: calc(-36px + var(--dogstrust-mobile-image-lift));
+          top: var(--dogstrust-mobile-image-top, 180px);
+          bottom: auto;
           left: -85px;
-          width: calc(60% + 181px);
-          height: calc(64.8% + 60px);
+          width: calc(60% + 308px);
+          height: auto;
           object-fit: contain;
           object-position: right bottom;
         }
@@ -230,10 +229,10 @@
       .dogstrust__text-shape{
         display: block;
         float: left;
-        width: calc(((100vw - (var(--page-margin) * 2)) * 0.276) + 181px);
+        width: var(--dogstrust-mobile-shape-width, 0px);
         max-width: none;
         height: auto;
-        margin: calc(clamp(12px, 5vw, 28px) - var(--dogstrust-mobile-image-lift)) 0 0 calc((var(--page-margin) * -1) - 85px);
+        margin: var(--dogstrust-mobile-shape-top, 0px) 0 calc(var(--dogstrust-mobile-shape-height, 0px) * -1) var(--dogstrust-mobile-shape-left, 0px);
         opacity: 0;
         shape-margin: 5px;
         shape-image-threshold: 0.08;
@@ -247,11 +246,13 @@
 
       .dogstrust__button{
         display: block;
-        position: relative;
+        position: absolute;
         z-index: 3;
-        width: calc(58% + var(--page-margin) - 12px);
-        margin-left: 42%;
-        margin-top: 8px;
+        top: var(--dogstrust-mobile-button-top, 0px);
+        left: 42%;
+        right: 12px;
+        width: auto;
+        margin: 0;
         padding-right: 0;
         box-sizing: border-box;
         text-align: center;
@@ -438,9 +439,11 @@
 
 <script>
   (() => {
+    const mobileQuery = window.matchMedia('(max-width: 749px)');
     const horizontalQuery = window.matchMedia('(min-width: 1400px), (min-width: 750px) and (orientation: landscape)');
     const bandRatio = 203 / 467;
     const stepRatio = 132 / 467;
+    const imageAlphaTopRatio = 592 / 3312;
 
     function getDogstrustMaskUrl(width, height, isHorizontal) {
       const rects = [];
@@ -465,6 +468,89 @@
       return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
     }
 
+    function getContainedImageRect(img) {
+      const rect = img.getBoundingClientRect();
+      const naturalWidth = img.naturalWidth || 2480;
+      const naturalHeight = img.naturalHeight || 3312;
+      const aspect = naturalWidth / naturalHeight;
+      let width = rect.width;
+      let height = width / aspect;
+
+      if (height > rect.height && rect.height > 0) {
+        height = rect.height;
+        width = height * aspect;
+      }
+
+      return {
+        left: rect.right - width,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.top + height,
+        width,
+        height,
+      };
+    }
+
+    function applyDogstrustMobileLayout() {
+      document.querySelectorAll('.dogstrust__wrapper').forEach((wrapper) => {
+        const img = wrapper.querySelector('.dogstrust__bg img');
+        const content = wrapper.querySelector('.dogstrust__content');
+        const text = wrapper.querySelector('.dogstrust__text');
+        const paragraph = wrapper.querySelector('.dogstrust__text p');
+        const shape = wrapper.querySelector('.dogstrust__text-shape');
+        const buttonWrap = wrapper.querySelector('.dogstrust__button');
+        const button = wrapper.querySelector('.dogstrust__button .button');
+
+        if (!img || !content || !text || !paragraph || !shape || !buttonWrap || !button) return;
+
+        if (!mobileQuery.matches) {
+          wrapper.style.removeProperty('--dogstrust-mobile-layout-height');
+          wrapper.style.removeProperty('--dogstrust-mobile-image-top');
+          wrapper.style.removeProperty('--dogstrust-mobile-shape-width');
+          wrapper.style.removeProperty('--dogstrust-mobile-shape-height');
+          wrapper.style.removeProperty('--dogstrust-mobile-shape-left');
+          wrapper.style.removeProperty('--dogstrust-mobile-shape-top');
+          content.style.removeProperty('--dogstrust-mobile-button-top');
+          return;
+        }
+
+        wrapper.style.removeProperty('--dogstrust-mobile-layout-height');
+
+        for (let i = 0; i < 3; i += 1) {
+          const wrapperRect = wrapper.getBoundingClientRect();
+          const paragraphRect = paragraph.getBoundingClientRect();
+          const imageRect = getContainedImageRect(img);
+          const desiredVisibleTop = paragraphRect.bottom - wrapperRect.top - 40;
+          const imageTop = Math.max(0, desiredVisibleTop - (imageRect.height * imageAlphaTopRatio) + 50);
+
+          wrapper.style.setProperty('--dogstrust-mobile-image-top', `${Math.round(imageTop)}px`);
+
+          const movedImageRect = getContainedImageRect(img);
+          const textRect = text.getBoundingClientRect();
+
+          wrapper.style.setProperty('--dogstrust-mobile-shape-width', `${Math.round(movedImageRect.width)}px`);
+          wrapper.style.setProperty('--dogstrust-mobile-shape-height', `${Math.round(movedImageRect.height)}px`);
+          wrapper.style.setProperty('--dogstrust-mobile-shape-left', `${Math.round(movedImageRect.left - textRect.left)}px`);
+          wrapper.style.setProperty('--dogstrust-mobile-shape-top', `${Math.round(movedImageRect.top - textRect.top)}px`);
+        }
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const contentRect = content.getBoundingClientRect();
+        const paragraphRect = paragraph.getBoundingClientRect();
+        const imageRect = getContainedImageRect(img);
+        const buttonTop = Math.round(paragraphRect.bottom - contentRect.top + 8);
+
+        content.style.setProperty('--dogstrust-mobile-button-top', `${buttonTop}px`);
+
+        const buttonHeight = button.getBoundingClientRect().height;
+        const buttonBottom = (contentRect.top - wrapperRect.top) + buttonTop + buttonHeight;
+        const imageHiddenBottom = imageRect.bottom - wrapperRect.top - 90;
+        const minHeight = Math.ceil(Math.max(window.innerWidth * 1.2, buttonBottom + 84, imageHiddenBottom) + 50);
+
+        wrapper.style.setProperty('--dogstrust-mobile-layout-height', `${minHeight}px`);
+      });
+    }
+
     function applyDogstrustMask() {
       document.querySelectorAll('.dogstrust__inner').forEach((inner) => {
         const rect = inner.getBoundingClientRect();
@@ -485,8 +571,12 @@
     function scheduleDogstrustMask() {
       cancelAnimationFrame(dogstrustMaskFrame);
       dogstrustMaskFrame = requestAnimationFrame(() => {
+        applyDogstrustMobileLayout();
         applyDogstrustMask();
-        requestAnimationFrame(applyDogstrustMask);
+        requestAnimationFrame(() => {
+          applyDogstrustMobileLayout();
+          applyDogstrustMask();
+        });
       });
     }
 
@@ -499,6 +589,12 @@
       horizontalQuery.addEventListener('change', scheduleDogstrustMask);
     } else {
       horizontalQuery.addListener(scheduleDogstrustMask);
+    }
+
+    if (mobileQuery.addEventListener) {
+      mobileQuery.addEventListener('change', scheduleDogstrustMask);
+    } else {
+      mobileQuery.addListener(scheduleDogstrustMask);
     }
 
     if ('ResizeObserver' in window) {
