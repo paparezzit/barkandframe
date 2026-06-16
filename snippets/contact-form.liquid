@@ -46,6 +46,10 @@
         <input class="cf-type-radio" type="radio" name="contact[request_type]" value="order-issue">
         <span class="cf-type-label">Order Issue / Complaint</span>
       </label>
+      <label class="cf-type-option">
+        <input class="cf-type-radio" type="radio" name="contact[request_type]" value="withdrawal-form">
+        <span class="cf-type-label">Withdrawal form</span>
+      </label>
     </div>
 
     <!-- ——— Two-column layout ——— -->
@@ -148,6 +152,12 @@
 (function () {
   var CF_CONFIG = {
     'order-issue': {
+      textareaPlaceholder: 'Tell us what happened',
+      textareaRequired: true,
+      showOrderNumber: true,
+      showUpload: true
+    },
+    'withdrawal-form': {
       textareaPlaceholder: 'Tell us what happened',
       textareaRequired: true,
       showOrderNumber: true,

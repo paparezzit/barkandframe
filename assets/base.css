@@ -4997,7 +4997,9 @@ slideshow-component.slideshow--homepage{
 }
 
 .cf-type-label {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 15px 30px;
   border-radius: 10px;
   border: none;
@@ -5005,7 +5007,9 @@ slideshow-component.slideshow--homepage{
   color: color-mix(in srgb, var(--brown) 45%, transparent);
   background: var(--cream);
   transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
+  min-height: 48px;
+  line-height: 1.15;
+  white-space: normal;
   width: 100%;
   text-align: center;
 }
@@ -5013,6 +5017,13 @@ slideshow-component.slideshow--homepage{
 .cf-type-radio:checked + .cf-type-label {
   background: var(--purple);
   color: var(--brown);
+}
+
+@media screen and (min-width: 750px) {
+  .cf-type-label {
+    min-height: 0;
+    white-space: nowrap;
+  }
 }
 
 /* ——— Contact form: two-column layout ——— */
