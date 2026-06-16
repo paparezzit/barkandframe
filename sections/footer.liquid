@@ -152,16 +152,35 @@ footer.shopify-section-group-footer-group{
     }
 
     .email-signup__input{
-      background-color: #fff;
+      background-color: var(--beige);
       font-size: 14px;
       text-transform: none;
+
+      &:hover,
+      &:focus{
+        background-color: var(--beige);
+      }
+
+      &:focus,
+      &:focus-visible{
+        border-color: var(--brown);
+        outline: 2px solid var(--brown);
+        outline-offset: 2px;
+      }
     }
 
     .email-signup__button{
       right: 0;
       top: 0;
       background: var(--brown);
+      color: var(--beige);
       height: 100%;
+
+      &:hover,
+      &:focus-visible{
+        background: var(--brown);
+        color: var(--beige);
+      }
     }
   }
 
