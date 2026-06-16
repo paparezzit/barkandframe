@@ -4,6 +4,22 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
+    {%- if request.page_type == 'product' -%}
+      {%- capture baf_configurator_product_redirect_url -%}
+        {%- render 'configurator-product-url', product: product -%}
+      {%- endcapture -%}
+      {%- assign baf_configurator_product_redirect_url = baf_configurator_product_redirect_url | strip -%}
+      {%- if baf_configurator_product_redirect_url != blank -%}
+        <meta name="robots" content="noindex, nofollow">
+        <script>
+          window.location.replace({{ baf_configurator_product_redirect_url | json }});
+        </script>
+        <noscript>
+          <meta http-equiv="refresh" content="0;url={{ baf_configurator_product_redirect_url }}">
+        </noscript>
+      {%- endif -%}
+    {%- endif -%}
+
     <!-- Google Tag Manager -->
     <script>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
