@@ -184,6 +184,14 @@
     overflow: hidden;
   }
 
+  .search-modal__content .resource-card:is(:hover, :focus-within) .resource-card__image {
+    opacity: 1 !important;
+  }
+
+  .search-modal__content .resource-card:is(:hover, :focus-within) .resource-card__image--secondary {
+    opacity: 0 !important;
+  }
+
   /* Hide the default dialog backdrop on small screens */
   @media screen and (max-width: 749px) {
     .search-modal__content::backdrop {
