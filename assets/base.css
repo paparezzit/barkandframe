@@ -5270,6 +5270,10 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.cf-success-back {
+  margin-top: 14px;
+}
+
 @media(min-width: 750px){
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
