@@ -5,13 +5,6 @@
         <h2 class="three-steps__title">
           {{ section.settings.main-text }}
         </h2>
-        {% if section.settings.button_text != blank %}
-          <div class="three-steps__button three-steps__button--sticky">
-            <a href="{{ section.settings.button_link }}" class="button">
-              {{ section.settings.button_text }}
-            </a>
-          </div>
-        {% endif %}
         <div class="three-steps__content">
           <div class="three-steps__step is-active">
             <div class="three-steps__step__content">
@@ -55,6 +48,13 @@
             </div>
           </div>
         </div>
+        {% if section.settings.button_text != blank %}
+          <div class="three-steps__button three-steps__button--sticky">
+            <a href="{{ section.settings.button_link }}" class="button">
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
       </div>
       <div class="three-steps__checkpoints" aria-hidden="true">
         <span class="three-steps__checkpoint" data-three-steps-checkpoint="0"></span>
@@ -221,18 +221,21 @@
     .three-steps__pin{
       position: sticky;
       top: var(--header-height, 0px);
-      min-height: calc(100svh - var(--header-height, 0px));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 44px 0;
+      height: calc(100svh - var(--header-height, 0px));
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      align-items: center;
+      padding: clamp(18px, 4svh, 34px) 0;
       box-sizing: border-box;
     }
 
     .three-steps__title{
       position: relative;
       z-index: 2;
-      margin: 0 0 28px;
+      align-self: end;
+      margin: 0 0 clamp(12px, 3svh, 22px);
+      font-size: clamp(32px, 10vw, 36px);
       line-height: 1;
     }
 
@@ -240,7 +243,8 @@
       display: grid;
       grid-template: "step" 1fr / 1fr;
       align-items: center;
-      min-height: 350px;
+      height: clamp(250px, 48svh, 330px);
+      min-height: 0;
       position: relative;
     }
 
@@ -248,14 +252,30 @@
       grid-area: step;
       position: relative;
       z-index: 1;
-      min-height: 330px;
+      min-height: 0;
       margin: 0;
-      padding: 24px 0 16px;
+      padding: 0;
       background: var(--beige);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: opacity 260ms ease, visibility 0ms linear 260ms;
+      align-self: center;
+
+      .three-steps__step__content{
+        .three-steps__step__text{
+          font-size: clamp(36px, 11vw, var(--baf-display-medium-size));
+          margin-top: clamp(18px, 4svh, 30px);
+        }
+      }
+
+      .three-steps__step__image{
+        img{
+          width: clamp(108px, 30vw, 140px);
+          max-height: 30svh;
+          margin: clamp(12px, 2.8svh, 20px) auto 0;
+        }
+      }
     }
 
     .three-steps__step.is-active{
@@ -269,7 +289,8 @@
       display: block;
       position: relative;
       z-index: 2;
-      margin: 0 0 20px;
+      align-self: start;
+      margin: clamp(8px, 2svh, 14px) 0 0;
     }
 
     .three-steps__button--end{
