@@ -319,18 +319,22 @@
 }
 
 .artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-stack {
-  position: static;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: 0;
   height: var(--baf-layer-height);
 }
 
 .artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero,
 .artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
-  position: fixed;
-  inset: auto 0 auto;
-  top: var(--baf-layer-top);
-  height: var(--baf-layer-height);
+  position: absolute;
+  inset: 0;
+  height: 100%;
   width: 100%;
-  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, var(--baf-layer-pin-y, 0px), 0);
+  transform: translate3d(0, var(--baf-layer-pin-y, 0px), 0);
   backface-visibility: hidden;
   will-change: transform;
   contain: layout paint;

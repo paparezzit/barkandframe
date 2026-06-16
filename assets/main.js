@@ -139,10 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (scrollY >= end) {
         setFixedLayerState(section, 'after');
+        section.style.removeProperty('--baf-layer-pin-y');
       } else if (scrollY >= start) {
+        section.style.setProperty('--baf-layer-pin-y', `${Math.round(scrollY - start)}px`);
         setFixedLayerState(section, 'active');
       } else {
         setFixedLayerState(section, 'before');
+        section.style.removeProperty('--baf-layer-pin-y');
       }
     });
   };
