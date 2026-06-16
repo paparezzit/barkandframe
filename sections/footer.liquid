@@ -40,10 +40,60 @@
   @media screen and (max-width: 749px) {
     html,
     body {
-      background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
+      background-color: #fffaf1;
     }
   }
 {% endstyle %}
+
+<script>
+  (() => {
+    const mobileMedia = window.matchMedia('(max-width: 749px)');
+    const footerThemeColor = {{ section.settings.color_scheme.settings.background | json }};
+    const pageThemeColor = '#fffaf1';
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) return;
+
+    let frame = null;
+
+    const isAtPageBottom = () => {
+      const root = document.documentElement;
+      const body = document.body;
+      const scrollTop = window.scrollY || root.scrollTop || body.scrollTop || 0;
+      const viewportHeight = window.innerHeight || root.clientHeight || 0;
+      const scrollHeight = Math.max(
+        root.scrollHeight,
+        body.scrollHeight,
+        root.offsetHeight,
+        body.offsetHeight
+      );
+
+      return scrollHeight - (scrollTop + viewportHeight) <= 8;
+    };
+
+    const updateThemeColor = () => {
+      frame = null;
+      if (!mobileMedia.matches) return;
+      metaThemeColor.setAttribute('content', isAtPageBottom() ? footerThemeColor : pageThemeColor);
+    };
+
+    const requestUpdate = () => {
+      if (frame !== null) return;
+      frame = window.requestAnimationFrame(updateThemeColor);
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    window.addEventListener('orientationchange', requestUpdate);
+
+    if (mobileMedia.addEventListener) {
+      mobileMedia.addEventListener('change', requestUpdate);
+    } else if (mobileMedia.addListener) {
+      mobileMedia.addListener(requestUpdate);
+    }
+
+    updateThemeColor();
+  })();
+</script>
 
 {% stylesheet %}
 footer.shopify-section-group-footer-group{

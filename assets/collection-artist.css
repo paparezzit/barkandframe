@@ -7,7 +7,7 @@
 }
 
 .artist-collection__wrapper {
-  padding-top: var(--baf-scroll-subnav-height);
+  padding-top: 0;
 }
 
 .artist-collection__sticky-stage {
@@ -30,10 +30,8 @@
   gap: 0;
   box-sizing: border-box;
   justify-content: flex-start;
-  position: fixed;
+  position: sticky;
   top: var(--header-height, 0);
-  left: 0;
-  right: 0;
   z-index: calc(var(--layer-sticky, 8) - 1);
   width: 100%;
   margin-inline: 0;

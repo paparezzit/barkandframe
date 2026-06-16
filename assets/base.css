@@ -76,7 +76,13 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);
   scroll-behavior: auto !important;
-  background-color: var(--baf-footer-overscroll-background, var(--purple));
+  background-color: var(--beige);
+  background-image: linear-gradient(
+    to bottom,
+    var(--beige) 0 50%,
+    var(--baf-footer-overscroll-background, var(--purple)) 50% 100%
+  );
+  background-attachment: fixed;
 }
 
 html[scroll-lock] {

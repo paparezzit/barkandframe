@@ -203,7 +203,7 @@
   .shop-products__inner {
     width: 100%;
     margin-inline: auto;
-    padding-top: var(--baf-scroll-subnav-height);
+    padding-top: 0;
   }
 
   .shop-products__end-spacer {
@@ -220,10 +220,8 @@
     justify-content: flex-start;
     gap: 0;
     box-sizing: border-box;
-    position: fixed;
+    position: sticky;
     top: var(--header-height, 0);
-    left: 0;
-    right: 0;
     z-index: calc(var(--layer-sticky, 8) - 1);
     width: 100%;
     margin-inline: 0;
