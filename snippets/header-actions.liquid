@@ -88,6 +88,16 @@
     margin-right: calc(var(--padding-sm) * -1);
   }
 
+  .cart-drawer__close-button:focus,
+  .cart-drawer__close-button:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .cart-drawer__close-button:focus-visible::after {
+    content: none;
+  }
+
   .cart-drawer--empty .cart-drawer__content {
     text-align: center;
     min-height: auto;
