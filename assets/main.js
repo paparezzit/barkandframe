@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const layerHeight = parseFloat(section.style.getPropertyValue('--baf-layer-height')) || 0;
       const sectionTop = section.getBoundingClientRect().top + scrollY;
       const sectionHeight = section.offsetHeight;
-      const start = sectionTop - top;
+      const startOffset = parseFloat(getComputedStyle(section).getPropertyValue('--baf-fixed-layer-start-offset')) || 0;
+      const start = sectionTop + startOffset - top;
       const end = sectionTop + sectionHeight - layerHeight - top;
 
       if (scrollY >= end) {
