@@ -11,6 +11,31 @@
   assign show_unit_price = show_unit_price | default: false
   assign show_sale_price_first = show_sale_price_first | default: false
   assign selected_variant = product_resource.selected_or_first_available_variant
+
+  case product_resource.handle
+    when 'framed-canvas-1'
+      for variant in product_resource.variants
+        if variant.option1 == 'Black' and variant.option2 == '12″×16″'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
+    when 'unframed-canvas'
+      for variant in product_resource.variants
+        if variant.option1 == '12″×16″'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
+    when 'framed-poster'
+      for variant in product_resource.variants
+        if variant.option1 == 'Black' and variant.option2 == '30×40 cm'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
+  endcase
+
   assign price = selected_variant.price
   assign compare_at_price = selected_variant.compare_at_price
 

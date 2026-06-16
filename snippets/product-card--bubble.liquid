@@ -74,6 +74,11 @@
   if product.id == empty or product == blank
     assign onboarding = true
   endif
+
+  capture product_card_url
+    render 'product-card-variant-url', product: product
+  endcapture
+  assign product_card_url = product_card_url | strip
 %}
 
 <product-card--custom
@@ -102,7 +107,7 @@
     <a
       id="{{ product_card_id | md5 }}"
       {% unless onboarding %}
-        href="/pages/portrait?step=2&product={{ product.handle | url_encode }}"
+        href="{{ product_card_url }}"
       {% endunless %}
       class="product-card__link"
       ref="productCardLink"
@@ -249,7 +254,25 @@
 
     const handle = card.dataset.productHandle;
     if (handle) {
-      const configuratorUrl = "/pages/portrait?step=2&product=" + encodeURIComponent(handle);
+      const params = new URLSearchParams({
+        style: "the_gentleman",
+        step: "3",
+        size: handle === "framed-poster" ? "30×40 cm" : "12″×16″",
+      });
+      if (handle === "framed-canvas-1" || handle === "unframed-canvas") {
+        params.set("category", "canvas");
+      }
+      if (handle === "framed-canvas-1") {
+        params.set("framing", "framed");
+        params.set("color", "black");
+      } else if (handle === "unframed-canvas") {
+        params.set("framing", "unframed");
+      } else if (handle === "framed-poster") {
+        params.set("category", "paper");
+        params.set("border", "no-border");
+        params.set("color", "black");
+      }
+      const configuratorUrl = "/pages/portrait?" + params.toString();
       card.querySelectorAll("a.card-gallery__link, a.card-gallery__slide-link, .card-gallery a").forEach(link => {
         link.href = configuratorUrl;
       });

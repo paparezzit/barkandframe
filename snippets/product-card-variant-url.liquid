@@ -8,20 +8,31 @@
 {%- enddoc -%}
 
 {% liquid
-  assign variant_to_link = product.selected_or_first_available_variant
-  assign combined_listing_count = product.options_with_values | map: 'values' | map: 'product_url' | compact | size
+  capture configurator_product_url
+    render 'configurator-product-url', product: product
+  endcapture
+  assign configurator_product_url = configurator_product_url | strip
 
-  # For now if it’s combined listing, we don’t need to do anything.
-  unless combined_listing_count > 0
-    # Simple direct check: which variant owns the featured image?
-    if product.featured_media
-      for variant in product.variants
-        if variant.featured_media.id == product.featured_media.id
-          assign variant_to_link = variant
-          break
-        endif
-      endfor
-    endif
+  unless configurator_product_url != blank
+    assign variant_to_link = product.selected_or_first_available_variant
+    assign combined_listing_count = product.options_with_values | map: 'values' | map: 'product_url' | compact | size
+
+    # For now if it’s combined listing, we don’t need to do anything.
+    unless combined_listing_count > 0
+      # Simple direct check: which variant owns the featured image?
+      if product.featured_media
+        for variant in product.variants
+          if variant.featured_media.id == product.featured_media.id
+            assign variant_to_link = variant
+            break
+          endif
+        endfor
+      endif
+    endunless
   endunless
 %}
-{{- variant_to_link.url -}}
+{%- if configurator_product_url != blank -%}
+  {{- configurator_product_url -}}
+{%- else -%}
+  {{- variant_to_link.url -}}
+{%- endif -%}

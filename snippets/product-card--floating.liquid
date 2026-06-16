@@ -74,6 +74,11 @@
   if product.id == empty or product == blank
     assign onboarding = true
   endif
+
+  capture product_card_url
+    render 'product-card-variant-url', product: product
+  endcapture
+  assign product_card_url = product_card_url | strip
 %}
 
 <product-card--floating
@@ -97,7 +102,7 @@
     {%- unless onboarding -%}
       <a
         class="product-card--floating__link"
-        href="{{ variant_to_link.url }}"
+        href="{{ product_card_url }}"
         aria-label="{{ product.title | escape }}"
       ></a>
     {%- endunless -%}

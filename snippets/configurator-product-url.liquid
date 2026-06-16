@@ -1,0 +1,15 @@
+{%- doc -%}
+  Returns the configurator URL for products that should not open their product detail page.
+
+  @param {object} product - The product object
+{%- enddoc -%}
+
+{%- liquid
+  if product.handle == 'framed-canvas-1'
+    echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=12%E2%80%B3%C3%9716%E2%80%B3&framing=framed&color=black'
+  elsif product.handle == 'unframed-canvas'
+    echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=12%E2%80%B3%C3%9716%E2%80%B3&framing=unframed'
+  elsif product.handle == 'framed-poster'
+    echo '/pages/portrait?step=3&style=the_gentleman&category=paper&size=30%C3%9740%20cm&border=no-border&color=black'
+  endif
+-%}
