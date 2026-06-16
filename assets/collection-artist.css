@@ -329,6 +329,11 @@
   inset: auto 0 auto;
   top: var(--baf-layer-top);
   height: var(--baf-layer-height);
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+  contain: layout paint;
 }
 
 .artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero {
