@@ -261,7 +261,7 @@
         top: auto;
         left: auto;
         right: auto;
-        width: min(312px, calc(100% - 24px));
+        width: min(270px, calc(100% - 24px));
         max-width: calc(100% - 24px);
         margin: 14px 12px 0 auto;
         padding-right: 0;
@@ -270,10 +270,14 @@
 
         .button{
           width: 100%;
+          min-width: 0;
           max-width: 100%;
           padding-left: 20px;
           padding-right: 20px;
           line-height: 1.22;
+          white-space: normal;
+          overflow-wrap: normal;
+          word-break: normal;
         }
       }
     }
