@@ -4,46 +4,48 @@
 -%}
 
 <div class="floating-images">
-  <div class="floating-images__content">
-    <div class="floating-images__content__inner">
-      <div class="floating-images__icon">
-        <img src="{{ 'logo-icon.svg' | asset_url }}" alt="Logo" width="800" height="800">
-      </div>
+  <div class="floating-images__stage">
+    <div class="floating-images__content">
+      <div class="floating-images__content__inner">
+        <div class="floating-images__icon">
+          <img src="{{ 'logo-icon.svg' | asset_url }}" alt="Logo" width="800" height="800">
+        </div>
 
-      <h2 class="floating-images__title">
-        {{ floating_title_html }}
-      </h2>
+        <h2 class="floating-images__title">
+          {{ floating_title_html }}
+        </h2>
 
-      {%- if section.settings.subtitle != blank -%}
-        <p class="floating-images__subtitle">{{ section.settings.subtitle }}</p>
-      {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="floating-images__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
 
-      <div class="floating-images__button">
-        <a href="{{ section.settings.button_link }}" class="button">
-          {{ section.settings.button_text }}
-        </a>
+        <div class="floating-images__button">
+          <a href="{{ section.settings.button_link }}" class="button">
+            {{ section.settings.button_text }}
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="floating-images__fake-title" aria-hidden="true">
-    <div class="floating-images__content__inner">
-      <div class="floating-images__icon floating-images__fake-spacer">
-        <img src="{{ 'logo-icon.svg' | asset_url }}" alt="" width="800" height="800">
-      </div>
+    <div class="floating-images__fake-title" aria-hidden="true">
+      <div class="floating-images__content__inner">
+        <div class="floating-images__icon floating-images__fake-spacer">
+          <img src="{{ 'logo-icon.svg' | asset_url }}" alt="" width="800" height="800">
+        </div>
 
-      <div class="floating-images__title">
-        {{ floating_title_html }}
-      </div>
+        <div class="floating-images__title">
+          {{ floating_title_html }}
+        </div>
 
-      {%- if section.settings.subtitle != blank -%}
-        <p class="floating-images__subtitle floating-images__fake-spacer">{{ section.settings.subtitle }}</p>
-      {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="floating-images__subtitle floating-images__fake-spacer">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
 
-      <div class="floating-images__button floating-images__fake-spacer">
-        <span class="button">
-          {{ section.settings.button_text }}
-        </span>
+        <div class="floating-images__button floating-images__fake-spacer">
+          <span class="button">
+            {{ section.settings.button_text }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +63,10 @@
     color: var(--brown);
     margin: 0 0 120px;
     text-align: center;
+
+    .floating-images__stage{
+      display: contents;
+    }
 
     .floating-images__content,
     .floating-images__fake-title{
@@ -208,6 +214,54 @@
             left: 35%;
             top: 85%;
           }
+        }
+      }
+    }
+
+    &.baf-fixed-layer{
+      position: relative;
+
+      .floating-images__stage{
+        display: block;
+        height: var(--baf-layer-height);
+        position: relative;
+      }
+
+      .floating-images__content,
+      .floating-images__fake-title{
+        position: absolute;
+        inset: auto 0 0;
+        top: 0;
+        height: var(--baf-layer-height);
+        min-height: 0;
+        margin-top: 0;
+      }
+
+      .floating-images__content .floating-images__content__inner,
+      .floating-images__fake-title .floating-images__content__inner{
+        height: calc((var(--baf-layer-height) + var(--baf-layer-top)) * 0.7);
+      }
+
+      .floating-images__holder{
+        margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33);
+        padding-bottom: calc((var(--baf-layer-height) + var(--baf-layer-top)) * 0.8);
+      }
+
+      &.is-fixed-active{
+        .floating-images__content,
+        .floating-images__fake-title{
+          position: fixed;
+          top: var(--baf-layer-top);
+          height: var(--baf-layer-height);
+        }
+      }
+
+      &.is-fixed-after{
+        .floating-images__content,
+        .floating-images__fake-title{
+          position: absolute;
+          top: var(--baf-layer-after-top);
+          height: var(--baf-layer-height);
         }
       }
     }

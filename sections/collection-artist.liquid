@@ -32,36 +32,38 @@
   {%- endif -%}
 
   <div class="artist-collection__wrapper">
-    <div class="artist-collection__hero">
-      <h1 class="artist-collection__title">{{ collection.title }}</h1>
-      {%- if artist and artist.signature.value != blank -%}
-        <div class="artist-collection__signature">
-          <span class="artist-collection__by">by</span>
-          <img
-            src="{{ artist.signature.value | image_url: width: 400 }}"
-            alt=""
-            width="400"
-            height="100"
-            loading="eager"
-          >
-        </div>
-      {%- endif -%}
-    </div>
+    <div class="artist-collection__sticky-stage">
+      <div class="artist-collection__hero">
+        <h1 class="artist-collection__title">{{ collection.title }}</h1>
+        {%- if artist and artist.signature.value != blank -%}
+          <div class="artist-collection__signature">
+            <span class="artist-collection__by">by</span>
+            <img
+              src="{{ artist.signature.value | image_url: width: 400 }}"
+              alt=""
+              width="400"
+              height="100"
+              loading="eager"
+            >
+          </div>
+        {%- endif -%}
+      </div>
 
-    <div class="artist-collection__hero-outline" aria-hidden="true">
-      <div class="artist-collection__title">{{ collection.title }}</div>
-      {%- if artist and artist.signature.value != blank -%}
-        <div class="artist-collection__signature">
-          <span class="artist-collection__by">by</span>
-          <img
-            src="{{ artist.signature.value | image_url: width: 400 }}"
-            alt=""
-            width="400"
-            height="100"
-            loading="lazy"
-          >
-        </div>
-      {%- endif -%}
+      <div class="artist-collection__hero-outline" aria-hidden="true">
+        <div class="artist-collection__title">{{ collection.title }}</div>
+        {%- if artist and artist.signature.value != blank -%}
+          <div class="artist-collection__signature">
+            <span class="artist-collection__by">by</span>
+            <img
+              src="{{ artist.signature.value | image_url: width: 400 }}"
+              alt=""
+              width="400"
+              height="100"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+      </div>
     </div>
 
     <div class="artist-collection__info section section--page-width">

@@ -254,13 +254,14 @@
       }
 
       .dogstrust__button{
+        clear: both;
         display: block;
         position: relative;
         z-index: 3;
         top: auto;
         left: auto;
         right: auto;
-        width: fit-content;
+        width: min(312px, calc(100% - 24px));
         max-width: calc(100% - 24px);
         margin: 14px 12px 0 auto;
         padding-right: 0;
@@ -268,9 +269,11 @@
         text-align: center;
 
         .button{
+          width: 100%;
           max-width: 100%;
           padding-left: 20px;
           padding-right: 20px;
+          line-height: 1.22;
         }
       }
     }
@@ -492,6 +495,7 @@
     }
 
     let dogstrustMaskFrame = null;
+    let dogstrustMaskWidth = window.innerWidth;
 
     function scheduleDogstrustMask() {
       cancelAnimationFrame(dogstrustMaskFrame);
@@ -500,9 +504,21 @@
       });
     }
 
+    function handleDogstrustResize() {
+      if (Math.abs(window.innerWidth - dogstrustMaskWidth) <= 20) return;
+      dogstrustMaskWidth = window.innerWidth;
+      scheduleDogstrustMask();
+    }
+
     scheduleDogstrustMask();
     window.addEventListener('load', scheduleDogstrustMask);
-    window.addEventListener('resize', scheduleDogstrustMask, { passive: true });
+    window.addEventListener('resize', handleDogstrustResize, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      window.setTimeout(() => {
+        dogstrustMaskWidth = window.innerWidth;
+        scheduleDogstrustMask();
+      }, 250);
+    }, { passive: true });
     document.addEventListener('shopify:section:load', scheduleDogstrustMask);
 
     if (horizontalQuery.addEventListener) {
