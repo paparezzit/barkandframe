@@ -604,7 +604,10 @@
       let resizeObserver = null;
       let lastTime = null;
       let loopPoint = 0;
+      let position = 0;
       let pauseUntil = 0;
+      let autoScrollTimeout = null;
+      let isAutoScrolling = false;
       const pixelsPerMs = 0.027;
       const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
       const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -620,16 +623,41 @@
           : track.scrollWidth / 8;
       };
 
-      const normalizeScroll = () => {
-        if (loopPoint <= 0) return;
+      const normalizePosition = (value) => {
+        if (loopPoint <= 0) return value;
         const minScroll = loopPoint;
         const maxScroll = loopPoint * 6;
         const resetAmount = loopPoint * 3;
 
-        if (rail.scrollLeft < minScroll) {
-          rail.scrollLeft += resetAmount;
-        } else if (rail.scrollLeft > maxScroll) {
-          rail.scrollLeft -= resetAmount;
+        if (value < minScroll) {
+          return value + resetAmount;
+        }
+
+        if (value > maxScroll) {
+          return value - resetAmount;
+        }
+
+        return value;
+      };
+
+      const applyPosition = () => {
+        isAutoScrolling = true;
+        rail.scrollLeft = Math.round(position);
+        clearTimeout(autoScrollTimeout);
+        autoScrollTimeout = window.setTimeout(() => {
+          isAutoScrolling = false;
+        }, 80);
+      };
+
+      const syncPositionFromScroll = () => {
+        if (isAutoScrolling) return;
+
+        pauseForGesture();
+        const normalizedPosition = normalizePosition(rail.scrollLeft);
+        position = normalizedPosition;
+
+        if (Math.round(normalizedPosition) !== Math.round(rail.scrollLeft)) {
+          rail.scrollLeft = Math.round(normalizedPosition);
         }
       };
 
@@ -642,10 +670,13 @@
         }
 
         if (!rail.dataset.autoRailReady || rail.dataset.autoRailReady === 'false') {
-          rail.scrollLeft = loopPoint * 3;
+          position = loopPoint * 3;
+        } else {
+          position = rail.scrollLeft || position;
         }
 
-        normalizeScroll();
+        position = normalizePosition(position);
+        applyPosition();
         rail.dataset.autoRailReady = 'true';
       };
 
@@ -667,8 +698,8 @@
         lastTime = time;
 
         if (rail.dataset.autoRailReady === 'true' && !reduceMotion.matches && time >= pauseUntil) {
-          rail.scrollLeft += delta * pixelsPerMs;
-          normalizeScroll();
+          position = normalizePosition(position + (delta * pixelsPerMs));
+          applyPosition();
         }
 
         frame = window.requestAnimationFrame(tick);
@@ -686,7 +717,7 @@
       });
 
       window.addEventListener('resize', queueRefreshRail);
-      rail.addEventListener('scroll', normalizeScroll, { passive: true });
+      rail.addEventListener('scroll', syncPositionFromScroll, { passive: true });
       rail.addEventListener('touchstart', pauseForGesture, { passive: true });
       rail.addEventListener('touchmove', pauseForGesture, { passive: true });
       rail.addEventListener('pointerdown', pauseForGesture);
@@ -706,9 +737,10 @@
       document.addEventListener('shopify:section:unload', () => {
         if (frame) window.cancelAnimationFrame(frame);
         if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+        clearTimeout(autoScrollTimeout);
         if (resizeObserver) resizeObserver.disconnect();
         window.removeEventListener('resize', queueRefreshRail);
-        rail.removeEventListener('scroll', normalizeScroll);
+        rail.removeEventListener('scroll', syncPositionFromScroll);
         rail.removeEventListener('touchstart', pauseForGesture);
         rail.removeEventListener('touchmove', pauseForGesture);
         rail.removeEventListener('pointerdown', pauseForGesture);
