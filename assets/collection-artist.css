@@ -16,7 +16,7 @@
 
 .artist-collection__showcase {
   position: relative;
-  margin-top: clamp(96px, 24vw, 180px);
+  margin-top: clamp(48px, 12vw, 90px);
 }
 
 .artist-collection__nav {
@@ -398,7 +398,7 @@
 
 @media screen and (max-width: 749px) {
   .artist-collection__showcase {
-    margin-top: clamp(96px, 26vw, 150px);
+    margin-top: clamp(48px, 13vw, 75px);
   }
 }
 
