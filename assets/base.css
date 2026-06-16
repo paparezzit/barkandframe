@@ -4869,7 +4869,7 @@ slideshow-component.slideshow--homepage{
   text-align: center;
   transform: none !important;
   padding-bottom: 40px !important;
-  margin-top: 0 !important;
+  margin-top: -32px !important;
   margin-bottom: 0 !important;
 }
 
@@ -5184,6 +5184,10 @@ slideshow-component.slideshow--homepage{
 
   .page-contact > .section-content-wrapper{
     gap: 120px !important;
+  }
+
+  .page-contact .faq-intro-copy{
+    margin-top: -56px !important;
   }
 
   .page-contact .image-block{
