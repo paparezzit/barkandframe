@@ -61,6 +61,11 @@
     }
   }
 
+  .search-modal__content:focus,
+  .search-modal__content:focus-visible {
+    outline: none;
+  }
+
   .search-modal__content predictive-search-component,
   .search-modal__content .predictive-search-form__content,
   .search-modal__content .predictive-search-form__content-wrapper,
@@ -221,7 +226,7 @@
 
     &::backdrop {
       animation: search-backdrop-lighten var(--animation-speed) var(--animation-easing) forwards;
-      background: rgb(255 255 255 / 45%);
+      background: rgb(255 255 255 / 70%);
     }
   }
 
@@ -235,7 +240,7 @@
     }
 
     to {
-      backdrop-filter: brightness(1.15);
+      backdrop-filter: brightness(1.25);
     }
   }
 
