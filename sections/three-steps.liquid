@@ -208,32 +208,26 @@
   }
 
   @media(max-width: 749px){
-    --three-steps-stage-top: max(76px, calc(var(--baf-stable-header-height, var(--header-height, 60px)) + 14px));
-    --three-steps-stage-bottom: max(14px, env(safe-area-inset-bottom));
-    --three-steps-stage-height: calc(100svh - var(--three-steps-stage-top) - var(--three-steps-stage-bottom));
-
     .three-steps__inner{
       padding: 0 20px 20px;
     }
 
     .three-steps__wrapper{
-      min-height: calc(var(--three-steps-stage-height) + 200svh);
+      min-height: calc(300svh - 96px);
       position: relative;
       padding-top: 0;
     }
 
     .three-steps__pin{
       position: sticky;
-      top: var(--three-steps-stage-top);
-      height: var(--three-steps-stage-height);
+      top: 96px;
+      height: calc(100svh - 116px);
       min-height: 0;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
       align-items: center;
-      padding: 0;
+      padding: 0 0 max(12px, env(safe-area-inset-bottom));
       box-sizing: border-box;
-      transform: translate3d(0, 0, 0);
-      will-change: transform;
     }
 
     .three-steps__title{
