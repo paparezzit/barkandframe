@@ -398,17 +398,7 @@
 
 @media screen and (max-width: 749px) {
   .artist-collection__showcase {
-    --baf-fixed-layer-start-offset: calc((var(--baf-layer-height, 720px) * -0.5) + 96px);
-    margin-top: clamp(150px, 44vw, 190px);
-  }
-
-  .artist-collection__showcase.baf-fixed-layer:not(.is-fixed-active):not(.is-fixed-after) .artist-collection__hero,
-  .artist-collection__showcase.baf-fixed-layer:not(.is-fixed-active):not(.is-fixed-after) .artist-collection__hero-outline {
-    height: auto;
-    min-height: 0;
-    justify-content: flex-start;
-    padding-top: 0;
-    padding-bottom: 0;
+    margin-top: calc((var(--baf-layer-height, 720px) * -0.5) + clamp(180px, 48vw, 220px));
   }
 }
 
