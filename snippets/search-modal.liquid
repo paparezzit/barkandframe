@@ -26,7 +26,7 @@
 {% stylesheet %}
   /* Search modal style */
   .search-modal {
-    --search-border-radius: var(--style-border-radius-popover);
+    --search-border-radius: 10px;
     --search-border-width: var(--style-border-width);
   }
 
@@ -47,13 +47,63 @@
     --modal-width: 66dvw;
 
     padding: 0;
-    border: var(--style-border-popover);
+    border: 1px solid transparent;
+    background: #fffaf1;
+    color: #4c443f;
 
     @media screen and (min-width: 750px) {
       width: var(--modal-width);
       margin-block-start: var(--modal-top-margin);
       overflow: hidden;
     }
+  }
+
+  .search-modal__content predictive-search-component,
+  .search-modal__content .predictive-search-form__content,
+  .search-modal__content .predictive-search-form__content-wrapper,
+  .search-modal__content .predictive-search-form__header,
+  .search-modal__content .predictive-search-form__header-inner {
+    background: #fffaf1;
+    color: #4c443f;
+  }
+
+  .search-modal__content .predictive-search-form__header,
+  .search-modal__content .predictive-search-form__header-inner {
+    border-color: transparent !important;
+  }
+
+  .search-modal__content .predictive-search-form__header-inner {
+    border-radius: 10px;
+  }
+
+  .search-modal__content .predictive-search-form__header-inner:focus-within {
+    background: #f4efe5;
+    outline: none;
+  }
+
+  .search-modal__content .search-input,
+  .search-modal__content .predictive-search-results__inner,
+  .search-modal__content :is(.predictive-search__reset-button, .predictive-search__close-modal-button) {
+    color: #4c443f;
+  }
+
+  .search-modal__content .search-input::placeholder {
+    color: rgb(76 68 63 / 70%);
+  }
+
+  .search-modal__content .predictive-search__reset-button-icon:hover,
+  .search-modal__content .predictive-search__close-modal-button:hover {
+    background-color: #f9f3ea;
+    border-radius: 8px;
+  }
+
+  .search-modal__content .predictive-search-results__pill:focus,
+  .search-modal__content .predictive-search-results__pill:hover,
+  .search-modal__content .predictive-search-results__card--query:is([aria-selected='true'], :focus-within) .predictive-search-results__pill {
+    background-color: #f9f3ea;
+    border-radius: 8px;
+    outline: none;
+    border-color: transparent;
   }
 
   /* Hide the default dialog backdrop on small screens */
