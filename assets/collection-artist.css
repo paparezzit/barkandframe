@@ -404,6 +404,36 @@
   .artist-collection {
     --artist-info-top-offset: calc(clamp(18px, 4svh, 40px) + 10px);
   }
+
+  .artist-collection__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .artist-collection__info {
+    order: 1;
+    margin: clamp(42px, 12vw, 72px) auto 0;
+    min-height: 0;
+    z-index: 2;
+  }
+
+  .artist-collection__sticky-stage {
+    order: 2;
+    display: block;
+    position: relative;
+  }
+
+  .artist-collection__hero {
+    min-height: calc(100svh - var(--header-height));
+  }
+
+  .artist-collection__hero-outline {
+    height: calc(100svh - var(--header-height));
+  }
+
+  .artist-collection__products {
+    order: 3;
+  }
 }
 
 @media screen and (min-width: 750px) {

@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fixedLayerMedia = window.matchMedia('(max-width: 989px), (hover: none), (pointer: coarse)');
+  const artistMobileFlowMedia = window.matchMedia('(max-width: 749px)');
   const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection'));
   let fixedLayerFrame = null;
 
@@ -124,7 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const layerHeight = Math.max(1, Math.round(getStableViewportHeight() - top));
 
     fixedLayerRoots.forEach(section => {
-      if (!enabled) {
+      const enabledForSection = enabled && !(artistMobileFlowMedia.matches && section.classList.contains('artist-collection'));
+
+      if (!enabledForSection) {
         section.classList.remove('baf-fixed-layer');
         section.style.removeProperty('--baf-layer-top');
         section.style.removeProperty('--baf-layer-height');
@@ -163,6 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
   window.addEventListener('load', measureFixedLayers, { once: true });
   fixedLayerMedia.addEventListener?.('change', () => {
+    setStableScrollMetrics();
+    measureFixedLayers();
+  });
+  artistMobileFlowMedia.addEventListener?.('change', () => {
     setStableScrollMetrics();
     measureFixedLayers();
   });
