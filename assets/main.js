@@ -158,14 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const layerHeight = Math.max(1, Math.round(getStableViewportHeight() - top));
 
     fixedLayerRoots.forEach(section => {
-      const useFixedLayer = enabled && !section.classList.contains('artist-collection__showcase');
-
-      if (!useFixedLayer) {
+      if (!enabled) {
         section.classList.remove('baf-fixed-layer');
         section.style.removeProperty('--baf-layer-top');
         section.style.removeProperty('--baf-layer-height');
         section.style.removeProperty('--baf-layer-after-top');
-        section.style.removeProperty('--baf-layer-pin-y');
         setFixedLayerState(section, 'before');
         return;
       }
