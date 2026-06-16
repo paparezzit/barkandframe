@@ -521,7 +521,7 @@
           const paragraphRect = paragraph.getBoundingClientRect();
           const imageRect = getContainedImageRect(img);
           const desiredVisibleTop = paragraphRect.bottom - wrapperRect.top - 40;
-          const imageTop = Math.max(0, desiredVisibleTop - (imageRect.height * imageAlphaTopRatio) + 65);
+          const imageTop = Math.max(0, desiredVisibleTop - (imageRect.height * imageAlphaTopRatio) + 80);
 
           wrapper.style.setProperty('--dogstrust-mobile-image-top', `${Math.round(imageTop)}px`);
 
