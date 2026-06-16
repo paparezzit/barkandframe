@@ -5270,6 +5270,13 @@ slideshow-component.slideshow--homepage{
   }
 }
 
+.contact-form__error:focus,
+.contact-form__error:focus-visible,
+.contact-form__success:focus,
+.contact-form__success:focus-visible {
+  outline: none;
+}
+
 .cf-success-back {
   margin-top: 14px;
 }
