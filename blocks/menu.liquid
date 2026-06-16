@@ -57,9 +57,13 @@
             {% for link in menu.links %}
               {% assign menu_link_url = link.url | split: '?' | first %}
               {% if link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' and menu_link_url != '/collections/bark-studio' %}{% continue %}{% endif %}
+              {% assign link_title = link.title %}
+              {% if menu.handle == 'info-menu' and link.title == 'Contact' %}
+                {% assign link_title = 'Contact us' %}
+              {% endif %}
               <li class="menu__item {{ block_settings.link_preset }}{% if link.active %} menu__item--active{% endif %}">
                 <a href="{{ link.url }}">
-                  {{ link.title }}
+                  {{ link_title }}
                 </a>
               </li>
             {% endfor %}
