@@ -4832,11 +4832,13 @@ slideshow-component.slideshow--homepage{
 .page-contact{
   --faq-illustration-size: 250px;
   --faq-illustration-scale: 1;
+  --faq-last-section-bottom: 250px;
 }
 
 @media(max-width: 749px){
   .page-contact{
     --faq-illustration-size: 162.5px;
+    --faq-last-section-bottom: 160px;
   }
 }
 
@@ -4902,6 +4904,10 @@ slideshow-component.slideshow--homepage{
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) + .group-block:has(.section-faq){
   margin-top: 38px !important;
+}
+
+.page-contact > .section-content-wrapper > .group-block:has(.section-faq):last-child{
+  margin-bottom: var(--faq-last-section-bottom) !important;
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) .section-faq,
@@ -5269,5 +5275,6 @@ slideshow-component.slideshow--homepage{
 @media(min-width: 1200px){
   .page-contact{
     --faq-illustration-size: 300px;
+    --faq-last-section-bottom: 300px;
   }
 }
