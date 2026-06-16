@@ -5086,7 +5086,8 @@ slideshow-component.slideshow--homepage{
 
 .cf-field[hidden],
 #cf-field-upload[hidden],
-#cf-columns[hidden] {
+#cf-columns[hidden],
+#cf-withdrawal-info[hidden] {
   display: none !important;
 }
 
@@ -5131,6 +5132,22 @@ slideshow-component.slideshow--homepage{
 .cf-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.cf-additional-info {
+  color: var(--brown);
+  font-size: 14px;
+  line-height: 1.35;
+  margin-top: 4px;
+  max-width: 760px;
+}
+
+.cf-additional-info p {
+  margin: 0 0 0.75em;
+}
+
+.cf-additional-info p:last-child {
+  margin-bottom: 0;
 }
 
 /* ——— Contact form: shared inputs ——— */

@@ -154,6 +154,13 @@
       </div>
     </div>
 
+    <div class="cf-additional-info" id="cf-withdrawal-info" hidden>
+      <p>Additional information:</p>
+      <p>If the contract for provision of personalized goods has already entered production following your approval of the design, the right of withdrawal does not apply.</p>
+      <p>After receiving your notice, we will promptly acknowledge receipt and inform you If you need help with the form or are unsure how to proceed, please contact us at of the next steps.</p>
+      <p>customercare@barkandframe.com.</p>
+    </div>
+
     {%- endif -%}
 
   {%- endform -%}
@@ -169,6 +176,7 @@
       textareaRequired: true,
       showOrderNumber: true,
       showFullName: false,
+      showWithdrawalInfo: false,
       showUpload: true
     },
     'withdrawal-form': {
@@ -176,6 +184,7 @@
       textareaRequired: true,
       showOrderNumber: true,
       showFullName: true,
+      showWithdrawalInfo: true,
       showUpload: false
     },
     'general-inquiry': {
@@ -183,6 +192,7 @@
       textareaRequired: true,
       showOrderNumber: false,
       showFullName: false,
+      showWithdrawalInfo: false,
       showUpload: false
     }
   };
@@ -228,6 +238,9 @@
       fullNameField.hidden = !cfg.showFullName;
       if (fullNameInput) fullNameInput.required = !!cfg.showFullName;
     }
+
+    var withdrawalInfo = document.getElementById('cf-withdrawal-info');
+    if (withdrawalInfo) withdrawalInfo.hidden = !cfg.showWithdrawalInfo;
 
     // Update textarea
     var ta = document.getElementById('cf-textarea');
