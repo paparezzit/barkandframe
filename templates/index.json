@@ -64,7 +64,7 @@
       "settings": {
         "image": "shopify://shop_images/ANIM_ARTISTS.png",
         "title": "Artist-designed. Turn your dog into a timeless icon.",
-        "text": "<p>Each portrait is created by professional artists and designed to be timeless — a distinctive piece that reflects your dog’s personality and fits naturally into a well-designed home.</p>",
+        "text": "<p>Each style is created by professional artists and designed to be timeless — a distinctive piece that reflects your dog’s personality and fits naturally into a well-designed home.</p>",
         "button_label": "Meet our artists",
         "button_link": "shopify://pages/our-artists"
       }
