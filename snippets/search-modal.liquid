@@ -106,6 +106,37 @@
     border-color: transparent;
   }
 
+  .search-modal__content predictive-search-component {
+    --resource-card-corner-radius: 8px;
+  }
+
+  .search-modal__content .predictive-search-results__card {
+    border-radius: 8px;
+  }
+
+  .search-modal__content .predictive-search-results__card:is(:hover, :focus-within, [aria-selected='true']) {
+    background-color: #f9f3ea;
+  }
+
+  .search-modal__content :is(
+    .resource-card,
+    .resource-card__media,
+    .resource-card__image,
+    .resource-card__image--secondary,
+    .resource-card__image-placeholder,
+    .resource-card__image-wrapper,
+    .resource-card__collection-image
+  ) {
+    border-radius: 8px;
+  }
+
+  .search-modal__content :is(
+    .resource-card__media,
+    .resource-card__image-wrapper
+  ) {
+    overflow: hidden;
+  }
+
   /* Hide the default dialog backdrop on small screens */
   @media screen and (max-width: 749px) {
     .search-modal__content::backdrop {
