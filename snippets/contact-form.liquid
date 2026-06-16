@@ -48,7 +48,7 @@
       </label>
       <label class="cf-type-option">
         <input class="cf-type-radio" type="radio" name="contact[request_type]" value="withdrawal-form">
-        <span class="cf-type-label">Withdrawal form</span>
+        <span class="cf-type-label">Withdrawal Form</span>
       </label>
     </div>
 
@@ -86,6 +86,19 @@
             aria-required="true"
           >
           <label class="cf-label" for="cf-email">Email <span class="cf-req">*</span></label>
+        </div>
+
+        <!-- Full Name (Withdrawal Form only) -->
+        <div class="cf-field cf-field--labeled" id="cf-field-full-name" hidden>
+          <input
+            type="text"
+            id="cf-full-name"
+            name="contact[full_name]"
+            class="contact-form__input"
+            autocomplete="name"
+            placeholder=" "
+          >
+          <label class="cf-label" for="cf-full-name">Full Name <span class="cf-req">*</span></label>
         </div>
 
         <!-- Textarea -->
@@ -155,18 +168,21 @@
       textareaPlaceholder: 'Tell us what happened',
       textareaRequired: true,
       showOrderNumber: true,
+      showFullName: false,
       showUpload: true
     },
     'withdrawal-form': {
-      textareaPlaceholder: 'Tell us what happened',
+      textareaPlaceholder: 'Item(s) you wish to withdraw from *',
       textareaRequired: true,
       showOrderNumber: true,
-      showUpload: true
+      showFullName: true,
+      showUpload: false
     },
     'general-inquiry': {
       textareaPlaceholder: 'Message *',
       textareaRequired: true,
       showOrderNumber: false,
+      showFullName: false,
       showUpload: false
     }
   };
@@ -203,6 +219,14 @@
     if (orderField) {
       orderField.hidden = !cfg.showOrderNumber;
       if (orderInput) orderInput.required = cfg.showOrderNumber;
+    }
+
+    // Toggle full name
+    var fullNameField = document.getElementById('cf-field-full-name');
+    var fullNameInput = document.getElementById('cf-full-name');
+    if (fullNameField) {
+      fullNameField.hidden = !cfg.showFullName;
+      if (fullNameInput) fullNameInput.required = !!cfg.showFullName;
     }
 
     // Update textarea
