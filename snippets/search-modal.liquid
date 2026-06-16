@@ -218,16 +218,20 @@
     }
   }
 
+  .search-modal__content::backdrop {
+    background: rgba(255, 255, 255, 0.81);
+    backdrop-filter: none;
+  }
+
+  .search-modal__content[open]::backdrop {
+    animation: none;
+  }
+
   .dialog-modal[open].search-modal__content {
     transform-origin: bottom center;
     animation: search-element-slide-in-bottom 300ms var(--ease-out-quad) forwards;
     border-radius: var(--search-border-radius);
     box-shadow: var(--shadow-popover);
-
-    &::backdrop {
-      animation: backdropFilter var(--animation-speed) var(--animation-easing) forwards;
-      background: rgba(255, 255, 255, .45);
-    }
   }
 
   .dialog-modal.search-modal__content.dialog-closing {
