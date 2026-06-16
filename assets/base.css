@@ -4417,6 +4417,7 @@ text-component {
   --green: #899800;
   --purple: #DBDBFF;
   --baf-footer-overscroll-background: var(--purple);
+  --baf-mobile-overscroll-background: var(--beige);
   --color-black: var(--brown);
 }
 

@@ -35,12 +35,13 @@
 {% style %}
   :root {
     --baf-footer-overscroll-background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
+    --baf-mobile-overscroll-background: #fffaf1;
   }
 
   @media screen and (max-width: 749px) {
     html,
     body {
-      background-color: #fffaf1;
+      background-color: var(--baf-mobile-overscroll-background, #fffaf1);
     }
   }
 {% endstyle %}
@@ -51,7 +52,6 @@
     const footerThemeColor = {{ section.settings.color_scheme.settings.background | json }};
     const pageThemeColor = '#fffaf1';
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (!metaThemeColor) return;
 
     let frame = null;
 
@@ -67,23 +67,26 @@
         body.offsetHeight
       );
 
-      return scrollHeight - (scrollTop + viewportHeight) <= 8;
+      return scrollHeight - (scrollTop + viewportHeight) <= 96;
     };
 
-    const updateThemeColor = () => {
+    const updateOverscrollColor = () => {
       frame = null;
-      if (!mobileMedia.matches) return;
-      metaThemeColor.setAttribute('content', isAtPageBottom() ? footerThemeColor : pageThemeColor);
+      const canvasColor = mobileMedia.matches && isAtPageBottom() ? footerThemeColor : pageThemeColor;
+      document.documentElement.style.setProperty('--baf-mobile-overscroll-background', canvasColor);
+      metaThemeColor?.setAttribute('content', canvasColor);
     };
 
     const requestUpdate = () => {
       if (frame !== null) return;
-      frame = window.requestAnimationFrame(updateThemeColor);
+      frame = window.requestAnimationFrame(updateOverscrollColor);
     };
 
     window.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', requestUpdate);
     window.addEventListener('orientationchange', requestUpdate);
+    window.visualViewport?.addEventListener('scroll', requestUpdate, { passive: true });
+    window.visualViewport?.addEventListener('resize', requestUpdate);
 
     if (mobileMedia.addEventListener) {
       mobileMedia.addEventListener('change', requestUpdate);
@@ -91,7 +94,7 @@
       mobileMedia.addListener(requestUpdate);
     }
 
-    updateThemeColor();
+    updateOverscrollColor();
   })();
 </script>
 
