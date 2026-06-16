@@ -403,17 +403,20 @@
 @media screen and (max-width: 749px) {
   .artist-collection {
     --artist-info-top-offset: calc(clamp(18px, 4svh, 40px) + 10px);
-    --artist-mobile-intro-gap: clamp(44px, 12vw, 72px);
-    --artist-mobile-products-offset: clamp(300px, 76vw, 440px);
+    --artist-mobile-stage-gap: clamp(220px, 58vw, 320px);
+    --baf-fixed-layer-start-offset: calc(var(--baf-scroll-subnav-height) + var(--artist-mobile-stage-gap));
   }
 
-  .artist-collection.baf-fixed-layer:not(.is-fixed-active):not(.is-fixed-after) .artist-collection__hero,
-  .artist-collection.baf-fixed-layer:not(.is-fixed-active):not(.is-fixed-after) .artist-collection__hero-outline {
-    visibility: hidden;
+  .artist-collection.baf-fixed-layer .artist-collection__sticky-stage {
+    margin-top: var(--artist-mobile-stage-gap);
+  }
+
+  .artist-collection.baf-fixed-layer .artist-collection__info {
+    margin-top: calc((var(--baf-layer-height) * -1) + var(--artist-info-top-offset) - var(--artist-mobile-stage-gap));
   }
 
   .artist-collection.baf-fixed-layer .artist-collection__products {
-    margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33 + var(--artist-mobile-products-offset));
+    margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33 + var(--artist-mobile-stage-gap));
   }
 }
 

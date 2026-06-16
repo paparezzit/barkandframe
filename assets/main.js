@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fixedLayerMedia = window.matchMedia('(max-width: 989px), (hover: none), (pointer: coarse)');
-  const artistMobileIntroMedia = window.matchMedia('(max-width: 749px)');
   const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection'));
   let fixedLayerFrame = null;
 
@@ -101,15 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const layerHeight = parseFloat(section.style.getPropertyValue('--baf-layer-height')) || 0;
       const sectionTop = section.getBoundingClientRect().top + scrollY;
       const sectionHeight = section.offsetHeight;
-      let start = sectionTop - top;
-      if (artistMobileIntroMedia.matches && section.classList.contains('artist-collection')) {
-        const info = section.querySelector('.artist-collection__info');
-        if (info) {
-          const introGap = parseFloat(getComputedStyle(section).getPropertyValue('--artist-mobile-intro-gap')) || 0;
-          const infoBottom = info.getBoundingClientRect().bottom + scrollY;
-          start = Math.max(start, infoBottom + introGap - top);
-        }
-      }
+      const startOffset = parseFloat(getComputedStyle(section).getPropertyValue('--baf-fixed-layer-start-offset')) || 0;
+      const start = sectionTop + startOffset - top;
       const end = sectionTop + sectionHeight - layerHeight - top;
 
       if (scrollY >= end) {
@@ -175,11 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setStableScrollMetrics();
     measureFixedLayers();
   });
-  artistMobileIntroMedia.addEventListener?.('change', () => {
-    setStableScrollMetrics();
-    measureFixedLayers();
-  });
-
   const floatingParallaxPattern = ["0svh", "-20svh", "-10svh", "0svh", "-20svh"];
   document.querySelectorAll(".floating-images__holder > .product-card--floating").forEach((card, index) => {
     if (!card.dataset.parallax) {
