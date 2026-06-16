@@ -27,7 +27,7 @@
 {% stylesheet %}
   /* Search modal style */
   .search-modal {
-    --search-border-radius: 10px;
+    --search-border-radius: 40px;
     --search-border-width: var(--style-border-width);
   }
 
@@ -49,13 +49,14 @@
 
     padding: 0;
     border: 1px solid transparent;
+    border-radius: var(--search-border-radius);
     background: #fffaf1;
     color: #4c443f;
+    overflow: hidden;
 
     @media screen and (min-width: 750px) {
       width: var(--modal-width);
       margin-block-start: var(--modal-top-margin);
-      overflow: hidden;
     }
   }
 
@@ -167,10 +168,6 @@
     animation: search-element-slide-in-bottom 300ms var(--ease-out-quad) forwards;
     border-radius: var(--search-border-radius);
     box-shadow: var(--shadow-popover);
-
-    @media screen and (max-width: 749px) {
-      border-radius: 0;
-    }
   }
 
   .dialog-modal.search-modal__content.dialog-closing {
