@@ -5297,15 +5297,18 @@ slideshow-component.slideshow--homepage{
 
 .contact-company-info__inner {
   width: 100%;
-  max-width: 330px;
+  max-width: 430px;
 }
 
 .contact-company-info__icon {
+  display: flex;
+  justify-content: center;
   line-height: 0;
   margin-bottom: 18px;
 }
 
 .contact-company-info__icon img {
+  display: block;
   width: 46px;
   height: auto;
 }
@@ -5314,7 +5317,7 @@ slideshow-component.slideshow--homepage{
   margin: 0 0 54px;
   color: var(--brown);
   font-family: var(--baf-text-bold-family);
-  font-size: var(--baf-text-bold-medium-size);
+  font-size: var(--baf-text-bold-large-size);
   font-weight: var(--baf-text-bold-weight);
   line-height: 1.15;
   text-transform: uppercase;
@@ -5332,7 +5335,7 @@ slideshow-component.slideshow--homepage{
   margin: 0;
   color: var(--brown);
   font-family: var(--baf-text-family);
-  font-size: var(--baf-text-small-size);
+  font-size: var(--baf-text-medium-size);
   font-weight: var(--baf-text-weight);
   line-height: 1.18;
 }
@@ -5350,7 +5353,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .contact-company-info__inner {
-    max-width: 270px;
+    max-width: 300px;
   }
 
   .contact-company-info__icon {
