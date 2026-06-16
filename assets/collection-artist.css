@@ -14,6 +14,11 @@
   display: contents;
 }
 
+.artist-collection__hero-stack {
+  display: contents;
+  pointer-events: none;
+}
+
 .artist-collection__showcase {
   position: relative;
   margin-top: clamp(24px, 6vw, 45px);
@@ -286,8 +291,8 @@
   position: relative;
 }
 
-.artist-collection__showcase.baf-fixed-layer .artist-collection__hero,
-.artist-collection__showcase.baf-fixed-layer .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero-stack {
+  display: block;
   position: absolute;
   inset: auto 0 0;
   top: 0;
@@ -296,23 +301,44 @@
   margin-top: 0;
 }
 
-.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero,
-.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero,
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero-outline {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  min-height: 0;
+  margin-top: 0;
+}
+
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero {
+  z-index: 0;
+  pointer-events: none;
+}
+
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero-outline {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-stack {
   position: fixed;
+  inset: auto 0 auto;
   top: var(--baf-layer-top);
   height: var(--baf-layer-height);
 }
 
-.artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero,
-.artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero-stack {
   position: absolute;
   top: var(--baf-layer-after-top);
+  right: 0;
+  left: 0;
   height: var(--baf-layer-height);
 }
 
 .artist-collection__showcase.baf-fixed-layer .artist-collection__products {
   margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33);
   padding-bottom: calc((var(--baf-layer-height) + var(--baf-layer-top)) * 0.8);
+  z-index: 1;
 }
 
 .artist-collection__artist-bio {
