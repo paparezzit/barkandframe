@@ -319,10 +319,24 @@
 }
 
 .artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-stack {
+  position: static;
+  height: var(--baf-layer-height);
+}
+
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero,
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
   position: fixed;
   inset: auto 0 auto;
   top: var(--baf-layer-top);
   height: var(--baf-layer-height);
+}
+
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero {
+  z-index: 0;
+}
+
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
+  z-index: 3;
 }
 
 .artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero-stack {
