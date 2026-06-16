@@ -16,6 +16,7 @@
           </h2>
 
           <div class="dogstrust__text">
+            <img class="dogstrust__text-shape" src="{{ 'bark-and-frame-foundation.png' | asset_url }}" alt="" aria-hidden="true" width="2480" height="3312">
             <p>{{ section.settings.text }}</p>
           </div>
 
@@ -41,6 +42,13 @@
     mask-size: 100% 100%;
     -webkit-mask-position: center top;
     mask-position: center top;
+  }
+
+  @media(max-width: 749px){
+    .dogstrust__text-shape {
+      -webkit-shape-outside: url("{{ 'bark-and-frame-foundation.png' | asset_url }}");
+      shape-outside: url("{{ 'bark-and-frame-foundation.png' | asset_url }}");
+    }
   }
 </style>
 
@@ -109,6 +117,10 @@
     .dogstrust__text{
       color: var(--brown);
       font-size: var(--baf-text-medium-size);
+    }
+
+    .dogstrust__text-shape{
+      display: none;
     }
 
     .dogstrust__button{
@@ -209,31 +221,34 @@
       }
 
       .dogstrust__text{
-        display: flow-root;
+        display: block;
         margin-bottom: 0;
+        text-align: left;
       }
 
-      .dogstrust__text::before{
-        content: '';
+      .dogstrust__text-shape{
+        display: block;
         float: left;
-        width: min(46%, 182px);
-        height: clamp(120px, 27vw, 148px);
-        margin-top: clamp(42px, 9vw, 52px);
-        -webkit-shape-outside: polygon(0 0, 50% 0, 78% 15%, 96% 42%, 100% 66%, 82% 88%, 52% 100%, 0 100%);
-        shape-outside: polygon(0 0, 50% 0, 78% 15%, 96% 42%, 100% 66%, 82% 88%, 52% 100%, 0 100%);
+        width: calc(((100vw - (var(--page-margin) * 2)) * 0.276) + 181px);
+        max-width: none;
+        height: auto;
+        margin: clamp(12px, 5vw, 28px) 0 0 calc((var(--page-margin) * -1) - 85px);
+        opacity: 0;
         shape-margin: 5px;
+        shape-image-threshold: 0.08;
         pointer-events: none;
       }
 
       .dogstrust__text p{
         margin-bottom: 0;
+        text-align: left;
       }
 
       .dogstrust__button{
         display: flow-root;
         position: relative;
         z-index: 3;
-        width: 58%;
+        width: calc(58% + 18px);
         margin-left: 42%;
         margin-top: 8px;
         padding-right: 0;
