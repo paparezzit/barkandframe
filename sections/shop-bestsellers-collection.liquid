@@ -432,9 +432,10 @@
     margin-block-start: calc(-1 * var(--hover-lift-amount));
     margin-inline: calc((100% - 100vw) / 2);
     padding-block-start: var(--hover-lift-amount);
-    overflow-x: hidden;
+    overflow-x: auto;
     scrollbar-width: none;
-    -webkit-overflow-scrolling: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
   }
 
   .shop-products__rail::-webkit-scrollbar {
@@ -442,40 +443,13 @@
   }
 
   .shop-products__rail-track {
-    --shop-products-rail-x: 0px;
-    --shop-products-rail-duration: 60s;
-
     display: flex;
     gap: var(--shop-products-grid-gap);
     width: max-content;
     margin: 0;
     padding: 0;
     list-style: none;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
     backface-visibility: hidden;
-  }
-
-  .shop-products__rail[data-auto-rail-ready="true"] .shop-products__rail-track {
-    animation: shop-products-rail-marquee var(--shop-products-rail-duration) linear infinite;
-  }
-
-  @keyframes shop-products-rail-marquee {
-    to {
-      transform: translate3d(var(--shop-products-rail-x), 0, 0);
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .shop-products__rail:hover .shop-products__rail-track {
-      animation-play-state: paused;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .shop-products__rail-track {
-      animation: none;
-    }
   }
 
   .shop-products__rail-track .product-card__content {
@@ -626,27 +600,52 @@
       const track = rail.querySelector('.shop-products__rail-track');
       if (!track) return;
 
-      const pixelsPerSecond = 27;
+      let frame = null;
+      let resizeObserver = null;
+      let lastTime = null;
+      let loopPoint = 0;
+      let pauseUntil = 0;
+      const pixelsPerMs = 0.027;
       const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
+      const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       let refreshFrame = null;
-      let resizeObserver = null;
 
-      const refreshRail = () => {
+      const measureLoopPoint = () => {
         const items = track.children;
         const firstItem = items[0];
         const nextSetFirstItem = cardCount > 0 ? items[cardCount] : null;
-        const loopPoint = firstItem && nextSetFirstItem
+        loopPoint = firstItem && nextSetFirstItem
           ? nextSetFirstItem.offsetLeft - firstItem.offsetLeft
           : track.scrollWidth / 8;
+      };
 
-        if (loopPoint <= 0 || reduceMotion.matches) {
+      const normalizeScroll = () => {
+        if (loopPoint <= 0) return;
+        const minScroll = loopPoint;
+        const maxScroll = loopPoint * 6;
+        const resetAmount = loopPoint * 3;
+
+        if (rail.scrollLeft < minScroll) {
+          rail.scrollLeft += resetAmount;
+        } else if (rail.scrollLeft > maxScroll) {
+          rail.scrollLeft -= resetAmount;
+        }
+      };
+
+      const refreshRail = () => {
+        measureLoopPoint();
+
+        if (loopPoint <= 0) {
           rail.dataset.autoRailReady = 'false';
           return;
         }
 
-        track.style.setProperty('--shop-products-rail-x', `${-loopPoint}px`);
-        track.style.setProperty('--shop-products-rail-duration', `${(loopPoint / pixelsPerSecond).toFixed(3)}s`);
+        if (!rail.dataset.autoRailReady || rail.dataset.autoRailReady === 'false') {
+          rail.scrollLeft = loopPoint * 3;
+        }
+
+        normalizeScroll();
         rail.dataset.autoRailReady = 'true';
       };
 
@@ -656,6 +655,23 @@
           refreshFrame = null;
           refreshRail();
         });
+      };
+
+      const pauseForGesture = () => {
+        pauseUntil = performance.now() + 1200;
+      };
+
+      const tick = (time) => {
+        if (lastTime === null) lastTime = time;
+        const delta = Math.min(time - lastTime, 64);
+        lastTime = time;
+
+        if (rail.dataset.autoRailReady === 'true' && !reduceMotion.matches && time >= pauseUntil) {
+          rail.scrollLeft += delta * pixelsPerMs;
+          normalizeScroll();
+        }
+
+        frame = window.requestAnimationFrame(tick);
       };
 
       refreshRail();
@@ -670,15 +686,37 @@
       });
 
       window.addEventListener('resize', queueRefreshRail);
+      rail.addEventListener('scroll', normalizeScroll, { passive: true });
+      rail.addEventListener('touchstart', pauseForGesture, { passive: true });
+      rail.addEventListener('touchmove', pauseForGesture, { passive: true });
+      rail.addEventListener('pointerdown', pauseForGesture);
+      rail.addEventListener('wheel', pauseForGesture, { passive: true });
+
+      if (canHover) {
+        rail.addEventListener('mouseenter', pauseForGesture);
+        rail.addEventListener('pointerenter', pauseForGesture);
+      }
 
       if (reduceMotion.addEventListener) {
         reduceMotion.addEventListener('change', queueRefreshRail);
       }
 
+      frame = window.requestAnimationFrame(tick);
+
       document.addEventListener('shopify:section:unload', () => {
+        if (frame) window.cancelAnimationFrame(frame);
         if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
         if (resizeObserver) resizeObserver.disconnect();
         window.removeEventListener('resize', queueRefreshRail);
+        rail.removeEventListener('scroll', normalizeScroll);
+        rail.removeEventListener('touchstart', pauseForGesture);
+        rail.removeEventListener('touchmove', pauseForGesture);
+        rail.removeEventListener('pointerdown', pauseForGesture);
+        rail.removeEventListener('wheel', pauseForGesture);
+        if (canHover) {
+          rail.removeEventListener('mouseenter', pauseForGesture);
+          rail.removeEventListener('pointerenter', pauseForGesture);
+        }
         if (reduceMotion.removeEventListener) {
           reduceMotion.removeEventListener('change', queueRefreshRail);
         }
