@@ -74,22 +74,31 @@
 {% stylesheet %}
   .search-page-input {
     width: 100%;
-    color: var(--color-input-text);
-    background-color: var(--color-input-background);
+    color: #4c443f;
+    background-color: #f4efe5;
     padding-block: var(--padding-lg);
     padding-inline: calc(var(--icon-size-lg) + var(--margin-xl) * 1.5);
     text-overflow: ellipsis;
     overflow: hidden;
-    border-radius: var(--style-border-radius-inputs);
-    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    border-radius: 15px;
+    border: var(--style-border-width-inputs) solid transparent;
+    outline: none;
 
     @media screen and (max-width: 749px) {
       padding-inline: calc(var(--margin-xs) + var(--icon-size-lg) + var(--padding-md));
     }
   }
 
+  .search-page-input:is(:focus, :focus-visible, :focus-within, :hover) {
+    color: #4c443f;
+    background-color: #f4efe5;
+    border-color: transparent;
+    outline: none;
+    box-shadow: none;
+  }
+
   .search-page-input::placeholder {
-    color: rgb(var(--color-input-text-rgb) / var(--opacity-subdued-text));
+    color: rgb(76 68 63 / 70%);
   }
 
   .search-page-input__parent {
@@ -109,7 +118,7 @@
     top: 0;
     max-width: var(--size-style-width);
     align-items: center;
-    background-color: var(--color-background);
+    background-color: transparent;
     margin: var(--margin-2xl) 0 var(--margin-md);
 
     @media screen and (max-width: 749px) {
@@ -135,7 +144,7 @@
   }
 
   search-page-input-component .search__icon svg {
-    color: var(--color-input-text);
+    color: #4c443f;
   }
 
   search-page-input-component .search__icon {
@@ -148,7 +157,7 @@
 
   search-page-input-component .search__reset-button {
     border-radius: 100%;
-    color: var(--color-input-text);
+    color: #4c443f;
     right: var(--margin-lg);
     cursor: pointer;
     opacity: 0;
@@ -176,6 +185,18 @@
     width: var(--icon-size-lg);
     height: var(--icon-size-lg);
     transition: transform var(--animation-speed) var(--animation-easing);
+  }
+
+  search-page-input-component .search__reset-button:hover .search__reset-button-icon,
+  search-page-input-component .search__reset-button:focus-visible .search__reset-button-icon {
+    background-color: #f9f3ea;
+    border-radius: 15px;
+  }
+
+  search-page-input-component .search__reset-button:focus,
+  search-page-input-component .search__reset-button:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 
   search-page-input-component .search__reset-button:active .search__reset-button-icon {
