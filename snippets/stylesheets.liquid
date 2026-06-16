@@ -1,2 +1,2 @@
 {{ 'overflow-list.css' | asset_url | preload_tag: as: 'style' }}
-{{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'base.css' | asset_url | append: '&baf_cache=overscroll-20260616' | stylesheet_tag: preload: true }}

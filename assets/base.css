@@ -40,25 +40,6 @@ body {
   }
 }
 
-@media screen and (max-width: 749px) {
-  #header-group,
-  main.content-for-layout {
-    background: var(--beige);
-  }
-
-  footer.shopify-section-group-footer-group::before {
-    content: '';
-    position: absolute;
-    z-index: -3;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--baf-radius-xl);
-    background: var(--beige);
-    pointer-events: none;
-  }
-}
-
 :root {
   --close-icon-size: 24px;
   --hover-lift-amount: 4px;
@@ -77,12 +58,6 @@ html {
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);
   scroll-behavior: auto !important;
   background-color: var(--beige);
-  background-image: linear-gradient(
-    to bottom,
-    var(--beige) 0 50%,
-    var(--baf-footer-overscroll-background, var(--purple)) 50% 100%
-  );
-  background-attachment: fixed;
 }
 
 html[scroll-lock] {
@@ -4417,8 +4392,40 @@ text-component {
   --green: #899800;
   --purple: #DBDBFF;
   --baf-footer-overscroll-background: var(--purple);
-  --baf-mobile-overscroll-background: var(--beige);
   --color-black: var(--brown);
+}
+
+html {
+  background: var(--beige) !important;
+}
+
+html.is-baf-bottom-overscroll {
+  background: var(--baf-footer-overscroll-background, var(--purple)) !important;
+}
+
+body {
+  background: var(--beige) !important;
+}
+
+html.is-baf-bottom-overscroll body {
+  background: var(--baf-footer-overscroll-background, var(--purple)) !important;
+}
+
+#header-group,
+main.content-for-layout {
+  background: var(--beige);
+}
+
+footer.shopify-section-group-footer-group::before {
+  content: '';
+  position: absolute;
+  z-index: -3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: var(--beige);
+  pointer-events: none;
 }
 
 :where(

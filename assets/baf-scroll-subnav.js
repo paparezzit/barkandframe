@@ -16,6 +16,21 @@
   if (typeof state.hidden !== 'boolean') state.hidden = false;
 
   const getNavRoot = (nav) => nav.closest('.artist-collection, .shop-products') || document.documentElement;
+  const getCurrentScrollY = () => Math.max(window.scrollY || 0, 0);
+
+  const revealAtTop = () => {
+    if (getCurrentScrollY() > 4) return;
+
+    state.hidden = false;
+    state.lastScrollY = 0;
+    state.navs.forEach((nav) => {
+      if (!document.documentElement.contains(nav)) {
+        state.navs.delete(nav);
+        return;
+      }
+      nav.classList.remove('is-hidden-on-scroll');
+    });
+  };
 
   const measureNavs = () => {
     state.navs.forEach((nav) => {
@@ -45,6 +60,7 @@
     }
   });
 
+  revealAtTop();
   queueMeasureNavs();
 
   if (state.bound) return;
@@ -88,6 +104,7 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', queueMeasureNavs);
+  window.addEventListener('pageshow', revealAtTop);
 
   const bindLenis = () => {
     const lenis = window.BarkFrameLenis;

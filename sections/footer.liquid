@@ -35,68 +35,8 @@
 {% style %}
   :root {
     --baf-footer-overscroll-background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
-    --baf-mobile-overscroll-background: #fffaf1;
-  }
-
-  @media screen and (max-width: 749px) {
-    html,
-    body {
-      background-color: var(--baf-mobile-overscroll-background, #fffaf1);
-    }
   }
 {% endstyle %}
-
-<script>
-  (() => {
-    const mobileMedia = window.matchMedia('(max-width: 749px)');
-    const footerThemeColor = {{ section.settings.color_scheme.settings.background | json }};
-    const pageThemeColor = '#fffaf1';
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
-    let frame = null;
-
-    const isAtPageBottom = () => {
-      const root = document.documentElement;
-      const body = document.body;
-      const scrollTop = window.scrollY || root.scrollTop || body.scrollTop || 0;
-      const viewportHeight = window.innerHeight || root.clientHeight || 0;
-      const scrollHeight = Math.max(
-        root.scrollHeight,
-        body.scrollHeight,
-        root.offsetHeight,
-        body.offsetHeight
-      );
-
-      return scrollHeight - (scrollTop + viewportHeight) <= 96;
-    };
-
-    const updateOverscrollColor = () => {
-      frame = null;
-      const canvasColor = mobileMedia.matches && isAtPageBottom() ? footerThemeColor : pageThemeColor;
-      document.documentElement.style.setProperty('--baf-mobile-overscroll-background', canvasColor);
-      metaThemeColor?.setAttribute('content', canvasColor);
-    };
-
-    const requestUpdate = () => {
-      if (frame !== null) return;
-      frame = window.requestAnimationFrame(updateOverscrollColor);
-    };
-
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
-    window.addEventListener('orientationchange', requestUpdate);
-    window.visualViewport?.addEventListener('scroll', requestUpdate, { passive: true });
-    window.visualViewport?.addEventListener('resize', requestUpdate);
-
-    if (mobileMedia.addEventListener) {
-      mobileMedia.addEventListener('change', requestUpdate);
-    } else if (mobileMedia.addListener) {
-      mobileMedia.addListener(requestUpdate);
-    }
-
-    updateOverscrollColor();
-  })();
-</script>
 
 {% stylesheet %}
 footer.shopify-section-group-footer-group{
@@ -104,6 +44,7 @@ footer.shopify-section-group-footer-group{
   margin: 0;
   border-radius: var(--baf-radius-xl) var(--baf-radius-xl) 0 0;
   overflow: visible;
+  position: relative;
   padding: 0 20px;
 
   > .section-background,

@@ -844,7 +844,7 @@
   })();
 </script>
 
-{{ 'baf-scroll-subnav.js' | asset_url | script_tag }}
+{{ 'baf-scroll-subnav.js' | asset_url | append: '&baf_cache=overscroll-20260616' | script_tag }}
 
 {% schema %}
 {

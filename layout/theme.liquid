@@ -15,6 +15,83 @@
     <!-- End Google Tag Manager -->
 
     {%- render 'stylesheets' -%}
+    <style id="baf-overscroll-canvas">
+      html {
+        background: var(--beige, #fffaf1) !important;
+      }
+
+      html.is-baf-bottom-overscroll {
+        background: var(--baf-footer-overscroll-background, #dbdbff) !important;
+      }
+
+      body {
+        background: var(--beige, #fffaf1) !important;
+      }
+
+      html.is-baf-bottom-overscroll body {
+        background: var(--baf-footer-overscroll-background, #dbdbff) !important;
+      }
+
+      #header-group,
+      main.content-for-layout {
+        background: var(--beige, #fffaf1);
+      }
+
+      footer.shopify-section-group-footer-group {
+        background-color: var(--beige, #fffaf1);
+        isolation: isolate;
+        position: relative;
+      }
+
+      footer.shopify-section-group-footer-group::before {
+        content: '';
+        position: absolute;
+        z-index: -3;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 160px;
+        background: var(--beige, #fffaf1);
+        pointer-events: none;
+      }
+    </style>
+    <script>
+      (() => {
+        const syncOverscrollCanvas = () => {
+          const root = document.documentElement;
+          const body = document.body;
+          if (!body) return;
+
+          const scrollTop = Math.max(window.scrollY || root.scrollTop || body.scrollTop || 0, 0);
+          const viewportHeight = window.innerHeight || root.clientHeight || 0;
+          const scrollHeight = Math.max(root.scrollHeight, body.scrollHeight, root.offsetHeight, body.offsetHeight);
+          const scrollableDistance = scrollHeight - viewportHeight;
+          const remainingDistance = scrollHeight - (scrollTop + viewportHeight);
+
+          root.classList.toggle(
+            'is-baf-bottom-overscroll',
+            scrollTop > 8 && scrollableDistance > 16 && remainingDistance <= 96
+          );
+        };
+
+        let frame = null;
+        const queueOverscrollCanvas = () => {
+          if (frame !== null) return;
+          frame = window.requestAnimationFrame(() => {
+            frame = null;
+            syncOverscrollCanvas();
+          });
+        };
+
+        document.addEventListener('DOMContentLoaded', syncOverscrollCanvas, { once: true });
+        window.addEventListener('scroll', queueOverscrollCanvas, { passive: true });
+        window.addEventListener('resize', queueOverscrollCanvas, { passive: true });
+        window.addEventListener('orientationchange', queueOverscrollCanvas, { passive: true });
+        window.visualViewport?.addEventListener('scroll', queueOverscrollCanvas, { passive: true });
+        window.visualViewport?.addEventListener('resize', queueOverscrollCanvas, { passive: true });
+        window.addEventListener('pageshow', queueOverscrollCanvas);
+      })();
+    </script>
 
     {%- if settings.favicon != blank -%}
       <link
@@ -42,7 +119,7 @@
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
 
-    <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'main.js' | asset_url | append: '&baf_cache=overscroll-20260616' }}" defer="defer"></script>
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}

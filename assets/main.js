@@ -16,64 +16,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setStableScrollMetrics();
 
-  const mobileOverscrollMedia = window.matchMedia('(max-width: 749px)');
-  const metaThemeColor = document.head.querySelector('meta[name="theme-color"]');
-  let overscrollFrame = null;
+  let overscrollCanvasFrame = null;
+  const setOverscrollCanvas = () => {
+    overscrollCanvasFrame = null;
 
-  const getFooterOverscrollColor = () => {
-    const footerBackground = document.querySelector('footer.shopify-section-group-footer-group .section-background');
-    const footerColor = footerBackground ? getComputedStyle(footerBackground).backgroundColor : '';
-
-    return footerColor && footerColor !== 'rgba(0, 0, 0, 0)' ? footerColor : '#dbdbff';
-  };
-
-  const isNearPageBottom = () => {
-    const body = document.body;
-    const scrollTop = window.scrollY || root.scrollTop || body.scrollTop || 0;
+    const scrollTop = Math.max(window.scrollY || root.scrollTop || document.body.scrollTop || 0, 0);
     const viewportHeight = window.innerHeight || root.clientHeight || 0;
     const scrollHeight = Math.max(
       root.scrollHeight,
-      body.scrollHeight,
+      document.body.scrollHeight,
       root.offsetHeight,
-      body.offsetHeight
+      document.body.offsetHeight
     );
+    const scrollableDistance = scrollHeight - viewportHeight;
+    const remainingDistance = scrollHeight - (scrollTop + viewportHeight);
 
-    return scrollHeight - (scrollTop + viewportHeight) <= 96;
+    root.classList.toggle(
+      'is-baf-bottom-overscroll',
+      scrollTop > 8 && scrollableDistance > 16 && remainingDistance <= 96
+    );
   };
 
-  const updateMobileOverscrollCanvas = () => {
-    overscrollFrame = null;
-
-    if (!mobileOverscrollMedia.matches) {
-      root.style.removeProperty('--baf-mobile-overscroll-background');
-      root.style.removeProperty('background-color');
-      document.body.style.removeProperty('background-color');
-      return;
-    }
-
-    const canvasColor = isNearPageBottom() ? getFooterOverscrollColor() : '#fffaf1';
-    root.style.setProperty('--baf-mobile-overscroll-background', canvasColor);
-    root.style.setProperty('background-color', canvasColor);
-    document.body.style.setProperty('background-color', canvasColor);
-    metaThemeColor?.setAttribute('content', canvasColor);
+  const queueOverscrollCanvas = () => {
+    if (overscrollCanvasFrame !== null) return;
+    overscrollCanvasFrame = window.requestAnimationFrame(setOverscrollCanvas);
   };
 
-  const requestMobileOverscrollUpdate = () => {
-    if (overscrollFrame !== null) return;
-    overscrollFrame = window.requestAnimationFrame(updateMobileOverscrollCanvas);
-  };
-
-  updateMobileOverscrollCanvas();
-  window.addEventListener('scroll', requestMobileOverscrollUpdate, { passive: true });
-  window.addEventListener('resize', requestMobileOverscrollUpdate);
-  window.addEventListener('orientationchange', requestMobileOverscrollUpdate);
-  window.visualViewport?.addEventListener('scroll', requestMobileOverscrollUpdate, { passive: true });
-  window.visualViewport?.addEventListener('resize', requestMobileOverscrollUpdate);
-  if (mobileOverscrollMedia.addEventListener) {
-    mobileOverscrollMedia.addEventListener('change', requestMobileOverscrollUpdate);
-  } else if (mobileOverscrollMedia.addListener) {
-    mobileOverscrollMedia.addListener(requestMobileOverscrollUpdate);
-  }
+  setOverscrollCanvas();
+  window.addEventListener('scroll', queueOverscrollCanvas, { passive: true });
+  window.addEventListener('resize', queueOverscrollCanvas, { passive: true });
+  window.addEventListener('orientationchange', queueOverscrollCanvas, { passive: true });
+  window.visualViewport?.addEventListener('scroll', queueOverscrollCanvas, { passive: true });
+  window.visualViewport?.addEventListener('resize', queueOverscrollCanvas, { passive: true });
+  window.addEventListener('pageshow', queueOverscrollCanvas);
 
   const internalLinkHosts = new Set([
     window.location.hostname,
