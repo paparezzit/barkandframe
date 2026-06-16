@@ -5298,6 +5298,7 @@ slideshow-component.slideshow--homepage{
 .contact-company-info__inner {
   width: 100%;
   max-width: 430px;
+  transform: translateY(-12px);
 }
 
 .contact-company-info__icon {
