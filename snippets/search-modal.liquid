@@ -218,10 +218,25 @@
     animation: search-element-slide-in-bottom 300ms var(--ease-out-quad) forwards;
     border-radius: var(--search-border-radius);
     box-shadow: var(--shadow-popover);
+
+    &::backdrop {
+      animation: search-backdrop-lighten var(--animation-speed) var(--animation-easing) forwards;
+      background: rgb(255 255 255 / 45%);
+    }
   }
 
   .dialog-modal.search-modal__content.dialog-closing {
     animation: search-element-slide-out-bottom 200ms var(--ease-out-quad) forwards;
+  }
+
+  @keyframes search-backdrop-lighten {
+    from {
+      backdrop-filter: brightness(1);
+    }
+
+    to {
+      backdrop-filter: brightness(1.15);
+    }
   }
 
   .search-modal__content[open] {
