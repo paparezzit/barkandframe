@@ -303,6 +303,8 @@
       box-sizing: border-box;
 
       .dogstrust__content{
+        position: relative;
+        z-index: 2;
         margin: auto 0;
         padding-right: 0;
       }
@@ -310,7 +312,8 @@
 
     .dogstrust__wrapper{
       .dogstrust__bg{
-        overflow: hidden;
+        z-index: 1;
+        overflow: visible;
 
         img{
           top: -100px;
