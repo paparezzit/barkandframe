@@ -57,6 +57,9 @@
   class="resource-card{% if style == 'overlay' %} resource-card--overlay{% endif %}"
   href="{{ resource_url }}"
   data-resource-type="{{ resource_type }}"
+  {% if resource_type == 'product' %}
+    data-product-handle="{{ resource.handle }}"
+  {% endif %}
 >
   <a
     class="resource-card__link"

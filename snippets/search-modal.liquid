@@ -203,6 +203,15 @@
     overflow: hidden;
   }
 
+  .search-modal__content .resource-card:is(
+    [data-product-handle='framed-canvas-1'],
+    [data-product-handle='unframed-canvas'],
+    [data-product-handle='framed-poster']
+  ) .resource-card__media {
+    background: var(--cream);
+    aspect-ratio: var(--resource-card-aspect-ratio, 4 / 5);
+  }
+
   .search-modal__content .resource-card:is(:hover, :focus-within) .resource-card__image {
     opacity: 1 !important;
   }
