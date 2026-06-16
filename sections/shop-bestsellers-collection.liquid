@@ -229,14 +229,14 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    transition: opacity 0.16s ease, transform 0.16s ease;
-    will-change: transform;
+    transition: opacity 0.16s ease;
+    transform: translate3d(0, 0, 0);
   }
 
   .shop-products__nav.is-hidden-on-scroll {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(calc(-100% - 1px));
+    transform: translate3d(0, 0, 0);
   }
 
   .shop-products__nav::before,
@@ -427,13 +427,8 @@
     margin-block-start: calc(-1 * var(--hover-lift-amount));
     margin-inline: calc((100% - 100vw) / 2);
     padding-block-start: var(--hover-lift-amount);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .shop-products__rail[data-auto-rail-ready="true"] {
     overflow-x: hidden;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: auto;
   }
 
@@ -448,8 +443,27 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    transform: translate3d(var(--shop-products-rail-x, 0px), 0, 0);
+    transform: translate3d(0, 0, 0);
+    animation: shop-products-rail-marquee 44s linear infinite;
     will-change: transform;
+  }
+
+  @keyframes shop-products-rail-marquee {
+    to {
+      transform: translate3d(calc(-50% - (var(--shop-products-grid-gap) / 2)), 0, 0);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .shop-products__rail:hover .shop-products__rail-track {
+      animation-play-state: paused;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shop-products__rail-track {
+      animation: none;
+    }
   }
 
   .shop-products__rail-item {
@@ -571,7 +585,6 @@
 
 <script>
   (() => {
-    const rails = document.querySelectorAll('[data-shop-products-rail]');
     const stickyButton = document.querySelector('.collection-sticky-btn');
     const navLinks = Array.from(document.querySelectorAll('.shop-products__nav-link[href^="#shop-products-"]'));
     const navSections = navLinks
@@ -580,109 +593,6 @@
         section: document.querySelector(link.getAttribute('href')),
       }))
       .filter((item) => item.section);
-
-    rails.forEach((rail) => {
-      const track = rail.querySelector('.shop-products__rail-track');
-      if (!track) return;
-
-      let frame = null;
-      let resizeObserver = null;
-      let paused = false;
-      let lastTime = null;
-      let loopPoint = 0;
-      let position = 0;
-      const pixelsPerMs = 0.027;
-      const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
-      const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let refreshFrame = null;
-
-      const measureLoopPoint = () => {
-        const items = track.children;
-        const firstItem = items[0];
-        const nextSetFirstItem = cardCount > 0 ? items[cardCount] : null;
-        loopPoint = firstItem && nextSetFirstItem
-          ? nextSetFirstItem.offsetLeft - firstItem.offsetLeft
-          : track.scrollWidth / 2;
-      };
-
-      const normalizeScroll = () => {
-        if (loopPoint <= 0) return;
-        position %= loopPoint;
-        if (position < 0) position += loopPoint;
-      };
-
-      const applyPosition = () => {
-        track.style.setProperty('--shop-products-rail-x', `${-position}px`);
-      };
-
-      const refreshRail = () => {
-        measureLoopPoint();
-        normalizeScroll();
-        applyPosition();
-      };
-
-      const queueRefreshRail = () => {
-        if (refreshFrame) return;
-        refreshFrame = window.requestAnimationFrame(() => {
-          refreshFrame = null;
-          refreshRail();
-        });
-      };
-
-      const tick = (time) => {
-        if (lastTime === null) lastTime = time;
-        const delta = Math.min(time - lastTime, 64);
-        lastTime = time;
-
-        if (!paused && !reduceMotion.matches) {
-          position += delta * pixelsPerMs;
-          normalizeScroll();
-          applyPosition();
-        }
-
-        frame = window.requestAnimationFrame(tick);
-      };
-
-      const pauseRail = () => {
-        paused = true;
-      };
-
-      const resumeRail = () => {
-        paused = false;
-      };
-
-      rail.dataset.autoRailReady = 'true';
-      rail.scrollLeft = 0;
-      refreshRail();
-
-      if ('ResizeObserver' in window) {
-        resizeObserver = new ResizeObserver(queueRefreshRail);
-        resizeObserver.observe(track);
-      }
-
-      track.querySelectorAll('img').forEach((image) => {
-        if (!image.complete) image.addEventListener('load', queueRefreshRail, { once: true });
-      });
-
-      window.addEventListener('resize', queueRefreshRail);
-
-      if (canHover) {
-        rail.addEventListener('mouseenter', pauseRail);
-        rail.addEventListener('pointerenter', pauseRail);
-        rail.addEventListener('mouseleave', resumeRail);
-        rail.addEventListener('pointerleave', resumeRail);
-      }
-
-      frame = window.requestAnimationFrame(tick);
-
-      document.addEventListener('shopify:section:unload', () => {
-        if (frame) window.cancelAnimationFrame(frame);
-        if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
-        if (resizeObserver) resizeObserver.disconnect();
-        window.removeEventListener('resize', queueRefreshRail);
-      }, { once: true });
-    });
 
     if (navSections.length) {
       let navTicking = false;

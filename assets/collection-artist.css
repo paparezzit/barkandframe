@@ -22,14 +22,14 @@
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  transition: opacity 0.16s ease, transform 0.16s ease;
-  will-change: transform;
+  transition: opacity 0.16s ease;
+  transform: translate3d(0, 0, 0);
 }
 
 .artist-collection__nav.is-hidden-on-scroll {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(calc(-100% - 1px));
+  transform: translate3d(0, 0, 0);
 }
 
 .artist-collection__nav::before,
@@ -84,6 +84,7 @@
   margin-top: calc(-100svh + var(--header-height));
   z-index: 1;
   pointer-events: none;
+  transform: translate3d(var(--outline-sync-x, 0px), var(--outline-sync-y, 0px), 0);
 }
 
 .artist-collection__hero-outline .artist-collection__title {
