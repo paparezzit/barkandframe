@@ -36,6 +36,7 @@
 footer.shopify-section-group-footer-group{
   width: 100%;
   margin: 0;
+  position: relative;
   background-color: var(--beige);
   border-radius: var(--baf-radius-xl) var(--baf-radius-xl) 0 0;
   overflow: visible;
@@ -43,8 +44,17 @@ footer.shopify-section-group-footer-group{
 
   > .section-background,
   > .section{
-    background-color: var(--purple);
     border-radius: inherit;
+  }
+
+  > .section-background{
+    background-color: var(--purple) !important;
+    z-index: 0;
+  }
+
+  > .section{
+    position: relative;
+    z-index: 1;
   }
 
   .logo-block{
