@@ -5079,7 +5079,7 @@ slideshow-component.slideshow--homepage{
 .cf-notice {
   font-size: 14px;
   color: var(--brown);
-  font-weight: 700;
+  font-weight: var(--font-paragraph--weight);
   margin: 0;
   line-height: 1.3;
 }
