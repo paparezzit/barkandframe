@@ -23,21 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
     anchor.setAttribute("rel", Array.from(rel).join(" "));
   });
 
-  const lenis = new Lenis();
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isTouchScroll = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  const lenis = isSafari || isTouchScroll ? null : new Lenis();
   window.BarkFrameLenis = lenis;
 
   if (window.ScrollTrigger?.config) {
     ScrollTrigger.config({ ignoreMobileResize: true });
   }
 
-  function raf(time) {
-    lenis.raf(time);
+  if (lenis) {
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
     requestAnimationFrame(raf);
+
+    lenis.on('scroll', ScrollTrigger.update);
+  } else if (window.ScrollTrigger?.update) {
+    window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
   }
-
-  requestAnimationFrame(raf);
-
-  lenis.on('scroll', ScrollTrigger.update);
 
   const floatingParallaxPattern = ["0svh", "-20svh", "-10svh", "0svh", "-20svh"];
   document.querySelectorAll(".floating-images__holder > .product-card--floating").forEach((card, index) => {
