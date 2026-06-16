@@ -44,6 +44,7 @@
 
   .search-modal__content {
     /* Approx set the top so when the content is at max height, the modal is centered */
+    --search-modal-inner-gap: var(--padding-xl);
     --modal-top-margin: calc(50dvh - var(--modal-max-height) / 2 - 2rem);
     --modal-width: 66dvw;
 
@@ -72,6 +73,11 @@
   .search-modal__content .predictive-search-form__header,
   .search-modal__content .predictive-search-form__header-inner {
     border-color: transparent !important;
+  }
+
+  .search-modal__content .predictive-search-form__header {
+    border: 0 !important;
+    padding: var(--search-modal-inner-gap) var(--search-modal-inner-gap) 0;
   }
 
   .search-modal__content .predictive-search-form__header-inner {
