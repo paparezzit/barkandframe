@@ -103,7 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const sectionHeight = section.offsetHeight;
       let start = sectionTop - top;
       if (artistMobileIntroMedia.matches && section.classList.contains('artist-collection')) {
-        start += parseFloat(getComputedStyle(section).getPropertyValue('--artist-mobile-block-offset')) || 0;
+        const info = section.querySelector('.artist-collection__info');
+        if (info) {
+          const introGap = parseFloat(getComputedStyle(section).getPropertyValue('--artist-mobile-intro-gap')) || 0;
+          const infoBottom = info.getBoundingClientRect().bottom + scrollY;
+          start = Math.max(start, infoBottom + introGap - top);
+        }
       }
       const end = sectionTop + sectionHeight - layerHeight - top;
 
