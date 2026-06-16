@@ -12,6 +12,34 @@ body {
   font-variation-settings: 'slnt' 0;
 }
 
+@media screen and (max-width: 1199px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
+  }
+
+  .content-for-layout {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  @supports (overflow: clip) {
+    .content-for-layout {
+      overflow-x: clip;
+    }
+  }
+}
+
 :root {
   --close-icon-size: 24px;
   --hover-lift-amount: 4px;
