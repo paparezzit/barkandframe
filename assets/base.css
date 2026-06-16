@@ -2,13 +2,9 @@
   box-sizing: border-box;
 }
 
-html {
-  background-color: var(--purple);
-}
-
 body {
   color: var(--color-foreground);
-  background: transparent;
+  background: var(--color-background);
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -344,11 +340,6 @@ p:empty {
 /* Layout */
 .content-for-layout {
   flex: 1;
-}
-
-#header-group,
-.content-for-layout {
-  background-color: var(--beige);
 }
 
 /* Set up page widths & margins */
@@ -4414,13 +4405,8 @@ text-component {
        url('PPAcma-Semibold.woff') format('woff');
 }
 
-html,
 body{
-  background-color: var(--purple) !important;
-}
-
-body{
-  background-color: transparent !important;
+  background-color: var(--beige) !important;
 }
 
 :root {
