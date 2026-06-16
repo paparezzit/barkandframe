@@ -5,10 +5,15 @@
   @param {string} [search_test_id] - A Playwright test ID for differentiating search components.
   @param {string} [input_id] - The ID for the search input element.
   @param {string} [products_test_id] - A Playwright test ID for differentiating products.
+  @param {boolean} [load_empty_state] - Whether to render the empty-state products immediately.
 
   @example
   {% render 'predictive-search', search_test_id: 'header-search' %}
 {%- enddoc -%}
+
+{%- liquid
+  assign should_load_empty_state = load_empty_state | default: false, allow_false: true
+-%}
 
 <script
   src="{{ 'predictive-search.js' | asset_url }}"
@@ -102,7 +107,7 @@
         on:click="/handleModalClick"
       >
         {% render 'predictive-search-empty-state',
-          load_empty_state: false,
+          load_empty_state: should_load_empty_state,
           shadow_opacity: 0.1,
           products_test_id: products_test_id
         %}
