@@ -114,12 +114,25 @@
 
   .search-modal__content .predictive-search-results__card {
     border-radius: 15px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .search-modal__content .predictive-search-results__card:is(:hover, :focus-within, [aria-selected='true']) {
-    border-radius: 15px;
-    overflow: hidden;
+    background-color: transparent;
+    border-radius: 0;
+    margin: 0;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .search-modal__content .predictive-search-results__card--product:hover,
+  .search-modal__content .predictive-search-results__card--product:is([aria-selected='true'].keyboard-focus, :focus-visible, :has(.resource-card:focus-visible)) {
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 0;
+    margin: 0;
+    outline: none;
+    padding: 0;
   }
 
   .search-modal__content :is(
