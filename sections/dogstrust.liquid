@@ -181,7 +181,6 @@
       --dogstrust-mobile-image-top: clamp(206px, 55.4vw, 236px);
       --dogstrust-mobile-shape-left: calc((var(--page-margin) * -1) - 85px);
       --dogstrust-mobile-shape-top: 61px;
-      --dogstrust-mobile-button-top: 185px;
       display: grid;
       grid-template-columns: 42% 58%;
       position: relative;
@@ -231,7 +230,7 @@
       }
 
       .dogstrust__text{
-        display: block;
+        display: flow-root;
         margin-bottom: 0;
         text-align: left;
       }
@@ -256,13 +255,14 @@
 
       .dogstrust__button{
         display: block;
-        position: absolute;
+        position: relative;
         z-index: 3;
-        top: var(--dogstrust-mobile-button-top);
-        left: 42%;
-        right: 12px;
-        width: auto;
-        margin: 0;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: fit-content;
+        max-width: calc(100% - 24px);
+        margin: 14px 12px 0 auto;
         padding-right: 0;
         box-sizing: border-box;
         text-align: center;

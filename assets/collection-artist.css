@@ -92,7 +92,6 @@
   margin-top: calc(-100svh + var(--header-height));
   z-index: 1;
   pointer-events: none;
-  transform: translate3d(var(--outline-sync-x, 0px), var(--outline-sync-y, 0px), 0);
 }
 
 .artist-collection__hero-outline .artist-collection__title {

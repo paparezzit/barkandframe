@@ -39,40 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lenis.on('scroll', ScrollTrigger.update);
 
-  const outlinePairs = [
-    ...Array.from(document.querySelectorAll('.floating-images')).map((root) => ({
-      layer: root.querySelector('.floating-images__fake-title'),
-      source: root.querySelector('.floating-images__content .floating-images__title'),
-      target: root.querySelector('.floating-images__fake-title .floating-images__title'),
-    })),
-    ...Array.from(document.querySelectorAll('.artist-collection')).map((root) => ({
-      layer: root.querySelector('.artist-collection__hero-outline'),
-      source: root.querySelector('.artist-collection__hero .artist-collection__title'),
-      target: root.querySelector('.artist-collection__hero-outline .artist-collection__title'),
-    })),
-  ].filter(({ layer, source, target }) => layer && source && target);
-
-  let outlineSyncFrame = null;
-  const syncOutlinePairs = () => {
-    outlinePairs.forEach(({ layer, source, target }) => {
-      const sourceRect = source.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      layer.style.setProperty('--outline-sync-x', `${sourceRect.left - targetRect.left}px`);
-      layer.style.setProperty('--outline-sync-y', `${sourceRect.top - targetRect.top}px`);
-    });
-    outlineSyncFrame = null;
-  };
-  const queueOutlineSync = () => {
-    if (!outlinePairs.length || outlineSyncFrame) return;
-    outlineSyncFrame = window.requestAnimationFrame(syncOutlinePairs);
-  };
-
-  queueOutlineSync();
-  window.addEventListener('scroll', queueOutlineSync, { passive: true });
-  window.addEventListener('resize', queueOutlineSync);
-  document.fonts?.ready?.then(queueOutlineSync);
-  lenis.on('scroll', queueOutlineSync);
-
   const floatingParallaxPattern = ["0svh", "-20svh", "-10svh", "0svh", "-20svh"];
   document.querySelectorAll(".floating-images__holder > .product-card--floating").forEach((card, index) => {
     if (!card.dataset.parallax) {

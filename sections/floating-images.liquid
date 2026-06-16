@@ -66,7 +66,7 @@
     .floating-images__fake-title{
       padding: 0 var(--page-margin);
       margin: 0 auto;
-      min-height: calc(100dvh - var(--header-height));
+      min-height: calc(100svh - var(--header-height));
       position: sticky;
       top: var(--header-height);
       display: flex;
@@ -78,7 +78,7 @@
         padding: 40px 20px;
         border-radius: var(--baf-radius-xl);
         width: 100%;
-        height: 70dvh;
+        height: 70svh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -121,10 +121,9 @@
     }
 
     .floating-images__fake-title{
-      margin-top: calc(-100dvh + var(--header-height));
+      margin-top: calc(-100svh + var(--header-height));
       z-index: var(--layer-heightened, 4);
       pointer-events: none;
-      transform: translate3d(var(--outline-sync-x, 0px), var(--outline-sync-y, 0px), 0);
 
       .floating-images__content__inner{
         background: transparent;
@@ -146,7 +145,7 @@
       display: flex;
       flex-direction: column;
       gap: 60px;
-      margin: -33dvh auto 0;
+      margin: -33svh auto 0;
       pointer-events: none;
       position: relative;
       z-index: 2;
@@ -302,7 +301,7 @@
 
         .floating-images__content__inner{
           border-radius: var(--baf-radius-pill-surface);
-      height: 77.78dvh;
+      height: 77.78svh;
         }
 
         .floating-images__title{
