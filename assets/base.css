@@ -5087,6 +5087,7 @@ slideshow-component.slideshow--homepage{
 .cf-field[hidden],
 #cf-field-upload[hidden],
 #cf-columns[hidden],
+#cf-withdrawal-consent[hidden],
 #cf-withdrawal-info[hidden] {
   display: none !important;
 }
@@ -5132,6 +5133,21 @@ slideshow-component.slideshow--homepage{
 .cf-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.cf-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--brown);
+  font-size: 14px;
+  line-height: 1.35;
+  max-width: 760px;
+}
+
+.cf-checkbox input {
+  flex: 0 0 auto;
+  margin-top: 0.2em;
 }
 
 .cf-additional-info {

@@ -154,6 +154,16 @@
       </div>
     </div>
 
+    <label class="cf-checkbox" id="cf-withdrawal-consent" hidden>
+      <input
+        type="checkbox"
+        id="cf-withdrawal-consent-input"
+        name="contact[withdrawal_confirmation]"
+        value="I hereby withdraw from the contract for the purchase of the above-listed goods."
+      >
+      <span>I hereby withdraw from the contract for the purchase of the above-listed goods.</span>
+    </label>
+
     <div class="cf-additional-info" id="cf-withdrawal-info" hidden>
       <p>Additional information:</p>
       <p>If the contract for provision of personalized goods has already entered production following your approval of the design, the right of withdrawal does not apply.</p>
@@ -176,6 +186,7 @@
       textareaRequired: true,
       showOrderNumber: true,
       showFullName: false,
+      showWithdrawalConsent: false,
       showWithdrawalInfo: false,
       showUpload: true
     },
@@ -184,6 +195,7 @@
       textareaRequired: true,
       showOrderNumber: true,
       showFullName: true,
+      showWithdrawalConsent: true,
       showWithdrawalInfo: true,
       showUpload: false
     },
@@ -192,6 +204,7 @@
       textareaRequired: true,
       showOrderNumber: false,
       showFullName: false,
+      showWithdrawalConsent: false,
       showWithdrawalInfo: false,
       showUpload: false
     }
@@ -237,6 +250,16 @@
     if (fullNameField) {
       fullNameField.hidden = !cfg.showFullName;
       if (fullNameInput) fullNameInput.required = !!cfg.showFullName;
+    }
+
+    var withdrawalConsent = document.getElementById('cf-withdrawal-consent');
+    var withdrawalConsentInput = document.getElementById('cf-withdrawal-consent-input');
+    if (withdrawalConsent) {
+      withdrawalConsent.hidden = !cfg.showWithdrawalConsent;
+      if (withdrawalConsentInput) {
+        withdrawalConsentInput.required = !!cfg.showWithdrawalConsent;
+        if (!cfg.showWithdrawalConsent) withdrawalConsentInput.checked = false;
+      }
     }
 
     var withdrawalInfo = document.getElementById('cf-withdrawal-info');
