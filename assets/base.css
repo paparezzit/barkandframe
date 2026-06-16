@@ -4953,7 +4953,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .contact-form-section.contact-page-form-section{
-  margin-top: 0;
+  margin-top: 80px;
 }
 
 .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
@@ -5269,6 +5269,10 @@ slideshow-component.slideshow--homepage{
     .cf-submit{
       margin-top: auto;
     }
+  }
+
+  .contact-form-section.contact-page-form-section{
+    margin-top: 140px;
   }
 }
 
