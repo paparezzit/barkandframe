@@ -176,6 +176,7 @@
     }
 
     .dogstrust__wrapper{
+      --dogstrust-mobile-image-lift: 40px;
       display: grid;
       grid-template-columns: 42% 58%;
       position: relative;
@@ -193,7 +194,7 @@
 
         img{
           top: auto;
-          bottom: -36px;
+          bottom: calc(-36px + var(--dogstrust-mobile-image-lift));
           left: -85px;
           width: calc(60% + 181px);
           height: calc(64.8% + 60px);
@@ -232,7 +233,7 @@
         width: calc(((100vw - (var(--page-margin) * 2)) * 0.276) + 181px);
         max-width: none;
         height: auto;
-        margin: clamp(12px, 5vw, 28px) 0 0 calc((var(--page-margin) * -1) - 85px);
+        margin: calc(clamp(12px, 5vw, 28px) - var(--dogstrust-mobile-image-lift)) 0 0 calc((var(--page-margin) * -1) - 85px);
         opacity: 0;
         shape-margin: 5px;
         shape-image-threshold: 0.08;
@@ -245,10 +246,10 @@
       }
 
       .dogstrust__button{
-        display: flow-root;
+        display: block;
         position: relative;
         z-index: 3;
-        width: calc(58% + 18px);
+        width: calc(58% + var(--page-margin) - 12px);
         margin-left: 42%;
         margin-top: 8px;
         padding-right: 0;
