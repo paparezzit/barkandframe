@@ -8,7 +8,7 @@ html {
 
 body {
   color: var(--color-foreground);
-  background: var(--purple);
+  background: transparent;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -4417,6 +4417,10 @@ text-component {
 html,
 body{
   background-color: var(--purple) !important;
+}
+
+body{
+  background-color: transparent !important;
 }
 
 :root {

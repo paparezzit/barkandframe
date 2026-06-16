@@ -37,10 +37,21 @@ footer.shopify-section-group-footer-group{
   width: 100%;
   margin: 0;
   position: relative;
+  isolation: isolate;
   background-color: var(--beige);
   border-radius: var(--baf-radius-xl) var(--baf-radius-xl) 0 0;
   overflow: visible;
   padding: 0 20px;
+
+  &::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--purple);
+    border-radius: inherit;
+    pointer-events: none;
+  }
 
   > .section-background,
   > .section{
@@ -48,13 +59,13 @@ footer.shopify-section-group-footer-group{
   }
 
   > .section-background{
-    background-color: var(--purple) !important;
-    z-index: 0;
+    display: none;
   }
 
   > .section{
     position: relative;
     z-index: 1;
+    background: transparent !important;
   }
 
   .logo-block{
