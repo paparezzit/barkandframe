@@ -151,7 +151,7 @@
         </h2>
 
         <div class="shop-products__rail" data-shop-products-rail>
-          <ul class="shop-products__rail-track" role="list">
+          <ul class="shop-products__rail-track" role="list" data-shop-products-card-count="{{ bestseller_count }}">
             {%- for i in (1..8) -%}
               {{ bestseller_cards }}
             {%- endfor -%}
@@ -432,6 +432,11 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  .shop-products__rail[data-auto-rail-ready="true"] {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: auto;
+  }
+
   .shop-products__rail::-webkit-scrollbar {
     display: none;
   }
@@ -443,6 +448,8 @@
     margin: 0;
     padding: 0;
     list-style: none;
+    transform: translate3d(var(--shop-products-rail-x, 0px), 0, 0);
+    will-change: transform;
   }
 
   .shop-products__rail-item {
@@ -579,23 +586,61 @@
       if (!track) return;
 
       let frame = null;
+      let resizeObserver = null;
       let paused = false;
-      const speed = 0.45;
+      let lastTime = null;
+      let loopPoint = 0;
+      let position = 0;
+      const pixelsPerMs = 0.027;
+      const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
+      const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let refreshFrame = null;
 
-      const getLoopPoint = () => track.scrollWidth / 2;
-
-      const normalizeScroll = () => {
-        const loopPoint = getLoopPoint();
-        if (loopPoint <= 0) return;
-        if (rail.scrollLeft >= loopPoint) rail.scrollLeft -= loopPoint;
-        if (rail.scrollLeft < 0) rail.scrollLeft += loopPoint;
+      const measureLoopPoint = () => {
+        const items = track.children;
+        const firstItem = items[0];
+        const nextSetFirstItem = cardCount > 0 ? items[cardCount] : null;
+        loopPoint = firstItem && nextSetFirstItem
+          ? nextSetFirstItem.offsetLeft - firstItem.offsetLeft
+          : track.scrollWidth / 2;
       };
 
-      const tick = () => {
-        if (!paused) {
-          rail.scrollLeft += speed;
+      const normalizeScroll = () => {
+        if (loopPoint <= 0) return;
+        position %= loopPoint;
+        if (position < 0) position += loopPoint;
+      };
+
+      const applyPosition = () => {
+        track.style.setProperty('--shop-products-rail-x', `${-position}px`);
+      };
+
+      const refreshRail = () => {
+        measureLoopPoint();
+        normalizeScroll();
+        applyPosition();
+      };
+
+      const queueRefreshRail = () => {
+        if (refreshFrame) return;
+        refreshFrame = window.requestAnimationFrame(() => {
+          refreshFrame = null;
+          refreshRail();
+        });
+      };
+
+      const tick = (time) => {
+        if (lastTime === null) lastTime = time;
+        const delta = Math.min(time - lastTime, 64);
+        lastTime = time;
+
+        if (!paused && !reduceMotion.matches) {
+          position += delta * pixelsPerMs;
           normalizeScroll();
+          applyPosition();
         }
+
         frame = window.requestAnimationFrame(tick);
       };
 
@@ -607,15 +652,35 @@
         paused = false;
       };
 
-      rail.addEventListener('mouseenter', pauseRail);
-      rail.addEventListener('pointerenter', pauseRail);
-      rail.addEventListener('mouseleave', resumeRail);
-      rail.addEventListener('pointerleave', resumeRail);
+      rail.dataset.autoRailReady = 'true';
+      rail.scrollLeft = 0;
+      refreshRail();
+
+      if ('ResizeObserver' in window) {
+        resizeObserver = new ResizeObserver(queueRefreshRail);
+        resizeObserver.observe(track);
+      }
+
+      track.querySelectorAll('img').forEach((image) => {
+        if (!image.complete) image.addEventListener('load', queueRefreshRail, { once: true });
+      });
+
+      window.addEventListener('resize', queueRefreshRail);
+
+      if (canHover) {
+        rail.addEventListener('mouseenter', pauseRail);
+        rail.addEventListener('pointerenter', pauseRail);
+        rail.addEventListener('mouseleave', resumeRail);
+        rail.addEventListener('pointerleave', resumeRail);
+      }
 
       frame = window.requestAnimationFrame(tick);
 
       document.addEventListener('shopify:section:unload', () => {
         if (frame) window.cancelAnimationFrame(frame);
+        if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+        if (resizeObserver) resizeObserver.disconnect();
+        window.removeEventListener('resize', queueRefreshRail);
       }, { once: true });
     });
 
