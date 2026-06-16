@@ -14,6 +14,11 @@
   display: contents;
 }
 
+.artist-collection__showcase {
+  position: relative;
+  margin-top: clamp(96px, 24vw, 180px);
+}
+
 .artist-collection__nav {
   display: flex;
   flex-wrap: nowrap;
@@ -264,29 +269,25 @@
   gap: 50px;
   padding: 0 var(--page-margin);
   width: min(var(--page-width), 100%);
-  margin: calc(-100svh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
-  min-height: calc(100svh - var(--header-height) - var(--artist-info-top-offset) - var(--artist-products-peek));
+  margin: clamp(42px, 12vw, 72px) auto 0;
+  min-height: 0;
   box-sizing: border-box;
   position: relative;
   z-index: 2;
 }
 
-.artist-collection__info + .artist-collection__products {
-  margin-top: 0;
-}
-
-.artist-collection.baf-fixed-layer {
+.artist-collection__showcase.baf-fixed-layer {
   position: relative;
 }
 
-.artist-collection.baf-fixed-layer .artist-collection__sticky-stage {
+.artist-collection__showcase.baf-fixed-layer .artist-collection__sticky-stage {
   display: block;
   height: var(--baf-layer-height);
   position: relative;
 }
 
-.artist-collection.baf-fixed-layer .artist-collection__hero,
-.artist-collection.baf-fixed-layer .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero,
+.artist-collection__showcase.baf-fixed-layer .artist-collection__hero-outline {
   position: absolute;
   inset: auto 0 0;
   top: 0;
@@ -295,28 +296,23 @@
   margin-top: 0;
 }
 
-.artist-collection.baf-fixed-layer.is-fixed-active .artist-collection__hero,
-.artist-collection.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero,
+.artist-collection__showcase.baf-fixed-layer.is-fixed-active .artist-collection__hero-outline {
   position: fixed;
   top: var(--baf-layer-top);
   height: var(--baf-layer-height);
 }
 
-.artist-collection.baf-fixed-layer.is-fixed-after .artist-collection__hero,
-.artist-collection.baf-fixed-layer.is-fixed-after .artist-collection__hero-outline {
+.artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero,
+.artist-collection__showcase.baf-fixed-layer.is-fixed-after .artist-collection__hero-outline {
   position: absolute;
   top: var(--baf-layer-after-top);
   height: var(--baf-layer-height);
 }
 
-.artist-collection.baf-fixed-layer .artist-collection__products {
+.artist-collection__showcase.baf-fixed-layer .artist-collection__products {
   margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33);
   padding-bottom: calc((var(--baf-layer-height) + var(--baf-layer-top)) * 0.8);
-}
-
-.artist-collection.baf-fixed-layer .artist-collection__info {
-  margin-top: calc((var(--baf-layer-height) * -1) + var(--artist-info-top-offset));
-  min-height: calc(var(--baf-layer-height) - var(--artist-info-top-offset) - var(--artist-products-peek));
 }
 
 .artist-collection__artist-bio {
@@ -401,22 +397,8 @@
 }
 
 @media screen and (max-width: 749px) {
-  .artist-collection {
-    --artist-info-top-offset: calc(clamp(18px, 4svh, 40px) + 10px);
-    --artist-mobile-stage-gap: clamp(220px, 58vw, 320px);
-    --baf-fixed-layer-start-offset: calc(var(--baf-scroll-subnav-height) + var(--artist-mobile-stage-gap));
-  }
-
-  .artist-collection.baf-fixed-layer .artist-collection__sticky-stage {
-    margin-top: var(--artist-mobile-stage-gap);
-  }
-
-  .artist-collection.baf-fixed-layer .artist-collection__info {
-    margin-top: calc((var(--baf-layer-height) * -1) + var(--artist-info-top-offset) - var(--artist-mobile-stage-gap));
-  }
-
-  .artist-collection.baf-fixed-layer .artist-collection__products {
-    margin-top: calc((var(--baf-layer-height) + var(--baf-layer-top)) * -0.33 + var(--artist-mobile-stage-gap));
+  .artist-collection__showcase {
+    margin-top: clamp(96px, 26vw, 150px);
   }
 }
 
@@ -524,10 +506,6 @@
   .artist-collection__info {
     padding-top: 0;
     padding-bottom: 0;
-  }
-
-  .artist-collection__info + .artist-collection__products {
-    margin-top: 0;
   }
 
   .artist-collection__artist-text {

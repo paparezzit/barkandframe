@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fixedLayerMedia = window.matchMedia('(max-width: 989px), (hover: none), (pointer: coarse)');
-  const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection'));
+  const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection__showcase'));
   let fixedLayerFrame = null;
 
   const getStableHeaderHeight = () => (
@@ -100,8 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const layerHeight = parseFloat(section.style.getPropertyValue('--baf-layer-height')) || 0;
       const sectionTop = section.getBoundingClientRect().top + scrollY;
       const sectionHeight = section.offsetHeight;
-      const startOffset = parseFloat(getComputedStyle(section).getPropertyValue('--baf-fixed-layer-start-offset')) || 0;
-      const start = sectionTop + startOffset - top;
+      const start = sectionTop - top;
       const end = sectionTop + sectionHeight - layerHeight - top;
 
       if (scrollY >= end) {
