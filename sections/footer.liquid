@@ -36,6 +36,13 @@
   :root {
     --baf-footer-overscroll-background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
   }
+
+  @media screen and (max-width: 749px) {
+    html,
+    body {
+      background: rgb({{ section.settings.color_scheme.settings.background.rgba }});
+    }
+  }
 {% endstyle %}
 
 {% stylesheet %}

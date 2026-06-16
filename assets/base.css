@@ -41,10 +41,6 @@ body {
 }
 
 @media screen and (max-width: 749px) {
-  body {
-    background: var(--baf-footer-overscroll-background, var(--purple));
-  }
-
   #header-group,
   main.content-for-layout {
     background: var(--beige);
