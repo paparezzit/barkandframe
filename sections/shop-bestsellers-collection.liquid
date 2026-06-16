@@ -437,6 +437,9 @@
   }
 
   .shop-products__rail-track {
+    --shop-products-rail-x: 0px;
+    --shop-products-rail-duration: 60s;
+
     display: flex;
     gap: var(--shop-products-grid-gap);
     width: max-content;
@@ -444,13 +447,17 @@
     padding: 0;
     list-style: none;
     transform: translate3d(0, 0, 0);
-    animation: shop-products-rail-marquee 44s linear infinite;
     will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .shop-products__rail[data-auto-rail-ready="true"] .shop-products__rail-track {
+    animation: shop-products-rail-marquee var(--shop-products-rail-duration) linear infinite;
   }
 
   @keyframes shop-products-rail-marquee {
     to {
-      transform: translate3d(calc(-50% - (var(--shop-products-grid-gap) / 2)), 0, 0);
+      transform: translate3d(var(--shop-products-rail-x), 0, 0);
     }
   }
 
@@ -464,6 +471,21 @@
     .shop-products__rail-track {
       animation: none;
     }
+  }
+
+  .shop-products__rail-track .product-card__content {
+    isolation: isolate;
+  }
+
+  .shop-products__rail-track .card-gallery {
+    position: relative;
+    z-index: 1;
+  }
+
+  .shop-products__rail-track .baf-product-card-bubble {
+    z-index: 3;
+    transform: translate3d(0, 0, 1px);
+    backface-visibility: hidden;
   }
 
   .shop-products__rail-item {
@@ -585,6 +607,7 @@
 
 <script>
   (() => {
+    const rails = document.querySelectorAll('[data-shop-products-rail]');
     const stickyButton = document.querySelector('.collection-sticky-btn');
     const navLinks = Array.from(document.querySelectorAll('.shop-products__nav-link[href^="#shop-products-"]'));
     const navSections = navLinks
@@ -593,6 +616,69 @@
         section: document.querySelector(link.getAttribute('href')),
       }))
       .filter((item) => item.section);
+
+    rails.forEach((rail) => {
+      const track = rail.querySelector('.shop-products__rail-track');
+      if (!track) return;
+
+      const pixelsPerSecond = 27;
+      const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let refreshFrame = null;
+      let resizeObserver = null;
+
+      const refreshRail = () => {
+        const items = track.children;
+        const firstItem = items[0];
+        const nextSetFirstItem = cardCount > 0 ? items[cardCount] : null;
+        const loopPoint = firstItem && nextSetFirstItem
+          ? nextSetFirstItem.offsetLeft - firstItem.offsetLeft
+          : track.scrollWidth / 8;
+
+        if (loopPoint <= 0 || reduceMotion.matches) {
+          rail.dataset.autoRailReady = 'false';
+          return;
+        }
+
+        track.style.setProperty('--shop-products-rail-x', `${-loopPoint}px`);
+        track.style.setProperty('--shop-products-rail-duration', `${(loopPoint / pixelsPerSecond).toFixed(3)}s`);
+        rail.dataset.autoRailReady = 'true';
+      };
+
+      const queueRefreshRail = () => {
+        if (refreshFrame) return;
+        refreshFrame = window.requestAnimationFrame(() => {
+          refreshFrame = null;
+          refreshRail();
+        });
+      };
+
+      refreshRail();
+
+      if ('ResizeObserver' in window) {
+        resizeObserver = new ResizeObserver(queueRefreshRail);
+        resizeObserver.observe(track);
+      }
+
+      track.querySelectorAll('img').forEach((image) => {
+        if (!image.complete) image.addEventListener('load', queueRefreshRail, { once: true });
+      });
+
+      window.addEventListener('resize', queueRefreshRail);
+
+      if (reduceMotion.addEventListener) {
+        reduceMotion.addEventListener('change', queueRefreshRail);
+      }
+
+      document.addEventListener('shopify:section:unload', () => {
+        if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+        if (resizeObserver) resizeObserver.disconnect();
+        window.removeEventListener('resize', queueRefreshRail);
+        if (reduceMotion.removeEventListener) {
+          reduceMotion.removeEventListener('change', queueRefreshRail);
+        }
+      }, { once: true });
+    });
 
     if (navSections.length) {
       let navTicking = false;
