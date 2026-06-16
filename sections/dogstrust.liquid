@@ -201,17 +201,6 @@
         transform: none;
       }
 
-      .dogstrust__content::before{
-        content: '';
-        float: left;
-        width: min(64%, 250px);
-        height: clamp(430px, 118vw, 560px);
-        -webkit-shape-outside: polygon(0 0, 0 34%, 42% 39%, 68% 48%, 88% 61%, 100% 75%, 82% 90%, 48% 100%, 0 100%);
-        shape-outside: polygon(0 0, 0 34%, 42% 39%, 68% 48%, 88% 61%, 100% 75%, 82% 90%, 48% 100%, 0 100%);
-        shape-margin: 3px;
-        pointer-events: none;
-      }
-
       .dogstrust__title,
       .dogstrust__text{
         width: 100%;
@@ -219,20 +208,42 @@
         padding-right: 0;
       }
 
+      .dogstrust__text{
+        display: flow-root;
+        margin-bottom: 0;
+      }
+
+      .dogstrust__text::before{
+        content: '';
+        float: left;
+        width: min(46%, 182px);
+        height: clamp(120px, 27vw, 148px);
+        margin-top: clamp(42px, 9vw, 52px);
+        -webkit-shape-outside: polygon(0 0, 50% 0, 78% 15%, 96% 42%, 100% 66%, 82% 88%, 52% 100%, 0 100%);
+        shape-outside: polygon(0 0, 50% 0, 78% 15%, 96% 42%, 100% 66%, 82% 88%, 52% 100%, 0 100%);
+        shape-margin: 5px;
+        pointer-events: none;
+      }
+
+      .dogstrust__text p{
+        margin-bottom: 0;
+      }
+
       .dogstrust__button{
         display: flow-root;
         position: relative;
         z-index: 3;
-        width: calc(58% - var(--page-margin));
+        width: 58%;
         margin-left: 42%;
+        margin-top: 8px;
         padding-right: 0;
         box-sizing: border-box;
         text-align: center;
 
         .button{
           max-width: 100%;
-          padding-left: 24px;
-          padding-right: 24px;
+          padding-left: 20px;
+          padding-right: 20px;
         }
       }
     }
