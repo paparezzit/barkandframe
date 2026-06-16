@@ -45,31 +45,41 @@
   .search-modal__content {
     /* Approx set the top so when the content is at max height, the modal is centered */
     --search-modal-inner-gap: var(--padding-xl);
-    --search-modal-viewport-gap: clamp(16px, 4svw, 48px);
-    --modal-top-margin: calc(50svh - var(--modal-max-height) / 2 - 2rem);
-    --modal-width: min(1020px, 66svw, calc(100svw - (var(--search-modal-viewport-gap) * 2)));
+    --search-modal-viewport-gap: clamp(16px, 4vw, 48px);
+    --modal-top-margin: max(20px, calc((100vh - var(--modal-max-height)) / 2 - 2rem));
 
+    position: fixed;
+    inset-block-start: var(--modal-top-margin);
+    inset-inline: var(--search-modal-viewport-gap);
+    width: auto;
+    inline-size: auto;
+    max-width: 1020px;
+    max-inline-size: 1020px;
+    margin: 0 auto;
     padding: 0;
     border: 1px solid transparent;
-    border-radius: var(--search-border-radius);
+    border-radius: var(--search-border-radius) !important;
     background: #fffaf1;
     color: #4c443f;
     box-sizing: border-box;
-    max-width: calc(100svw - (var(--search-modal-viewport-gap) * 2));
     overflow: hidden;
     overflow-x: hidden;
     overscroll-behavior-x: contain;
 
     @media screen and (min-width: 750px) {
-      width: var(--modal-width);
-      margin-block-start: var(--modal-top-margin);
+      max-height: calc(100vh - (var(--modal-top-margin) * 2));
     }
 
     @media screen and (max-width: 749px) {
-      width: 100svw;
-      max-width: 100svw;
-      height: 100svh;
-      max-height: 100svh;
+      inset: 0;
+      width: auto;
+      inline-size: auto;
+      max-width: none;
+      max-inline-size: none;
+      height: auto;
+      block-size: auto;
+      max-height: none;
+      max-block-size: none;
       margin: 0;
     }
   }
@@ -77,6 +87,12 @@
   .search-modal__content:focus,
   .search-modal__content:focus-visible {
     outline: none;
+  }
+
+  .search-modal__content[open],
+  .dialog-modal[open].search-modal__content,
+  .dialog-modal.search-modal__content.dialog-closing {
+    border-radius: var(--search-border-radius) !important;
   }
 
   .search-modal__content predictive-search-component,
@@ -90,6 +106,18 @@
     background: #fffaf1;
     color: #4c443f;
     overflow-x: hidden;
+  }
+
+  .search-modal__content predictive-search-component,
+  .search-modal__content .predictive-search-form,
+  .search-modal__content .predictive-search-form__content-wrapper,
+  .search-modal__content .predictive-search-dropdown {
+    border-radius: inherit;
+  }
+
+  .search-modal__content predictive-search-component,
+  .search-modal__content .predictive-search-form {
+    overflow: hidden;
   }
 
   .search-modal__content .predictive-search-form__header,
@@ -146,20 +174,31 @@
     .recently-viewed-wrapper,
     .predictive-search-results__wrapper,
     .predictive-search-results__wrapper-products,
+    .predictive-search-results__card,
+    .resource-card,
     slideshow-component,
     slideshow-slides
   ) {
     min-width: 0;
+    width: 100%;
     max-width: 100%;
     box-sizing: border-box;
   }
 
   .search-modal__content :is(
+    .predictive-search-form__content,
     .predictive-search-results__products,
     .recently-viewed-wrapper,
+    .predictive-search-results__wrapper,
     .predictive-search-results__wrapper-products
   ) {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    overscroll-behavior-x: contain;
+    touch-action: pan-y;
+  }
+
+  .search-modal__content .predictive-search-results__wrapper {
+    scroll-snap-type: none;
   }
 
   .search-modal__content .predictive-search-results__products > .recently-viewed-wrapper + .predictive-search-results__title,
