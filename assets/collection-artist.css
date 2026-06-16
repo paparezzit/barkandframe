@@ -62,7 +62,7 @@
 .artist-collection__hero {
   position: sticky;
   top: var(--header-height);
-  min-height: calc(100dvh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,14 +74,14 @@
 .artist-collection__hero-outline {
   position: sticky;
   top: var(--header-height);
-  height: calc(100dvh - var(--header-height));
+  height: calc(100svh - var(--header-height));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 40px var(--page-margin);
-  margin-top: calc(-100dvh + var(--header-height));
+  margin-top: calc(-100svh + var(--header-height));
   z-index: 1;
   pointer-events: none;
 }
@@ -134,7 +134,7 @@
   align-items: flex-start;
   padding: 0 calc(var(--page-margin) * 2) 80vh;
   max-width: 1280px;
-  margin: -33dvh auto 0;
+  margin: -33svh auto 0;
   position: relative;
   z-index: 0;
   pointer-events: none;
@@ -252,7 +252,7 @@
   gap: 50px;
   padding: 0 var(--page-margin);
   width: min(var(--page-width), 100%);
-  margin: calc(-100dvh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
+  margin: calc(-100svh + var(--header-height) + var(--artist-info-top-offset)) auto 0;
   min-height: calc(100svh - var(--header-height) - var(--artist-info-top-offset) - var(--artist-products-peek));
   box-sizing: border-box;
   position: relative;

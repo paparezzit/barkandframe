@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const lenis = new Lenis();
   window.BarkFrameLenis = lenis;
 
+  if (window.ScrollTrigger?.config) {
+    ScrollTrigger.config({ ignoreMobileResize: true });
+  }
+
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
@@ -35,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lenis.on('scroll', ScrollTrigger.update);
 
-  const floatingParallaxPattern = ["0vh", "-20vh", "-10vh", "0vh", "-20vh"];
+  const floatingParallaxPattern = ["0svh", "-20svh", "-10svh", "0svh", "-20svh"];
   document.querySelectorAll(".floating-images__holder > .product-card--floating").forEach((card, index) => {
     if (!card.dataset.parallax) {
       card.dataset.parallax = floatingParallaxPattern[index % floatingParallaxPattern.length];

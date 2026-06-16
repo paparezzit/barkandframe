@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <div class="floating-images__holder" data-parallax="-20dvh">
+  <div class="floating-images__holder" data-parallax="-20svh">
     {% content_for 'blocks' %}
   </div>
 </div>
@@ -122,7 +122,7 @@
 
     .floating-images__fake-title{
       margin-top: calc(-100dvh + var(--header-height));
-      z-index: 50;
+      z-index: var(--layer-heightened, 4);
       pointer-events: none;
 
       .floating-images__content__inner{
@@ -218,6 +218,26 @@
         .image-block img{
           opacity: .27;
         }
+      }
+    }
+
+    @media(max-width: 1199px){
+      .floating-images__content,
+      .floating-images__fake-title{
+        min-height: calc(100svh - var(--header-height));
+
+        .floating-images__content__inner{
+          height: 70svh;
+        }
+      }
+
+      .floating-images__fake-title{
+        margin-top: calc(-100svh + var(--header-height));
+      }
+
+      .floating-images__holder{
+        padding-bottom: 80svh;
+        margin-top: -33svh;
       }
     }
   }

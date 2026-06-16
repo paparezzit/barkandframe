@@ -10,7 +10,7 @@
 .at-home__hero {
   position: sticky;
   top: var(--header-height);
-  height: calc(100dvh - var(--header-height));
+  height: calc(100svh - var(--header-height));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,11 +22,11 @@
 .at-home__outline-overlay {
   position: sticky;
   top: var(--header-height);
-  height: calc(100dvh - var(--header-height));
+  height: calc(100svh - var(--header-height));
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: calc(-100dvh + var(--header-height));
+  margin-top: calc(-100svh + var(--header-height));
   z-index: 1;
   pointer-events: none;
 }
@@ -65,7 +65,7 @@
   align-items: start;
   padding: 40px var(--page-margin) 60px;
   position: relative;
-  margin: -20dvh 0 20px;
+  margin: -20svh 0 20px;
 }
 
 .at-home__item {
@@ -219,7 +219,7 @@
 
 .at-home-lightbox__img {
   width: 100vw;
-  height: 100dvh;
+  height: 100svh;
   object-fit: contain;
   image-rendering: auto;
 }
