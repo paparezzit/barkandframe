@@ -113,6 +113,16 @@
           <label class="cf-label" for="cf-textarea" id="cf-textarea-label">Tell us what happened</label>
         </div>
 
+        <label class="cf-checkbox" id="cf-withdrawal-consent" hidden>
+          <input
+            type="checkbox"
+            id="cf-withdrawal-consent-input"
+            name="contact[withdrawal_confirmation]"
+            value="I hereby withdraw from the contract for the purchase of the above-listed goods."
+          >
+          <span>I hereby withdraw from the contract for the purchase of the above-listed goods.</span>
+        </label>
+
       </div>
 
       <!-- Right column -->
@@ -146,7 +156,7 @@
         </div>
 
         <div class="cf-additional-info" id="cf-withdrawal-info" hidden>
-          <p>Additional information:</p>
+          <p class="cf-additional-info__heading">Additional Information</p>
           <p>If the contract for provision of personalized goods has already entered production following your approval of the design, the right of withdrawal does not apply.</p>
           <p>After receiving your notice, we will promptly acknowledge receipt and inform you If you need help with the form or are unsure how to proceed, please contact us at of the next steps.</p>
           <p><a href="mailto:customercare@barkandframe.com">customercare@barkandframe.com</a>.</p>
@@ -160,16 +170,6 @@
 
       </div>
     </div>
-
-    <label class="cf-checkbox" id="cf-withdrawal-consent" hidden>
-      <input
-        type="checkbox"
-        id="cf-withdrawal-consent-input"
-        name="contact[withdrawal_confirmation]"
-        value="I hereby withdraw from the contract for the purchase of the above-listed goods."
-      >
-      <span>I hereby withdraw from the contract for the purchase of the above-listed goods.</span>
-    </label>
 
     {%- endif -%}
 

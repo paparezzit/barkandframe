@@ -1014,8 +1014,9 @@ p:not(.h1, .h2, .h3, .h4, .h5, .h6) a:where(:not(.button, .button-primary, .butt
   text-decoration-color: currentcolor;
 
   &:hover {
+    --button-color: var(--green);
     text-decoration-color: transparent;
-    color: var(--color-primary-hover);
+    color: var(--green);
   }
 }
 
@@ -5142,7 +5143,8 @@ slideshow-component.slideshow--homepage{
   color: var(--brown);
   font-size: 14px;
   line-height: 1.35;
-  max-width: 760px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cf-checkbox input {
@@ -5178,6 +5180,10 @@ slideshow-component.slideshow--homepage{
   background: var(--brown);
 }
 
+.cf-checkbox span {
+  min-width: 0;
+}
+
 .cf-additional-info {
   color: var(--brown);
   font-size: 14px;
@@ -5196,14 +5202,14 @@ slideshow-component.slideshow--homepage{
   margin-bottom: 0;
 }
 
+.cf-additional-info__heading {
+  font-weight: var(--font-paragraph--weight-bold);
+}
+
 .cf-additional-info a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 0.12em;
-}
-
-.cf-additional-info a:hover {
-  color: var(--green);
 }
 
 /* ——— Contact form: shared inputs ——— */
