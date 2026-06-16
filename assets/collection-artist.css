@@ -1,8 +1,13 @@
 .artist-collection {
   margin-left: auto;
   margin-right: auto;
+  --baf-scroll-subnav-height: 51px;
   --artist-info-top-offset: calc(clamp(18px, 4svh, 40px) + 60px);
   --artist-products-peek: clamp(110px, 18svh, 220px);
+}
+
+.artist-collection__wrapper {
+  padding-top: var(--baf-scroll-subnav-height);
 }
 
 .artist-collection__nav {
@@ -11,11 +16,13 @@
   gap: 0;
   box-sizing: border-box;
   justify-content: flex-start;
-  position: sticky;
+  position: fixed;
   top: var(--header-height, 0);
-  z-index: 7;
-  width: 100vw;
-  margin-inline: calc((100% - 100vw) / 2);
+  left: 0;
+  right: 0;
+  z-index: calc(var(--layer-sticky, 8) - 1);
+  width: 100%;
+  margin-inline: 0;
   padding: 10px 0 0;
   background: var(--beige);
   overflow-x: auto;
@@ -24,6 +31,7 @@
   scrollbar-width: none;
   transition: opacity 0.16s ease;
   transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .artist-collection__nav.is-hidden-on-scroll {
