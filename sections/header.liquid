@@ -433,6 +433,16 @@
     }
   }
 
+  @media screen and (min-width: 750px) and (max-width: 1199px) {
+    #header-component .header-menu.mobile\:hidden {
+      display: none !important;
+    }
+
+    #header-component .header__drawer.desktop\:hidden {
+      display: flex !important;
+    }
+  }
+
   .header__column--left,
   .header__column--center {
     gap: var(--gap-xl);
