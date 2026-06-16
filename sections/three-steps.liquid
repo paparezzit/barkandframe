@@ -208,33 +208,39 @@
   }
 
   @media(max-width: 749px){
+    --three-steps-stage-top: max(76px, calc(var(--baf-stable-header-height, var(--header-height, 60px)) + 14px));
+    --three-steps-stage-bottom: max(14px, env(safe-area-inset-bottom));
+    --three-steps-stage-height: calc(100svh - var(--three-steps-stage-top) - var(--three-steps-stage-bottom));
+
     .three-steps__inner{
       padding: 0 20px 20px;
     }
 
     .three-steps__wrapper{
-      min-height: calc(300svh - var(--header-height, 0px));
+      min-height: calc(var(--three-steps-stage-height) + 200svh);
       position: relative;
       padding-top: 0;
     }
 
     .three-steps__pin{
       position: sticky;
-      top: var(--header-height, 0px);
-      height: calc(100svh - var(--header-height, 0px));
+      top: var(--three-steps-stage-top);
+      height: var(--three-steps-stage-height);
       min-height: 0;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
       align-items: center;
-      padding: clamp(18px, 4svh, 34px) 0;
+      padding: 0;
       box-sizing: border-box;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
     }
 
     .three-steps__title{
       position: relative;
       z-index: 2;
-      align-self: end;
-      margin: 0 0 clamp(12px, 3svh, 22px);
+      align-self: start;
+      margin: 0 0 clamp(8px, 2svh, 14px);
       font-size: clamp(32px, 10vw, 36px);
       line-height: 1;
     }
@@ -243,15 +249,21 @@
       display: grid;
       grid-template: "step" 1fr / 1fr;
       align-items: center;
-      height: clamp(250px, 48svh, 330px);
+      align-self: stretch;
+      height: auto;
       min-height: 0;
       position: relative;
+      overflow: hidden;
     }
 
     .three-steps__step{
       grid-area: step;
-      position: relative;
+      position: absolute;
+      inset: 0;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       min-height: 0;
       margin: 0;
       padding: 0;
@@ -260,20 +272,19 @@
       visibility: hidden;
       pointer-events: none;
       transition: opacity 260ms ease, visibility 0ms linear 260ms;
-      align-self: center;
 
       .three-steps__step__content{
         .three-steps__step__text{
-          font-size: clamp(36px, 11vw, var(--baf-display-medium-size));
-          margin-top: clamp(18px, 4svh, 30px);
+          font-size: clamp(34px, 10vw, 44px);
+          margin-top: clamp(14px, 3svh, 22px);
         }
       }
 
       .three-steps__step__image{
         img{
-          width: clamp(108px, 30vw, 140px);
-          max-height: 30svh;
-          margin: clamp(12px, 2.8svh, 20px) auto 0;
+          width: clamp(96px, 28vw, 128px);
+          max-height: 24svh;
+          margin: clamp(10px, 2svh, 16px) auto 0;
         }
       }
     }
