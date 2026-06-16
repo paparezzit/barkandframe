@@ -5348,7 +5348,8 @@ slideshow-component.slideshow--homepage{
 
 @media(max-width: 749px){
   .contact-company-info {
-    width: min(420px, calc(100vw - 32px));
+    width: calc(100vw - (var(--page-margin) * 2));
+    max-width: none;
     margin-top: 114px;
     padding: 38px 30px;
   }
