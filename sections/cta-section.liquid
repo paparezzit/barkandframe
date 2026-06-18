@@ -108,7 +108,7 @@
         line-height: 1;
         font-size: var(--baf-display-extra-large-size);
         margin: 30px auto;
-        max-width: 240px;
+        max-width: min(340px, calc(100vw - 64px));
         color: var(--beige);
       }
 
@@ -123,6 +123,16 @@
           &:hover{
             background-color: var(--purple);
           }
+        }
+      }
+    }
+  }
+
+  @media(min-width: 750px) and (max-width: 1199px){
+    .cta-section{
+      .cta-section__content{
+        .cta-section__title{
+          max-width: 440px;
         }
       }
     }

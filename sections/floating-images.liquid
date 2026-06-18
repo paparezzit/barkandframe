@@ -283,6 +283,11 @@
         .floating-images__content__inner{
           height: 70svh;
         }
+
+        .floating-images__title{
+          width: min(560px, 80vw);
+          font-size: min(78px, 10vw);
+        }
       }
 
       .floating-images__fake-title{
@@ -292,6 +297,16 @@
       .floating-images__holder{
         padding-bottom: 80svh;
         margin-top: -33svh;
+      }
+    }
+
+    @media(max-width: 749px){
+      .floating-images__content,
+      .floating-images__fake-title{
+        .floating-images__title{
+          width: min(360px, 82vw);
+          font-size: min(52px, 13vw);
+        }
       }
     }
   }
