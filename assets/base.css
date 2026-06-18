@@ -2,6 +2,16 @@
   box-sizing: border-box;
 }
 
+@media (hover: none), (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
 body {
   color: var(--color-foreground);
   background: var(--color-background);

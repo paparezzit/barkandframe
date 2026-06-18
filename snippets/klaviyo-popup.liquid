@@ -15,15 +15,6 @@
   class="klav-popup"
   aria-label="Get 5% off your first order"
 >
-  <!-- Logo -->
-  <div class="klav-popup__brand">
-    {%- if settings.logo != blank -%}
-      {{- settings.logo | image_url: width: 160 | image_tag: loading: 'lazy', class: 'klav-popup__brand-img' -}}
-    {%- else -%}
-      <span class="klav-popup__brand-text">{{ shop.name }}</span>
-    {%- endif -%}
-  </div>
-
   <div class="klav-popup__inner">
     <div class="klav-popup__col klav-popup__col--content">
       <button
@@ -37,10 +28,15 @@
 
       <!-- Step 1: Offer prompt -->
       <div id="klav-step-1" class="klav-step">
-        <div class="klav-step__icon" aria-hidden="true">
-          <svg width="57" height="39" viewBox="0 0 57 39" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M56.3479 4.56847C55.3231 3.87238 53.4111 3.55914 52.0621 2.94427C51.1194 2.51501 49.9943 3.00016 49.7779 4.00316C49.7363 4.19512 49.715 4.39445 49.7128 4.59273C49.7075 4.98191 50.1394 6.15682 50.0253 6.30659L47.1673 7.50048C46.6725 7.01216 46.3782 6.28655 45.8951 5.72651C43.035 2.41376 38.168 2.68165 34.5785 4.60644C32.8701 5.5219 31.6331 6.92041 30.2926 8.27673C28.9458 4.75199 25.3733 1.93283 21.8734 0.595495C17.258 -1.16687 10.7978 1.04162 10.3734 6.43737C10.0566 10.4768 13.9821 18.273 16.1042 21.783C16.4262 22.3166 17.0927 23.1055 17.3305 23.6202C17.3775 23.7225 17.4638 23.7594 17.3913 23.9124L11.106 27.3053C9.78364 26.4436 7.92918 26.1451 6.30398 26.2506C4.42392 26.3719 1.25992 26.3582 0.328949 27.9908C-0.977389 30.2816 1.89976 32.4964 3.83314 32.4521C3.13464 33.8685 2.45428 35.1225 2.84245 36.7583C3.37032 38.9816 5.33463 39.6851 7.1667 38.2592C8.96572 36.8596 10.2934 34.3463 11.0367 32.2422C11.2254 31.7075 11.347 30.6391 11.6786 30.2837L19.1797 26.4668L19.3226 26.51C19.6276 27.203 20.1725 27.9043 20.6406 28.5245C21.9694 30.2868 26.0644 35.8313 27.8346 36.5843C28.5213 36.8765 29.3446 37.0958 30.057 36.7626C31.5243 36.076 34.7928 32.5417 36.0192 31.2181C39.8646 27.0701 43.6919 22.2734 46.0956 17.1424C47.1929 14.7999 47.6728 12.5619 47.6301 9.97371L51.2911 8.88211C51.6313 8.9011 51.7432 9.45691 51.9885 9.73851C52.5526 10.385 53.3503 10.5749 54.0435 10.018C54.4946 9.65519 56.6892 6.84553 56.8801 6.36459C57.152 5.67694 56.9558 4.97769 56.349 4.56531L56.3479 4.56847ZM42.1531 17.2151C38.8857 23.3439 34.0442 28.3462 29.1868 33.2442C28.917 33.4213 28.6728 33.0469 28.4702 32.8666C26.5261 31.1358 24.1672 28.0383 22.574 25.9205C22.4535 25.7612 21.883 25.0514 22.0088 24.9227L29.7861 21.1617C30.6093 20.6861 31.7408 19.6936 31.1703 18.6453C30.3449 17.1276 27.2768 18.7381 26.1859 19.2644C24.196 20.2241 22.2946 21.3969 20.2834 22.3229C20.1938 22.3704 20.1448 22.3451 20.0691 22.2892C19.8782 22.1489 18.7723 20.5026 18.5494 20.1661C16.5563 17.1571 12.9615 10.4019 12.9359 6.85818C12.9178 4.41976 15.6531 2.89048 17.8648 2.7597C20.9072 2.57935 25.6186 5.79296 27.2086 8.31891C27.6767 9.06352 28.4851 11.3912 29.1612 11.6696C29.6752 11.8816 30.3236 11.8521 30.7981 11.5642C33.3596 8.79035 37.944 4.97241 42.0315 6.7949C46.0284 8.57731 43.6183 14.4614 42.1521 17.213L42.1531 17.2151Z" fill="#4C443F"/>
-          </svg>
+        <div class="klav-step__illustration-card" aria-hidden="true">
+          <img
+            src="{{ 'klaviyo-popup-circle.svg' | asset_url }}"
+            alt=""
+            class="klav-step__illustration"
+            width="229"
+            height="229"
+            loading="lazy"
+          >
         </div>
         <h2 class="klav-step__heading klav-step__heading--welcome">Welcome, dog person</h2>
         <p class="klav-step__text">
@@ -51,7 +47,17 @@
 
       <!-- Step 2: Email input -->
       <div id="klav-step-2" class="klav-step" hidden>
-        <h2 class="klav-step__heading">Enter your email<br>to get your discount</h2>
+        <div class="klav-step__illustration-card" aria-hidden="true">
+          <img
+            src="{{ 'klaviyo-popup-circle.svg' | asset_url }}"
+            alt=""
+            class="klav-step__illustration"
+            width="229"
+            height="229"
+            loading="lazy"
+          >
+        </div>
+        <h2 class="klav-step__heading klav-step__heading--welcome">Enter your email<br>to get your discount</h2>
         <form id="klav-form" class="klav-form" novalidate>
           <input
             type="email"
@@ -142,36 +148,9 @@
   align-items: center;
   justify-content: center;
   min-height: 430px;
-  padding: 70px 48px 52px;
+  padding: 56px 48px 52px;
   position: relative;
   box-sizing: border-box;
-}
-
-/* Brand logo in content column */
-.klav-popup__brand {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 40px;
-  background-color: var(--beige);
-  border-radius: 0 0 1000px 1000px;
-  text-align: center;
-}
-
-.klav-popup__brand-img {
-  height: 30px;
-  width: auto;
-  display: block;
-  margin: 3px auto 0;
-}
-
-.klav-popup__brand-text {
-  font-family: var(--font-heading--family);
-  font-size: var(--font-size--sm);
-  color: var(--brown);
-  text-transform: lowercase;
 }
 
 /* Close button */
@@ -216,6 +195,25 @@
   color: var(--brown);
   line-height: 0;
   margin: 10px 0 -8px;
+}
+
+.klav-step__illustration-card {
+  width: 176px;
+  height: 176px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -2px 0 -8px;
+  padding: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+.klav-step__illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .klav-step__heading {
@@ -350,7 +348,7 @@
   font-family: var(--font-body--family);
   font-size: 10px;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   line-height: 1;
   text-align: left;

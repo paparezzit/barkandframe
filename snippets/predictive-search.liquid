@@ -288,6 +288,12 @@
     border: 0;
   }
 
+  @media screen and (max-width: 749px), screen and (min-width: 750px) and (max-width: 989px) and (orientation: portrait) {
+    .search-input {
+      font-size: max(16px, var(--baf-text-medium-size));
+    }
+  }
+
   .search-input::placeholder {
     color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
   }

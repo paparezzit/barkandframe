@@ -147,8 +147,7 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0,
-                    "wrap": "pretty"
+                    "padding-inline-end": 0
                   },
                   "blocks": {}
                 }
@@ -169,7 +168,7 @@
       "settings": {
         "title": "Discover Bark & Frame",
         "cta_image": "shopify://shop_images/make-portrait.png",
-        "cta_label": "Make a Portrait",
+        "cta_label": "Make a portrait",
         "cta_link": "shopify://pages/portrait",
         "collection": "all-products"
       }

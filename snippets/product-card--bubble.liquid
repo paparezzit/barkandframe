@@ -254,24 +254,50 @@
 
     const handle = card.dataset.productHandle;
     if (handle) {
+      const portraitProductDefaults = {
+        "framed-canvas-1": {
+          category: "canvas",
+          size: "33 × 43 cm | 13.0 × 16.9 in",
+          framing: "framed",
+          color: "black",
+        },
+        "canvas-framed": {
+          category: "canvas",
+          size: "33 × 43 cm | 13.0 × 16.9 in",
+          framing: "framed",
+          color: "black",
+        },
+        "unframed-canvas": {
+          category: "canvas",
+          size: "30 × 40 cm | 11.8 × 15.7 in",
+          framing: "unframed",
+        },
+        "canvas-unframed": {
+          category: "canvas",
+          size: "30 × 40 cm | 11.8 × 15.7 in",
+          framing: "unframed",
+        },
+        "framed-poster": {
+          category: "paper",
+          size: "33 × 43 cm | 13.0 × 16.9 in",
+          border: "no-border",
+          color: "black",
+        },
+        "fine-art-paper-framed": {
+          category: "paper",
+          size: "33 × 43 cm | 13.0 × 16.9 in",
+          border: "no-border",
+          color: "black",
+        },
+      };
+      const defaultParams = portraitProductDefaults[handle];
+      if (!defaultParams) return;
+
       const params = new URLSearchParams({
         style: "the_gentleman",
         step: "3",
-        size: handle === "framed-poster" ? "30×40 cm" : "12″×16″",
+        ...defaultParams,
       });
-      if (handle === "framed-canvas-1" || handle === "unframed-canvas") {
-        params.set("category", "canvas");
-      }
-      if (handle === "framed-canvas-1") {
-        params.set("framing", "framed");
-        params.set("color", "black");
-      } else if (handle === "unframed-canvas") {
-        params.set("framing", "unframed");
-      } else if (handle === "framed-poster") {
-        params.set("category", "paper");
-        params.set("border", "no-border");
-        params.set("color", "black");
-      }
       const configuratorUrl = "/pages/portrait?" + params.toString();
       card.querySelectorAll("a.card-gallery__link, a.card-gallery__slide-link, .card-gallery a").forEach(link => {
         link.href = configuratorUrl;

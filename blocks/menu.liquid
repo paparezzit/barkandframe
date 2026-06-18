@@ -61,6 +61,12 @@
               {% if menu.handle == 'info-menu' and link.title == 'Contact' %}
                 {% assign link_title = 'Contact us' %}
               {% endif %}
+              {% if link.url contains 'faq' %}
+                <li class="menu__item {{ block_settings.link_preset }}{% if link.active %} menu__item--active{% endif %}">
+                  <a href="{{ link.url }}" class="menu__link--faq-split">Frequently<br>asked questions</a>
+                </li>
+                {% continue %}
+              {% endif %}
               <li class="menu__item {{ block_settings.link_preset }}{% if link.active %} menu__item--active{% endif %}">
                 <a href="{{ link.url }}">
                   {{ link_title }}
@@ -85,6 +91,11 @@
 
   .menu__item + .menu__item {
     margin-block-start: var(--spacing--size);
+  }
+
+  .menu__link--faq-split {
+    display: inline-block;
+    line-height: 1.25;
   }
 
   .menu .menu__heading--empty {

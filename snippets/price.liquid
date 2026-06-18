@@ -20,6 +20,13 @@
           break
         endif
       endfor
+    when 'canvas-framed'
+      for variant in product_resource.variants
+        if variant.option1 == 'Black' and variant.option2 == '33 × 43 cm | 13.0 × 16.9 in'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
     when 'unframed-canvas'
       for variant in product_resource.variants
         if variant.option1 == '12″×16″'
@@ -27,9 +34,23 @@
           break
         endif
       endfor
+    when 'canvas-unframed'
+      for variant in product_resource.variants
+        if variant.option1 == '30 × 40 cm | 11.8 × 15.7 in'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
     when 'framed-poster'
       for variant in product_resource.variants
         if variant.option1 == 'Black' and variant.option2 == '30×40 cm'
+          assign selected_variant = variant
+          break
+        endif
+      endfor
+    when 'fine-art-paper-framed'
+      for variant in product_resource.variants
+        if variant.option1 == 'Black' and variant.option2 == '33 × 43 cm | 13.0 × 16.9 in'
           assign selected_variant = variant
           break
         endif

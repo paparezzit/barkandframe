@@ -90,6 +90,7 @@
     {%- assign product_size_guide = closest.product.metafields.custom.size_guide -%}
     {%- assign product_made = closest.product.metafields.custom.made -%}
     {%- assign product_care = closest.product.metafields.custom.care -%}
+    {%- assign product_handle_downcase = closest.product.handle | downcase -%}
     {%- assign product_type_downcase = closest.product.type | downcase -%}
     {%- assign product_title_downcase = closest.product.title | downcase -%}
     {%- assign is_crewneck_product = false -%}
@@ -112,6 +113,41 @@
     {%- if product_type_downcase == 'cap' or product_title_downcase contains ' cap' or product_title_downcase contains '| cap' -%}
       {%- assign is_cap_product = true -%}
     {%- endif -%}
+    {%- assign is_charity_cap_product = false -%}
+    {%- if is_cap_product -%}
+      {%- if product_handle_downcase contains 'give-love' or product_handle_downcase contains 'charity' or product_title_downcase contains 'charity' -%}
+        {%- assign is_charity_cap_product = true -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- assign product_detail_icon_keys = '' -%}
+    {%- assign product_detail_icons_metafield = closest.product.metafields.custom.detail_icons -%}
+    {%- if product_detail_icons_metafield != blank -%}
+      {%- assign product_detail_icons_text = product_detail_icons_metafield.value | join: '||' | downcase -%}
+      {%- if product_detail_icons_text contains '10 eur to charity' -%}
+        {%- assign product_detail_icon_keys = product_detail_icon_keys | append: '10 Eur to Charity||' -%}
+      {%- endif -%}
+      {%- if product_detail_icons_text contains 'natural' -%}
+        {%- assign product_detail_icon_keys = product_detail_icon_keys | append: 'Natural||' -%}
+      {%- endif -%}
+      {%- if product_detail_icons_text contains '100% organic' or product_detail_icons_text contains '100 organic' -%}
+        {%- assign product_detail_icon_keys = product_detail_icon_keys | append: '100% Organic||' -%}
+      {%- endif -%}
+      {%- if product_detail_icons_text contains 'human friendly' -%}
+        {%- assign product_detail_icon_keys = product_detail_icon_keys | append: 'Human Friendly||' -%}
+      {%- endif -%}
+      {%- if product_detail_icons_text contains 'quality product' -%}
+        {%- assign product_detail_icon_keys = product_detail_icon_keys | append: 'Quality Product||' -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if product_detail_icon_keys == '' -%}
+      {%- if is_charity_cap_product -%}
+        {%- assign product_detail_icon_keys = '10 Eur to Charity||100% Organic||Human Friendly||' -%}
+      {%- elsif is_crewneck_product -%}
+        {%- assign product_detail_icon_keys = 'Natural||Human Friendly||Quality Product||' -%}
+      {%- elsif is_tshirt_product or is_cap_product -%}
+        {%- assign product_detail_icon_keys = '100% Organic||Human Friendly||Quality Product||' -%}
+      {%- endif -%}
+    {%- endif -%}
     {%- assign has_product_tabs = false -%}
     {%- if closest.product.description != blank
       or product_the_fabric != blank
@@ -119,6 +155,7 @@
       or product_size_guide != blank
       or product_made != blank
       or product_care != blank
+      or product_detail_icon_keys != blank
     -%}
       {%- assign has_product_tabs = true -%}
     {%- endif -%}
@@ -129,6 +166,53 @@
         <div class="product-information__tabs-description rte">
           {{ closest.product.description }}
         </div>
+      {%- endif -%}
+
+      {%- if product_detail_icon_keys != blank -%}
+        <ul class="prod-detail-icons" role="list" aria-label="Product highlights">
+          {%- assign product_detail_icon_labels = product_detail_icon_keys | split: '||' -%}
+          {%- for product_detail_icon in product_detail_icon_labels -%}
+            {%- assign product_detail_icon_label = product_detail_icon | strip -%}
+            {%- if product_detail_icon_label != blank -%}
+              {%- liquid
+                assign product_detail_icon_handle = product_detail_icon_label | handleize
+                assign product_detail_icon_asset = ''
+                assign product_detail_icon_display = product_detail_icon_label
+
+                case product_detail_icon_handle
+                  when '100-organic'
+                    assign product_detail_icon_asset = 'product-icon-100-organic.svg'
+                    assign product_detail_icon_display = '100%<br>Organic'
+                  when 'natural'
+                    assign product_detail_icon_asset = 'product-icon-natural.svg'
+                    assign product_detail_icon_display = 'Natural'
+                  when 'quality-product'
+                    assign product_detail_icon_asset = 'product-icon-quality-product.svg'
+                    assign product_detail_icon_display = 'Quality Product'
+                  when 'human-friendly'
+                    assign product_detail_icon_asset = 'product-icon-human-friendly.svg'
+                    assign product_detail_icon_display = 'Human Friendly'
+                  when '10-eur-to-charity'
+                    assign product_detail_icon_asset = 'product-icon-10-eur-to-charity.svg'
+                    assign product_detail_icon_display = '10 Eur to Charity'
+                endcase
+              -%}
+              {%- if product_detail_icon_asset != blank -%}
+                <li class="prod-detail-icons__item">
+                  <img
+                    class="prod-detail-icons__icon"
+                    src="{{ product_detail_icon_asset | asset_url }}"
+                    alt=""
+                    width="100"
+                    height="100"
+                    loading="lazy"
+                  >
+                  <span class="prod-detail-icons__label">{{ product_detail_icon_display }}</span>
+                </li>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
       {%- endif -%}
 
       <div class="prod-accordion-section__accordions" id="prod-accordions">
@@ -685,6 +769,40 @@
     margin-bottom: 40px;
   }
 
+  .prod-detail-icons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 28px 50px;
+    margin: 0 0 54px;
+    padding: 0;
+    color: var(--brown);
+    list-style: none;
+  }
+
+  .prod-detail-icons__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 108px;
+  }
+
+  .prod-detail-icons__icon {
+    display: block;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    object-fit: contain;
+  }
+
+  .prod-detail-icons__label {
+    display: block;
+    max-width: 82px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
   .baf-size-guide {
     margin: 20px 0;
     padding: 40px 20px;
@@ -811,6 +929,25 @@
   }
 
   @media screen and (max-width: 749px) {
+    .prod-detail-icons {
+      gap: 24px 34px;
+      margin-bottom: 44px;
+    }
+
+    .prod-detail-icons__item {
+      min-width: 100px;
+    }
+
+    .prod-detail-icons__icon {
+      width: 34px;
+      height: 34px;
+      flex-basis: 34px;
+    }
+
+    .prod-detail-icons__label {
+      max-width: 76px;
+    }
+
     .baf-size-guide {
       padding: 40px 20px;
       border-radius: var(--baf-radius-md);

@@ -187,7 +187,7 @@
 
 {%- if section.settings.sticky_button_enabled and section.settings.sticky_button_link != blank -%}
   <a href="{{ section.settings.sticky_button_link }}" class="collection-sticky-btn button">
-    {{- section.settings.sticky_button_text | default: 'Shop Now' -}}
+    {{- section.settings.sticky_button_text | default: 'Shop now' -}}
   </a>
 {%- endif -%}
 
@@ -603,12 +603,12 @@
       let lastTime = null;
       let loopPoint = 0;
       let position = 0;
-      let pauseUntil = 0;
       let autoScrollTimeout = null;
       let isAutoScrolling = false;
+      let isTileHoverPaused = false;
       const pixelsPerMs = 0.027;
       const cardCount = Number.parseInt(track.dataset.shopProductsCardCount || '0', 10);
-      const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const canHover = window.matchMedia('(hover: hover) and (pointer: fine)');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       let refreshFrame = null;
 
@@ -650,7 +650,6 @@
       const syncPositionFromScroll = () => {
         if (isAutoScrolling) return;
 
-        pauseForGesture();
         const normalizedPosition = normalizePosition(rail.scrollLeft);
         position = normalizedPosition;
 
@@ -686,21 +685,25 @@
         });
       };
 
-      const pauseForGesture = () => {
-        pauseUntil = performance.now() + 1200;
-      };
-
       const tick = (time) => {
         if (lastTime === null) lastTime = time;
         const delta = Math.min(time - lastTime, 64);
         lastTime = time;
 
-        if (rail.dataset.autoRailReady === 'true' && !reduceMotion.matches && time >= pauseUntil) {
+        if (rail.dataset.autoRailReady === 'true' && !reduceMotion.matches && !isTileHoverPaused) {
           position = normalizePosition(position + (delta * pixelsPerMs));
           applyPosition();
         }
 
         frame = window.requestAnimationFrame(tick);
+      };
+
+      const pauseOnTileHover = () => {
+        isTileHoverPaused = true;
+      };
+
+      const resumeOnTileHover = () => {
+        isTileHoverPaused = false;
       };
 
       refreshRail();
@@ -716,14 +719,12 @@
 
       window.addEventListener('resize', queueRefreshRail);
       rail.addEventListener('scroll', syncPositionFromScroll, { passive: true });
-      rail.addEventListener('touchstart', pauseForGesture, { passive: true });
-      rail.addEventListener('touchmove', pauseForGesture, { passive: true });
-      rail.addEventListener('pointerdown', pauseForGesture);
-      rail.addEventListener('wheel', pauseForGesture, { passive: true });
 
-      if (canHover) {
-        rail.addEventListener('mouseenter', pauseForGesture);
-        rail.addEventListener('pointerenter', pauseForGesture);
+      if (canHover.matches) {
+        track.querySelectorAll('.shop-products__rail-item').forEach((item) => {
+          item.addEventListener('mouseenter', pauseOnTileHover);
+          item.addEventListener('mouseleave', resumeOnTileHover);
+        });
       }
 
       if (reduceMotion.addEventListener) {
@@ -739,14 +740,10 @@
         if (resizeObserver) resizeObserver.disconnect();
         window.removeEventListener('resize', queueRefreshRail);
         rail.removeEventListener('scroll', syncPositionFromScroll);
-        rail.removeEventListener('touchstart', pauseForGesture);
-        rail.removeEventListener('touchmove', pauseForGesture);
-        rail.removeEventListener('pointerdown', pauseForGesture);
-        rail.removeEventListener('wheel', pauseForGesture);
-        if (canHover) {
-          rail.removeEventListener('mouseenter', pauseForGesture);
-          rail.removeEventListener('pointerenter', pauseForGesture);
-        }
+        track.querySelectorAll('.shop-products__rail-item').forEach((item) => {
+          item.removeEventListener('mouseenter', pauseOnTileHover);
+          item.removeEventListener('mouseleave', resumeOnTileHover);
+        });
         if (reduceMotion.removeEventListener) {
           reduceMotion.removeEventListener('change', queueRefreshRail);
         }
@@ -902,7 +899,7 @@
       "type": "text",
       "id": "portrait_1_button_label",
       "label": "Button label",
-      "default": "Make a Portrait"
+      "default": "Make a portrait"
     },
     {
       "type": "header",
@@ -946,7 +943,7 @@
       "type": "text",
       "id": "portrait_2_button_label",
       "label": "Button label",
-      "default": "Make a Portrait"
+      "default": "Make a portrait"
     },
     {
       "type": "header",
@@ -990,7 +987,7 @@
       "type": "text",
       "id": "portrait_3_button_label",
       "label": "Button label",
-      "default": "Make a Portrait"
+      "default": "Make a portrait"
     },
     {
       "type": "text",
@@ -1062,7 +1059,7 @@
       "type": "text",
       "id": "sticky_button_text",
       "label": "Sticky button text",
-      "default": "Artist Collection"
+      "default": "Artist collection"
     },
     {
       "type": "url",

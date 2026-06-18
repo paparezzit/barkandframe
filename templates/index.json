@@ -170,8 +170,7 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "wrap": "pretty"
+                "padding-inline-end": 0
               },
               "blocks": {}
             }
@@ -250,8 +249,7 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "wrap": "pretty"
+                "padding-inline-end": 0
               },
               "blocks": {}
             }
@@ -288,7 +286,6 @@
     },
     "section_reviews": {
       "type": "reviews",
-      "disabled": true,
       "blocks": {
         "product_card_QxrxEc": {
           "type": "product-card",
@@ -1505,6 +1502,7 @@
         "product_card_nR3E3d",
         "product_card_DQA9R7"
       ],
+      "disabled": true,
       "name": "Reviews",
       "settings": {
         "main-text": "What dog<br>people say",
@@ -1518,6 +1516,7 @@
         "product_card_floating_Aq9RiH": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
+          "disabled": true,
           "settings": {
             "product": "you-can-pet-the-dog-cap",
             "parallax_amount": "0vh",
@@ -1575,12 +1574,12 @@
           "block_order": [
             "image_ExQgjX",
             "product_title_pk63Tq"
-          ],
-          "disabled": true
+          ]
         },
         "product_card_floating_X66h7c": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
+          "disabled": true,
           "settings": {
             "product": "powered-by-dogs-t-shirt",
             "parallax_amount": "-20vh",
@@ -1638,12 +1637,12 @@
           "block_order": [
             "image_kLmjma",
             "product_title_V3djHJ"
-          ],
-          "disabled": true
+          ]
         },
         "product_card_floating_AFBBqt": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
+          "disabled": true,
           "settings": {
             "product": "bloom-crewneck",
             "parallax_amount": "-10vh",
@@ -1701,12 +1700,12 @@
           "block_order": [
             "image_7HVfCR",
             "product_title_KJ4qWg"
-          ],
-          "disabled": true
+          ]
         },
         "product_card_floating_HQ3CaJ": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
+          "disabled": true,
           "settings": {
             "product": "powered-by-dogs-t-shirt",
             "parallax_amount": "0vh",
@@ -1764,12 +1763,12 @@
           "block_order": [
             "image_QWaC9e",
             "product_title_iedVUE"
-          ],
-          "disabled": true
+          ]
         },
         "product_card_floating_6mK3kK": {
           "type": "product-card--floating",
           "name": "t:names.product_card",
+          "disabled": true,
           "settings": {
             "product": "you-can-pet-the-dog-cap",
             "parallax_amount": "-20vh",
@@ -1827,8 +1826,7 @@
           "block_order": [
             "image_P7y9jH",
             "product_title_yinNVT"
-          ],
-          "disabled": true
+          ]
         },
         "product_card_floating_merch_lifestyle_01": {
           "type": "product-card--floating",
@@ -2884,8 +2882,7 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "wrap": "pretty"
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -2893,7 +2890,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>Shop Now</p>",
+                        "text": "<p>Shop now</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3194,8 +3191,7 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "wrap": "pretty"
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -3203,7 +3199,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>Shop Now</p>",
+                        "text": "<p>Shop now</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",

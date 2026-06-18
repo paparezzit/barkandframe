@@ -70,9 +70,13 @@
   window.MakePortraitProducts = [
     {%- if products_collection != blank -%}
       {%- for product in products_collection.products -%}
+        {%- assign _mp_product_title = product.title -%}
+        {%- if product.handle == section.settings.framed_poster_handle -%}
+          {%- assign _mp_product_title = 'Fine Art Paper' -%}
+        {%- endif -%}
         {
           "id": {{ product.id }},
-          "title": {{ product.title | json }},
+          "title": {{ _mp_product_title | json }},
           "handle": {{ product.handle | json }},
           "featuredImage": "{{ product.featured_image | image_url: width: 600 }}",
           "price": {{ product.price_min }}
@@ -94,7 +98,7 @@
       {%- assign _cpv_cv = null -%}
       {%- for _v in _cpv_cf.variants -%}
         {%- assign _v_options_str = _v.options | join: ' ' | downcase -%}
-        {%- if _v_options_str contains 'brown' -%}
+        {%- if _v_options_str contains 'brown' or _v_options_str contains 'walnut' -%}
           {%- assign _cpv_cv = _v -%}
         {%- endif -%}
       {%- endfor -%}
@@ -188,34 +192,52 @@
       {%- endfor -%}
     {%- endif -%}
   };
-  {%- comment -%} Map of variantId -> printful_variant_id parsed from SKU (format: PREFIX_PRINTFULID) {%- endcomment -%}
+  {%- comment -%} Map of Shopify variant ID -> Printful variant ID for portrait products.
+    Keep this independent from Shopify SKU so direct Printful routing can be disabled safely.
+  {%- endcomment -%}
   window.MakePortraitPrintfulVariants = {
-    {%- assign _mp_pv_handles = '' -%}
-    {%- if section.settings.canvas_unframed_handle != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_unframed_handle | append: ',' -%}{%- endif -%}
-    {%- if section.settings.canvas_framed_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.canvas_framed_handle   | append: ',' -%}{%- endif -%}
-    {%- if section.settings.framed_poster_handle   != blank -%}{%- assign _mp_pv_handles = _mp_pv_handles | append: section.settings.framed_poster_handle   | append: ',' -%}{%- endif -%}
-    {%- assign _mp_pv_list = _mp_pv_handles | split: ',' -%}
-    {%- for _mp_pvh in _mp_pv_list -%}
-      {%- unless _mp_pvh == blank -%}
-        {%- assign _mp_pvp = all_products[_mp_pvh] -%}
-        {%- for _mp_pvv in _mp_pvp.variants -%}
-          {%- assign _mp_pvid = _mp_pvv.sku | split: '_' | last | plus: 0 -%}
-          {%- if _mp_pvid != 0 -%}
-            {{ _mp_pvv.id }}: {{ _mp_pvid }},
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endunless -%}
-    {%- endfor -%}
-    {%- if products_collection != blank -%}
-      {%- for _mp_pvp2 in products_collection.products -%}
-        {%- for _mp_pvv2 in _mp_pvp2.variants -%}
-          {%- assign _mp_pvid2 = _mp_pvv2.sku | split: '_' | last | plus: 0 -%}
-          {%- if _mp_pvid2 != 0 -%}
-            {{ _mp_pvv2.id }}: {{ _mp_pvid2 }},
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endfor -%}
-    {%- endif -%}
+    54153272066394: 17627,
+    54153272099162: 16035,
+    54153272131930: 17631,
+    54153272164698: 17634,
+    54153272197466: 16041,
+    54153272230234: 17638,
+    54153272263002: 17641,
+    54153272295770: 15696,
+    54153272328538: 17645,
+    54039377281370: 19293,
+    54039377314138: 5,
+    54039377346906: 19310,
+    54051927851354: 9356,
+    54051927884122: 9357,
+    54051927916890: 9358,
+    54051927949658: 11790,
+    54051927982426: 11791,
+    54051928015194: 11792,
+    54051928047962: 10296,
+    54051928080730: 10297,
+    54051928113498: 10298,
+    54328010244442: 17627,
+    54328010277210: 16035,
+    54328010309978: 17631,
+    54328010342746: 17634,
+    54328010375514: 16041,
+    54328010408282: 17638,
+    54328010441050: 17641,
+    54328010473818: 15696,
+    54328010506586: 17645,
+    54328010834266: 19293,
+    54328010867034: 5,
+    54328010899802: 19310,
+    54328010539354: 9356,
+    54328010572122: 9357,
+    54328010604890: 9358,
+    54328010637658: 11790,
+    54328010670426: 11791,
+    54328010703194: 11792,
+    54328010735962: 10296,
+    54328010768730: 10297,
+    54328010801498: 10298,
   };
 
   {%- assign _prints_block = section.blocks | where: "type", "prints" | first -%}
@@ -239,6 +261,16 @@
     "number-of-pets-2":          {{ 'make-portrait/number-of-pets-2.png'          | asset_url | json }},
     "number-of-pets-3":          {{ 'make-portrait/number-of-pets-3.png'          | asset_url | json }},
     "number-of-pets-4":          {{ 'make-portrait/number-of-pets-4.png'          | asset_url | json }},
+    "color-black":               {{ 'make-portrait/color-black.png'               | asset_url | json }},
+    "color-brown":               {{ 'make-portrait/color-brown.png'               | asset_url | json }},
+    "color-oak":                 {{ 'make-portrait/color-oak.png'                 | asset_url | json }},
+    "color-white":               {{ 'make-portrait/color-white.png'               | asset_url | json }},
+    "size-8x10":                 {{ 'make-portrait/size-8x10.png'                 | asset_url | json }},
+    "size-12x16":                {{ 'make-portrait/size-12x16.png'                | asset_url | json }},
+    "size-20x28":                {{ 'make-portrait/size-20x28.png'                | asset_url | json }},
+    "size-21x30-cm":             {{ 'make-portrait/size-21x30-cm.png'             | asset_url | json }},
+    "size-30x40-cm":             {{ 'make-portrait/size-30x40-cm.png'             | asset_url | json }},
+    "size-50x70-cm":             {{ 'make-portrait/size-50x70-cm.png'             | asset_url | json }},
     {%- assign _mp_img_list = _mp_img_handles | split: ',' -%}
     {%- for _mp_ih in _mp_img_list -%}
       {%- unless _mp_ih == blank -%}
@@ -405,6 +437,7 @@
             {%- assign _fp = all_products[section.settings.framed_poster_handle] -%}
             {%- if _fp != blank -%}
             {%- assign _fp_img = section.settings.poster_picker_image | default: _fp.featured_image -%}
+            {%- assign _fp_label = 'Fine Art Paper' -%}
             <div class="product-picker__print-group">
               <button
                 class="product-picker__item product-picker__item--category"
@@ -414,11 +447,11 @@
                 aria-selected="false"
               >
                 {%- if _fp_img -%}
-                  <img src="{{ _fp_img | image_url: width: 200 }}" width="200" height="200" alt="{{ _fp.title }}" loading="lazy">
+                  <img src="{{ _fp_img | image_url: width: 200 }}" width="200" height="200" alt="{{ _fp_label }}" loading="lazy">
                 {%- else -%}
                   <div class="product-picker__placeholder"></div>
                 {%- endif -%}
-                <span class="product-picker__name">{{ _fp.title }}</span>
+                <span class="product-picker__name">{{ _fp_label }}</span>
                 <span class="product-picker__sub">from {{ _fp.price_min | money }}</span>
               </button>
             </div>
@@ -2373,17 +2406,23 @@
   padding: 10px 14px;
   font-size: 36px;
   color: var(--brown);
-  background: #fff;
-  outline: none;
-  box-shadow: inset 0 0 0 0 transparent;
-  transition: box-shadow 0.2s, background 0.2s;
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  box-shadow: none;
+  transition: outline-color 0.2s;
   display: block;
   background: var(--cream);
+  background-color: var(--cream);
   font-family: "display", serif;
+  appearance: none;
+  -webkit-appearance: none;
+  caret-color: var(--brown);
 
-  &:hover, &:focus{
-    box-shadow: var(--mp-choice-ring);
+  &:hover, &:focus, &:focus-visible{
     background: var(--cream);
+    background-color: var(--cream);
+    color: var(--brown);
+    outline-color: transparent;
   }
 
   &::placeholder{
@@ -2392,8 +2431,58 @@
   }
 }
 
-.make-portrait__text-input:focus {
-  box-shadow: var(--mp-choice-ring);
+.make-portrait__text-input:focus,
+.make-portrait__text-input:focus-visible {
+  outline-color: transparent;
+}
+
+.make-portrait__text-input.is-selected,
+.make-portrait__text-input:not(:placeholder-shown) {
+  outline-color: var(--green);
+}
+
+.make-portrait__text-input:-webkit-autofill,
+.make-portrait__text-input:-webkit-autofill:hover,
+.make-portrait__text-input:-webkit-autofill:focus,
+.make-portrait__text-input:-webkit-autofill:focus-visible {
+  -webkit-text-fill-color: var(--brown);
+  caret-color: var(--brown);
+  background-color: var(--cream);
+  box-shadow: 0 0 0 1000px var(--cream) inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--cream) inset;
+  transition: background-color 9999s ease-out, outline-color 0.2s;
+}
+
+.make-portrait__text-input:autofill,
+.make-portrait__text-input:autofill:hover,
+.make-portrait__text-input:autofill:focus,
+.make-portrait__text-input:autofill:focus-visible {
+  color: var(--brown);
+  caret-color: var(--brown);
+  background: var(--cream);
+  background-color: var(--cream);
+}
+
+.make-portrait__text-input:-webkit-autofill:focus,
+.make-portrait__text-input:-webkit-autofill:focus-visible,
+.make-portrait__text-input:autofill:focus,
+.make-portrait__text-input:autofill:focus-visible {
+  outline-color: transparent;
+}
+
+.make-portrait__text-input.is-selected:-webkit-autofill,
+.make-portrait__text-input.is-selected:-webkit-autofill:focus,
+.make-portrait__text-input.is-selected:-webkit-autofill:focus-visible,
+.make-portrait__text-input.is-selected:autofill,
+.make-portrait__text-input.is-selected:autofill:focus,
+.make-portrait__text-input.is-selected:autofill:focus-visible,
+.make-portrait__text-input:not(:placeholder-shown):-webkit-autofill,
+.make-portrait__text-input:not(:placeholder-shown):-webkit-autofill:focus,
+.make-portrait__text-input:not(:placeholder-shown):-webkit-autofill:focus-visible,
+.make-portrait__text-input:not(:placeholder-shown):autofill,
+.make-portrait__text-input:not(:placeholder-shown):autofill:focus,
+.make-portrait__text-input:not(:placeholder-shown):autofill:focus-visible {
+  outline-color: var(--green);
 }
 
 .make-portrait__pet-name-fee {
@@ -3542,7 +3631,13 @@
 
   var STYLES = window.MakePortraitStyles || [];
   var FRAMED_POSTER_HANDLE = window.MakePortraitFramedPosterHandle || '';
-  var COLOR_DISPLAY_NAMES = { 'oak': 'Premium Oak', 'brown': 'Premium Walnut' };
+  var COLOR_DISPLAY_NAMES = {
+    'oak': 'Premium Oak',
+    'premium oak': 'Premium Oak',
+    'brown': 'Premium Walnut',
+    'walnut': 'Premium Walnut',
+    'premium walnut': 'Premium Walnut'
+  };
   var PRODUCTS = window.MakePortraitProducts || [];
   var CANVAS_HANDLES = window.MakePortraitCanvasHandles || {};
   var EXTRA_PET_USD    = window.MakePortraitExtraPetUSD    || 9;
@@ -3559,6 +3654,38 @@
   /* --------------------------------------------------------------------------------
      Utilities
   -------------------------------------------------------------------------------- */
+  function optionNameKey(name) {
+    var key = String(name || '').trim().toLowerCase();
+    if (key === 'frame color' || key === 'frame colour' || key === 'color' || key === 'colour') return 'color';
+    return key;
+  }
+
+  function isSizeOptionName(name) {
+    return optionNameKey(name) === 'size';
+  }
+
+  function isColorOptionName(name) {
+    return optionNameKey(name) === 'color';
+  }
+
+  function normalizeOptionValueKey(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\u00D7/g, 'x')
+      .replace(/[\u2033"']/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function normalizeResolutionParts(value) {
+    var parts = String(value || '').replace(/\u00D7/g, 'x').split(/x/i);
+    if (parts.length !== 2) return null;
+    var w = parseInt(parts[0].replace(/[^\d]/g, ''), 10);
+    var h = parseInt(parts[1].replace(/[^\d]/g, ''), 10);
+    if (!w || !h) return null;
+    return { w: w, h: h };
+  }
+
   function formatMoney(cents) {
     var format = window.MakePortraitMoneyFormat || '${{amount}}';
     var amount = Math.round(cents) / 100;
@@ -3793,6 +3920,12 @@
     var canvasHandles = window.MakePortraitCanvasHandles || {};
     var isCanvas = state.productHandle === canvasHandles.unframed || state.productHandle === canvasHandles.framed;
     group.hidden = isDream && (isCanvas || (!isWhiteBorder && isPaper));
+  }
+
+  function syncPetNameSelectedState() {
+    var input = $('mp-pet-name');
+    if (!input) return;
+    input.classList.toggle('is-selected', !!String(input.value || '').trim());
   }
 
   function updateSubtotals() {
@@ -4278,7 +4411,7 @@
         if (product.variants && product.variants.length) {
           product.variants.forEach(function (v) {
             var opts = (v.options || []).join(' ').toLowerCase();
-            if (opts.includes('brown') || opts.includes('oak')) {
+            if (opts.includes('brown') || opts.includes('walnut') || opts.includes('oak')) {
               _previewVariantId = v.id;
             }
           });
@@ -4433,7 +4566,7 @@
     if (state.product) {
       normalizeOptions(state.product.options).forEach(function (opt) {
         var val = state.selectedOptions[opt.position];
-        if (val !== undefined) previousSelections[opt.name.toLowerCase()] = val;
+        if (val !== undefined) previousSelections[optionNameKey(opt.name)] = val;
       });
     }
     if (!handle) {
@@ -4467,10 +4600,10 @@
     target = target || {};
     normalizeOptions(product ? product.options : []).forEach(function (opt) {
       var val = selections[opt.position];
-      if (val !== undefined) target[opt.name.toLowerCase()] = val;
+      if (val !== undefined) target[optionNameKey(opt.name)] = val;
     });
     Object.keys(selections).forEach(function (key) {
-      if (!/^\d+$/.test(key)) target[key.toLowerCase()] = selections[key];
+      if (!/^\d+$/.test(key)) target[optionNameKey(key)] = selections[key];
     });
     return target;
   }
@@ -4483,8 +4616,8 @@
     if (container2) container2.innerHTML = '';
 
     var opts = normalizeOptions(product.options);
-    var sizeOpts  = opts.filter(function (o) { return o.name.toLowerCase() === 'size'; });
-    var otherOpts = opts.filter(function (o) { return o.name.toLowerCase() !== 'size'; });
+    var sizeOpts  = opts.filter(function (o) { return isSizeOptionName(o.name); });
+    var otherOpts = opts.filter(function (o) { return !isSizeOptionName(o.name); });
 
     // 1. Size first
     sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections); });
@@ -4530,6 +4663,36 @@
     matchVariant(product);
   }
 
+  function getLegacyOptionImageValue(optName, value) {
+    var optKey = optionNameKey(optName);
+    var raw = normalizeOptionValueKey(value);
+
+    if (optKey === 'color') {
+      if (raw.includes('walnut') || raw === 'brown') return 'brown';
+      if (raw.includes('oak')) return 'oak';
+      if (raw.includes('black')) return 'black';
+      if (raw.includes('white')) return 'white';
+    }
+
+    if (optKey === 'size') {
+      var handle = state.productHandle || '';
+      var canvasHandles = window.MakePortraitCanvasHandles || {};
+      var isPaper = handle === FRAMED_POSTER_HANDLE || state.productCategory === 'paper';
+
+      if (raw.includes('23 x 28') || raw.includes('20 x 25') || raw.includes('9.1 x 11.0') || raw.includes('7.9 x 9.8') || raw.includes('8x10')) return '8x10';
+      if (raw.includes('30 x 40') || raw.includes('11.8 x 15.7') || raw.includes('12x16')) return isPaper ? '30x40-cm' : '12x16';
+      if (raw.includes('51 x 71') || raw.includes('20.1 x 28.0') || raw.includes('20x28')) return '20x28';
+
+      if (isPaper || handle !== canvasHandles.unframed) {
+        if (raw.includes('24 x 33') || raw.includes('9.4 x 13.0') || raw.includes('21x30')) return '21x30-cm';
+        if (raw.includes('33 x 43') || raw.includes('13.0 x 16.9') || raw.includes('30x40')) return isPaper ? '30x40-cm' : '12x16';
+        if (raw.includes('54 x 74') || raw.includes('21.3 x 29.1') || raw.includes('50x70')) return isPaper ? '50x70-cm' : '20x28';
+      }
+    }
+
+    return value;
+  }
+
   function optionImageUrl(optName, value) {
     var map = window.MakePortraitOptionImages || {};
     function slug(s) {
@@ -4538,17 +4701,37 @@
         .replace(/[\u2033"']/g, '')
         .replace(/ /g, '-');
     }
-    var key = slug(optName) + '-' + slug(value);
-    return map[key] || null;
+    var optKey = optionNameKey(optName);
+    var optSlugs = [slug(optKey)];
+    var legacyValue = getLegacyOptionImageValue(optName, value);
+    var valueSlugs = [slug(legacyValue), slug(value)];
+
+    if (optKey !== optName) optSlugs.push(slug(optName));
+    for (var oi = 0; oi < optSlugs.length; oi++) {
+      for (var vi = 0; vi < valueSlugs.length; vi++) {
+        var key = optSlugs[oi] + '-' + valueSlugs[vi];
+        if (map[key]) return map[key];
+      }
+    }
+    return null;
   }
 
   function getSizeDimensions(value) {
-    var s = String(value).replace(/\u00D7/g, 'x').replace(/[\u2033"']/g, '').trim();
+    var raw = String(value || '').trim();
+    var combined = raw.match(/(\d+(?:\.\d+)?)\s*[\u00D7x]\s*(\d+(?:\.\d+)?)\s*cm\s*\|\s*(\d+(?:\.\d+)?)\s*[\u00D7x]\s*(\d+(?:\.\d+)?)\s*in/i);
+    if (combined) {
+      return {
+        cm: parseFloat(combined[1]) + ' \u00D7 ' + parseFloat(combined[2]) + ' cm',
+        inches: parseFloat(combined[3]).toFixed(1) + ' \u00D7 ' + parseFloat(combined[4]).toFixed(1) + ' in'
+      };
+    }
+
+    var s = raw.replace(/\u00D7/g, 'x').replace(/[\u2033"']/g, '').trim();
     var isCm = /cm/i.test(s);
     var parts = s.split('x');
     if (parts.length !== 2) return null;
-    var a = parseFloat(parts[0]);
-    var b = parseFloat(parts[1]);
+    var a = parseFloat(parts[0].replace(/[^\d.]/g, ''));
+    var b = parseFloat(parts[1].replace(/[^\d.]/g, ''));
     if (isNaN(a) || isNaN(b)) return null;
 
     var key = Math.round(a) + 'x' + Math.round(b);
@@ -4739,6 +4922,8 @@
     var normalizedPreset = normalizePresetOptionValue(presetValue);
     for (var i = 0; i < values.length; i++) {
       if (normalizePresetOptionValue(values[i]) === normalizedPreset) return values[i];
+      if (normalizePresetOptionValue(getLegacyOptionImageValue('color', values[i])) === normalizedPreset) return values[i];
+      if (normalizePresetOptionValue(getLegacyOptionImageValue('size', values[i])) === normalizedPreset) return values[i];
     }
     return null;
   }
@@ -4749,11 +4934,12 @@
     var label = document.createElement('span');
     label.className = 'make-portrait__option-label';
     var optionLabelNames = { 'color': 'Frame Color' };
-    label.textContent = optionLabelNames[opt.name.toLowerCase()] || opt.name;
+    var optKey = optionNameKey(opt.name);
+    label.textContent = optionLabelNames[optKey] || opt.name;
     group.appendChild(label);
     var grid = document.createElement('div');
     grid.className = 'option-btn-grid';
-    grid.dataset.optionName = opt.name.toLowerCase();
+    grid.dataset.optionName = optKey;
 
     var seen = {}, values = [];
     product.variants.forEach(function (v) {
@@ -4761,7 +4947,7 @@
       if (!seen[val]) { seen[val] = true; values.push(val); }
     });
 
-    if (opt.name.toLowerCase() === 'color') {
+    if (isColorOptionName(opt.name)) {
       values.sort(function (a, b) {
         var order = function (v) {
           var l = v.toLowerCase();
@@ -4773,15 +4959,15 @@
       });
     }
 
-    var prevValue = previousSelections && previousSelections[opt.name.toLowerCase()];
+    var prevValue = previousSelections && previousSelections[optKey];
     var matchedPrevValue = matchPresetOptionValue(values, prevValue);
     var hasPrev = matchedPrevValue !== null;
 
     values.forEach(function (value, vIdx) {
-      var _defaultIdx = opt.name.toLowerCase() === 'size' ? Math.floor(values.length / 2) : 0;
+      var _defaultIdx = isSizeOptionName(opt.name) ? Math.floor(values.length / 2) : 0;
       var isSelected = hasPrev ? (value === matchedPrevValue) : (vIdx === _defaultIdx);
       var btn = document.createElement('button');
-      var optNameLower = opt.name.toLowerCase();
+      var optNameLower = optKey;
       btn.className = 'option-btn' +
         (optNameLower === 'size' ? ' option-btn--size' : '') +
         (optNameLower === 'color' ? ' option-btn--small' : '') +
@@ -4790,7 +4976,7 @@
       btn.dataset.optionIndex = opt.position;
       btn.dataset.value = value;
       var imgUrl = optionImageUrl(opt.name, value);
-      if (opt.name.toLowerCase() === 'size') {
+      if (isSizeOptionName(opt.name)) {
         // Size button: always show inch + cm + price stacked; image optional
         if (imgUrl) {
           var sImg = document.createElement('img');
@@ -4829,7 +5015,7 @@
         if (usesStep3BestsellerBadges(product) && dims && dims.cm === '33 \u00D7 43 cm' && dims.inches === '13.0 \u00D7 16.9 in') {
           addOptionBadge(btn, 'Bestseller');
         }
-      } else if (opt.name.toLowerCase() === 'color') {
+      } else if (isColorOptionName(opt.name)) {
         var displayName = COLOR_DISPLAY_NAMES[value.toLowerCase()] || value;
         var globalMinPrice = Math.min.apply(null, product.variants.map(function (v) { return v.price; }));
         var colorMinPrice = null;
@@ -4885,12 +5071,12 @@
     var prevSel = {};
     if (initialSelections) {
       Object.keys(initialSelections).forEach(function (key) {
-        prevSel[key.toLowerCase()] = initialSelections[key];
+        prevSel[optionNameKey(key)] = initialSelections[key];
       });
     }
     normalizeOptions(product.options || []).forEach(function (opt) {
       var val = state.selectedOptions[opt.position];
-      if (val !== undefined) prevSel[opt.name.toLowerCase()] = val;
+      if (val !== undefined) prevSel[optionNameKey(opt.name)] = val;
     });
     state.selectedOptions = {};
 
@@ -4955,7 +5141,7 @@
     }
     var opts = normalizeOptions(product.options);
     opts.sort(function (a, b) {
-      return (a.name.toLowerCase() === 'size' ? 0 : 1) - (b.name.toLowerCase() === 'size' ? 0 : 1) || a.position - b.position;
+      return (isSizeOptionName(a.name) ? 0 : 1) - (isSizeOptionName(b.name) ? 0 : 1) || a.position - b.position;
     });
     opts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections); });
     matchVariant(product);
@@ -4964,8 +5150,8 @@
   function buildPosterUI(product, container, previousSelections) {
     var container2 = $('mp-options-container-2');
     var opts = normalizeOptions(product.options);
-    var sizeOpts  = opts.filter(function (o) { return o.name.toLowerCase() === 'size'; });
-    var colorOpts = opts.filter(function (o) { return o.name.toLowerCase() === 'color'; });
+    var sizeOpts  = opts.filter(function (o) { return isSizeOptionName(o.name); });
+    var colorOpts = opts.filter(function (o) { return isColorOptionName(o.name); });
 
     // 1. Size
     sizeOpts.forEach(function (opt) { appendOptionGroup(opt, product, container, previousSelections || {}); });
@@ -5030,7 +5216,7 @@
       var previewName = $('mp-preview-style-name');
       if (previewName) {
         var sizeOpts = normalizeOptions(state.product ? state.product.options : [])
-          .filter(function (o) { return o.name.toLowerCase() === 'size'; });
+          .filter(function (o) { return isSizeOptionName(o.name); });
         var sizeValue = sizeOpts.length ? state.selectedOptions[sizeOpts[0].position] : null;
         var dims = sizeValue ? getSizeDimensions(sizeValue) : null;
         if (dims) {
@@ -5078,7 +5264,7 @@
   function getSelectedSizeValue() {
     if (!state.product) return null;
     var sizeOpts = normalizeOptions(state.product.options)
-      .filter(function (o) { return o.name.toLowerCase() === 'size'; });
+      .filter(function (o) { return isSizeOptionName(o.name); });
     return sizeOpts.length ? state.selectedOptions[sizeOpts[0].position] : null;
   }
 
@@ -5231,9 +5417,13 @@
       return;
     }
 
-    var parts = minResStr.split(/x/i);
-    var minW = parseInt(parts[0], 10);
-    var minH = parseInt(parts[1], 10);
+    var minRes = normalizeResolutionParts(minResStr);
+    if (!minRes) {
+      alertEl.hidden = true;
+      return;
+    }
+    var minW = minRes.w;
+    var minH = minRes.h;
 
     var allPass = true;
     state.fileDimensions.forEach(function (dims) {
@@ -5375,12 +5565,10 @@
     var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
     if (!minResStr) return null;
 
-    var parts = minResStr.split(/x/i);
-    var minW = parseInt(parts[0], 10);
-    var minH = parseInt(parts[1], 10);
-    if (!minW || !minH) return null;
+    var minRes = normalizeResolutionParts(minResStr);
+    if (!minRes) return null;
 
-    return { minResStr: minResStr, minW: minW, minH: minH };
+    return { minResStr: minResStr, minW: minRes.w, minH: minRes.h };
   }
 
   function photoMeetsMinResolution(dims, minRes) {
@@ -5445,10 +5633,12 @@
     if (!banner) { onConfirm(); return; }
 
     if (detail && minResStr) {
-      var rp = minResStr.split(/x/i);
+      var rp = normalizeResolutionParts(minResStr);
       var currentResolution = formatPhotoResolution(photoDims);
-      detail.textContent = (currentResolution ? 'Your photo resolution is ' + currentResolution + '. ' : '') +
-        'For best results, use a photo at least ' + rp[0] + ' \u00D7 ' + rp[1] + ' px.';
+      if (rp) {
+        detail.textContent = (currentResolution ? 'Your photo resolution is ' + currentResolution + '. ' : '') +
+          'For best results, use a photo at least ' + rp.w + ' \u00D7 ' + rp.h + ' px.';
+      }
     }
     if (backdrop) backdrop.hidden = false;
     banner.hidden = false;
@@ -5571,12 +5761,10 @@
 
           var minResStr = window.MakePortraitMinResolutions && window.MakePortraitMinResolutions[state.variantId];
           var qualityOk = true;
-          if (minResStr) {
-            var rp = minResStr.split(/x/i);
-            var minW = parseInt(rp[0], 10);
-            var minH = parseInt(rp[1], 10);
-            qualityOk = Math.max(dims.w, dims.h) >= Math.max(minW, minH) &&
-                        Math.min(dims.w, dims.h) >= Math.min(minW, minH);
+          var minResParts = normalizeResolutionParts(minResStr);
+          if (minResParts) {
+            qualityOk = Math.max(dims.w, dims.h) >= Math.max(minResParts.w, minResParts.h) &&
+                        Math.min(dims.w, dims.h) >= Math.min(minResParts.w, minResParts.h);
           }
 
           if (qualityOk) {
@@ -5835,6 +6023,7 @@
       var inp = $('mp-pet-name');
       if (inp) inp.value = saved.petName;
       state.petName = saved.petName;
+      syncPetNameSelectedState();
     }
     if (saved.photoUrls && saved.photoUrls.length) {
       state.photoUrls = saved.photoUrls.slice();
@@ -6183,8 +6372,10 @@
     // Pet name
     var petNameInput = $('mp-pet-name');
     if (petNameInput) {
+      syncPetNameSelectedState();
       petNameInput.addEventListener('input', function () {
         state.petName = petNameInput.value;
+        syncPetNameSelectedState();
         var feeEl = $('mp-pet-name-fee');
         if (feeEl) feeEl.hidden = !state.petName;
         updateSubtotals();

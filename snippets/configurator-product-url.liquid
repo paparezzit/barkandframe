@@ -5,11 +5,12 @@
 {%- enddoc -%}
 
 {%- liquid
-  if product.handle == 'framed-canvas-1'
-    echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=12%E2%80%B3%C3%9716%E2%80%B3&framing=framed&color=black'
-  elsif product.handle == 'unframed-canvas'
-    echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=12%E2%80%B3%C3%9716%E2%80%B3&framing=unframed'
-  elsif product.handle == 'framed-poster'
-    echo '/pages/portrait?step=3&style=the_gentleman&category=paper&size=30%C3%9740%20cm&border=no-border&color=black'
-  endif
+  case product.handle
+    when 'framed-canvas-1', 'canvas-framed'
+      echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=33%20%C3%97%2043%20cm%20%7C%2013.0%20%C3%97%2016.9%20in&framing=framed&color=black'
+    when 'unframed-canvas', 'canvas-unframed'
+      echo '/pages/portrait?step=3&style=the_gentleman&category=canvas&size=30%20%C3%97%2040%20cm%20%7C%2011.8%20%C3%97%2015.7%20in&framing=unframed'
+    when 'framed-poster', 'fine-art-paper-framed'
+      echo '/pages/portrait?step=3&style=the_gentleman&category=paper&size=33%20%C3%97%2043%20cm%20%7C%2013.0%20%C3%97%2016.9%20in&border=no-border&color=black'
+  endcase
 -%}
