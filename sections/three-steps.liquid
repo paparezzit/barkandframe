@@ -259,8 +259,10 @@
       height: calc(100svh - 116px);
       min-height: 0;
       display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      align-content: center;
       align-items: center;
+      row-gap: clamp(28px, 6svh, 42px);
       padding: 0 0 max(12px, env(safe-area-inset-bottom));
       box-sizing: border-box;
     }
@@ -281,8 +283,7 @@
     .three-steps__title{
       position: relative;
       z-index: 2;
-      align-self: start;
-      margin: 0 0 clamp(8px, 2svh, 14px);
+      margin: 0;
       width: max-content;
       max-width: 100%;
       justify-self: center;
@@ -292,11 +293,12 @@
 
     .three-steps__content{
       display: grid;
-      grid-template: "step" 1fr / 1fr;
+      grid-template: "step" auto / 1fr;
       align-items: center;
-      align-self: stretch;
+      align-self: center;
+      width: 100%;
       height: auto;
-      min-height: 0;
+      min-height: clamp(300px, 44svh, 360px);
       position: relative;
       overflow: hidden;
     }
@@ -345,8 +347,8 @@
       display: block;
       position: relative;
       z-index: 2;
-      align-self: start;
-      margin: clamp(8px, 2svh, 14px) 0 0;
+      align-self: center;
+      margin: 0;
     }
 
     .three-steps__button--end{
