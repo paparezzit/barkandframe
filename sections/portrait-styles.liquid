@@ -4,7 +4,7 @@
 -%}
 
 <div class="portrait-styles section section--page-width">
-  <div class="portrait-styles__inner">
+  <div class="portrait-styles__inner force-full-width">
     <div class="portrait-styles__wrapper">
       {%- assign portrait_title_parts = section.settings.main-title | split: '. ' -%}
       <h2 class="portrait-styles__title">
@@ -120,6 +120,7 @@
   margin: 120px 0;
 
   .portrait-styles__inner{
+    margin-inline: var(--page-margin);
     padding: 80px 20px 60px;
     background: #F4EFE5;
     border-radius: calc(var(--baf-radius-xl) + 40px);
@@ -474,6 +475,8 @@
 
     .portrait-styles__inner{
       --portrait-styles-cta-top: 1064px;
+      max-width: var(--narrow-page-width);
+      margin-inline: auto;
       min-height: 1208px;
       padding: 130px 150px 100px;
       position: relative;
@@ -527,8 +530,6 @@
   }
 
   @media(max-width: 1199px){
-    --site-content-margin: var(--page-margin);
-
     .portrait-styles__title-break{
       display: initial;
     }
