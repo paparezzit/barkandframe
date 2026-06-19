@@ -4897,6 +4897,11 @@ slideshow-component.slideshow--homepage{
     --faq-illustration-size: 162.5px;
     --faq-last-section-bottom: 160px;
   }
+
+  .page-contact h1{
+    margin-top: clamp(130px, 22svh, 190px) !important;
+    margin-bottom: 24px !important;
+  }
 }
 
 .page-contact .faq-section-basics{
