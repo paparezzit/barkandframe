@@ -5034,8 +5034,8 @@ slideshow-component.slideshow--homepage{
 
 @media(max-width: 749px){
   .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
-    width: 27% !important;
-    max-width: 27% !important;
+    width: 40% !important;
+    max-width: 40% !important;
   }
 }
 
@@ -5415,18 +5415,23 @@ slideshow-component.slideshow--homepage{
 }
 
 @media(max-width: 749px){
+  .contact-form-section.contact-page-form-section{
+    overflow-x: clip;
+  }
+
   .contact-company-info {
-    width: calc(100vw - (var(--page-margin) * 2));
-    height: calc(100vw - (var(--page-margin) * 2));
+    width: 118vw;
+    height: 118vw;
     max-width: none;
     aspect-ratio: 1 / 1;
     box-sizing: border-box;
     margin-top: 114px;
     position: relative;
     left: 50%;
-    margin-left: calc(-50vw + var(--page-margin));
-    margin-right: calc(-50vw + var(--page-margin));
-    padding: 38px 30px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 46px max(42px, 14vw);
+    transform: translateX(-50%);
   }
 
   .contact-company-info__inner {
