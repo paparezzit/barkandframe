@@ -34,7 +34,7 @@
 /* ── SVG title ────────────────────────────────────── */
 
 .at-home__title-wrap {
-  width: 240px;
+  width: 300px;
   font-family: "display", serif;
 }
 
@@ -49,6 +49,10 @@
   font-family: "display", serif;
 }
 
+.at-home__svg--stroke text {
+  stroke-width: 0.8;
+}
+
 /* ── Photo grid ───────────────────────────────────── */
 
 /*
@@ -61,7 +65,7 @@
 .at-home__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap: 30px;
   align-items: start;
   padding: 40px var(--page-margin) 60px;
   position: relative;
@@ -232,11 +236,11 @@
   }
 
   .at-home__title-wrap {
-    width: 440px;
+    width: 420px;
   }
 
   .at-home__svg--stroke text {
-    stroke-width: 0.545;
+    stroke-width: 0.571;
   }
 }
 
