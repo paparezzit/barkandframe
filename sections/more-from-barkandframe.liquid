@@ -13,7 +13,7 @@
   endfor
 -%}
 
-<section class="more-from section section--page-width">
+<section class="more-from section section--page-width{% if request.page_type == 'product' %} more-from--scroll{% endif %}">
   <h2 class="more-from__title">{{ section.settings.title }}</h2>
 
   <div class="more-from__grid">
@@ -83,13 +83,26 @@
 
   </div>
 
+  {%- if request.page_type == 'product' -%}
+    <div class="more-from__scrollbar" aria-hidden="true">
+      <span class="more-from__scrollbar-thumb"></span>
+    </div>
+  {%- endif -%}
+
   <div class="more-from__end-spacer" aria-hidden="true"></div>
 </section>
 
 {% stylesheet %}
 .more-from {
+  --more-from-grid-gap: 20px;
+  --more-from-content-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+  --more-from-card-width: calc((var(--more-from-content-width) - (var(--more-from-grid-gap) * 3)) / 4);
   padding: 80px 0 0;
   color: var(--brown);
+}
+
+main.content-for-layout .more-from.section {
+  --site-content-margin: var(--page-margin);
 }
 
 .more-from__title {
@@ -105,8 +118,33 @@
   align-items: start;
 }
 
+.more-from--scroll .more-from__grid {
+  display: flex;
+  gap: var(--more-from-grid-gap);
+  width: 100%;
+  margin: 0;
+  overflow-x: auto;
+  scroll-padding-inline: 0;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.more-from--scroll .more-from__grid::-webkit-scrollbar {
+  display: none;
+}
+
 .more-from__end-spacer {
   height: 240px;
+}
+
+.more-from--scroll .more-from__cta,
+.more-from--scroll .more-from__product-card {
+  flex: 0 0 var(--more-from-card-width);
+  width: var(--more-from-card-width);
+  min-width: 0;
+  max-width: var(--more-from-card-width);
+  scroll-snap-align: start;
 }
 
 .more-from__product-card {
@@ -170,6 +208,43 @@
   transition: background .2s, color .2s;
 }
 
+.more-from__scrollbar {
+  position: relative;
+  display: none;
+  width: var(--more-from-content-width);
+  height: 22px;
+  margin: 24px auto 0;
+  cursor: pointer;
+}
+
+.more-from__scrollbar[hidden] {
+  display: none;
+}
+
+.more-from__scrollbar::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: rgb(76 68 63 / 0.18);
+}
+
+.more-from__scrollbar-thumb {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  display: block;
+  width: 34px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--brown);
+  transform: translateX(0);
+  transition: width 0.1s linear;
+}
+
 @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
   .more-from__cta:hover {
     transform: translateY(calc(-1 * var(--hover-lift-amount)));
@@ -178,6 +253,23 @@
       background-color: var(--purple);
       color: var(--brown);
     }
+  }
+}
+
+@media (max-width: 989px) {
+  .more-from {
+    --more-from-card-width: calc((var(--more-from-content-width) - (var(--more-from-grid-gap) * 2)) / 3);
+  }
+
+  .more-from--scroll .more-from__grid {
+    width: 100vw;
+    margin-inline: calc((100% - 100vw) / 2);
+    padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
+    scroll-padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
+  }
+
+  .more-from--scroll .more-from__scrollbar {
+    display: block;
   }
 }
 
@@ -200,6 +292,11 @@
 }
 
 @media (max-width: 749px) {
+  .more-from {
+    --more-from-grid-gap: 12px;
+    --more-from-card-width: calc((var(--more-from-content-width) - var(--more-from-grid-gap)) / 2);
+  }
+
   .more-from__end-spacer {
     height: 160px;
   }
@@ -211,9 +308,84 @@
     if (window.__bafMoreFromStyleCyclerBound) return;
     window.__bafMoreFromStyleCyclerBound = true;
 
+    const moreFromScroll = document.querySelector('.more-from--scroll');
+    const moreFromGrid = moreFromScroll?.querySelector('.more-from__grid');
+    const moreFromScrollbar = moreFromScroll?.querySelector('.more-from__scrollbar');
+    const moreFromScrollbarThumb = moreFromScrollbar?.querySelector('.more-from__scrollbar-thumb');
     const timers = new WeakMap();
     const desktopQuery = window.matchMedia('(min-width: 1200px)');
     const motionQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
+    let isMoreFromScrollbarDragging = false;
+
+    const updateMoreFromScrollbar = () => {
+      if (!moreFromGrid || !moreFromScrollbar || !moreFromScrollbarThumb) return;
+
+      const maxScroll = moreFromGrid.scrollWidth - moreFromGrid.clientWidth;
+
+      if (maxScroll <= 0) {
+        moreFromScrollbar.hidden = true;
+        moreFromScrollbarThumb.style.width = '100%';
+        moreFromScrollbarThumb.style.transform = 'translateX(0)';
+        return;
+      }
+
+      moreFromScrollbar.hidden = false;
+
+      const trackWidth = moreFromScrollbar.clientWidth;
+      const thumbWidth = Math.max((moreFromGrid.clientWidth / moreFromGrid.scrollWidth) * trackWidth, 34);
+      const left = ((trackWidth - thumbWidth) * moreFromGrid.scrollLeft) / maxScroll;
+
+      moreFromScrollbarThumb.style.width = `${thumbWidth}px`;
+      moreFromScrollbarThumb.style.transform = `translateX(${left}px)`;
+    };
+
+    const scrollMoreFromFromScrollbar = (clientX) => {
+      if (!moreFromGrid || !moreFromScrollbar || !moreFromScrollbarThumb) return;
+
+      const maxScroll = moreFromGrid.scrollWidth - moreFromGrid.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const rect = moreFromScrollbar.getBoundingClientRect();
+      const thumbWidth = moreFromScrollbarThumb.offsetWidth || 34;
+      const usableWidth = Math.max(rect.width - thumbWidth, 1);
+      const progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+      moreFromGrid.scrollLeft = progress * maxScroll;
+      updateMoreFromScrollbar();
+    };
+
+    const refreshMoreFromScrollbar = () => {
+      updateMoreFromScrollbar();
+      window.requestAnimationFrame(() => {
+        updateMoreFromScrollbar();
+        window.requestAnimationFrame(updateMoreFromScrollbar);
+      });
+    };
+
+    moreFromGrid?.addEventListener('scroll', updateMoreFromScrollbar, { passive: true });
+    moreFromScrollbar?.addEventListener('pointerdown', (event) => {
+      isMoreFromScrollbarDragging = true;
+      moreFromScrollbar.setPointerCapture?.(event.pointerId);
+      scrollMoreFromFromScrollbar(event.clientX);
+      event.preventDefault();
+    });
+    document.addEventListener('pointermove', (event) => {
+      if (!isMoreFromScrollbarDragging) return;
+      scrollMoreFromFromScrollbar(event.clientX);
+      event.preventDefault();
+    });
+    document.addEventListener('pointerup', () => {
+      isMoreFromScrollbarDragging = false;
+    });
+    document.addEventListener('pointercancel', () => {
+      isMoreFromScrollbarDragging = false;
+    });
+    moreFromGrid?.querySelectorAll('img').forEach((image) => {
+      if (!image.complete) image.addEventListener('load', refreshMoreFromScrollbar, { once: true });
+    });
+    window.addEventListener('resize', refreshMoreFromScrollbar);
+    window.addEventListener('load', refreshMoreFromScrollbar);
+    refreshMoreFromScrollbar();
 
     const setActiveImage = (holder, index) => {
       const images = holder.querySelectorAll('.more-from__cta-style-img');
