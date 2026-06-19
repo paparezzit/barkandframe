@@ -1464,17 +1464,15 @@
 }
 
 .tab-overview__photo-label--photo {
-  left: 50%;
-  margin-left: 0;
-  top: calc(100% + 10px);
-  transform: translate3d(-50%, var(--overview-label-parallax, 0px), 0);
+  left: 100%;
+  margin-left: 20px;
+  top: 45%;
 }
 
 .tab-overview__photo-label--artist {
-  left: 50%;
-  margin-left: 0;
-  top: calc(100% + 10px);
-  transform: translate3d(-50%, var(--overview-label-parallax, 0px), 0);
+  left: 100%;
+  margin-left: 20px;
+  top: 39%;
 }
 
 .tab-overview__photo-label--wall {
@@ -3763,6 +3761,11 @@
     artist: { x: 476, y: 100, width: 198 },
     wall: { x: 328, y: 542, width: 708 }
   };
+  var overviewCompositeBoxesCompact = {
+    photo: { x: 0, y: 154, width: 262 },
+    artist: { x: 476, y: 0, width: 198 },
+    wall: { x: 328, y: 542, width: 708 }
+  };
 
   function layoutOverviewComposite() {
     var media = $('mp-overview-media');
@@ -3772,8 +3775,9 @@
     if (!scale) return;
 
     var maxBottom = overviewCompositeBase.height * scale;
-    Object.keys(overviewCompositeBoxes).forEach(function (slot) {
-      var box = overviewCompositeBoxes[slot];
+    var boxes = window.innerWidth < 1200 ? overviewCompositeBoxesCompact : overviewCompositeBoxes;
+    Object.keys(boxes).forEach(function (slot) {
+      var box = boxes[slot];
       var img = $('mp-overview-' + slot);
       var card = img && img.closest('.tab-overview__image-card');
       if (!card || card.hidden) return;
