@@ -142,6 +142,9 @@
           fallback_image: 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg'
         -%}
       </div>
+      <div class="shop-products__portrait-scrollbar" aria-hidden="true">
+        <span class="shop-products__portrait-scrollbar-thumb"></span>
+      </div>
     </section>
 
     {%- if bestseller_cards != blank -%}
@@ -315,6 +318,43 @@
 
   .shop-products__portrait-grid::-webkit-scrollbar {
     display: none;
+  }
+
+  .shop-products__portrait-scrollbar {
+    position: relative;
+    display: none;
+    width: var(--shop-products-content-width);
+    height: 22px;
+    margin: 24px auto 0;
+    cursor: pointer;
+  }
+
+  .shop-products__portrait-scrollbar[hidden] {
+    display: none;
+  }
+
+  .shop-products__portrait-scrollbar::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: rgb(76 68 63 / 0.18);
+  }
+
+  .shop-products__portrait-scrollbar-thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    width: 34px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--brown);
+    transform: translateX(0);
+    transition: width 0.1s linear;
   }
 
   .shop-products__portrait-card {
@@ -533,6 +573,10 @@
       scroll-padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
     }
 
+    .shop-products__portrait-scrollbar {
+      display: block;
+    }
+
     .shop-products {
       --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 2)) / 3);
     }
@@ -596,6 +640,9 @@
 
 <script>
   (() => {
+    const portraitGrid = document.querySelector('.shop-products__portrait-grid');
+    const portraitScrollbar = document.querySelector('.shop-products__portrait-scrollbar');
+    const portraitScrollbarThumb = portraitScrollbar?.querySelector('.shop-products__portrait-scrollbar-thumb');
     const rails = document.querySelectorAll('[data-shop-products-rail]');
     const stickyButton = document.querySelector('.collection-sticky-btn');
     const navLinks = Array.from(document.querySelectorAll('.shop-products__nav-link[href^="#shop-products-"]'));
@@ -605,6 +652,74 @@
         section: document.querySelector(link.getAttribute('href')),
       }))
       .filter((item) => item.section);
+    let isPortraitScrollbarDragging = false;
+
+    const updatePortraitScrollbar = () => {
+      if (!portraitGrid || !portraitScrollbar || !portraitScrollbarThumb) return;
+
+      const maxScroll = portraitGrid.scrollWidth - portraitGrid.clientWidth;
+
+      if (maxScroll <= 0) {
+        portraitScrollbar.hidden = true;
+        portraitScrollbarThumb.style.width = '100%';
+        portraitScrollbarThumb.style.transform = 'translateX(0)';
+        return;
+      }
+
+      portraitScrollbar.hidden = false;
+
+      const trackWidth = portraitScrollbar.clientWidth;
+      const thumbWidth = Math.max((portraitGrid.clientWidth / portraitGrid.scrollWidth) * trackWidth, 34);
+      const left = ((trackWidth - thumbWidth) * portraitGrid.scrollLeft) / maxScroll;
+
+      portraitScrollbarThumb.style.width = `${thumbWidth}px`;
+      portraitScrollbarThumb.style.transform = `translateX(${left}px)`;
+    };
+
+    const scrollPortraitGridFromScrollbar = (clientX) => {
+      if (!portraitGrid || !portraitScrollbar || !portraitScrollbarThumb) return;
+
+      const maxScroll = portraitGrid.scrollWidth - portraitGrid.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const rect = portraitScrollbar.getBoundingClientRect();
+      const thumbWidth = portraitScrollbarThumb.offsetWidth || 34;
+      const usableWidth = Math.max(rect.width - thumbWidth, 1);
+      const progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+      portraitGrid.scrollLeft = progress * maxScroll;
+      updatePortraitScrollbar();
+    };
+
+    const refreshPortraitScrollbar = () => {
+      updatePortraitScrollbar();
+      window.requestAnimationFrame(() => {
+        updatePortraitScrollbar();
+        window.requestAnimationFrame(updatePortraitScrollbar);
+      });
+    };
+
+    portraitGrid?.addEventListener('scroll', updatePortraitScrollbar, { passive: true });
+    portraitScrollbar?.addEventListener('pointerdown', (event) => {
+      isPortraitScrollbarDragging = true;
+      portraitScrollbar.setPointerCapture?.(event.pointerId);
+      scrollPortraitGridFromScrollbar(event.clientX);
+      event.preventDefault();
+    });
+    document.addEventListener('pointermove', (event) => {
+      if (!isPortraitScrollbarDragging) return;
+      scrollPortraitGridFromScrollbar(event.clientX);
+      event.preventDefault();
+    });
+    document.addEventListener('pointerup', () => {
+      isPortraitScrollbarDragging = false;
+    });
+    document.addEventListener('pointercancel', () => {
+      isPortraitScrollbarDragging = false;
+    });
+    window.addEventListener('resize', refreshPortraitScrollbar);
+    window.addEventListener('load', refreshPortraitScrollbar);
+    refreshPortraitScrollbar();
 
     rails.forEach((rail) => {
       const track = rail.querySelector('.shop-products__rail-track');
