@@ -3,11 +3,12 @@
   @param {object} artist - Artist metaobject
 {%- enddoc -%}
 {%- assign heading_tag = heading_tag | default: 'h2' -%}
+{%- assign image_width = image_width | default: 200 -%}
 <div class="artist-card">
   {%- if artist.photo.value != blank -%}
     <img
       class="artist-card__photo"
-      src="{{ artist.photo.value | image_url: width: 200 }}"
+      src="{{ artist.photo.value | image_url: width: image_width }}"
       alt="{{ artist.name.value }}"
       width="72"
       height="72"
