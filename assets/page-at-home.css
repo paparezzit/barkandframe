@@ -61,6 +61,12 @@
   color: transparent;
 }
 
+@media screen and (max-width: 749px) {
+  .at-home__title {
+    line-height: 1.12;
+  }
+}
+
 /* ── Photo grid ───────────────────────────────────── */
 
 /*
