@@ -63,7 +63,12 @@
 
 @media screen and (max-width: 749px) {
   .at-home__title {
-    row-gap: 18px;
+    row-gap: 0;
+  }
+
+  .at-home__title span + span {
+    display: block;
+    margin-top: 36px;
   }
 }
 
