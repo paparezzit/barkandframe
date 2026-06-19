@@ -197,12 +197,19 @@
     --shop-products-content-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
     --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 3)) / 4);
     --baf-scroll-subnav-height: 51px;
+    --site-content-margin: var(--page-margin);
     padding-block: var(--padding-block-start) 0;
     background: var(--beige);
   }
 
+  main.content-for-layout .shop-products.section,
+  main.content-for-layout .shop-products__nav.section {
+    --site-content-margin: var(--page-margin);
+  }
+
   .shop-products__inner {
     width: var(--shop-products-content-width);
+    justify-self: center;
     margin-inline: auto;
     padding-top: 0;
   }
