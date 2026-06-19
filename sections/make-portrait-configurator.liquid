@@ -3586,6 +3586,26 @@
   }
 }
 
+@media (min-width: 750px) and (max-width: 1199px) {
+  .style-picker {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    max-width: none;
+    gap: 22px 18px;
+  }
+
+  .style-picker__item {
+    align-items: center;
+    text-align: center;
+  }
+
+  .style-picker__name {
+    padding-left: 0;
+    max-width: 76px;
+  }
+}
+
 @media (min-width: 1200px) {
   .make-portrait__layout{
     grid-template-columns: 3fr 420px;
