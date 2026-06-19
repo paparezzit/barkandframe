@@ -3283,6 +3283,15 @@
   gap: 10px;
 }
 
+.make-portrait__action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: var(--beige);
+  border-radius: 40px 40px 0 0;
+  margin-top: 20px;
+}
+
 .order-summary{
   margin-bottom: 15px;
 }
@@ -3570,14 +3579,6 @@
   .make-portrait__right { grid-area: right; position: sticky; top: 94px; padding-bottom: 40px;}
   .make-portrait__tabs  { grid-area: tabs; align-self: start; }
 
-  .make-portrait__action-bar {
-    position: sticky;
-    bottom: 0px;
-    z-index: 10;
-    background: var(--beige);
-    border-radius: 40px 40px 0 0;
-    margin-top: 20px;
-  }
 }
 
 @media (min-width: 750px) {
