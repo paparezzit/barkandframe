@@ -229,7 +229,12 @@
     background-color: var(--purple);
   }
 
-  @media (hover: hover) {
+  .artists-overlay,
+  .artists-cursor-follower {
+    display: none;
+  }
+
+  @media (hover: hover) and (min-width: 1200px) {
     .artists-page__style-card {
       position: relative;
     }
@@ -239,6 +244,7 @@
     }
 
     .artists-overlay {
+      display: block;
       position: fixed;
       inset: 0;
       background: #fff;
@@ -253,6 +259,7 @@
     }
 
     .artists-cursor-follower {
+      display: block;
       position: fixed;
       width: 180px;
       aspect-ratio: 5/6;
@@ -421,8 +428,8 @@
     const followerImg = follower.querySelector('.artists-cursor-follower__image img');
     const followerLabel = follower.querySelector('.artists-cursor-follower__label');
 
-    const isTouchDevice = window.matchMedia('(hover: none)').matches;
-    if (isTouchDevice) return;
+    const canShowFollower = window.matchMedia('(hover: hover) and (min-width: 1200px)').matches;
+    if (!canShowFollower) return;
 
     document.addEventListener('mousemove', (e) => {
       follower.style.left = e.clientX + 'px';
