@@ -318,10 +318,10 @@ main.content-for-layout .prod-accordion-section.section {
 }
 
 .prod-detail-icons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  flex-wrap: wrap;
-  gap: 28px 32px;
+  gap: 28px 20px;
   margin: 0 0 54px;
   padding: 0;
   color: var(--brown);
@@ -533,8 +533,6 @@ main.content-for-layout .prod-accordion-section.section {
 
 @media screen and (max-width: 749px) {
   .prod-detail-icons {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px 10px;
     margin-bottom: 44px;
   }
