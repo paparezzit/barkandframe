@@ -4,7 +4,7 @@
   assign default_cta_style = blank
   assign use_scroll_layout = false
 
-  if request.page_type == 'product' or section.settings.scroll_layout
+  if request.page_type == 'product' or template.name == 'page.artist' or section.settings.scroll_layout
     assign use_scroll_layout = true
   endif
 
