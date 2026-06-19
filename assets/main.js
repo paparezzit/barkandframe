@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fixedLayerMedia = window.matchMedia('(max-width: 989px), (hover: none), (pointer: coarse)');
-  const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection__showcase'));
+  const fixedLayerRoots = Array.from(document.querySelectorAll('.floating-images, .artist-collection__showcase, .at-home'));
   let fixedLayerFrame = null;
 
   const getStableHeaderHeight = () => (
