@@ -244,6 +244,14 @@
   }
 
   @media screen and (max-width: 749px) {
+    .about-hero + .about-split .about-photo-grid__item--medium {
+      top: 42%;
+    }
+
+    .about-hero + .about-split .about-photo-grid__item--small {
+      top: 68%;
+    }
+
     .about-split + .about-split {
       margin-top: 72px;
     }
@@ -280,7 +288,16 @@
     }
 
     .about-split__heading {
-      max-width: 520px;
+      max-width: none;
+      margin: 0 0 1em;
+    }
+
+    .about-hero + .about-split .about-photo-grid__item--medium {
+      top: 44%;
+    }
+
+    .about-hero + .about-split .about-photo-grid__item--small {
+      top: 72%;
     }
   }
 
