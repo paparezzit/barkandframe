@@ -5034,8 +5034,15 @@ slideshow-component.slideshow--homepage{
 
 @media(max-width: 749px){
   .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
-    width: 40% !important;
-    max-width: 40% !important;
+    width: 45% !important;
+    max-width: 45% !important;
+  }
+}
+
+@media(min-width: 750px) and (max-width: 1199px){
+  .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
+    width: 45% !important;
+    max-width: 45% !important;
   }
 }
 
