@@ -526,7 +526,11 @@
 
   @media screen and (max-width: 989px) {
     .shop-products__portrait-grid {
-      --portrait-card-width: calc((100% - (var(--portrait-grid-gap) * 2)) / 3);
+      --portrait-card-width: calc((var(--shop-products-content-width) - (var(--portrait-grid-gap) * 2)) / 3);
+      width: 100vw;
+      margin-inline: calc((100% - 100vw) / 2);
+      padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
+      scroll-padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
     }
 
     .shop-products {
@@ -555,7 +559,7 @@
 
     .shop-products__portrait-grid {
       --portrait-grid-gap: 12px;
-      --portrait-card-width: calc((100% - var(--portrait-grid-gap)) / 2);
+      --portrait-card-width: calc((var(--shop-products-content-width) - var(--portrait-grid-gap)) / 2);
       justify-content: flex-start;
       margin-top: calc(83px - var(--hover-lift-amount));
     }
