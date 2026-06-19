@@ -288,6 +288,18 @@
   };
 </script>
 
+{%- capture step_indicator_markup -%}
+  <nav class="make-portrait__step-indicator" aria-label="Progress">
+    <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Style">Style</button>
+    <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+    <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Format">Format</button>
+    <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+    <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Details">Details</button>
+    <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
+    <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order">Order</button>
+  </nav>
+{%- endcapture -%}
+
 <div class="make-portrait section section--page-width" id="make-portrait-section">
   <h1 class="visually-hidden">Create your portrait</h1>
   <div class="make-portrait__layout">
@@ -296,6 +308,10 @@
       LEFT PANEL - Preview only
     --------------------------------------------------------------------------------{%- endcomment -%}
     <div class="make-portrait__left">
+
+      <div class="make-portrait__step-indicator-slot make-portrait__step-indicator-slot--mobile">
+        {{ step_indicator_markup }}
+      </div>
 
       <div class="make-portrait__preview-wrap">
         <img
@@ -338,15 +354,9 @@
     <div class="make-portrait__right">
 
       {%- comment -%} Step indicator {%- endcomment -%}
-      <nav class="make-portrait__step-indicator" aria-label="Progress">
-        <button class="step-indicator__btn active" data-step="1" aria-label="Step 1: Style">Style</button>
-        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="2" aria-label="Step 2: Format">Format</button>
-        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="3" aria-label="Step 3: Details">Details</button>
-        <span class="step-indicator__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1"/></svg></span>
-        <button class="step-indicator__btn" data-step="4" aria-label="Step 4: Order">Order</button>
-      </nav>
+      <div class="make-portrait__step-indicator-slot make-portrait__step-indicator-slot--desktop">
+        {{ step_indicator_markup }}
+      </div>
 
       {%- comment -%}------ STEP 1: Choose Style ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="1">
@@ -1748,6 +1758,14 @@
 }
 
 /* Step indicator */
+.make-portrait__step-indicator-slot--desktop {
+  display: none;
+}
+
+.make-portrait__step-indicator-slot--mobile .make-portrait__step-indicator {
+  margin-bottom: 0;
+}
+
 .make-portrait__step-indicator {
   display: flex;
   align-items: center;
@@ -3564,6 +3582,14 @@
   .make-portrait__layout{
     grid-template-columns: 3fr 420px;
     gap: 120px;
+  }
+
+  .make-portrait__step-indicator-slot--mobile {
+    display: none;
+  }
+
+  .make-portrait__step-indicator-slot--desktop {
+    display: block;
   }
 
   .make-portrait_artist-badge{
