@@ -169,9 +169,8 @@
         "title": "Discover Bark & Frame",
         "cta_image": "shopify://shop_images/make-portrait.png",
         "cta_label": "Make a portrait",
-        "cta_link": "shopify://pages/portrait",
-        "collection": "all-products",
-        "scroll_layout": true
+        "cta_link": "/pages/portrait",
+        "collection": "all-products"
       }
     }
   },

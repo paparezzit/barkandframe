@@ -3,8 +3,13 @@
   assign portrait_styles = shop.metaobjects.portrait_style.values | sort: 'order'
   assign default_cta_style = blank
   assign use_scroll_layout = false
+  assign is_artist_page = false
 
-  if request.page_type == 'product' or template.name == 'page.artist' or section.settings.scroll_layout
+  if template.name == 'page' and template.suffix == 'artist'
+    assign is_artist_page = true
+  endif
+
+  if request.page_type == 'product' or is_artist_page
     assign use_scroll_layout = true
   endif
 
@@ -489,12 +494,6 @@ main.content-for-layout .more-from.section {
       "type": "collection",
       "id": "collection",
       "label": "Collection"
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_layout",
-      "label": "Use scroll layout",
-      "default": false
     }
   ],
   "presets": [
