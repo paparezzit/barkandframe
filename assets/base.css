@@ -5032,6 +5032,13 @@ slideshow-component.slideshow--homepage{
   object-fit: contain;
 }
 
+@media(max-width: 749px){
+  .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
+    width: 27% !important;
+    max-width: 27% !important;
+  }
+}
+
 @media(max-width: 1199px){
   .contact-form-section > .custom-section-content > .section-content-wrapper,
   .contact-form-section .contact-form{
@@ -5410,7 +5417,10 @@ slideshow-component.slideshow--homepage{
 @media(max-width: 749px){
   .contact-company-info {
     width: calc(100vw - (var(--page-margin) * 2));
+    height: calc(100vw - (var(--page-margin) * 2));
     max-width: none;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
     margin-top: 114px;
     position: relative;
     left: 50%;
