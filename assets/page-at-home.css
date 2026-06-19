@@ -61,17 +61,6 @@
   color: transparent;
 }
 
-@media screen and (max-width: 749px) {
-  .at-home__title {
-    row-gap: 0;
-  }
-
-  .at-home__title span + span {
-    display: block;
-    margin-top: 36px;
-  }
-}
-
 /* ── Photo grid ───────────────────────────────────── */
 
 /*
@@ -84,7 +73,8 @@
 .at-home__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 30px;
+  column-gap: 30px;
+  row-gap: 60px;
   align-items: start;
   padding: 40px var(--page-margin) 60px;
   position: relative;
