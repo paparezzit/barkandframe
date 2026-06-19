@@ -164,7 +164,7 @@
       max-width: none;
     }
 
-    .artist-card__description:last-child{
+    .artist-card__long > .artist-card__description:last-child{
       padding-bottom: 4em;
     }
 
@@ -342,20 +342,40 @@
   @media screen and (max-width: 1199px) {
     .artists-page__item {
       .artist-card {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr);
+        column-gap: 20px;
+        row-gap: 16px;
       }
 
       .artist-card__body {
+        display: contents;
+      }
+
+      .artist-card__photo {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .artist-card__intro {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+      }
+
+      .artist-card__long {
+        grid-column: 1 / -1;
         width: 100%;
       }
 
-      .artist-card__description:last-child {
+      .artist-card__long > .artist-card__description:last-child {
         padding-bottom: 0;
       }
 
       .artist-card__signature {
+        grid-column: 1 / -1;
         position: static;
-        align-self: flex-end;
+        justify-self: end;
         margin-top: -4px;
       }
     }

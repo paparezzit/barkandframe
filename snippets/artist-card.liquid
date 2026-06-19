@@ -15,22 +15,26 @@
     >
   {%- endif -%}
   <div class="artist-card__body">
-    <{{ heading_tag }} class="artist-card__heading">
-      <strong class="artist-card__name">{{ artist.name.value }}</strong>
-    </{{ heading_tag }}>
-    {%- unless about_long_only -%}
-      {%- if artist.hero.value != blank -%}
-        <p class="artist-card__description">{{ artist.hero.value | newline_to_br }}</p>
+    <div class="artist-card__intro">
+      <{{ heading_tag }} class="artist-card__heading">
+        <strong class="artist-card__name">{{ artist.name.value }}</strong>
+      </{{ heading_tag }}>
+      {%- unless about_long_only -%}
+        {%- if artist.hero.value != blank -%}
+          <p class="artist-card__description artist-card__description--hero">{{ artist.hero.value | newline_to_br }}</p>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+    <div class="artist-card__long">
+      {%- if artist['about-long'].value != blank -%}
+        <p class="artist-card__description">{{ artist['about-long'].value | newline_to_br }}</p>
       {%- endif -%}
-    {%- endunless -%}
-    {%- if artist['about-long'].value != blank -%}
-      <p class="artist-card__description">{{ artist['about-long'].value | newline_to_br }}</p>
-    {%- endif -%}
-    {%- unless about_long_only -%}
-      {%- if artist.description != blank -%}
-        <div class="artist-card__description">{{ artist.description | metafield_tag }}</div>
-      {%- endif -%}
-    {%- endunless -%}
+      {%- unless about_long_only -%}
+        {%- if artist.description != blank -%}
+          <div class="artist-card__description">{{ artist.description | metafield_tag }}</div>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
   </div>
   {%- if artist.signature.value != blank -%}
     <img
@@ -86,6 +90,11 @@
     }
   }
 
+  .artist-card__intro,
+  .artist-card__long {
+    min-width: 0;
+  }
+
   .artist-card__name {
     font-weight: 700;
     margin-bottom: 1em;
@@ -94,10 +103,10 @@
   .artist-card__description {
     margin: 0;
     padding-bottom: 1em;
+  }
 
-    &:last-child{
-      padding-bottom: 2em;
-    }
+  .artist-card__long > .artist-card__description:last-child {
+    padding-bottom: 2em;
   }
 
   .artist-card__signature {
