@@ -3508,6 +3508,22 @@
   margin: 0;
 }
 
+@media (max-width: 599px) {
+  #tab-artist .artist-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #tab-artist .artist-card__body {
+    width: 100%;
+    max-width: none;
+  }
+
+  #tab-artist .artist-card__signature {
+    position: static;
+  }
+}
+
 /* ------ Reviews grid ------ */
 .mp-reviews{
   text-align: left;
