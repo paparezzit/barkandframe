@@ -360,7 +360,7 @@
 
       {%- comment -%}------ STEP 1: Choose Style ------{%- endcomment -%}
       <div class="make-portrait__step" data-step="1">
-        <h2 class="make-portrait__step-title">Pick a style<br>for your dog</h2>
+        <h2 class="make-portrait__step-title">Pick a style<span class="make-portrait__step-title-break"><br></span><span class="make-portrait__step-title-space"> </span>for your dog</h2>
 
         <div class="style-picker" id="mp-style-picker" role="listbox" aria-label="Portrait styles">
           {%- for style in _portrait_styles -%}
@@ -1168,6 +1168,10 @@
   gap: 40px;
 }
 
+.make-portrait__step[hidden] {
+  display: none !important;
+}
+
 /* ------ Left Panel ------ */
 .make-portrait__left {
   display: flex;
@@ -1902,6 +1906,14 @@
   color: var(--brown, #5a4035);
   margin: .5em 0 1em !important;
   font-family: var(--baf-display-family);
+}
+
+.make-portrait__step-title-break {
+  display: none;
+}
+
+.make-portrait__step-title-space {
+  display: inline;
 }
 
 
@@ -3682,7 +3694,30 @@
   }
 }
 
-@media (min-width: 750px) and (max-width: 1199px) and (orientation: portrait) {
+@media (min-width: 750px) and (max-width: 799px) and (orientation: portrait) {
+  .make-portrait__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .make-portrait__left,
+  .make-portrait__right,
+  .make-portrait__tabs {
+    grid-area: auto;
+  }
+
+  .make-portrait__right {
+    position: static;
+    top: auto;
+    padding-bottom: 0;
+  }
+
+  .make-portrait__tabs {
+    align-self: stretch;
+  }
+
   .make-portrait__step[data-step="1"] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -3702,6 +3737,20 @@
   .make-portrait__step[data-step="1"] .make-portrait__style-info {
     grid-column: 2;
     margin: 0;
+  }
+}
+
+@media (min-width: 800px) and (max-width: 1199px) and (orientation: portrait) {
+  .make-portrait__step[data-step="1"] .make-portrait__step-title-break {
+    display: inline;
+  }
+
+  .make-portrait__step[data-step="1"] .make-portrait__step-title-space {
+    display: none;
+  }
+
+  .make-portrait__step[data-step="1"] .make-portrait__style-info {
+    margin: 20px 0 0;
   }
 }
 
