@@ -3682,6 +3682,29 @@
   }
 }
 
+@media (min-width: 750px) and (max-width: 1199px) and (orientation: portrait) {
+  .make-portrait__step[data-step="1"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 36px;
+    align-items: start;
+  }
+
+  .make-portrait__step[data-step="1"] .make-portrait__step-title {
+    grid-column: 1 / -1;
+  }
+
+  .make-portrait__step[data-step="1"] .style-picker {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+
+  .make-portrait__step[data-step="1"] .make-portrait__style-info {
+    grid-column: 2;
+    margin: 0;
+  }
+}
+
 @media (min-width: 1200px) {
   .make-portrait__layout{
     grid-template-columns: 3fr 420px;
