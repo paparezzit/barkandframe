@@ -3170,6 +3170,39 @@
   opacity: 0.7;
 }
 
+@media (max-width: 599px) {
+  .addon-item--prints .make-portrait__prints-options {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 14px 0 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    align-items: flex-start;
+  }
+
+  .addon-item--prints #mp-prints-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px 12px;
+    width: 100%;
+  }
+
+  .addon-item--prints #mp-prints-grid .option-btn {
+    width: auto;
+    min-width: 0;
+  }
+
+  .addon-item--prints .make-portrait__prints-custom {
+    width: auto;
+  }
+
+  .addon-item--prints .make-portrait__prints-custom-input {
+    width: 100%;
+  }
+}
+
 /* ------ Add-ons ------ */
 .make-portrait__addons {
   margin-bottom: 60px;
