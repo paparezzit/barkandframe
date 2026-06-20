@@ -829,6 +829,7 @@
           </div>
         </div>
       </div>
+      <div class="make-portrait__mobile-subtotal-cover" id="mp-mobile-subtotal-cover" aria-hidden="true"></div>
       <button class="button make-portrait__cta" id="mp-cta-step1">Continue to format</button>
       <button class="button make-portrait__cta" id="mp-cta-step2" disabled hidden>Continue to details</button>
       <button class="button make-portrait__cta make-portrait__cta--secondary" id="mp-back-step1" hidden>Change a style</button>
@@ -3519,33 +3520,57 @@
   margin-top: 20px;
 }
 
-@media (max-width: 599px) {
+.make-portrait__mobile-subtotal-cover {
+  display: none;
+}
+
+@media (max-width: 599px), (min-width: 750px) and (max-width: 1199px) and (orientation: portrait) {
   .make-portrait__action-bar {
     isolation: isolate;
     overflow: visible;
+    background: transparent;
+    pointer-events: none;
+    z-index: 80;
   }
 
   .make-portrait__action-bar::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 100vw;
-    height: calc(100% + 260px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(-50%);
-    background: var(--beige);
-    pointer-events: none;
-    z-index: 0;
+    content: none;
   }
 
   .make-portrait__action-bar .make-portrait__subtotal {
     position: relative;
-    z-index: 1;
+    overflow: visible;
+    pointer-events: auto;
+    z-index: 2;
   }
 
-  .make-portrait__cta {
+  .make-portrait__action-bar .make-portrait__subtotal > * {
     position: relative;
-    z-index: 11;
+    z-index: 2;
+  }
+
+  .make-portrait__action-bar .make-portrait__subtotal::after {
+    content: none;
+  }
+
+  .make-portrait__mobile-subtotal-cover {
+    display: block;
+    position: fixed;
+    top: var(--mp-mobile-subtotal-cover-top, 100vh);
+    left: 0;
+    right: 0;
+    height: 900px;
+    background: var(--beige);
+    pointer-events: none;
+    transform: translateZ(0);
+    z-index: 45;
+  }
+
+  .make-portrait__action-bar ~ *:not(.make-portrait__mobile-subtotal-cover),
+  .make-portrait__tabs,
+  .mp-reviews {
+    position: relative;
+    z-index: 90;
   }
 }
 
@@ -4485,6 +4510,54 @@
     updatePetNameVisibility();
     buildSummary();
     saveDraft();
+    requestMobileSubtotalCoverUpdate();
+  }
+
+  var mobileSubtotalCoverUpdateQueued = false;
+
+  function isMobileSubtotalCoverMode() {
+    return window.matchMedia('(max-width: 599px), (min-width: 750px) and (max-width: 1199px) and (orientation: portrait)').matches;
+  }
+
+  function updateMobileSubtotalCover() {
+    var cover = $('mp-mobile-subtotal-cover');
+    var subtotal = $('mp-subtotal-panel');
+    if (!cover || !subtotal) return;
+
+    if (!isMobileSubtotalCoverMode()) {
+      cover.style.removeProperty('--mp-mobile-subtotal-cover-top');
+      return;
+    }
+
+    var rect = subtotal.getBoundingClientRect();
+    var top = Math.max(0, Math.floor(rect.bottom) - 1);
+    cover.style.setProperty('--mp-mobile-subtotal-cover-top', top + 'px');
+  }
+
+  function requestMobileSubtotalCoverUpdate() {
+    if (mobileSubtotalCoverUpdateQueued) return;
+    mobileSubtotalCoverUpdateQueued = true;
+    window.requestAnimationFrame(function () {
+      mobileSubtotalCoverUpdateQueued = false;
+      updateMobileSubtotalCover();
+    });
+  }
+
+  function initMobileSubtotalCover() {
+    var cover = $('mp-mobile-subtotal-cover');
+    if (cover && cover.parentNode !== document.body) {
+      document.body.appendChild(cover);
+    }
+
+    updateMobileSubtotalCover();
+    window.addEventListener('scroll', requestMobileSubtotalCoverUpdate, { passive: true });
+    window.addEventListener('resize', requestMobileSubtotalCoverUpdate);
+    window.addEventListener('orientationchange', requestMobileSubtotalCoverUpdate);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('scroll', requestMobileSubtotalCoverUpdate, { passive: true });
+      window.visualViewport.addEventListener('resize', requestMobileSubtotalCoverUpdate);
+    }
   }
 
   /* --------------------------------------------------------------------------------
@@ -6748,6 +6821,7 @@
     initOverviewStepsScrollbar();
     initSizeTableScrollbars();
     initDonationImageParallax();
+    initMobileSubtotalCover();
 
     // Resume banner
     var urlParams = new URLSearchParams(window.location.search);
