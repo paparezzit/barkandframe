@@ -947,48 +947,52 @@
 
                   <div class="accordion-card">
                     <h4 class="accordion-card__title">Canvas</h4>
-                    <div class="size-table">
-                      <div class="size-table__header">
-                        <span class="size-table__badge size-table__badge--dark">SIZE</span>
-                        <span class="size-table__badge size-table__badge--green">UNFRAMED</span>
-                        <span class="size-table__badge size-table__badge--green">FRAMED</span>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
-                        <div class="size-table__dim"><strong>20 × 25 cm</strong><span>7.9 × 9.8 in</span></div>
-                        <div class="size-table__dim"><strong>23 × 28 cm</strong><span>9.1 × 11.0 in</span></div>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
-                        <div class="size-table__dim"><strong>30 × 40 cm</strong><span>11.8 × 15.7 in</span></div>
-                        <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
-                        <div class="size-table__dim"><strong>51 × 71 cm</strong><span>20.1 × 28.0 in</span></div>
-                        <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                    <div class="size-table-scroll">
+                      <div class="size-table">
+                        <div class="size-table__header">
+                          <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                          <span class="size-table__badge size-table__badge--green">UNFRAMED</span>
+                          <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                          <div class="size-table__dim"><strong>20 × 25 cm</strong><span>7.9 × 9.8 in</span></div>
+                          <div class="size-table__dim"><strong>23 × 28 cm</strong><span>9.1 × 11.0 in</span></div>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                          <div class="size-table__dim"><strong>30 × 40 cm</strong><span>11.8 × 15.7 in</span></div>
+                          <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                          <div class="size-table__dim"><strong>51 × 71 cm</strong><span>20.1 × 28.0 in</span></div>
+                          <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <div class="accordion-card">
                     <h4 class="accordion-card__title">Paper</h4>
-                    <div class="size-table size-table--2col">
-                      <div class="size-table__header">
-                        <span class="size-table__badge size-table__badge--dark">SIZE</span>
-                        <span class="size-table__badge size-table__badge--green">FRAMED</span>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
-                        <div class="size-table__dim"><strong>24 × 33 cm</strong><span>9.4 × 13.0 in</span></div>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
-                        <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
-                      </div>
-                      <div class="size-table__row">
-                        <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
-                        <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                    <div class="size-table-scroll">
+                      <div class="size-table size-table--2col">
+                        <div class="size-table__header">
+                          <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                          <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                          <div class="size-table__dim"><strong>24 × 33 cm</strong><span>9.4 × 13.0 in</span></div>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                          <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                        </div>
+                        <div class="size-table__row">
+                          <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                          <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1708,6 +1712,10 @@
   gap: 0;
 }
 
+.size-table-scroll {
+  width: 100%;
+}
+
 .size-table--2col {
   grid-template-columns: 120px 1fr;
 }
@@ -1790,6 +1798,41 @@
 
 .size-table__dim:last-child {
   border-right: 1px solid var(--brown);
+}
+
+@media (max-width: 599px) {
+  #tab-product .size-table-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 14px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brown) color-mix(in srgb, var(--brown) 18%, transparent);
+  }
+
+  #tab-product .size-table-scroll::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  #tab-product .size-table-scroll::-webkit-scrollbar-track {
+    background: color-mix(in srgb, var(--brown) 18%, transparent);
+    border-radius: 999px;
+  }
+
+  #tab-product .size-table-scroll::-webkit-scrollbar-thumb {
+    background: var(--brown);
+    border-radius: 999px;
+  }
+
+  #tab-product .size-table {
+    min-width: 500px;
+    grid-template-columns: 120px 190px 190px;
+  }
+
+  #tab-product .size-table--2col {
+    min-width: 340px;
+    grid-template-columns: 120px 220px;
+  }
 }
 
 .tab-accordion .svg-wrapper.icon-plus {
