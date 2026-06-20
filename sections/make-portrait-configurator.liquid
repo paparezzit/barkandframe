@@ -884,6 +884,9 @@
                 <img class="tab-overview__step-img" src="{{ 'illustrations/03.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
               </div>
             </div>
+            <div class="tab-overview__steps-scrollbar" aria-hidden="true">
+              <span class="tab-overview__steps-scrollbar-thumb"></span>
+            </div>
             <p>
               A portrait of your dog isn’t just wall art. It’s a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
@@ -1385,6 +1388,10 @@
   max-width: 98.6px;
 }
 
+.tab-overview__steps-scrollbar {
+  display: none;
+}
+
 @media (max-width: 749px) {
   .tab-overview__steps {
     display: flex;
@@ -1392,8 +1399,15 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 14px;
+    margin-bottom: 0;
     scroll-snap-type: x mandatory;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+  }
+
+  .tab-overview__steps::-webkit-scrollbar {
+    display: none;
   }
 
   .tab-overview__step {
@@ -1403,7 +1417,10 @@
   }
 
   .tab-overview__step-pill {
-    min-width: 156px;
+    display: inline-flex;
+    justify-content: center;
+    width: max-content;
+    min-width: 0;
     max-width: none;
     padding-left: 14px;
     padding-right: 14px;
@@ -1413,6 +1430,43 @@
   .tab-overview__step-title {
     width: 190px;
     max-width: none;
+  }
+
+  .tab-overview__steps-scrollbar {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 22px;
+    margin: 14px 0 46px;
+    cursor: pointer;
+  }
+
+  .tab-overview__steps-scrollbar[hidden] {
+    display: none;
+  }
+
+  .tab-overview__steps-scrollbar::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: rgb(76 68 63 / 0.18);
+  }
+
+  .tab-overview__steps-scrollbar-thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    width: 34px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--brown);
+    transform: translateX(0);
+    transition: width 0.1s linear;
   }
 }
 
@@ -3908,6 +3962,76 @@
     window.addEventListener('resize', requestUpdate);
   }
 
+  function initOverviewStepsScrollbar() {
+    var container = document.querySelector('.tab-overview__steps');
+    var scrollbar = document.querySelector('.tab-overview__steps-scrollbar');
+    var thumb = scrollbar && scrollbar.querySelector('.tab-overview__steps-scrollbar-thumb');
+    if (!container || !scrollbar || !thumb) return;
+
+    var isDragging = false;
+
+    function update() {
+      var maxScroll = container.scrollWidth - container.clientWidth;
+
+      if (window.innerWidth >= 750 || maxScroll <= 0) {
+        scrollbar.hidden = true;
+        thumb.style.width = '100%';
+        thumb.style.transform = 'translateX(0)';
+        return;
+      }
+
+      scrollbar.hidden = false;
+
+      var trackWidth = scrollbar.clientWidth;
+      var thumbWidth = Math.max((container.clientWidth / container.scrollWidth) * trackWidth, 34);
+      var left = ((trackWidth - thumbWidth) * container.scrollLeft) / maxScroll;
+
+      thumb.style.width = thumbWidth + 'px';
+      thumb.style.transform = 'translateX(' + left + 'px)';
+    }
+
+    function scrollFromScrollbar(clientX) {
+      var maxScroll = container.scrollWidth - container.clientWidth;
+      if (maxScroll <= 0) return;
+
+      var rect = scrollbar.getBoundingClientRect();
+      var thumbWidth = thumb.offsetWidth || 34;
+      var usableWidth = Math.max(rect.width - thumbWidth, 1);
+      var progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+      container.scrollLeft = progress * maxScroll;
+      update();
+    }
+
+    container.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', function () {
+      window.requestAnimationFrame(update);
+    });
+
+    scrollbar.addEventListener('pointerdown', function (event) {
+      isDragging = true;
+      scrollbar.setPointerCapture && scrollbar.setPointerCapture(event.pointerId);
+      scrollFromScrollbar(event.clientX);
+    });
+
+    scrollbar.addEventListener('pointermove', function (event) {
+      if (!isDragging) return;
+      scrollFromScrollbar(event.clientX);
+    });
+
+    function stopDragging(event) {
+      isDragging = false;
+      if (event && scrollbar.releasePointerCapture) {
+        scrollbar.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    scrollbar.addEventListener('pointerup', stopDragging);
+    scrollbar.addEventListener('pointercancel', stopDragging);
+
+    window.requestAnimationFrame(update);
+  }
+
   function initDonationImageParallax() {
     var frame = document.querySelector('.donation-card__image-frame');
     var image = frame && frame.querySelector('.donation-card__image');
@@ -6279,6 +6403,7 @@
     initTabs();
     initSmartSticky();
     initOverviewLabelParallax();
+    initOverviewStepsScrollbar();
     initDonationImageParallax();
 
     // Resume banner
