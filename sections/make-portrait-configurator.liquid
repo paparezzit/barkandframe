@@ -971,6 +971,9 @@
                         </div>
                       </div>
                     </div>
+                    <div class="size-table-scrollbar" aria-hidden="true">
+                      <span class="size-table-scrollbar__thumb"></span>
+                    </div>
                   </div>
 
                   <div class="accordion-card">
@@ -994,6 +997,9 @@
                           <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
                         </div>
                       </div>
+                    </div>
+                    <div class="size-table-scrollbar" aria-hidden="true">
+                      <span class="size-table-scrollbar__thumb"></span>
                     </div>
                   </div>
                 </div>
@@ -1716,6 +1722,10 @@
   width: 100%;
 }
 
+.size-table-scrollbar {
+  display: none;
+}
+
 .size-table--2col {
   grid-template-columns: 120px 1fr;
 }
@@ -1806,22 +1816,50 @@
     overflow-y: hidden;
     padding-bottom: 14px;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--brown) color-mix(in srgb, var(--brown) 18%, transparent);
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
   }
 
   #tab-product .size-table-scroll::-webkit-scrollbar {
-    height: 3px;
+    display: none;
   }
 
-  #tab-product .size-table-scroll::-webkit-scrollbar-track {
-    background: color-mix(in srgb, var(--brown) 18%, transparent);
+  #tab-product .size-table-scrollbar {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 22px;
+    margin: 0;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  #tab-product .size-table-scrollbar[hidden] {
+    display: none;
+  }
+
+  #tab-product .size-table-scrollbar::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 2px;
     border-radius: 999px;
+    background: rgb(76 68 63 / 0.18);
   }
 
-  #tab-product .size-table-scroll::-webkit-scrollbar-thumb {
+  #tab-product .size-table-scrollbar__thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    width: 34px;
+    height: 2px;
+    border-radius: 999px;
     background: var(--brown);
-    border-radius: 999px;
+    transform: translateX(0);
+    transition: width 0.1s linear;
   }
 
   #tab-product .size-table {
@@ -4179,6 +4217,99 @@
     window.requestAnimationFrame(update);
   }
 
+  var sizeTableScrollbarInstances = [];
+
+  function updateSizeTableScrollbars() {
+    sizeTableScrollbarInstances.forEach(function (instance) {
+      var container = instance.container;
+      var scrollbar = instance.scrollbar;
+      var thumb = instance.thumb;
+      var maxScroll = container.scrollWidth - container.clientWidth;
+
+      if (window.innerWidth > 599 || container.clientWidth <= 0 || maxScroll <= 0) {
+        scrollbar.hidden = true;
+        thumb.style.width = '100%';
+        thumb.style.transform = 'translateX(0)';
+        return;
+      }
+
+      scrollbar.hidden = false;
+
+      var trackWidth = scrollbar.clientWidth;
+      var thumbWidth = Math.max((container.clientWidth / container.scrollWidth) * trackWidth, 34);
+      var left = ((trackWidth - thumbWidth) * container.scrollLeft) / maxScroll;
+
+      thumb.style.width = thumbWidth + 'px';
+      thumb.style.transform = 'translateX(' + left + 'px)';
+    });
+  }
+
+  function scrollSizeTableFromScrollbar(instance, clientX) {
+    var container = instance.container;
+    var scrollbar = instance.scrollbar;
+    var thumb = instance.thumb;
+    var maxScroll = container.scrollWidth - container.clientWidth;
+    if (maxScroll <= 0) return;
+
+    var rect = scrollbar.getBoundingClientRect();
+    var thumbWidth = thumb.offsetWidth || 34;
+    var usableWidth = Math.max(rect.width - thumbWidth, 1);
+    var progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+    container.scrollLeft = progress * maxScroll;
+    updateSizeTableScrollbars();
+  }
+
+  function initSizeTableScrollbars() {
+    sizeTableScrollbarInstances = [];
+
+    document.querySelectorAll('#tab-product .size-table-scroll').forEach(function (container) {
+      var scrollbar = container.nextElementSibling;
+      if (!scrollbar || !scrollbar.classList.contains('size-table-scrollbar')) return;
+
+      var thumb = scrollbar.querySelector('.size-table-scrollbar__thumb');
+      if (!thumb) return;
+
+      var instance = {
+        container: container,
+        scrollbar: scrollbar,
+        thumb: thumb,
+        isDragging: false
+      };
+
+      sizeTableScrollbarInstances.push(instance);
+
+      container.addEventListener('scroll', updateSizeTableScrollbars, { passive: true });
+
+      scrollbar.addEventListener('pointerdown', function (event) {
+        instance.isDragging = true;
+        scrollbar.setPointerCapture && scrollbar.setPointerCapture(event.pointerId);
+        scrollSizeTableFromScrollbar(instance, event.clientX);
+      });
+
+      scrollbar.addEventListener('pointermove', function (event) {
+        if (!instance.isDragging) return;
+        scrollSizeTableFromScrollbar(instance, event.clientX);
+      });
+
+      function stopDragging(event) {
+        instance.isDragging = false;
+        if (event && scrollbar.releasePointerCapture) {
+          scrollbar.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      scrollbar.addEventListener('pointerup', stopDragging);
+      scrollbar.addEventListener('pointercancel', stopDragging);
+    });
+
+    window.addEventListener('resize', function () {
+      window.requestAnimationFrame(updateSizeTableScrollbars);
+    });
+
+    window.requestAnimationFrame(updateSizeTableScrollbars);
+  }
+
   function initDonationImageParallax() {
     var frame = document.querySelector('.donation-card__image-frame');
     var image = frame && frame.querySelector('.donation-card__image');
@@ -6297,6 +6428,7 @@
     document.querySelectorAll('.tab-panel').forEach(function (p) {
       p.hidden = p.dataset.tab !== tabId;
     });
+    window.requestAnimationFrame(updateSizeTableScrollbars);
   }
 
   function initTabs() {
@@ -6551,6 +6683,7 @@
     initSmartSticky();
     initOverviewLabelParallax();
     initOverviewStepsScrollbar();
+    initSizeTableScrollbars();
     initDonationImageParallax();
 
     // Resume banner
