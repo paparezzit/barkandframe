@@ -1385,6 +1385,37 @@
   max-width: 98.6px;
 }
 
+@media (max-width: 749px) {
+  .tab-overview__steps {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 14px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-overview__step {
+    flex: 0 0 190px;
+    width: 190px;
+    scroll-snap-align: start;
+  }
+
+  .tab-overview__step-pill {
+    min-width: 156px;
+    max-width: none;
+    padding-left: 14px;
+    padding-right: 14px;
+    text-align: center;
+  }
+
+  .tab-overview__step-title {
+    width: 190px;
+    max-width: none;
+  }
+}
+
 .tab-overview__body {
   display: flex;
   flex-direction: column;
