@@ -3519,6 +3519,26 @@
   margin-top: 20px;
 }
 
+@media (max-width: 599px) {
+  .make-portrait__action-bar {
+    isolation: isolate;
+    overflow: visible;
+  }
+
+  .make-portrait__action-bar::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(-220px - env(safe-area-inset-bottom, 0px));
+    width: 100vw;
+    height: calc(220px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    background: var(--beige);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
 .order-summary{
   margin-bottom: 15px;
 }
