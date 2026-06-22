@@ -2573,13 +2573,21 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   color: var(--brown);
   margin-bottom: 80px !important;
 
+  .shopify-policy__title {
+    margin-block-end: 1.5em;
+  }
+
   h1{
     font-family: "display", "Times New Roman", serif !important;
-    margin: .5em 0 !important;
+    margin: .5em 0 0 !important;
   }
 
   h2{
     font-size: 36px;
+  }
+
+  .shopify-policy__body h2:not(:first-of-type) {
+    margin-block-start: 5rem;
   }
 }
 
