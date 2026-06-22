@@ -2586,6 +2586,13 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
     font-size: 36px;
   }
 
+  .shopify-policy__body :is(h3, h4) {
+    font-family: var(--baf-display-family);
+    font-size: var(--baf-display-small-size);
+    font-weight: var(--baf-display-weight);
+    line-height: var(--line-height--display-tight);
+  }
+
   .shopify-policy__body h2:not(:first-of-type) {
     margin-block-start: 5rem;
   }
