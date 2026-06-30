@@ -3,7 +3,19 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign total_price = cart.total_price | money
+  assign adjusted_total_price = 0
+  for item in cart.items
+    assign line_price = item.final_line_price
+    assign sale_cp = item.properties['_Sale_Price'] | times: 1
+    if sale_cp > 0
+      assign property_line_price = sale_cp | times: item.quantity
+      if line_price > property_line_price
+        assign line_price = property_line_price
+      endif
+    endif
+    assign adjusted_total_price = adjusted_total_price | plus: line_price
+  endfor
+  assign total_price = adjusted_total_price | money
 -%}
 
 <div class="cart__ctas">

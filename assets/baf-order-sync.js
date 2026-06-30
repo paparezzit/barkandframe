@@ -50,6 +50,16 @@ function getJsonObjectProperty(properties, key) {
 }
 
 /**
+ * @param {Record<string, unknown> | null | undefined} properties
+ * @param {string} key
+ * @returns {number}
+ */
+function getPositiveIntegerProperty(properties, key) {
+  const number = Number.parseInt(getProperty(properties, key), 10);
+  return Number.isFinite(number) && number > 0 ? number : 0;
+}
+
+/**
  * @param {unknown} rawOrder
  * @returns {{items: Array<Record<string, unknown>>}}
  */
@@ -127,6 +137,14 @@ function buildMerchOrderItem(cartLine) {
 
   const production = getJsonObjectProperty(properties, '_baf_production');
   if (production) orderItem.production = production;
+
+  const salePrice = getPositiveIntegerProperty(properties, '_Sale_Price');
+  if (salePrice > 0) {
+    orderItem.discount = {
+      type: 'cart_upsell',
+      sale_price: salePrice,
+    };
+  }
 
   return orderItem;
 }

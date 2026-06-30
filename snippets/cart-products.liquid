@@ -387,9 +387,10 @@
                 >
                   {%- liquid
                     assign cp = item.properties['_custom_price'] | times: 1
+                    assign sale_cp = item.properties['_Sale_Price'] | times: 1
                     assign don = item.properties['_donation'] | times: 1
                     if cp <= 0
-                      assign cp = item.properties['_Sale_Price'] | times: 1
+                      assign cp = sale_cp
                       if cp <= 0
                         assign cp = item.properties['_custom_price_shop'] | times: 1
                       endif
@@ -398,13 +399,20 @@
                         assign don = item.properties['_donation'] | times: 1
                       endif
                     endif
+                    assign effective_line_price = item.final_line_price
+                    if sale_cp > 0
+                      assign property_line_price = sale_cp | times: item.quantity
+                      if effective_line_price > property_line_price
+                        assign effective_line_price = property_line_price
+                      endif
+                    endif
                     if cp > 0 and don > 0
                       assign product_price_share = cp | minus: don
-                      assign line_price = item.final_line_price | times: product_price_share | divided_by: cp
+                      assign line_price = effective_line_price | times: product_price_share | divided_by: cp
                     elsif cp > 0
-                      assign line_price = item.final_line_price
+                      assign line_price = effective_line_price
                     else
-                      assign line_price = item.final_line_price
+                      assign line_price = effective_line_price
                     endif
                     assign price = line_price | money
                     assign unit_price = item.unit_price | money
@@ -423,9 +431,10 @@
             {%- for item in cart.items -%}
               {%- liquid
                 assign cp = item.properties['_custom_price'] | times: 1
+                assign sale_cp = item.properties['_Sale_Price'] | times: 1
                 assign don = item.properties['_donation'] | times: 1
                 if cp <= 0
-                  assign cp = item.properties['_Sale_Price'] | times: 1
+                  assign cp = sale_cp
                   if cp <= 0
                     assign cp = item.properties['_custom_price_shop'] | times: 1
                   endif
@@ -435,8 +444,15 @@
                   endif
                 endif
                 assign donation_value = 0
+                assign effective_line_price = item.final_line_price
+                if sale_cp > 0
+                  assign property_line_price = sale_cp | times: item.quantity
+                  if effective_line_price > property_line_price
+                    assign effective_line_price = property_line_price
+                  endif
+                endif
                 if don > 0 and cp > 0
-                  assign donation_value = item.final_line_price | times: don | divided_by: cp
+                  assign donation_value = effective_line_price | times: don | divided_by: cp
                 elsif don > 0
                   assign donation_value = don | times: item.quantity
                 endif
