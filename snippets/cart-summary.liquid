@@ -3,18 +3,20 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign adjusted_total_price = 0
+  assign adjusted_total_price = cart.total_price
   for item in cart.items
-    assign line_price = item.final_line_price
     assign sale_cp = item.properties['_Sale_Price'] | times: 1
     if sale_cp > 0
       assign property_line_price = sale_cp | times: item.quantity
-      if line_price > property_line_price
-        assign line_price = property_line_price
+      if item.final_line_price > property_line_price
+        assign line_price_difference = item.final_line_price | minus: property_line_price
+        assign adjusted_total_price = adjusted_total_price | minus: line_price_difference
       endif
     endif
-    assign adjusted_total_price = adjusted_total_price | plus: line_price
   endfor
+  if adjusted_total_price < 0
+    assign adjusted_total_price = 0
+  endif
   assign total_price = adjusted_total_price | money
 -%}
 
