@@ -210,8 +210,30 @@
     }
   }
 
-  /* Multi-variant product cards open the chooser instead of adding an arbitrary variant. */
-  :is(.product-card):has(.quick-add__product-form-component--multi-variant) .quick-add__button--add {
+  /* Hide the variant swatches for product cards that show a swatches variant picker */
+  :is(.product-card):has(swatches-variant-picker-component) .quick-add .variant-option--swatches {
+    display: none;
+  }
+
+  /* Hide "Add" button for single option product cards that show a swatches variant picker */
+  :is(.product-card:not([data-no-swatch-selected])):has(.quick-add__product-form-component--single-option):has(
+      swatches-variant-picker-component
+    )
+    .quick-add__button--choose {
+    display: none;
+  }
+
+  /* Hide "Add" button for single option product cards that show a swatches variant picker */
+  :is(.product-card[data-no-swatch-selected]):has(.quick-add__product-form-component--single-option):has(
+      swatches-variant-picker-component
+    )
+    add-to-cart-component {
+    display: none;
+  }
+
+  /* Hide "add" button for multi-variant product cards that don’t show a swatches variant picker */
+  :is(.product-card):has(.quick-add__product-form-component--multi-variant):not(:has(swatches-variant-picker-component))
+    .quick-add__button--add {
     display: none;
   }
 
@@ -239,7 +261,8 @@
   }
 
   :is(.product-grid, .shop-products__product-grid, .shop-products__rail-track, .more-from__grid) product-card .card-gallery slideshow-arrows,
-  :is(.product-grid, .shop-products__product-grid, .shop-products__rail-track, .more-from__grid) product-card .card-gallery slideshow-controls {
+  :is(.product-grid, .shop-products__product-grid, .shop-products__rail-track, .more-from__grid) product-card .card-gallery slideshow-controls,
+  .product-grid product-card product-swatches {
     display: none;
   }
 
