@@ -20,7 +20,6 @@
       {%- endif -%}
     {%- endif -%}
 
-    {%- render 'stylesheets' -%}
     {%- if request.page_type == 'index' -%}
       <link
         rel="preload"
@@ -43,6 +42,8 @@
         fetchpriority="high"
       >
     {%- endif -%}
+
+    {%- render 'stylesheets' -%}
     <!-- BAF cache bust: hero content top 20260717b -->
     <style id="baf-overscroll-canvas">
       html {
