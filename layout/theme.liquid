@@ -31,16 +31,6 @@
         type="image/webp"
         fetchpriority="high"
       >
-      <link
-        rel="preload"
-        as="image"
-        href="{{ 'hero-banner-desktop-1600.webp' | asset_url }}"
-        imagesrcset="{{ 'hero-banner-desktop-1600.webp' | asset_url }} 1600w, {{ 'hero-banner-desktop-2215.webp' | asset_url }} 2215w"
-        imagesizes="100vw"
-        media="(min-width: 750px)"
-        type="image/webp"
-        fetchpriority="high"
-      >
     {%- endif -%}
 
     {%- render 'stylesheets' -%}
