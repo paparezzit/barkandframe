@@ -10,13 +10,7 @@
 
 {% render 'text', fallback_text: text, block: block %}
 
-{% stylesheet %}
-
-.contents p{
-  font-family: "Times New Roman" !important;
-}
-
-{% endstylesheet %}
+{{ 'product-description.css' | asset_url | stylesheet_tag }}
 
 {% schema %}
 {

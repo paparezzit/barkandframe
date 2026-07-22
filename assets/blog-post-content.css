@@ -1,0 +1,4 @@
+.blog-post-content {
+    max-width: var(--normal-content-width);
+    margin: 0 auto;
+  }

@@ -1,0 +1,89 @@
+product-custom-property-component {
+    display: block;
+    width: 100%;
+  }
+
+  product-custom-property-component .__heading {
+    margin-inline: 0;
+    margin-block: 0 var(--padding-sm);
+  }
+
+  product-custom-property-component .__heading:has(+ .__description) {
+    margin-block-end: var(--padding-2xs);
+  }
+
+  product-custom-property-component .__description {
+    font-size: min(0.85em, var(--font-paragraph--size));
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+    margin-inline: 0;
+    margin-block: 0 var(--padding-md);
+  }
+
+  product-custom-property-component .__field {
+    position: relative;
+  }
+
+  product-custom-property-component .__input-wrapper {
+    position: relative;
+  }
+
+  product-custom-property-component input,
+  product-custom-property-component textarea {
+    width: 100%;
+    /* stylelint-disable-next-line declaration-no-important */
+    color: var(--color-input-text) !important;
+  }
+
+  /* Add padding for inputs with counter inside */
+  product-custom-property-component .__input-wrapper input {
+    padding-bottom: calc(var(--padding-sm) * 3);
+  }
+
+  product-custom-property-component .__input-wrapper textarea {
+    padding-bottom: calc(var(--padding-sm) * 3);
+    scroll-padding-bottom: calc(var(--padding-sm) * 3);
+  }
+
+  product-custom-property-component textarea {
+    min-height: 80px;
+  }
+
+  @supports (resize: vertical) {
+    @media (hover: hover) and (pointer: fine) {
+      product-custom-property-component textarea {
+        resize: vertical; /* stylelint-disable-line */
+      }
+    }
+  }
+
+  product-custom-property-component .__character-label {
+    position: absolute;
+    left: var(--input-padding-x);
+    bottom: var(--padding-sm);
+    pointer-events: none;
+  }
+
+  product-custom-property-component .__character-count {
+    font-style: italic;
+    /* stylelint-disable-next-line declaration-no-important */
+    color: var(--color-input-text) !important;
+  }
+
+  /* We should consolidate input styles that share the same behavior */
+  .custom-property__input {
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+
+    /* this is needed to override the styles from field__input */
+    box-shadow: none;
+
+    &:is(:hover, :focus) {
+      /* this is needed to override the styles from field__input */
+      box-shadow: none;
+    }
+
+    &:focus {
+      /* this is needed to override the styles from field__input */
+      outline: var(--focus-outline-width) solid var(--color-input-background);
+    }
+  }

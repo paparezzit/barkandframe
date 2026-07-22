@@ -30,26 +30,7 @@
   style="{% render 'border-override', settings: block_settings %}"
 >
 
-{% stylesheet %}
-  .blog-post-card__image {
-    width: 100%;
-    object-fit: cover;
-    object-position: center center;
-    height: calc(var(--blog-post-card-img-height) * var(--blog-post-card-scale));
-  }
-
-  .blog-post-card__image--small {
-    --blog-post-card-img-height: 280px;
-  }
-
-  .blog-post-card__image--medium {
-    --blog-post-card-img-height: 340px;
-  }
-
-  .blog-post-card__image--large {
-    --blog-post-card-img-height: 400px;
-  }
-{% endstylesheet %}
+{{ 'blog-post-image.css' | asset_url | stylesheet_tag }}
 
 {% schema %}
 {
