@@ -1,0 +1,63 @@
+results-list.product-grid-container {
+    overflow-x: clip;
+  }
+
+  results-list .collection-wrapper,
+  results-list .main-collection-grid,
+  results-list .product-grid,
+  results-list .product-grid__item,
+  results-list .product-grid__card {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  results-list .main-collection-grid {
+    grid-column: var(--grid-column--mobile);
+  }
+
+  @media screen and (min-width: 750px) {
+    results-list .main-collection-grid {
+      grid-column: var(--grid-column--desktop);
+    }
+
+    results-list .collection-wrapper {
+      grid-template-columns:
+        1fr repeat(
+          var(--centered-column-number),
+          minmax(0, calc((var(--page-width) - var(--page-margin) * 2) / var(--centered-column-number)))
+        )
+        1fr;
+    }
+
+    results-list .collection-wrapper:has(.facets-block-wrapper--full-width),
+    results-list .collection-wrapper:has(.collection-wrapper--full-width) {
+      grid-column: 1 / -1;
+      grid-template-columns:
+        minmax(var(--page-margin), 1fr) repeat(
+          var(--centered-column-number),
+          minmax(0, calc((var(--page-width) - var(--page-margin) * 2) / var(--centered-column-number)))
+        )
+        minmax(var(--page-margin), 1fr);
+    }
+  }
+
+  results-list :is(.collection-wrapper--full-width, .collection-wrapper--full-width-on-mobile)
+    [product-grid-view='default']
+    .product-grid__card,
+  results-list :is(.collection-wrapper--full-width, .collection-wrapper--full-width-on-mobile)
+    [product-grid-view='mobile-single']
+    .product-grid__card {
+    @media screen and (max-width: 749px) {
+      padding-inline-start: max(var(--padding-xs), var(--padding-inline-start));
+      padding-inline-end: max(var(--padding-xs), var(--padding-inline-end));
+    }
+  }
+
+  results-list :is(.collection-wrapper--full-width) .card-gallery,
+  results-list :is(.collection-wrapper--full-width-on-mobile) .card-gallery {
+    @media screen and (max-width: 749px) {
+      margin-inline-start: calc(-1 * max(var(--padding-xs), var(--padding-inline-start)));
+      margin-inline-end: calc(-1 * max(var(--padding-xs), var(--padding-inline-end)));
+    }
+  }

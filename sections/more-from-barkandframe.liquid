@@ -37,10 +37,15 @@
             {%- assign has_cta_style_images = true -%}
             <img
               class="more-from__cta-style-img is-active"
-              src="{{ default_style_image | image_url: width: 800 }}"
+              src="{{ default_style_image | image_url: width: 640 }}"
+              srcset="{{ default_style_image | image_url: width: 320 }} 320w, {{ default_style_image | image_url: width: 480 }} 480w, {{ default_style_image | image_url: width: 640 }} 640w"
+              sizes="(max-width: 749px) 48vw, 25vw"
               alt="{{ default_cta_style.name.value | default: section.settings.cta_label | escape }}"
               loading="lazy"
-              width="800"
+              decoding="async"
+              fetchpriority="low"
+              width="{{ default_style_image.width }}"
+              height="{{ default_style_image.height }}"
             >
           {%- endif -%}
         {%- endif -%}
@@ -54,10 +59,15 @@
               {%- assign has_cta_style_images = true -%}
               <img
                 class="more-from__cta-style-img"
-                src="{{ style_image | image_url: width: 800 }}"
+                src="{{ style_image | image_url: width: 640 }}"
+                srcset="{{ style_image | image_url: width: 320 }} 320w, {{ style_image | image_url: width: 480 }} 480w, {{ style_image | image_url: width: 640 }} 640w"
+                sizes="(max-width: 749px) 48vw, 25vw"
                 alt="{{ style.name.value | default: section.settings.cta_label | escape }}"
                 loading="lazy"
-                width="800"
+                decoding="async"
+                fetchpriority="low"
+                width="{{ style_image.width }}"
+                height="{{ style_image.height }}"
               >
             {%- endif -%}
           {%- endunless -%}
@@ -66,10 +76,15 @@
         {%- if has_cta_style_images == false and section.settings.cta_image != blank -%}
           <img
             class="more-from__cta-style-img is-active"
-            src="{{ section.settings.cta_image | image_url: width: 800 }}"
+            src="{{ section.settings.cta_image | image_url: width: 640 }}"
+            srcset="{{ section.settings.cta_image | image_url: width: 320 }} 320w, {{ section.settings.cta_image | image_url: width: 480 }} 480w, {{ section.settings.cta_image | image_url: width: 640 }} 640w"
+            sizes="(max-width: 749px) 48vw, 25vw"
             alt="{{ section.settings.cta_label | escape }}"
             loading="lazy"
-            width="800"
+            decoding="async"
+            fetchpriority="low"
+            width="{{ section.settings.cta_image.width }}"
+            height="{{ section.settings.cta_image.height }}"
           >
         {%- endif -%}
       </div>
@@ -102,216 +117,7 @@
   <div class="more-from__end-spacer" aria-hidden="true"></div>
 </section>
 
-{% stylesheet %}
-.more-from {
-  --more-from-grid-gap: 20px;
-  --more-from-content-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
-  --more-from-card-width: calc((var(--more-from-content-width) - (var(--more-from-grid-gap) * 3)) / 4);
-  padding: 80px 0 0;
-  color: var(--brown);
-}
-
-main.content-for-layout .more-from.section {
-  --site-content-margin: var(--page-margin);
-}
-
-.more-from__title {
-  font-size: 36px;
-  margin: 0 0 40px;
-  font-family: "display", sans-serif;
-}
-
-.more-from__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 60px 20px;
-  align-items: start;
-}
-
-.more-from--scroll .more-from__grid {
-  display: flex;
-  gap: var(--more-from-grid-gap);
-  width: 100%;
-  margin: 0;
-  overflow-x: auto;
-  scroll-padding-inline: 0;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.more-from--scroll .more-from__grid::-webkit-scrollbar {
-  display: none;
-}
-
-.more-from__end-spacer {
-  height: 240px;
-}
-
-.more-from--scroll .more-from__cta,
-.more-from--scroll .more-from__product-card {
-  flex: 0 0 var(--more-from-card-width);
-  width: var(--more-from-card-width);
-  min-width: 0;
-  max-width: var(--more-from-card-width);
-  scroll-snap-align: start;
-}
-
-.more-from__product-card {
-  --color: var(--brown);
-  color: var(--brown);
-  transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
-}
-
-.more-from__product-card :is(.product-title, .product-title *, product-price, product-price *, .price, .compare-at-price, .unit-price) {
-  color: var(--brown);
-}
-
-@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .more-from__product-card:hover {
-    transform: translateY(calc(-1 * var(--hover-lift-amount)));
-  }
-}
-
-.more-from__cta {
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: var(--brown);
-  transition: opacity var(--hover-transition-duration) var(--hover-transition-timing), transform var(--hover-transition-duration) var(--hover-transition-timing);
-  height: 100%;
-}
-
-.more-from__cta-img {
-  width: 100%;
-  aspect-ratio: 100 / 126;
-  position: relative;
-  overflow: hidden;
-  background-color: #F4EFE5;
-  border-radius: var(--baf-radius-md);
-}
-
-.more-from__cta-style-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}
-
-.more-from__cta-style-img.is-active {
-  opacity: 1;
-}
-
-.more-from__cta-label {
-  font-size: 14px;
-  color: var(--beige);
-  padding: 16px 20px;
-  border-radius: 1000px;
-  background-color: var(--brown);
-  margin-top: 20px;
-  display: block;
-  text-align: center;
-  transition: background .2s, color .2s;
-}
-
-.more-from__scrollbar {
-  position: relative;
-  display: none;
-  width: var(--more-from-content-width);
-  height: 22px;
-  margin: 24px auto 0;
-  cursor: pointer;
-}
-
-.more-from__scrollbar[hidden] {
-  display: none;
-}
-
-.more-from__scrollbar::before {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  border-radius: 999px;
-  background: rgb(76 68 63 / 0.18);
-}
-
-.more-from__scrollbar-thumb {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  display: block;
-  width: 34px;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--brown);
-  transform: translateX(0);
-  transition: width 0.1s linear;
-}
-
-@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .more-from__cta:hover {
-    transform: translateY(calc(-1 * var(--hover-lift-amount)));
-
-    .more-from__cta-label{
-      background-color: var(--purple);
-      color: var(--brown);
-    }
-  }
-}
-
-@media (max-width: 989px) {
-  .more-from {
-    --more-from-card-width: calc((var(--more-from-content-width) - (var(--more-from-grid-gap) * 2)) / 3);
-  }
-
-  .more-from--scroll .more-from__grid {
-    width: 100vw;
-    margin-inline: calc((100% - 100vw) / 2);
-    padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
-    scroll-padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
-  }
-
-  .more-from--scroll .more-from__scrollbar {
-    display: block;
-  }
-}
-
-@media (min-width: 750px) {
-  .more-from__title {
-    font-size: 36px;
-    margin-bottom: 48px;
-  }
-
-  .more-from__grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .more-from {
-    padding: 100px 0 0;
-  }
-}
-
-@media (max-width: 749px) {
-  .more-from {
-    --more-from-grid-gap: 12px;
-    --more-from-card-width: calc((var(--more-from-content-width) - var(--more-from-grid-gap)) / 2);
-  }
-
-  .more-from__end-spacer {
-    height: 160px;
-  }
-}
-{% endstylesheet %}
+{{ 'more-from-barkandframe.css' | asset_url | stylesheet_tag }}
 
 <script>
   (() => {
