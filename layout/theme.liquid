@@ -211,9 +211,7 @@
       src="{{ 'critical.js' | asset_url }}"
       type="module"
       async
-      {% unless request.page_type == 'index' %}
       blocking="render"
-      {% endunless %}
     ></script>
 
     <main
