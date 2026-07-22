@@ -1,9 +1,6 @@
-import { OverflowList } from '@theme/critical';
-import VariantPicker from '@theme/variant-picker';
 import { Component } from '@theme/component';
 import { debounce, isDesktopBreakpoint, mediaQueryLarge, requestYieldCallback } from '@theme/utilities';
-import { ThemeEvents, VariantSelectedEvent, VariantUpdateEvent, SlideshowSelectEvent } from '@theme/events';
-import { morph } from '@theme/morph';
+import { SlideshowSelectEvent } from '@theme/events';
 
 /**
  * A custom element that displays a product card.
@@ -77,14 +74,9 @@ export class ProductCard extends Component {
     if (!(link instanceof HTMLAnchorElement)) throw new Error('Product card link not found');
     this.#handleQuickAdd();
 
-    this.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate);
-    this.addEventListener(ThemeEvents.variantSelected, this.#handleVariantSelected);
     this.addEventListener(SlideshowSelectEvent.eventName, this.#handleSlideshowSelect);
     mediaQueryLarge.addEventListener('change', this.#handleQuickAdd);
 
-    this.addEventListener('pointerover', this.#handleSwatchPointerOver);
-    this.addEventListener('pointerout', this.#handleSwatchPointerOut);
-    this.addEventListener('click', this.#handleSwatchClick, true);
     this.addEventListener('click', this.navigateToProduct);
 
     // Preload the next image on the slideshow to avoid white flashes on previewImage
@@ -97,9 +89,6 @@ export class ProductCard extends Component {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('pointerover', this.#handleSwatchPointerOver);
-    this.removeEventListener('pointerout', this.#handleSwatchPointerOut);
-    this.removeEventListener('click', this.#handleSwatchClick, true);
     this.removeEventListener('click', this.navigateToProduct);
   }
 
@@ -121,177 +110,6 @@ export class ProductCard extends Component {
     }
   };
 
-  /**
-   * Handles the variant selected event.
-   * @param {VariantSelectedEvent} event - The variant selected event.
-   */
-  #handleVariantSelected = (event) => {
-    if (event.target !== this.variantPicker) {
-      this.variantPicker?.updateSelectedOption(event.detail.resource.id);
-    }
-  };
-
-  /**
-   * Handles the variant update event.
-   * Updates price, checks for unavailable variants, and updates product URL.
-   * @param {VariantUpdateEvent} event - The variant update event.
-   */
-  #handleVariantUpdate = (event) => {
-    // Stop the event from bubbling up to the section, variant updates triggered from product cards are fully handled
-    // by this component and should not affect anything outside the card.
-    event.stopPropagation();
-
-    this.updatePrice(event);
-    this.#isUnavailableVariantSelected(event);
-    this.#updateProductUrl(event);
-    this.refs.quickAdd?.fetchProductPage(this.productPageUrl);
-
-    if (event.target !== this.variantPicker) {
-      this.variantPicker?.updateVariantPicker(event.detail.data.html);
-    }
-
-    this.#updateVariantImages();
-    this.#previousSlideIndex = null;
-
-    // Remove attribute after re-rendering since a variant selection has been made
-    this.removeAttribute('data-no-swatch-selected');
-
-    // Force overflow list to reflow after variant update
-    // This fixes an issue where the overflow counter doesn't update properly in some browsers
-    this.#updateOverflowList();
-  };
-
-  /**
-   * Forces the overflow list to recalculate by dispatching a reflow event.
-   * This ensures the overflow counter displays correctly after variant updates.
-   */
-  #updateOverflowList() {
-    // Find the overflow list in the variant picker
-    const overflowList = this.querySelector('swatches-variant-picker-component overflow-list');
-    const isActiveOverflowList = overflowList?.querySelector('[slot="overflow"]') ? true : false;
-    if (!overflowList || !isActiveOverflowList) return;
-
-    // Use requestAnimationFrame to ensure DOM has been updated
-    requestAnimationFrame(() => {
-      // Dispatch a reflow event to trigger recalculation
-      overflowList.dispatchEvent(
-        new CustomEvent('reflow', {
-          bubbles: true,
-          detail: {},
-        })
-      );
-    });
-  }
-
-  /**
-   * Updates the DOM with a new price.
-   * @param {VariantUpdateEvent} event - The variant update event.
-   */
-  updatePrice(event) {
-    const priceContainer = this.querySelectorAll(`product-price [ref='priceContainer']`)[1];
-    const newPriceElement = event.detail.data.html.querySelector(`product-price [ref='priceContainer']`);
-
-    if (newPriceElement && priceContainer) {
-      morph(priceContainer, newPriceElement);
-    }
-  }
-
-  /**
-   * Updates the product URL based on the variant update event.
-   * @param {VariantUpdateEvent} event - The variant update event.
-   */
-  #updateProductUrl(event) {
-    const anchorElement = event.detail.data.html?.querySelector('product-card a');
-    const featuredMediaUrl = event.detail.data.html
-      ?.querySelector('product-card-link')
-      ?.getAttribute('data-featured-media-url');
-
-    // If the product card is inside a product link, update the product link's featured media URL
-    if (featuredMediaUrl && this.closest('product-card-link'))
-      this.closest('product-card-link')?.setAttribute('data-featured-media-url', featuredMediaUrl);
-
-    if (anchorElement instanceof HTMLAnchorElement) {
-      // If the href is empty, don't update the product URL eg: unavailable variant
-      if (anchorElement.getAttribute('href')?.trim() === '') return;
-
-      const productUrl = anchorElement.href;
-      const { productCardLink, productTitleLink, cardGalleryLink } = this.refs;
-
-      productCardLink.href = productUrl;
-      if (cardGalleryLink instanceof HTMLAnchorElement) {
-        cardGalleryLink.href = productUrl;
-      }
-      if (productTitleLink instanceof HTMLAnchorElement) {
-        productTitleLink.href = productUrl;
-      }
-    }
-  }
-
-  /**
-   * Checks if an unavailable variant is selected.
-   * @param {VariantUpdateEvent} event - The variant update event.
-   */
-  #isUnavailableVariantSelected(event) {
-    const allVariants = /** @type {NodeListOf<HTMLInputElement>} */ (
-      event.detail.data.html.querySelectorAll('input:checked')
-    );
-
-    for (const variant of allVariants) {
-      this.#toggleAddToCartButton(variant.dataset.optionAvailable === 'true');
-    }
-  }
-
-  /**
-   * Toggles the add to cart button state.
-   * @param {boolean} enable - Whether to enable or disable the button.
-   */
-  #toggleAddToCartButton(enable) {
-    const addToCartButton = this.querySelector('.add-to-cart__button button');
-
-    if (addToCartButton instanceof HTMLButtonElement) {
-      addToCartButton.disabled = !enable;
-    }
-  }
-
-  /**
-   * Hide the variant images that are not for the selected variant.
-   */
-  #updateVariantImages() {
-    const { slideshow } = this.refs;
-    if (!this.variantPicker?.selectedOption) {
-      return;
-    }
-
-    const selectedImageId = this.variantPicker?.selectedOption.dataset.optionMediaId;
-
-    if (slideshow && selectedImageId) {
-      const { slides = [] } = slideshow.refs;
-
-      for (const slide of slides) {
-        if (slide.getAttribute('variant-image') == null) continue;
-
-        slide.hidden = slide.getAttribute('slide-id') !== selectedImageId;
-      }
-
-      slideshow.select({ id: selectedImageId }, undefined, { animate: false });
-    }
-  }
-
-  /**
-   * Gets all variant inputs.
-   * @returns {NodeListOf<HTMLInputElement>} All variant input elements.
-   */
-  get allVariants() {
-    return this.querySelectorAll('input[data-variant-id]');
-  }
-
-  /**
-   * Gets the variant picker component.
-   * @returns {VariantPicker | null} The variant picker component.
-   */
-  get variantPicker() {
-    return this.querySelector('swatches-variant-picker-component');
-  }
   /** @type {number | null} */
   #previousSlideIndex = null;
 
@@ -319,75 +137,6 @@ export class ProductCard extends Component {
     this.resetVariant.cancel();
     slideshow.select({ id }, undefined, { animate: false });
   }
-
-  /**
-   * Previews a color swatch image when hovering the swatch itself.
-   * @param {PointerEvent} event
-   */
-  #handleSwatchPointerOver = (event) => {
-    if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
-
-    const swatchLabel = event.target.closest(
-      'swatches-variant-picker-component .variant-option__button-label'
-    );
-    if (!swatchLabel || !this.contains(swatchLabel)) return;
-    if (event.relatedTarget instanceof Node && swatchLabel.contains(event.relatedTarget)) return;
-
-    const mediaId =
-      swatchLabel.getAttribute('data-media-id') ||
-      swatchLabel.querySelector('input[data-option-media-id]')?.getAttribute('data-option-media-id');
-    if (!mediaId) return;
-
-    this.previewVariant(mediaId);
-  };
-
-  /**
-   * Resets the card image after leaving a color swatch.
-   * @param {PointerEvent} event
-   */
-  #handleSwatchPointerOut = (event) => {
-    if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
-
-    const swatchLabel = event.target.closest(
-      'swatches-variant-picker-component .variant-option__button-label'
-    );
-    if (!swatchLabel || !this.contains(swatchLabel)) return;
-    if (event.relatedTarget instanceof Node && swatchLabel.contains(event.relatedTarget)) return;
-
-    this.resetVariant();
-  };
-
-  /**
-   * Opens product detail with the clicked color swatch variant preselected.
-   * @param {MouseEvent} event
-   */
-  #handleSwatchClick = (event) => {
-    if (!(event.target instanceof Element)) return;
-
-    const swatchLabel = event.target.closest(
-      'swatches-variant-picker-component .variant-option__button-label'
-    );
-    if (!swatchLabel || !this.contains(swatchLabel)) return;
-
-    const swatchInput = swatchLabel.querySelector(
-      'input[data-first-available-or-first-variant-id], input[data-variant-id]'
-    );
-    if (!(swatchInput instanceof HTMLInputElement)) return;
-
-    const variantId = swatchInput.dataset.firstAvailableOrFirstVariantId || swatchInput.dataset.variantId;
-    if (!variantId) return;
-
-    const picker = swatchInput.closest('swatches-variant-picker-component');
-    const productUrl = picker?.getAttribute('data-product-url') || this.refs.productCardLink.href;
-    if (!productUrl) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    const url = new URL(productUrl, window.location.origin);
-    url.searchParams.set('variant', variantId);
-    this.#navigateToURL(event, url);
-  };
 
   /**
    * Previews the next image.
@@ -421,14 +170,7 @@ export class ProductCard extends Component {
 
     if (event.pointerType !== 'mouse') return;
 
-    const { slideshow } = this.refs;
-
-    if (!this.variantPicker) {
-      if (!slideshow) return;
-      slideshow.previous(undefined, { animate: false });
-    } else {
-      this.#resetVariant();
-    }
+    this.#resetVariant();
   }
 
   /**
@@ -511,99 +253,4 @@ export class ProductCard extends Component {
 
 if (!customElements.get('product-card')) {
   customElements.define('product-card', ProductCard);
-}
-
-/**
- * A custom element that displays a variant picker with swatches.
- *
- * @typedef {object} SwatchesRefs
- * @property {HTMLElement} overflowList
- *
- * @extends {VariantPicker<SwatchesRefs>}
- */
-class SwatchesVariantPickerComponent extends VariantPicker {
-  connectedCallback() {
-    super.connectedCallback();
-
-    // Cache the parent product card
-    this.parentProductCard = this.closest('product-card');
-
-    // Listen for variant updates to apply pending URL changes
-    this.addEventListener(ThemeEvents.variantUpdate, this.#handleCardVariantUrlUpdate.bind(this));
-  }
-
-  /**
-   * Updates the card URL when a variant is selected.
-   */
-  #handleCardVariantUrlUpdate() {
-    if (this.pendingVariantId && this.parentProductCard instanceof ProductCard) {
-      const currentUrl = new URL(this.parentProductCard.refs.productCardLink.href);
-      currentUrl.searchParams.set('variant', this.pendingVariantId);
-      this.parentProductCard.refs.productCardLink.href = currentUrl.toString();
-      this.pendingVariantId = null;
-    }
-  }
-
-  /**
-   * Override the variantChanged method to handle unavailable swatches with available alternatives.
-   * @param {Event} event - The variant change event.
-   */
-  variantChanged(event) {
-    if (!(event.target instanceof HTMLElement)) return;
-
-    // Check if this is a swatch input
-    const isSwatchInput = event.target instanceof HTMLInputElement && event.target.name?.includes('-swatch');
-    const clickedSwatch = event.target;
-    const availableCount = parseInt(clickedSwatch.dataset.availableCount || '0');
-    const firstAvailableVariantId = clickedSwatch.dataset.firstAvailableOrFirstVariantId;
-
-    // For swatch inputs, check if we need special handling
-    if (isSwatchInput && availableCount > 0 && firstAvailableVariantId) {
-      // If this is an unavailable variant but there are available alternatives
-      // Prevent the default handling
-      event.stopPropagation();
-
-      // Update the selected option visually
-      this.updateSelectedOption(clickedSwatch);
-
-      // Build request URL with the first available variant
-      const productUrl = this.dataset.productUrl?.split('?')[0];
-
-      if (!productUrl) return;
-
-      const url = new URL(productUrl, window.location.origin);
-      url.searchParams.set('variant', firstAvailableVariantId);
-      url.searchParams.set('section_id', 'section-rendering-product-card');
-
-      const requestUrl = url.href;
-
-      // Store the variant ID we want to apply to the URL
-      this.pendingVariantId = firstAvailableVariantId;
-
-      // Use parent's fetch method
-      this.fetchUpdatedSection(requestUrl);
-      return;
-    }
-
-    // For all other cases, use the default behavior
-    super.variantChanged(event);
-  }
-
-  /**
-   * Shows all swatches.
-   * @param {Event} [event] - The event that triggered the show all swatches.
-   */
-  showAllSwatches(event) {
-    event?.preventDefault();
-
-    const { overflowList } = this.refs;
-
-    if (overflowList instanceof OverflowList) {
-      overflowList.showAll();
-    }
-  }
-}
-
-if (!customElements.get('swatches-variant-picker-component')) {
-  customElements.define('swatches-variant-picker-component', SwatchesVariantPickerComponent);
 }
