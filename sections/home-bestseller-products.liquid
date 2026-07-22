@@ -1,0 +1,588 @@
+{%- liquid
+  assign bestseller_count = 0
+-%}
+
+{%- capture bestseller_cards -%}
+  {%- for product in section.settings.products limit: 10 -%}
+    {%- if product != blank -%}
+      {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+      <li
+        class="shop-products__rail-item"
+        data-product-id="{{ product.id }}"
+        data-product-handle="{{ product.handle }}"
+        {% if product.handle == 'bloom-t-shirt' %}
+          data-product-url-override="/products/bloom-t-shirt?variant=54206718247258"
+        {% endif %}
+      >
+        {%- # theme-check-disable UniqueStaticBlockId -%}
+        {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+        {%- # theme-check-enable UniqueStaticBlockId -%}
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if bestseller_count == 0 -%}
+  {%- capture bestseller_cards -%}
+    {%- assign default_bestseller_handles = 'give-love-cap,sunday-ride-t-shirt,more-dog-is-more-dog-cap,powered-by-dogs-t-shirt,chill-vibes-crewneck,bloom-t-shirt' | split: ',' -%}
+    {%- for handle in default_bestseller_handles -%}
+      {%- assign product = all_products[handle] -%}
+      {%- if product != blank -%}
+        {%- assign bestseller_count = bestseller_count | plus: 1 -%}
+        <li
+          class="shop-products__rail-item"
+          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
+          {% if product.handle == 'bloom-t-shirt' %}
+            data-product-url-override="/products/bloom-t-shirt?variant=54206718247258"
+          {% endif %}
+        >
+          {%- # theme-check-disable UniqueStaticBlockId -%}
+          {%- content_for 'block', type: '_product-card', id: 'product-card', closest.product: product -%}
+          {%- # theme-check-enable UniqueStaticBlockId -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+{%- endif -%}
+
+{%- if bestseller_cards != blank -%}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+  <section
+    class="home-bestseller-products section color-{{ section.settings.color_scheme }}"
+    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+    {{ section.shopify_attributes }}
+  >
+    <div class="home-bestseller-products__inner">
+      <div class="home-bestseller-products__panel">
+        <h2 class="home-bestseller-products__title">{{ section.settings.title }}</h2>
+
+        <div class="home-bestseller-products__carousel" data-home-bestseller-carousel>
+          <div class="shop-products__rail" data-home-bestseller-rail>
+            <ul
+              class="shop-products__rail-track"
+              role="list"
+              data-home-bestseller-card-count="{{ bestseller_count }}"
+              data-home-bestseller-set-count="1"
+              data-home-bestseller-target-set-count="5"
+            >
+              {{ bestseller_cards }}
+            </ul>
+          </div>
+          <slideshow-arrows class="home-bestseller-products__arrows product-gallery__arrows" position="center">
+            <button
+              class="home-bestseller-products__arrow slideshow-control slideshow-control--previous button button-unstyled button-unstyled--transparent"
+              type="button"
+              aria-label="Previous product"
+              data-home-bestseller-prev
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button
+              class="home-bestseller-products__arrow slideshow-control slideshow-control--next button button-unstyled button-unstyled--transparent"
+              type="button"
+              aria-label="Next product"
+              data-home-bestseller-next
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </slideshow-arrows>
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .home-bestseller-products {
+    --shop-products-grid-gap: 20px;
+    --shop-products-content-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+    --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 3)) / 4);
+    --home-bestseller-panel-inset: var(--page-margin);
+    padding-block: var(--padding-block-start) var(--padding-block-end);
+    background: var(--beige);
+  }
+
+  .home-bestseller-products__inner {
+    width: var(--shop-products-content-width);
+    justify-self: center;
+    margin-inline: auto;
+  }
+
+  .home-bestseller-products__panel {
+    position: relative;
+    isolation: isolate;
+    padding: 76px 0 92px;
+    overflow: visible;
+    border-radius: var(--baf-radius-oval);
+  }
+
+  .home-bestseller-products__panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: #f4efe5;
+  }
+
+  .home-bestseller-products__title {
+    margin: 0 0 48px;
+    color: var(--brown);
+    font-family: "display", serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+  }
+
+  .home-bestseller-products__carousel {
+    position: relative;
+    width: 100vw;
+    margin-inline: calc((100% - 100vw) / 2);
+  }
+
+  .shop-products__rail {
+    width: 100%;
+    margin-block-start: calc(-1 * var(--hover-lift-amount));
+    margin-inline: 0;
+    padding-block-start: var(--hover-lift-amount);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+  }
+
+  .shop-products__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-products__rail-track {
+    display: flex;
+    gap: var(--shop-products-grid-gap);
+    width: max-content;
+    margin: 0;
+    padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
+    list-style: none;
+    backface-visibility: hidden;
+  }
+
+  .shop-products__rail-track .product-card__content {
+    isolation: isolate;
+  }
+
+  .shop-products__rail-track .card-gallery {
+    position: relative;
+    z-index: 1;
+  }
+
+  .shop-products__rail-track .baf-product-card-bubble {
+    z-index: 3;
+    transform: translate3d(0, 0, 1px);
+    backface-visibility: hidden;
+  }
+
+  .home-bestseller-products product-swatches,
+  .home-bestseller-products swatches-variant-picker-component,
+  .home-bestseller-products .variant-option--swatches {
+    display: none !important;
+  }
+
+  .shop-products__rail-item {
+    flex: 0 0 var(--shop-products-card-width);
+    width: var(--shop-products-card-width);
+    min-width: 0;
+    max-width: var(--shop-products-card-width);
+    transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
+  }
+
+  .home-bestseller-products .home-bestseller-products__arrows {
+    top: var(--hover-lift-amount);
+    right: 0;
+    bottom: auto;
+    left: 0;
+    height: calc(var(--shop-products-card-width) * 1.26);
+    z-index: 5;
+    padding-inline: max(20px, var(--page-margin));
+  }
+
+  .home-bestseller-products .home-bestseller-products__arrow {
+    opacity: 1;
+  }
+
+  .home-bestseller-products .home-bestseller-products__arrow:hover {
+    opacity: 1;
+  }
+
+  @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .shop-products__rail-item:hover {
+      transform: translateY(calc(-1 * var(--hover-lift-amount)));
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .home-bestseller-products {
+      --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 2)) / 3);
+    }
+  }
+
+  @media screen and (max-width: 1199px) {
+    .home-bestseller-products {
+      --shop-products-content-width: calc(100vw - (var(--home-bestseller-panel-inset) * 2));
+    }
+
+    .home-bestseller-products__inner {
+      grid-column: 1 / -1;
+      width: 100%;
+      justify-self: stretch;
+    }
+
+    .home-bestseller-products__panel {
+      margin-inline: var(--home-bestseller-panel-inset);
+    }
+
+    .home-bestseller-products__title {
+      max-width: calc(100% - 32px);
+      margin-inline: auto;
+      text-wrap: balance;
+    }
+
+    .home-bestseller-products__carousel {
+      margin-inline: calc(-1 * var(--home-bestseller-panel-inset));
+    }
+
+    .shop-products__rail-track {
+      padding-inline: var(--home-bestseller-panel-inset);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .home-bestseller-products {
+      --shop-products-grid-gap: 12px;
+      --home-bestseller-panel-inset: 20px;
+      --shop-products-card-width: calc((var(--shop-products-content-width) - var(--shop-products-grid-gap)) / 2);
+    }
+
+    .home-bestseller-products__panel {
+      padding: 52px 0 64px;
+      border-radius: var(--baf-radius-xl);
+    }
+
+    .home-bestseller-products__title {
+      margin-bottom: 28px;
+      font-size: var(--baf-display-large-size);
+    }
+
+    .shop-products__rail-track {
+      gap: var(--shop-products-grid-gap);
+    }
+
+    .home-bestseller-products .home-bestseller-products__arrows {
+      padding-inline: 12px;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const carousels = document.querySelectorAll('[data-home-bestseller-carousel]');
+
+    const initCarousel = (carousel) => {
+      if (carousel.dataset.homeBestsellerReady === 'true') return;
+      carousel.dataset.homeBestsellerReady = 'true';
+
+      const rail = carousel.querySelector('[data-home-bestseller-rail]');
+      if (!rail) return;
+
+      const track = rail.querySelector('.shop-products__rail-track');
+      const prev = carousel.querySelector('[data-home-bestseller-prev]');
+      const next = carousel.querySelector('[data-home-bestseller-next]');
+      if (!track || !prev || !next) return;
+
+      let loopPoint = 0;
+      let normalizeTimer = null;
+      let refreshFrame = null;
+      let hydrationScheduled = false;
+      const cardCount = Number.parseInt(track.dataset.homeBestsellerCardCount || '0', 10);
+      const targetSetCount = Number.parseInt(track.dataset.homeBestsellerTargetSetCount || '5', 10);
+      let setCount = Number.parseInt(track.dataset.homeBestsellerSetCount || '1', 10);
+
+      carousel.querySelectorAll('[data-product-url-override]').forEach((item) => {
+        const overrideUrl = item.dataset.productUrlOverride;
+        if (!overrideUrl) return;
+
+        item.querySelectorAll('a[href]').forEach((link) => {
+          link.setAttribute('href', overrideUrl);
+        });
+      });
+
+      const getMiddleSetIndex = () => Math.floor(setCount / 2);
+
+      const measureLoopPoint = () => {
+        const firstItem = track.children[0];
+        const nextSetFirstItem = cardCount > 0 ? track.children[cardCount] : null;
+        loopPoint = firstItem && nextSetFirstItem
+          ? nextSetFirstItem.offsetLeft - firstItem.offsetLeft
+          : 0;
+      };
+
+      const jumpWithoutAnimation = (left) => {
+        rail.style.scrollBehavior = 'auto';
+        rail.scrollLeft = Math.round(left);
+        rail.offsetHeight;
+        rail.style.scrollBehavior = '';
+      };
+
+      const normalizePosition = () => {
+        if (loopPoint <= 0 || setCount < 3) return;
+
+        const middleStart = loopPoint * getMiddleSetIndex();
+        const min = loopPoint;
+        const max = loopPoint * (setCount - 2);
+        const current = rail.scrollLeft;
+
+        if (current < min) {
+          jumpWithoutAnimation(current + middleStart);
+        } else if (current > max) {
+          jumpWithoutAnimation(current - middleStart);
+        }
+      };
+
+      const refreshRail = () => {
+        measureLoopPoint();
+        if (loopPoint <= 0 || setCount < 3) return;
+
+        const middleStart = loopPoint * getMiddleSetIndex();
+        if (!rail.dataset.infiniteRailReady) {
+          jumpWithoutAnimation(middleStart);
+          rail.dataset.infiniteRailReady = 'true';
+        } else {
+          normalizePosition();
+        }
+      };
+
+      const queueRefreshRail = () => {
+        if (refreshFrame) return;
+        refreshFrame = window.requestAnimationFrame(() => {
+          refreshFrame = null;
+          refreshRail();
+        });
+      };
+
+      const hydrateInfiniteRail = () => {
+        hydrationScheduled = false;
+        if (setCount >= targetSetCount || cardCount <= 0) return;
+
+        const originalItems = Array.from(track.children).slice(0, cardCount);
+        if (originalItems.length === 0) return;
+
+        const fragment = document.createDocumentFragment();
+        for (let setIndex = setCount; setIndex < targetSetCount; setIndex += 1) {
+          originalItems.forEach((item) => {
+            const clone = item.cloneNode(true);
+            const idMap = new Map();
+            clone.querySelectorAll('overflow-list').forEach((overflowList) => {
+              const replacement = document.createElement('div');
+
+              Array.from(overflowList.attributes).forEach((attribute) => {
+                replacement.setAttribute(attribute.name, attribute.value);
+              });
+
+              while (overflowList.firstChild) {
+                replacement.appendChild(overflowList.firstChild);
+              }
+
+              overflowList.replaceWith(replacement);
+            });
+            clone.querySelectorAll('[id]').forEach((node) => {
+              const nextId = `${node.id}--baf-clone-${setIndex}`;
+              idMap.set(node.id, nextId);
+              node.id = nextId;
+            });
+            clone
+              .querySelectorAll('[for], [aria-controls], [aria-labelledby], [aria-describedby], [form]')
+              .forEach((node) => {
+                ['for', 'aria-controls', 'aria-labelledby', 'aria-describedby', 'form'].forEach((attribute) => {
+                  const value = node.getAttribute(attribute);
+                  if (!value) return;
+
+                  node.setAttribute(
+                    attribute,
+                    value
+                      .split(/\s+/)
+                      .map((part) => idMap.get(part) || part)
+                      .join(' ')
+                  );
+                });
+              });
+            clone.querySelectorAll('[href^="#"]').forEach((node) => {
+              const targetId = node.getAttribute('href')?.slice(1);
+              if (!targetId || !idMap.has(targetId)) return;
+              node.setAttribute('href', `#${idMap.get(targetId)}`);
+            });
+            fragment.appendChild(clone);
+          });
+        }
+
+        track.appendChild(fragment);
+        setCount = targetSetCount;
+        track.dataset.homeBestsellerSetCount = String(setCount);
+        queueRefreshRail();
+      };
+
+      const scheduleHydration = () => {
+        if (hydrationScheduled || setCount >= targetSetCount) return;
+        hydrationScheduled = true;
+
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(hydrateInfiniteRail, { timeout: 1500 });
+        } else {
+          window.setTimeout(hydrateInfiniteRail, 500);
+        }
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          scheduleHydration();
+        }, { rootMargin: '600px 0px' });
+        observer.observe(carousel);
+      } else {
+        window.addEventListener('load', scheduleHydration, { once: true });
+      }
+
+      const getStep = () => {
+        const items = track.querySelectorAll('.shop-products__rail-item');
+        if (items.length > 1) {
+          return Math.abs(items[1].getBoundingClientRect().left - items[0].getBoundingClientRect().left);
+        }
+
+        const item = items[0];
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        return item ? item.getBoundingClientRect().width + gap : rail.clientWidth;
+      };
+
+      const scrollByDirection = (direction) => {
+        hydrateInfiniteRail();
+        const step = getStep();
+        if (step <= 0) return;
+
+        normalizePosition();
+        rail.scrollTo({ left: rail.scrollLeft + (step * direction), behavior: 'smooth' });
+      };
+
+      prev.addEventListener('click', () => {
+        scrollByDirection(-1);
+      });
+
+      next.addEventListener('click', () => {
+        scrollByDirection(1);
+      });
+
+      rail.addEventListener('scroll', () => {
+        clearTimeout(normalizeTimer);
+        normalizeTimer = window.setTimeout(normalizePosition, 180);
+      }, { passive: true });
+
+      track.querySelectorAll('img').forEach((image) => {
+        if (!image.complete) image.addEventListener('load', queueRefreshRail, { once: true });
+      });
+
+      window.addEventListener('resize', queueRefreshRail);
+      refreshRail();
+      window.setTimeout(refreshRail, 400);
+    };
+
+    const scheduleCarousel = (carousel) => {
+      const init = () => initCarousel(carousel);
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          init();
+        }, { rootMargin: '700px 0px' });
+        observer.observe(carousel);
+        return;
+      }
+
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(init, { timeout: 3000 });
+      } else {
+        window.setTimeout(init, 1500);
+      }
+    };
+
+    carousels.forEach(scheduleCarousel);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Home bestseller products",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Wearable art designed by artists"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 10
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home bestseller products"
+    }
+  ]
+}
+{% endschema %}
