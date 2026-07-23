@@ -42,7 +42,6 @@
   assign image_decoding = ''
   assign image_fetchpriority = ''
   assign image_asset = block_settings.image_asset | default: '' | strip
-  assign image_webp_asset = ''
   assign mobile_image_asset = block_settings.mobile_image_asset | default: '' | strip
   assign image_alt = block_settings.alt | default: block_settings.image.alt | default: ''
   assign parent_main_text = section.settings['main-text'] | default: ''
@@ -98,10 +97,6 @@
       assign mobile_image_asset = 'overview-see-it-at-home-studio-watercolour-mobile.jpg'
       assign image_alt = 'Studio Watercolour'
     endif
-
-    if image_asset contains '.jpg'
-      assign image_webp_asset = image_asset | replace: '.jpg', '.webp'
-    endif
   elsif parent_main_text contains 'beyond portraits'
     assign media_width_desktop = '400px'
     assign media_width_mobile = '60vw'
@@ -114,9 +109,6 @@
 {% capture image %}
   {%- if image_asset != blank -%}
     <picture class="image-block__picture">
-      {%- if image_webp_asset != blank -%}
-        <source media="(min-width: 750px)" type="image/webp" srcset="{{ image_webp_asset | asset_url }}">
-      {%- endif -%}
       {%- if mobile_image_asset != blank -%}
         <source media="(max-width: 749px)" srcset="{{ mobile_image_asset | asset_url }}">
       {%- endif -%}
