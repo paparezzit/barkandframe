@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+(() => {
+  const initBarkFrameMotion = () => {
   const root = document.documentElement;
   let stableMetricWidth = window.innerWidth;
 
@@ -227,4 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleActions: "play none reverse none"
     }});
   })
-});
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBarkFrameMotion, { once: true });
+  } else {
+    initBarkFrameMotion();
+  }
+})();
