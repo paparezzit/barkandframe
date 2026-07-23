@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="{{ 'baf-section-cta-section.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-cta-section.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="cta-section">
+  <div class="cta-section__inner">
+    <div class="cta-section__background">
+      <img src="{{ 'cta-section-01.webp' | asset_url }}" alt="" data-parallax="-3.5vh" width="286" height="394" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="{{ 'cta-section-02.webp' | asset_url }}" alt="" data-parallax="-10.5vh" width="192" height="264" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="{{ 'cta-section-03.webp' | asset_url }}" alt="" data-parallax="-7vh" width="386" height="534" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="{{ 'cta-section-04.webp' | asset_url }}" alt="" data-parallax="-10.5vh" width="368" height="516" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="{{ 'cta-section-05.webp' | asset_url }}" alt="" data-parallax="-3.5vh" width="238" height="332" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="{{ 'cta-section-06.webp' | asset_url }}" alt="" data-parallax="-7vh" width="298" height="406" loading="lazy" decoding="async" fetchpriority="low">
+    </div>
+
+    <div class="cta-section__content">
+      <div class="cta-section__icon">
+        <img src="{{ 'logo-icon--light.svg' | asset_url }}" alt="Logo" width="1200" height="800">
+      </div>
+
+      <h2 class="cta-section__title">
+        {{ section.settings.main-text }}
+      </h2>
+
+      <p class="cta-section__subtitle">
+        Camera rolls forget. Frames don’t.
+      </p>
+
+      <div class="cta-section__button">
+        <a id="baf-click-home-portrait-05" href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "The ones you love CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main-text",
+      "label": "Main Text",
+      "default": "Bring what matters most into your home"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Create portrait"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}

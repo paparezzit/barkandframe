@@ -16,6 +16,14 @@ class ProductCardLink extends HTMLElement {
     return this.getAttribute('data-featured-media-url');
   }
 
+  get isInProductListing() {
+    return (
+      this.querySelector('product-card')?.closest(
+        '.product-grid, .shop-products__product-grid, .shop-products__rail-track, .more-from__grid'
+      ) !== null
+    );
+  }
+
   /**
    * Handles the click event for the product link
    * @param {Event} event
@@ -29,6 +37,8 @@ class ProductCardLink extends HTMLElement {
       const interactiveElement = event.target.closest('button, input, label, select, [tabindex="1"]');
       if (interactiveElement) return;
     }
+
+    if (this.isInProductListing) return;
 
     const gallery = this.querySelector('[data-view-transition-to-main-product]');
     if (!this.productTransitionEnabled || !(gallery instanceof HTMLElement)) return;

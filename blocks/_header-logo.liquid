@@ -25,11 +25,19 @@
   Output all logo variants, use CSS to hide/show the appropriate one
   based on the .header[transparent] selector
 {% endcomment %}
+{% comment %}
+  BAF Agentic Browsing guard: keep this logo link directly named.
+  Do not remove aria-label, the hidden text, or the explicit image alt unless
+  the PageSpeed Agentic Browsing audit is revalidated on mobile and desktop.
+{% endcomment %}
 <a
   {% if template.name == 'index' and block_settings.hide_logo_on_home_page %}
     data-hidden-on-home-page
   {% endif %}
   href="{{ routes.root_url }}"
+  aria-label="{{ shop.name | escape }}"
+  title="{{ shop.name | escape }}"
+  data-baf-home-logo-link
   class="size-style spacing-style header-logo"
   style="
     {% render 'size-style', settings: block_settings %}
@@ -40,6 +48,12 @@
   "
   {{ block.shopify_attributes }}
 >
+  <span
+    class="visually-hidden"
+  >
+    {{ shop.name }}
+  </span>
+
   {% liquid
     assign logo_width = block_settings.custom_height | times: settings.logo.aspect_ratio | ceil
     assign logo_width_mobile = block_settings.custom_height_mobile | times: settings.logo.aspect_ratio | ceil
@@ -57,6 +71,7 @@
       image: settings.logo,
       class: 'header-logo__image',
       height: block_settings.custom_height,
+      alt: shop.name,
       text_fallback: shop.name,
       style: logo_style
     %}
@@ -71,12 +86,114 @@
         image: inverse_logo,
         class: 'header-logo__image',
         height: block_settings.custom_height,
+        alt: shop.name,
         text_fallback: shop.name,
         style: inverse_logo_style
       %}
     </span>
   {% endif %}
 </a>
+
+<script>
+  (() => {
+    if (window.__bafHeaderLogoHomeTopInit) return;
+    window.__bafHeaderLogoHomeTopInit = true;
+
+    const rootUrl = {{ routes.root_url | json }};
+    const storageKey = 'baf-header-logo-home-top';
+
+    const normalizePath = (path) => {
+      let normalizedPath = path || '/';
+
+      try {
+        normalizedPath = new URL(normalizedPath, window.location.origin).pathname;
+      } catch (error) {
+        normalizedPath = String(normalizedPath);
+      }
+
+      normalizedPath = normalizedPath.replace(/\/+$/, '');
+      return normalizedPath || '/';
+    };
+
+    const rootPath = normalizePath(rootUrl);
+    const isHomePath = (path) => normalizePath(path) === rootPath;
+
+    const scrollToHomeTop = () => {
+      if (window.BarkFrameLenis?.scrollTo) {
+        try {
+          window.BarkFrameLenis.scrollTo(0, { immediate: true, force: true });
+        } catch (error) {
+          // Native scroll fallback below.
+        }
+      }
+
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    };
+
+    const reinforceHomeTop = () => {
+      scrollToHomeTop();
+      window.requestAnimationFrame(scrollToHomeTop);
+      window.setTimeout(scrollToHomeTop, 120);
+      window.setTimeout(scrollToHomeTop, 420);
+    };
+
+    const isPlainPrimaryClick = (event) =>
+      event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        const link = event.target.closest?.('a[data-baf-home-logo-link]');
+        if (!link || event.defaultPrevented || !isPlainPrimaryClick(event)) return;
+
+        let targetUrl;
+
+        try {
+          targetUrl = new URL(link.href, window.location.href);
+        } catch (error) {
+          return;
+        }
+
+        if (targetUrl.origin !== window.location.origin || !isHomePath(targetUrl.pathname)) return;
+
+        try {
+          window.sessionStorage.setItem(storageKey, '1');
+        } catch (error) {
+          // The same-page handler below still covers the homepage case.
+        }
+
+        if (!isHomePath(window.location.pathname)) return;
+
+        event.preventDefault();
+
+        if (window.history?.replaceState) {
+          window.history.replaceState(null, document.title, rootUrl);
+        }
+
+        reinforceHomeTop();
+      },
+      true
+    );
+
+    let shouldRestoreHomeTop = false;
+
+    try {
+      shouldRestoreHomeTop = window.sessionStorage.getItem(storageKey) === '1';
+      if (shouldRestoreHomeTop) window.sessionStorage.removeItem(storageKey);
+    } catch (error) {
+      shouldRestoreHomeTop = false;
+    }
+
+    if (shouldRestoreHomeTop && isHomePath(window.location.pathname)) {
+      reinforceHomeTop();
+      window.addEventListener('DOMContentLoaded', reinforceHomeTop, { once: true });
+      window.addEventListener('load', reinforceHomeTop, { once: true });
+      window.addEventListener('pageshow', reinforceHomeTop, { once: true });
+    }
+  })();
+</script>
 
 {% stylesheet %}
   .header-logo {

@@ -86,7 +86,11 @@
     {%- endif -%}
   </a>
 
-  <a class="shop-products__portrait-button" href="{{ portrait_url }}">
+  <a
+    {% if click_id != blank %}id="{{ click_id }}"{% endif %}
+    class="shop-products__portrait-button"
+    href="{{ portrait_url }}"
+  >
     {{- button_label | default: 'Make a portrait' -}}
   </a>
 </article>

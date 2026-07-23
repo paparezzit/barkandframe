@@ -1,0 +1,30 @@
+{%- doc -%}
+  Outputs a mobile-only source element for a Shopify image.
+
+  @param {object} image - Shopify image object
+  @param {string} [sizes] - sizes attribute for mobile
+  @param {string} [widths] - comma-separated mobile widths
+{%- enddoc -%}
+
+{%- if image != blank -%}
+  {%- liquid
+    assign mobile_sizes = sizes | default: '100vw'
+    assign mobile_widths = widths | default: '240, 352, 480, 640, 750, 900, 1200'
+    assign mobile_widths_array = mobile_widths | split: ','
+    assign source_separator = ''
+    assign image_width = image.width | default: 0 | plus: 0
+  -%}
+  <source
+    media="(max-width: 749px)"
+    sizes="{{ mobile_sizes }}"
+    srcset="{%- for mobile_width in mobile_widths_array -%}{%- liquid
+      assign source_width = mobile_width | strip | plus: 0
+      assign include_source = false
+      if source_width > 0
+        if image_width == 0 or image_width >= source_width
+          assign include_source = true
+        endif
+      endif
+    -%}{%- if include_source -%}{{ source_separator }}{{ image | image_url: width: source_width }} {{ source_width }}w{%- assign source_separator = ', ' -%}{%- endif -%}{%- endfor -%}{%- if source_separator == '' and image_width > 0 -%}{{ image | image_url: width: image_width }} {{ image_width }}w{%- endif -%}"
+  >
+{%- endif -%}

@@ -21,6 +21,7 @@
       "@theme/quick-add": "{{ 'quick-add.js' | asset_url }}",
       "@theme/paginated-list-aspect-ratio": "{{ 'paginated-list-aspect-ratio.js' | asset_url }}",
       "@theme/baf-order-sync": "{{ 'baf-order-sync.js' | asset_url }}",
+      "@theme/baf-add-to-cart-analytics": "{{ 'baf-add-to-cart-analytics.js' | asset_url }}",
       "@theme/popover-polyfill": "{{ 'popover-polyfill.js' | asset_url }}"
     }
   }
@@ -31,7 +32,7 @@
   <script
     src="{{ 'view-transitions.js' | asset_url }}"
     async
-    blocking="render"
+    {% unless request.page_type == 'index' %}blocking="render"{% endunless %}
   ></script>
   {% # theme-check-enable %}
 {% endif %}
@@ -53,19 +54,26 @@
 >
 <link
   rel="modulepreload"
-  href="{{ 'section-renderer.js' | asset_url }}"
+  href="{{ 'baf-add-to-cart-analytics.js' | asset_url }}"
   fetchpriority="low"
 >
-<link
-  rel="modulepreload"
-  href="{{ 'section-hydration.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'morph.js' | asset_url }}"
-  fetchpriority="low"
->
+{% unless request.page_type == 'index' %}
+  <link
+    rel="modulepreload"
+    href="{{ 'section-renderer.js' | asset_url }}"
+    fetchpriority="low"
+  >
+  <link
+    rel="modulepreload"
+    href="{{ 'section-hydration.js' | asset_url }}"
+    fetchpriority="low"
+  >
+  <link
+    rel="modulepreload"
+    href="{{ 'morph.js' | asset_url }}"
+    fetchpriority="low"
+  >
+{% endunless %}
 
 {% if template.name == 'collection' or template.name == 'search' %}
   <link
@@ -86,156 +94,231 @@
   >
 {% endif %}
 
-<link
-  rel="modulepreload"
-  href="{{ 'focus.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'recently-viewed-products.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'scrolling.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'events.js' | asset_url }}"
-  fetchpriority="low"
->
-<script
-  src="{{ 'popover-polyfill.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'quick-add.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-{% if settings.show_add_discount_code %}
+{% if request.page_type == 'index' %}
   <script
-    src="{{ 'cart-discount.js' | asset_url }}"
+    src="{{ 'accordion-custom.js' | asset_url }}"
     type="module"
     fetchpriority="low"
   ></script>
 {% endif %}
-<script
-  src="{{ 'dialog.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'variant-picker.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'product-card.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'baf-order-sync.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'baf-entry-sync.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'product-form.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'accordion-custom.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'disclosure-custom.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'media.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'product-price.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'product-title-truncation.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'product-inventory.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'show-more.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'slideshow.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'anchored-popover.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'floating-panel.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'video-background.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'component-quantity-selector.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'media-gallery.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'rte-formatter.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'gift-card-recipient-form.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
 
-{% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
+{% unless request.page_type == 'index' %}
+  <link
+    rel="modulepreload"
+    href="{{ 'focus.js' | asset_url }}"
+    fetchpriority="low"
+  >
+  <link
+    rel="modulepreload"
+    href="{{ 'recently-viewed-products.js' | asset_url }}"
+    fetchpriority="low"
+  >
+  <link
+    rel="modulepreload"
+    href="{{ 'scrolling.js' | asset_url }}"
+    fetchpriority="low"
+  >
+  <link
+    rel="modulepreload"
+    href="{{ 'events.js' | asset_url }}"
+    fetchpriority="low"
+  >
   <script
-    src="{{ 'localization.js' | asset_url }}"
+    src="{{ 'popover-polyfill.js' | asset_url }}"
     type="module"
     fetchpriority="low"
   ></script>
-{% endif %}
+  <script
+    src="{{ 'quick-add.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  {% if settings.show_add_discount_code %}
+    <script
+      src="{{ 'cart-discount.js' | asset_url }}"
+      type="module"
+      fetchpriority="low"
+    ></script>
+  {% endif %}
+  <script
+    src="{{ 'dialog.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'variant-picker.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'product-card.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'baf-order-sync.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'baf-entry-sync.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'product-form.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'accordion-custom.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'disclosure-custom.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'media.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'product-price.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'product-title-truncation.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'product-inventory.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'show-more.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'slideshow.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'anchored-popover.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'floating-panel.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'video-background.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'component-quantity-selector.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'media-gallery.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'rte-formatter.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+  <script
+    src="{{ 'gift-card-recipient-form.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+
+  {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
+    <script
+      src="{{ 'localization.js' | asset_url }}"
+      type="module"
+      fetchpriority="low"
+    ></script>
+  {% endif %}
+{% else %}
+  <script>
+    (() => {
+      const scripts = [
+        {{ 'popover-polyfill.js' | asset_url | json }},
+        {{ 'quick-add.js' | asset_url | json }},
+        {% if settings.show_add_discount_code %}{{ 'cart-discount.js' | asset_url | json }},{% endif %}
+        {{ 'dialog.js' | asset_url | json }},
+        {{ 'variant-picker.js' | asset_url | json }},
+        {{ 'product-card.js' | asset_url | json }},
+        {{ 'baf-order-sync.js' | asset_url | json }},
+        {{ 'baf-entry-sync.js' | asset_url | json }},
+        {{ 'product-form.js' | asset_url | json }},
+        {{ 'disclosure-custom.js' | asset_url | json }},
+        {{ 'media.js' | asset_url | json }},
+        {{ 'product-price.js' | asset_url | json }},
+        {{ 'product-title-truncation.js' | asset_url | json }},
+        {{ 'product-inventory.js' | asset_url | json }},
+        {{ 'show-more.js' | asset_url | json }},
+        {{ 'slideshow.js' | asset_url | json }},
+        {{ 'anchored-popover.js' | asset_url | json }},
+        {{ 'floating-panel.js' | asset_url | json }},
+        {{ 'video-background.js' | asset_url | json }},
+        {{ 'component-quantity-selector.js' | asset_url | json }},
+        {{ 'media-gallery.js' | asset_url | json }},
+        {{ 'rte-formatter.js' | asset_url | json }},
+        {{ 'gift-card-recipient-form.js' | asset_url | json }}
+        {% if settings.transition_to_main_product %},{{ 'product-card-link.js' | asset_url | json }}{% endif %}
+        {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %},{{ 'localization.js' | asset_url | json }}{% endif %}
+      ];
+      let started = false;
+
+      const loadScript = (src) => new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.type = 'module';
+        script.fetchPriority = 'low';
+        script.onload = resolve;
+        script.onerror = resolve;
+        document.head.appendChild(script);
+      });
+
+      const loadDeferredThemeModules = () => {
+        if (started) return;
+        started = true;
+        scripts.reduce((chain, src) => chain.then(() => loadScript(src)), Promise.resolve());
+      };
+
+      const scheduleDeferredThemeModules = () => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadDeferredThemeModules, { timeout: 4000 });
+          return;
+        }
+        window.setTimeout(loadDeferredThemeModules, 2500);
+      };
+
+      window.addEventListener('load', () => {
+        window.setTimeout(scheduleDeferredThemeModules, 1200);
+      }, { once: true });
+
+      ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach((eventName) => {
+        window.addEventListener(eventName, loadDeferredThemeModules, { once: true, passive: true });
+      });
+    })();
+  </script>
+{% endunless %}
 
 {% if template == 'product' %}
   <script type="module">
@@ -244,7 +327,7 @@
   </script>
 {% endif %}
 
-{% if settings.transition_to_main_product %}
+{% if settings.transition_to_main_product and request.page_type != 'index' %}
   <script
     src="{{ 'product-card-link.js' | asset_url }}"
     type="module"

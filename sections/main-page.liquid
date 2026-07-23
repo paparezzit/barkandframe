@@ -1,23 +1,30 @@
+{%- liquid
+  assign is_removed_see_it_at_home_page = false
+  if request.page_type == 'page' and page.handle == 'see-it-at-home'
+    assign is_removed_see_it_at_home_page = true
+  endif
+-%}
 
-
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.custom-class != blank %} {{ section.settings.custom-class }}{% endif %}">
-  <div
-    class="
-      spacing-style
-      layout-panel-flex
-      layout-panel-flex--column
-      section-content-wrapper
-      mobile-column
-    "
-    style="
-      {% render 'layout-panel-style', settings: section.settings %}
-      {% render 'spacing-style', settings: section.settings %}
-    "
-  >
-    {% content_for 'blocks' %}
+{%- unless is_removed_see_it_at_home_page -%}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="section {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.custom-class != blank %} {{ section.settings.custom-class }}{% endif %}">
+    <div
+      class="
+        spacing-style
+        layout-panel-flex
+        layout-panel-flex--column
+        section-content-wrapper
+        mobile-column
+      "
+      style="
+        {% render 'layout-panel-style', settings: section.settings %}
+        {% render 'spacing-style', settings: section.settings %}
+      "
+    >
+      {% content_for 'blocks' %}
+    </div>
   </div>
-</div>
+{%- endunless -%}
 
 {% schema %}
 {

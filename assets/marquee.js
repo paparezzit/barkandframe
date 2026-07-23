@@ -13,9 +13,37 @@ import { debounce } from '@theme/utilities';
  */
 class MarqueeComponent extends Component {
   requiredRefs = ['wrapper', 'content'];
+  #isReady = false;
+  #intersectionObserver = null;
 
   connectedCallback() {
     super.connectedCallback();
+
+    if ('IntersectionObserver' in window) {
+      this.#intersectionObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        this.#intersectionObserver?.disconnect();
+        this.#intersectionObserver = null;
+        this.#init();
+      }, { rootMargin: '900px 0px' });
+
+      this.#intersectionObserver.observe(this);
+      return;
+    }
+
+    this.#init();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#intersectionObserver?.disconnect();
+    this.#intersectionObserver = null;
+    window.removeEventListener('resize', this.#handleResize);
+  }
+
+  #init() {
+    if (this.#isReady) return;
+    this.#isReady = true;
 
     const { content } = this.refs;
     if (content.firstElementChild?.children.length === 0) return;
@@ -26,11 +54,6 @@ class MarqueeComponent extends Component {
     this.setAttribute('data-ready', '');
 
     window.addEventListener('resize', this.#handleResize);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('resize', this.#handleResize);
   }
 
   get clonedContent() {
@@ -54,6 +77,8 @@ class MarqueeComponent extends Component {
   }
 
   #handleResize = debounce(() => {
+    if (this.hasAttribute('data-disabled')) return;
+
     const { content } = this.refs;
     const newNumberOfCopies = this.#calculateNumberOfCopies();
     const currentNumberOfCopies = content.children.length;

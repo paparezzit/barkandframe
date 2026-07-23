@@ -9,7 +9,7 @@
   endif
   assign media_width_mobile = '100vw'
   assign sizes = '(min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
-  assign widths = '832, 1200, 1600, 1920, 2560, 3840'
+  assign widths = '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840'
 
   assign has_image_1 = false
   assign has_image_2 = false
@@ -63,18 +63,21 @@
 {% capture media %}
   {%- if has_image_1 -%}
     {% assign media_count = media_count | plus: 1 %}
-    {{
-      section.settings.image_1
-      | image_url: width: 3840
-      | image_tag:
-        width: section.settings.image_1.width,
-        widths: widths,
-        height: section.settings.image_1.height,
-        alt: section.settings.image_1.alt,
-        class: 'hero__image',
-        sizes: sizes,
-        fetchpriority: fetch_priority
-    }}
+    <picture class="hero__picture">
+      {% render 'mobile-image-source', image: section.settings.image_1, sizes: media_width_mobile %}
+      {{
+        section.settings.image_1
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image_1.width,
+          widths: widths,
+          height: section.settings.image_1.height,
+          alt: section.settings.image_1.alt,
+          class: 'hero__image',
+          sizes: sizes,
+          fetchpriority: fetch_priority
+      }}
+    </picture>
   {%- endif -%}
 
   {%- if has_video_1 -%}
@@ -87,18 +90,21 @@
             assign fetch_priority_poster = 'high'
           endif
         %}
-        {{
-          section.settings.video_1.preview_image
-          | image_url: width: 3840
-          | image_tag:
-            width: section.settings.video_1.preview_image.width,
-            widths: widths,
-            height: section.settings.video_1.preview_image.height,
-            alt: section.settings.video_1.alt,
-            class: 'hero__video-poster',
-            sizes: sizes,
-            fetchpriority: fetch_priority_poster
-        }}
+        <picture class="hero__picture hero__picture--poster">
+          {% render 'mobile-image-source', image: section.settings.video_1.preview_image, sizes: media_width_mobile %}
+          {{
+            section.settings.video_1.preview_image
+            | image_url: width: 3840
+            | image_tag:
+              width: section.settings.video_1.preview_image.width,
+              widths: widths,
+              height: section.settings.video_1.preview_image.height,
+              alt: section.settings.video_1.alt,
+              class: 'hero__video-poster',
+              sizes: sizes,
+              fetchpriority: fetch_priority_poster
+          }}
+        </picture>
       {%- endif -%}
       {{
         section.settings.video_1
@@ -115,35 +121,41 @@
 
   {%- if has_image_2 -%}
     {% assign media_count = media_count | plus: 1 %}
-    {{
-      section.settings.image_2
-      | image_url: width: 3840
-      | image_tag:
-        width: section.settings.image_2.width,
-        widths: widths,
-        height: section.settings.image_2.height,
-        alt: section.settings.image_2.alt,
-        class: 'hero__image',
-        sizes: sizes,
-        fetchpriority: fetch_priority
-    }}
+    <picture class="hero__picture">
+      {% render 'mobile-image-source', image: section.settings.image_2, sizes: media_width_mobile %}
+      {{
+        section.settings.image_2
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image_2.width,
+          widths: widths,
+          height: section.settings.image_2.height,
+          alt: section.settings.image_2.alt,
+          class: 'hero__image',
+          sizes: sizes,
+          fetchpriority: fetch_priority
+      }}
+    </picture>
   {%- endif -%}
 
   {%- if has_video_2 -%}
     {% assign media_count = media_count | plus: 1 %}
     <div class="hero__video-wrapper">
       {%- if section.settings.video_2.preview_image -%}
-        {{
-          section.settings.video_2.preview_image
-          | image_url: width: 3840
-          | image_tag:
-            width: section.settings.video_2.preview_image.width,
-            widths: widths,
-            height: section.settings.video_2.preview_image.height,
-            alt: section.settings.video_2.alt,
-            class: 'hero__video-poster',
-            sizes: sizes
-        }}
+        <picture class="hero__picture hero__picture--poster">
+          {% render 'mobile-image-source', image: section.settings.video_2.preview_image, sizes: media_width_mobile %}
+          {{
+            section.settings.video_2.preview_image
+            | image_url: width: 3840
+            | image_tag:
+              width: section.settings.video_2.preview_image.width,
+              widths: widths,
+              height: section.settings.video_2.preview_image.height,
+              alt: section.settings.video_2.alt,
+              class: 'hero__video-poster',
+              sizes: sizes
+          }}
+        </picture>
       {%- endif -%}
       {{
         section.settings.video_2
@@ -165,30 +177,36 @@
 
 {% capture media_blurred %}
   {% if has_image_1 %}
-    {{
-      section.settings.image_1
-      | image_url: width: 3840
-      | image_tag:
-        width: section.settings.image_1.width,
-        widths: widths,
-        height: section.settings.image_1.height,
-        alt: '',
-        class: 'hero__image',
-        sizes: sizes
-    }}
+    <picture class="hero__picture">
+      {% render 'mobile-image-source', image: section.settings.image_1, sizes: media_width_mobile %}
+      {{
+        section.settings.image_1
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image_1.width,
+          widths: widths,
+          height: section.settings.image_1.height,
+          alt: '',
+          class: 'hero__image',
+          sizes: sizes
+      }}
+    </picture>
   {% endif %}
   {% if has_image_2 %}
-    {{
-      section.settings.image_2
-      | image_url: width: 3840
-      | image_tag:
-        width: section.settings.image_2.width,
-        widths: widths,
-        height: section.settings.image_2.height,
-        alt: '',
-        class: 'hero__image',
-        sizes: sizes
-    }}
+    <picture class="hero__picture">
+      {% render 'mobile-image-source', image: section.settings.image_2, sizes: media_width_mobile %}
+      {{
+        section.settings.image_2
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image_2.width,
+          widths: widths,
+          height: section.settings.image_2.height,
+          alt: '',
+          class: 'hero__image',
+          sizes: sizes
+      }}
+    </picture>
   {% endif %}
   {% if has_media == false and is_transparent %}
     {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__image' }}
@@ -329,13 +347,14 @@
     grid-template-columns: repeat(var(--hero-media-count, 1), 1fr);
   }
 
+  .hero--auto .hero__picture,
   .hero--auto .hero__image,
   .hero--auto .hero__video {
     aspect-ratio: var(--hero-media-aspect-ratio);
   }
 
   .hero--no-blocks-auto-height {
-    :is(.hero__image, .hero__video) {
+    :is(.hero__picture, .hero__image, .hero__video) {
       width: 100%;
       aspect-ratio: auto;
     }
@@ -355,6 +374,15 @@
     object-position: center center;
     overflow: hidden;
     position: relative;
+    z-index: var(--layer-base);
+  }
+
+  .hero__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
     z-index: var(--layer-base);
   }
 

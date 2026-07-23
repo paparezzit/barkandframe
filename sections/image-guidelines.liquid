@@ -31,7 +31,10 @@
     <div class="col-right">
       <div class="image-guidelines__images">
         <div class="image-guidelines__image">
-          <img src="{{ 'good-photo.jpg' | asset_url }}" alt="Good Photo" width="800" height="600">
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ 'good-photo-mobile.jpg' | asset_url }}">
+            <img src="{{ 'good-photo.jpg' | asset_url }}" alt="Good Photo" width="800" height="600">
+          </picture>
           <div class="image-guidelines__label">
             <h3 class="image-guidelines__title">
               Good Photo
@@ -51,7 +54,10 @@
         </div>
 
         <div class="image-guidelines__image">
-          <img src="{{ 'bad-photo.jpg' | asset_url }}" alt="Good Photo" width="800" height="600">
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ 'bad-photo-mobile.jpg' | asset_url }}">
+            <img src="{{ 'bad-photo.jpg' | asset_url }}" alt="Good Photo" width="800" height="600">
+          </picture>
           <div class="image-guidelines__label">
             <h3 class="image-guidelines__title">
               Bad Photo
@@ -89,9 +95,14 @@
       position: relative;
       margin-bottom: 100px;
 
+      picture{
+        display: block;
+        width: 75%;
+      }
+
       img{
         border-radius: 20px;
-        width: 75%;
+        width: 100%;
       }
 
       .image-guidelines__label{
@@ -164,7 +175,7 @@
         .image-guidelines__image{
           margin-bottom: 20px;
 
-          img{
+          picture{
             width: 80%;
           }
 

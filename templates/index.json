@@ -15,47 +15,276 @@
         "slide_YWDk6k": {
           "type": "slide",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/b779aa3e2d074580b35e512e52cd5a5d/b779aa3e2d074580b35e512e52cd5a5d.HD-1080p-7.2Mbps-85945950.mp4",
-            "portrait_video_url": "https://cdn.shopify.com/videos/c/vp/9e7695403c544657812906fc1e8ed15a/9e7695403c544657812906fc1e8ed15a.HD-1080p-4.8Mbps-85945965.mp4",
+            "image_asset": "hero banner desktop.jpg",
+            "mobile_image_asset": "hero banner mobil.jpg",
             "portrait_image_position": "center center",
-            "title": "A portrait worthy\nof your dog.",
-            "text": "Personalised dog wall art by our small studio of award-winning artists. From your photo.",
-            "button_text": "Create your portrait",
-            "button_link": "shopify://pages/portrait"
-          }
-        },
-        "slide_Mr3tKr": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/bark-and-frame-amsterdam-couple-with-golden-retriever-puppy-powered-by-dogs-sweatshirt-lifestyle-banner.jpg",
-            "portrait_image_position": "78% center",
-            "title": "Wear your\nlove for dogs.",
-            "text": "Wearable art from our small studio. Designed with dogs, made to be comfortable.",
-            "button_text": "Shop the collection",
-            "button_link": "shopify://collections/bark-studio"
-          }
-        },
-        "slide_banner_04": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/bark-and-frame-last-supper-dog-feast-old-masters-style-jack-russell-baron-framed-portrait-hero-banner.jpg",
-            "portrait_image_position": "center center",
-            "title": "Real artists. Real dogs. Real art.",
-            "text": "Every portrait is designed by our award-winning artists. No shortcuts. Just art.",
+            "title": "Your dog’s portrait.\nBy our artists.",
+            "text": "From your photo.",
             "button_text": "Create your portrait",
             "button_link": "shopify://pages/portrait"
           }
         }
       },
       "block_order": [
-        "slide_YWDk6k",
-        "slide_Mr3tKr",
-        "slide_banner_04"
+        "slide_YWDk6k"
       ],
-      "name": "Fade Slideshow",
+      "name": "Home hero",
       "settings": {
         "autoplay": true,
         "autoplay_speed": 10
+      }
+    },
+    "section_home_logo_strip": {
+      "type": "home-logo-strip",
+      "settings": {}
+    },
+    "section_pick_a_style": {
+      "type": "portrait-styles",
+      "name": "Pick a style",
+      "settings": {
+        "main-text": "Each Bark & Frame style captures your dog in its own way. None better, none worse. The fun part is choosing which one goes home with you.",
+        "main-title": "Pick a style. Your dog becomes art.",
+        "button_text": "Create your portrait",
+        "button_link": "shopify://pages/portrait"
+      }
+    },
+    "section_see_it_at_home_feed": {
+      "type": "see-it-at-home",
+      "blocks": {
+        "marquee_see_it_at_home": {
+          "type": "_marquee",
+          "name": "t:names.marquee",
+          "settings": {
+            "movement_direction": "normal",
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "transparent_background": true,
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "gap_between_elements": 24
+          },
+          "blocks": {
+            "image_see_home_studio_pencil": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=studio_pencil",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_dream": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=dream",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_indigo": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=indigo",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_studio_pop": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=studio_pop",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_the_gentleman": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=the_gentleman",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_la_parisienne": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=la_parisienne",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_the_duchess": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=the_duchess",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_pure_portrait": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=pure_portrait",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "image_see_home_studio_watercolour": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "link": "/pages/portrait?style=studio_watercolour",
+                "image_ratio": "portrait",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image_see_home_studio_pencil",
+            "image_see_home_dream",
+            "image_see_home_indigo",
+            "image_see_home_studio_pop",
+            "image_see_home_the_gentleman",
+            "image_see_home_la_parisienne",
+            "image_see_home_the_duchess",
+            "image_see_home_pure_portrait",
+            "image_see_home_studio_watercolour"
+          ]
+        }
+      },
+      "block_order": [
+        "marquee_see_it_at_home"
+      ],
+      "name": "See it at home strip",
+      "settings": {
+        "title": "See it at home",
+        "button_label": "",
+        "button_link": "",
+        "compact_spacing": true
       }
     },
     "section_artist-intro": {
@@ -63,62 +292,54 @@
       "name": "Artist Intro",
       "settings": {
         "image": "shopify://shop_images/ANIM_ARTISTS.png",
-        "title": "Artist-designed. Turn your dog into a timeless icon.",
-        "text": "<p>Each style is created by professional artists and designed to be timeless — a distinctive piece that reflects your dog’s personality and fits naturally into a well-designed home.</p>",
+        "title": "Artist-designed. Turn your dog into a&nbsp;timeless icon.",
+        "text": "<p>Each style is created by our award-winning artists and designed to be timeless, personalised dog wall art that reflects your dog’s personality and fits naturally into a well-designed home.</p>",
         "button_label": "Meet our artists",
         "button_link": "shopify://pages/our-artists"
       }
     },
-    "section_results": {
-      "type": "results",
-      "disabled": true,
-      "name": "Results",
+    "section_product-details": {
+      "type": "home-product-details",
+      "name": "Product Details",
       "settings": {
-        "main-text": "From photo to portrait.Still your dog.",
-        "text": "Recognizable at first glance",
-        "button_text": "Create portrait",
-        "button_link": "shopify://pages/portrait"
-      }
-    },
-    "section_portrait-styles": {
-      "type": "portrait-styles",
-      "name": "Portrait styles",
-      "settings": {
-        "main-text": "Each Bark & Frame style captures your dog in its own way. None better, none worse. The fun part is choosing which one goes home with you.",
-        "main-title": "Different styles. No wrong choice.",
-        "button_text": "See it at home",
-        "button_link": "shopify://pages/see-it-at-home"
+        "title": "Product Details"
       }
     },
     "section_three-steps": {
       "type": "three-steps",
-      "name": "Three steps",
+      "name": "Portrait process",
       "settings": {
-        "main-text": "It’s that simple",
-        "button_text": "Create your portrait",
-        "button_link": "shopify://pages/portrait"
+        "main-text": "How Your Portrait Comes to Life"
       }
     },
-    "section_portrait-formats": {
-      "type": "portrait-formats",
+    "section_wearable_art_products": {
+      "type": "wearable-art-products",
       "blocks": {
-        "product_card_bubble_etmgqQ": {
-          "type": "product-card--bubble",
-          "name": "t:names.product_card",
+        "product-card": {
+          "type": "_product-card",
+          "static": true,
           "settings": {
-            "product": "pet-bowl",
-            "position_x": 26,
-            "position_y": 55
+            "product_card_gap": 0,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {
-            "product_card_gallery_hbbT6g": {
+            "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_radius": 32,
+                "border_radius": 10,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -126,157 +347,137 @@
               },
               "blocks": {}
             },
-            "product_title_jTTMMx": {
-              "type": "product-title",
-              "name": "t:names.product_title",
+            "swatches_MagDWH": {
+              "type": "swatches",
+              "name": "t:names.swatches",
               "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "product_swatches_alignment": "center",
+                "product_swatches_alignment_mobile": "center",
+                "hide_padding": false,
+                "product_swatches_padding_top": 0,
+                "product_swatches_padding_bottom": 0,
+                "product_swatches_padding_left": 0,
+                "product_swatches_padding_right": 0
               },
               "blocks": {}
             },
-            "price_zgJxVQ": {
-              "type": "price",
-              "name": "t:names.product_price",
+            "group": {
+              "type": "_product-card-group",
               "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "custom",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--baf-text-family)",
-                "font_size": "var(--baf-text-medium-size)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_hbbT6g",
-            "product_title_jTTMMx",
-            "price_zgJxVQ"
-          ]
-        },
-        "product_card_bubble_EqJwPa": {
-          "type": "product-card--bubble",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "framed-canvas",
-            "position_x": 85,
-            "position_y": 23
-          },
-          "blocks": {
-            "product_card_gallery_zG3q7x": {
-              "type": "_product-card-gallery",
-              "settings": {
-                "image_ratio": "adapt",
+                "link": "",
+                "open_in_new_tab": false,
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "custom",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_radius": 32,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {}
-            },
-            "product_title_Jw9fQ8": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+              "blocks": {
+                "product_title_anJjPJ": {
+                  "type": "product-title",
+                  "name": "t:names.product_title",
+                  "settings": {
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--baf-text-bold-family)",
+                    "font_size": "var(--baf-text-bold-medium-size)",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "custom",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--baf-text-family)",
+                    "font_size": "var(--baf-text-medium-size)",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "color": "var(--color-foreground)",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
               },
-              "blocks": {}
-            },
-            "price_mK7A9g": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "custom",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--baf-text-family)",
-                "font_size": "var(--baf-text-medium-size)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
+              "block_order": [
+                "product_title_anJjPJ",
+                "price"
+              ]
             }
           },
           "block_order": [
-            "product_card_gallery_zG3q7x",
-            "product_title_Jw9fQ8",
-            "price_mK7A9g"
+            "card-gallery",
+            "swatches_MagDWH",
+            "group"
           ]
         }
       },
-      "block_order": [
-        "product_card_bubble_etmgqQ",
-        "product_card_bubble_EqJwPa"
-      ],
-      "disabled": true,
-      "name": "Portrait formats",
       "settings": {
-        "main-text": "Your dog, in every form.",
-        "subtitle": "Same dog. Same style. More places to love them.",
-        "button_text": "View all formats",
-        "button_link": "shopify://pages/portrait"
+        "title": "Wearable art designed by artists",
+        "products": [
+          "shopify://products/give-love-cap",
+          "shopify://products/sunday-ride-t-shirt",
+          "shopify://products/more-dog-is-more-dog-cap",
+          "shopify://products/powered-by-dogs-t-shirt",
+          "shopify://products/chill-vibes-crewneck",
+          "shopify://products/bloom-t-shirt"
+        ],
+        "color_scheme": "scheme-2",
+        "padding-block-start": 0,
+        "padding-block-end": 60
       }
     },
-    "section_dogstrust": {
-      "type": "dogstrust",
-      "name": "DogsTrust",
+    "section_portrait_donation_impact": {
+      "type": "portrait-donation-impact",
+      "name": "Every portrait makes a difference",
       "settings": {
         "title": "Every portrait makes a difference",
         "text": "Dogs are family.\nFor every personalised portrait we donate €2 to the Koninklijke Hondenbescherming — the Royal Association for the Protection of Dogs. Helping protect and improve the lives of dogs in need. Celebrating your dog should help another one too.",
@@ -284,1819 +485,7 @@
         "button_url": "https://hondenbescherming.nl/"
       }
     },
-    "section_reviews": {
-      "type": "reviews",
-      "blocks": {
-        "product_card_QxrxEc": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_EArLbd": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews01.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_eexQDF": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_qMAWax": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_EArLbd",
-            "text_eexQDF",
-            "text_qMAWax"
-          ]
-        },
-        "product_card_rRWN6U": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_UpFxj7": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews02.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_VrMbBU": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_9kjyGb": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_UpFxj7",
-            "text_VrMbBU",
-            "text_9kjyGb"
-          ]
-        },
-        "product_card_yjHKcF": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_WKVVfJ": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews03.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_RFB6qJ": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_xcHDkB": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_WKVVfJ",
-            "text_RFB6qJ",
-            "text_xcHDkB"
-          ]
-        },
-        "product_card_6jhFmc": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_Fep3rK": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews04.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_7YNVbT": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_MfYCPj": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_Fep3rK",
-            "text_7YNVbT",
-            "text_MfYCPj"
-          ]
-        },
-        "product_card_3PBwjN": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_wcYrgC": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews01.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_MNV4ED": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_T3UbPT": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_wcYrgC",
-            "text_MNV4ED",
-            "text_T3UbPT"
-          ]
-        },
-        "product_card_gKbUwQ": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_KCWVif": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews02.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_6bweLW": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_LQymTH": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_KCWVif",
-            "text_6bweLW",
-            "text_LQymTH"
-          ]
-        },
-        "product_card_YppHbf": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_qzPDkK": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews03.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_Rk8jYQ": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_JtaYbN": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_qzPDkK",
-            "text_Rk8jYQ",
-            "text_JtaYbN"
-          ]
-        },
-        "product_card_7M4rAi": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_ejVhMj": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews04.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_qB8tcR": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_ATGBm9": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_ejVhMj",
-            "text_qB8tcR",
-            "text_ATGBm9"
-          ]
-        },
-        "product_card_HMyMLt": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_KHtRUy": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews01.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_8YxiNV": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_QGMnez": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_KHtRUy",
-            "text_8YxiNV",
-            "text_QGMnez"
-          ]
-        },
-        "product_card_zqUQVe": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_MTD6dQ": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews02.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_44LMxk": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_GaNywi": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_MTD6dQ",
-            "text_44LMxk",
-            "text_GaNywi"
-          ]
-        },
-        "product_card_nR3E3d": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_dN8nUa": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews03.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_Rxt6y9": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h3>Brittany K.</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_VxpEtc": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_dN8nUa",
-            "text_Rxt6y9",
-            "text_VxpEtc"
-          ]
-        },
-        "product_card_DQA9R7": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_U4eTBm": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/reviews04.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 20,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_VPtA4V": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Mr. Frank Junior</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_wKbGJm": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>I’ve gotten a portrait done after loving the first. When it arrived it was a different background color than what I paid for.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_U4eTBm",
-            "text_VPtA4V",
-            "text_wKbGJm"
-          ]
-        }
-      },
-      "block_order": [
-        "product_card_QxrxEc",
-        "product_card_rRWN6U",
-        "product_card_yjHKcF",
-        "product_card_6jhFmc",
-        "product_card_3PBwjN",
-        "product_card_gKbUwQ",
-        "product_card_YppHbf",
-        "product_card_7M4rAi",
-        "product_card_HMyMLt",
-        "product_card_zqUQVe",
-        "product_card_nR3E3d",
-        "product_card_DQA9R7"
-      ],
-      "disabled": true,
-      "name": "Reviews",
-      "settings": {
-        "main-text": "What dog<br>people say",
-        "button_text": "All reviews",
-        "button_link": "shopify://pages/reviews"
-      }
-    },
-    "section_floating-images": {
-      "type": "floating-images",
-      "blocks": {
-        "product_card_floating_Aq9RiH": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "disabled": true,
-          "settings": {
-            "product": "you-can-pet-the-dog-cap",
-            "parallax_amount": "0vh",
-            "card_width": 300
-          },
-          "blocks": {
-            "image_ExQgjX": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/t-shirt.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_pk63Tq": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_ExQgjX",
-            "product_title_pk63Tq"
-          ]
-        },
-        "product_card_floating_X66h7c": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "disabled": true,
-          "settings": {
-            "product": "powered-by-dogs-t-shirt",
-            "parallax_amount": "-20vh",
-            "card_width": 400
-          },
-          "blocks": {
-            "image_kLmjma": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/blanket.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_V3djHJ": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_kLmjma",
-            "product_title_V3djHJ"
-          ]
-        },
-        "product_card_floating_AFBBqt": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "disabled": true,
-          "settings": {
-            "product": "bloom-crewneck",
-            "parallax_amount": "-10vh",
-            "card_width": 400
-          },
-          "blocks": {
-            "image_7HVfCR": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/bowl.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_KJ4qWg": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_7HVfCR",
-            "product_title_KJ4qWg"
-          ]
-        },
-        "product_card_floating_HQ3CaJ": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "disabled": true,
-          "settings": {
-            "product": "powered-by-dogs-t-shirt",
-            "parallax_amount": "0vh",
-            "card_width": 300
-          },
-          "blocks": {
-            "image_QWaC9e": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/hat.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_iedVUE": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_QWaC9e",
-            "product_title_iedVUE"
-          ]
-        },
-        "product_card_floating_6mK3kK": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "disabled": true,
-          "settings": {
-            "product": "you-can-pet-the-dog-cap",
-            "parallax_amount": "-20vh",
-            "card_width": 300
-          },
-          "blocks": {
-            "image_P7y9jH": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/mug.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_yinNVT": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_P7y9jH",
-            "product_title_yinNVT"
-          ]
-        },
-        "product_card_floating_merch_lifestyle_01": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "sunday-ride-t-shirt",
-            "parallax_amount": "0vh",
-            "card_width": 300
-          },
-          "blocks": {
-            "image_merch_lifestyle_01": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-tshirt-sunday-ride-white-mediterranean-meadow-jack-russell.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_merch_lifestyle_01": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_merch_lifestyle_01",
-            "product_title_merch_lifestyle_01"
-          ]
-        },
-        "product_card_floating_merch_lifestyle_02_cap": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "more-dog-is-more-dog-cap",
-            "parallax_amount": "-20vh",
-            "card_width": 400
-          },
-          "blocks": {
-            "image_merch_lifestyle_02_cap": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-cap-more-dog-is-more-dog-oyster-front-view-auburn-woman.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_merch_lifestyle_02_cap": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_merch_lifestyle_02_cap",
-            "product_title_merch_lifestyle_02_cap"
-          ]
-        },
-        "product_card_floating_merch_lifestyle_02": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "bloom-crewneck",
-            "parallax_amount": "-20vh",
-            "card_width": 400
-          },
-          "blocks": {
-            "image_merch_lifestyle_02": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-crewneck-bloom-black-auburn-woman-meadow-cavalier-king-charles-spaniel.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_merch_lifestyle_02": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_merch_lifestyle_02",
-            "product_title_merch_lifestyle_02"
-          ]
-        },
-        "product_card_floating_merch_lifestyle_03": {
-          "type": "product-card--floating",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "chill-vibes-crewneck",
-            "parallax_amount": "-10vh",
-            "card_width": 400
-          },
-          "blocks": {
-            "image_merch_lifestyle_03": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-crewneck-chill-vibes-heather-grey-afro-caribbean-dune-bichon-frise.jpg",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 32,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_merch_lifestyle_03": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_merch_lifestyle_03",
-            "product_title_merch_lifestyle_03"
-          ]
-        }
-      },
-      "block_order": [
-        "product_card_floating_merch_lifestyle_01",
-        "product_card_floating_merch_lifestyle_02_cap",
-        "product_card_floating_merch_lifestyle_02",
-        "product_card_floating_merch_lifestyle_03",
-        "product_card_floating_Aq9RiH",
-        "product_card_floating_X66h7c",
-        "product_card_floating_AFBBqt",
-        "product_card_floating_HQ3CaJ",
-        "product_card_floating_6mK3kK"
-      ],
-      "name": "The Collection",
-      "settings": {
-        "main-text": "Bark & Frame, beyond portraits.",
-        "subtitle": "A small collection of dog people essentials, designed by our artists.",
-        "button_text": "Explore the collection",
-        "button_link": "shopify://collections/all-products"
-      }
-    },
-    "section_KGipXL": {
+    "section_no_barriers_faq": {
       "type": "section",
       "blocks": {
         "text_eMdVMD": {
@@ -2238,7 +627,7 @@
                     "text_iwt9B4": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Your personalised portrait is created from the photo you provide, in a style designed by our artists. The final result is reviewed and refined by our team for expression, posture, and the small things only you would notice. Artificial intelligence technology may be used as part of the digital processing.</p>",
+                        "text": "<p>Your personalised portrait is created from the photo you provide, in a style designed by our award winning artists. The final result is reviewed and refined by our team for expression, posture, and the small things only you would notice.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2434,7 +823,7 @@
         "text_eMdVMD",
         "group_W4wQUp"
       ],
-      "name": "t:names.faq_section",
+      "name": "No barriers FAQ",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -2464,902 +853,99 @@
         "custom-class": "section-faq"
       }
     },
-    "section_cta-section": {
-      "type": "cta-section",
-      "name": "CTA Section",
+    "section_home_dog_people_reviews": {
+      "type": "home-dog-people-reviews",
+      "name": "Loved by dog people",
+      "blocks": {
+        "review_femke": {
+          "type": "review",
+          "settings": {
+            "time": "22 July 2026",
+            "text": "Had niet verwacht dat de lijst zo zwaar zou zijn — hij voelt echt degelijk aan. Hij hangt supermooi bij ons in de gang.",
+            "author": "Femke K.",
+            "dog": "Pixel · Terrier"
+          }
+        },
+        "review_sanne": {
+          "type": "review",
+          "settings": {
+            "time": "16 July 2026",
+            "text": "Super happy with it!! Looks even better in real life tbh",
+            "author": "Sanne V.",
+            "dog": "Loeka · Beagle"
+          }
+        },
+        "review_bram": {
+          "type": "review",
+          "settings": {
+            "time": "14 July 2026",
+            "text": "Sent them one photo of Max, wasnt sure it'd turn out well but it's really him. Even my girlfriend said so straight away",
+            "author": "Bram de Vries",
+            "dog": "Max · Golden Retriever"
+          }
+        },
+        "review_joris": {
+          "type": "review",
+          "settings": {
+            "time": "12 July 2026",
+            "text": "Got this for my parents, their dog Nala passed last year. Mom just started crying opening it.",
+            "author": "Joris H.",
+            "dog": "Nala · Australian Shepherd"
+          }
+        },
+        "review_siobhan": {
+          "type": "review",
+          "settings": {
+            "time": "3 July 2026",
+            "text": "Didnt expect the frame to be this heavy, proper solid wood. Looks deadly on the wall.",
+            "author": "Siobhán M.",
+            "dog": "Bailey · Border Collie"
+          }
+        },
+        "review_declan": {
+          "type": "review",
+          "settings": {
+            "time": "25 July 2026",
+            "text": "Made this for my ma's birthday, didnt tell her anything. She welled up opening it, kept saying it's Rosie to a tee.",
+            "author": "Declan O.",
+            "dog": "Rosie · Labrador"
+          }
+        }
+      },
+      "block_order": [
+        "review_femke",
+        "review_sanne",
+        "review_bram",
+        "review_joris",
+        "review_siobhan",
+        "review_declan"
+      ],
+      "settings": {
+        "title": "Loved by dog people"
+      }
+    },
+    "section_the_ones_you_love_cta": {
+      "type": "the-ones-you-love-cta",
+      "name": "The ones you love CTA",
       "settings": {
         "main-text": "The ones you love belong on the wall",
         "button_text": "Create your portrait",
         "button_link": "shopify://pages/portrait"
       }
-    },
-    "section_insta-feed": {
-      "type": "insta-feed",
-      "blocks": {
-        "marquee_yngPiX": {
-          "type": "_marquee",
-          "name": "t:names.marquee",
-          "settings": {
-            "movement_direction": "normal",
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "transparent_background": true,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
-            "gap_between_elements": 24
-          },
-          "blocks": {
-            "image_instagram_01": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-artist-collection-powered-by-dogs-full-color-design-pure-white-t-shirt-male-model-editorial-dynamic.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_02": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_03": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-father-son-holding-framed-border-collie-indigo-style-portrait-walnut-frame-living-room-banner-instagram.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_04": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_05": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-customer-photo-example-french-bulldog-fawn-eye-level-soft-light-good-upload.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_06": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-jack-russell-terrier-gentleman-old-masters-portrait-black-frame-leather-chair-office.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_07": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-see-it-at-home-cavalier-king-charles-spaniel-la-parisienne-style-portrait-victorian-desk-bedroom.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_08": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-artist-collection-bloom-tulip-dog-design-pure-white-t-shirt-female-model-editorial-close-up.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_instagram_09": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/bark-and-frame-artist-painting-jack-russell-dog-portrait-gentleman-style-on-easel-studio.jpg",
-                "link": "https://instagram.com/bark_and_frame",
-                "image_ratio": "portrait",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_instagram_01",
-            "image_instagram_02",
-            "image_instagram_03",
-            "image_instagram_04",
-            "image_instagram_05",
-            "image_instagram_06",
-            "image_instagram_07",
-            "image_instagram_08",
-            "image_instagram_09"
-          ]
-        }
-      },
-      "block_order": [
-        "marquee_yngPiX"
-      ],
-      "name": "Instagram Feed",
-      "settings": {}
-    },
-    "section_editorial": {
-      "type": "editorial",
-      "blocks": {
-        "product_card_9KHBgm": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "custom-pet-portrait",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_group_c9ii6m": {
-              "type": "_product-card-group",
-              "name": "t:names.group",
-              "settings": {
-                "link": "",
-                "open_in_new_tab": false,
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "inherit_color_scheme": true,
-                "color_scheme": "",
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "image_MbpHL3": {
-                  "type": "image",
-                  "name": "t:names.image",
-                  "settings": {
-                    "image": "shopify://shop_images/soap-image-2_7101a50a-dc57-4388-a847-7461a0bce516.png",
-                    "link": "",
-                    "image_ratio": "adapt",
-                    "width": "fill",
-                    "custom_width": 100,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "product_card_group_p9rPML": {
-                  "type": "_product-card-group",
-                  "name": "t:names.group",
-                  "settings": {
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "flex-start",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "center",
-                    "gap": 12,
-                    "width": "fill",
-                    "custom_width": 100,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "inherit_color_scheme": true,
-                    "color_scheme": "",
-                    "background_media": "none",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_radius": 0,
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "product_title_REN3LY": {
-                      "type": "product-title",
-                      "name": "t:names.product_title",
-                      "settings": {
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--baf-text-bold-family)",
-                        "font_size": "var(--baf-text-bold-medium-size)",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "var(--color-foreground-heading)",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 4,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "price_JPcE77": {
-                      "type": "price",
-                      "name": "t:names.product_price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": false,
-                        "show_tax_info": false,
-                        "type_preset": "custom",
-                        "width": "100%",
-                        "alignment": "left",
-                        "font": "var(--baf-text-family)",
-                        "font_size": "var(--baf-text-medium-size)",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "color": "var(--color-foreground)",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "text_VmpKDR": {
-                      "type": "text",
-                      "name": "t:names.text",
-                      "settings": {
-                        "text": "<p>Shop now</p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "var(--color-foreground)",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "product_title_REN3LY",
-                    "price_JPcE77",
-                    "text_VmpKDR"
-                  ]
-                }
-              },
-              "block_order": [
-                "image_MbpHL3",
-                "product_card_group_p9rPML"
-              ]
-            },
-            "product_card_group_kX68H6": {
-              "type": "_product-card-group",
-              "name": "t:names.group",
-              "settings": {
-                "link": "",
-                "open_in_new_tab": false,
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "inherit_color_scheme": true,
-                "color_scheme": "",
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "text_DN87Pb": {
-                  "type": "text",
-                  "name": "t:names.heading",
-                  "settings": {
-                    "text": "<h2>Why not to show your pets in the bathroom?</h2>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "text_UEfiKy": {
-                  "type": "text",
-                  "name": "t:names.text",
-                  "settings": {
-                    "text": "<p>Praesent bibendum id erat vel fermentum. Integer maximus ipsum malesuada magna viverra blandit. Ut placerat magna sit amet tortor finibus, sed  rutrum lacus varius. Donec eget quam sit amet est tincidunt imperdiet.  Mauris sit amet ante at ipsum ullamcorper consequat. Nullam nec eleifend orci, quis suscipit diam. Nullam pretium in quam eu mattis. Praesent  tincidunt velit sapien, at mattis justo porttitor non. Donec auctor  dolor ex, eget facilisis ipsum elementum nec. Sed ultrices ac odio  imperdiet accumsan.</p>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_DN87Pb",
-                "text_UEfiKy"
-              ]
-            }
-          },
-          "block_order": [
-            "product_card_group_c9ii6m",
-            "product_card_group_kX68H6"
-          ]
-        },
-        "product_card_6FAbdj": {
-          "type": "product-card",
-          "name": "t:names.product_card",
-          "settings": {
-            "product": "throw-pillow",
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_group_NftDcb": {
-              "type": "_product-card-group",
-              "name": "t:names.group",
-              "settings": {
-                "link": "",
-                "open_in_new_tab": false,
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "inherit_color_scheme": true,
-                "color_scheme": "",
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "image_m4NFQx": {
-                  "type": "image",
-                  "name": "t:names.image",
-                  "settings": {
-                    "image": "shopify://shop_images/soap-image-3.png",
-                    "link": "",
-                    "image_ratio": "adapt",
-                    "width": "fill",
-                    "custom_width": 100,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "product_card_group_UDgTCV": {
-                  "type": "_product-card-group",
-                  "name": "t:names.group",
-                  "settings": {
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "flex-start",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "center",
-                    "gap": 12,
-                    "width": "fill",
-                    "custom_width": 100,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "inherit_color_scheme": true,
-                    "color_scheme": "",
-                    "background_media": "none",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_radius": 0,
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "product_title_czY33d": {
-                      "type": "product-title",
-                      "name": "t:names.product_title",
-                      "settings": {
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "var(--color-foreground)",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 4,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "price_rjhgTi": {
-                      "type": "price",
-                      "name": "t:names.product_price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": false,
-                        "show_tax_info": false,
-                        "type_preset": "custom",
-                        "width": "100%",
-                        "alignment": "left",
-                        "font": "var(--baf-text-family)",
-                        "font_size": "var(--baf-text-medium-size)",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "color": "var(--color-foreground)",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "text_WkAk6E": {
-                      "type": "text",
-                      "name": "t:names.text",
-                      "settings": {
-                        "text": "<p>Shop now</p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "var(--color-foreground)",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "product_title_czY33d",
-                    "price_rjhgTi",
-                    "text_WkAk6E"
-                  ]
-                }
-              },
-              "block_order": [
-                "image_m4NFQx",
-                "product_card_group_UDgTCV"
-              ]
-            },
-            "product_card_group_cmtRn7": {
-              "type": "_product-card-group",
-              "name": "t:names.group",
-              "settings": {
-                "link": "",
-                "open_in_new_tab": false,
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "inherit_color_scheme": true,
-                "color_scheme": "",
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "text_6pTn9B": {
-                  "type": "text",
-                  "name": "t:names.heading",
-                  "settings": {
-                    "text": "<h2>Pets in the bathroom? Why not? Why yes?</h2>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "text_TnyWF6": {
-                  "type": "text",
-                  "name": "t:names.text",
-                  "settings": {
-                    "text": "<p>Nullam pretium in quam eu mattis. Praesent  tincidunt velit sapien, at mattis justo porttitor non. Donec auctor  dolor ex, eget facilisis ipsum elementum nec. Sed ultrices ac odio  imperdiet accumsan. Praesent bibendum id erat vel fermentum. Integer maximus ipsum malesuada magna viverra blandit. Ut placerat magna sit amet tortor finibus, sed  rutrum lacus varius. Donec eget quam sit amet est tincidunt imperdiet. </p>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_6pTn9B",
-                "text_TnyWF6"
-              ]
-            }
-          },
-          "block_order": [
-            "product_card_group_NftDcb",
-            "product_card_group_cmtRn7"
-          ]
-        }
-      },
-      "block_order": [
-        "product_card_9KHBgm",
-        "product_card_6FAbdj"
-      ],
-      "disabled": true,
-      "name": "Editorial",
-      "settings": {}
     }
   },
   "order": [
     "custom_slideshow_JARCkf",
+    "section_home_logo_strip",
+    "section_pick_a_style",
+    "section_see_it_at_home_feed",
     "section_artist-intro",
-    "section_results",
-    "section_portrait-styles",
     "section_three-steps",
-    "section_portrait-formats",
-    "section_dogstrust",
-    "section_reviews",
-    "section_floating-images",
-    "section_KGipXL",
-    "section_cta-section",
-    "section_insta-feed",
-    "section_editorial"
+    "section_product-details",
+    "section_portrait_donation_impact",
+    "section_no_barriers_faq",
+    "section_home_dog_people_reviews",
+    "section_wearable_art_products",
+    "section_the_ones_you_love_cta"
   ]
 }

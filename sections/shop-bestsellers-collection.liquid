@@ -98,72 +98,19 @@
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
 >
   <nav class="shop-products__nav section section--page-width" aria-label="Shop products sections" data-baf-scroll-subnav>
-    <a class="shop-products__nav-link is-active" href="#shop-products-custom">{{ section.settings.custom_portrait_title }}</a>
-    {%- if bestseller_cards != blank -%}<a class="shop-products__nav-link" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>{%- endif -%}
+    {%- if bestseller_cards != blank -%}
+      <a class="shop-products__nav-link is-active" href="#shop-products-bestseller">{{ section.settings.bestseller_title }}</a>
+    {%- endif -%}
     {%- if cap_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-cap">{{ section.settings.cap_title }}</a>{%- endif -%}
     {%- if tshirt_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-tshirt">{{ section.settings.tshirt_title }}</a>{%- endif -%}
     {%- if crewneck_count > 0 -%}<a class="shop-products__nav-link" href="#shop-products-crewneck">{{ section.settings.crewneck_title }}</a>{%- endif -%}
   </nav>
 
+  {%- if collection.handle == 'all-products' -%}
+    {% render 'clothing-collection-intro', section_id: section.id %}
+  {%- endif -%}
+
   <div class="shop-products__inner">
-    <section id="shop-products-custom" class="shop-products__custom shop-products__anchor">
-      <h1 class="shop-products__hero-title">{{ section.settings.custom_portrait_title }}</h1>
-
-      <div class="shop-products__portrait-grid">
-        {%- render 'shop-products-portrait-tile',
-          image: section.settings.portrait_1_image,
-          style_label: section.settings.portrait_1_style_label,
-          style_id: section.settings.portrait_1_style_id,
-          product: section.settings.portrait_1_product,
-          product_label: section.settings.portrait_1_product_label,
-          product_handle_override: section.settings.portrait_1_product_handle_override,
-          preset_product_category: 'canvas',
-          preset_size: '20″×28″',
-          preset_framing: 'framed',
-          preset_color: 'brown',
-          button_label: section.settings.portrait_1_button_label,
-          click_id: 'baf-click-collection-portrait-01',
-          fallback_image: 'make-portrait/overview01.png'
-        -%}
-
-        {%- render 'shop-products-portrait-tile',
-          image: section.settings.portrait_2_image,
-          style_label: section.settings.portrait_2_style_label,
-          style_id: section.settings.portrait_2_style_id,
-          product: section.settings.portrait_2_product,
-          product_label: section.settings.portrait_2_product_label,
-          product_handle_override: section.settings.portrait_2_product_handle_override,
-          preset_product_category: 'canvas',
-          preset_size: '20″×28″',
-          preset_framing: 'framed',
-          preset_color: 'brown',
-          button_label: section.settings.portrait_2_button_label,
-          click_id: 'baf-click-collection-portrait-02',
-          fallback_image: 'make-portrait/overview02.png'
-        -%}
-
-        {%- render 'shop-products-portrait-tile',
-          image: section.settings.portrait_3_image,
-          style_label: section.settings.portrait_3_style_label,
-          style_id: section.settings.portrait_3_style_id,
-          product: section.settings.portrait_3_product,
-          product_label: section.settings.portrait_3_product_label,
-          product_handle_override: section.settings.portrait_3_product_handle_override,
-          preset_product_category: 'paper',
-          preset_size: '50×70 cm',
-          preset_border: 'no-border',
-          preset_framing: 'framed',
-          preset_color: 'oak',
-          button_label: section.settings.portrait_3_button_label,
-          click_id: 'baf-click-collection-portrait-03',
-          fallback_image: 'make-portrait/bark-and-frame-configurator-hero-jack-russell-with-his-portrait-gentleman-old-master-style-living-room.jpg'
-        -%}
-      </div>
-      <div class="shop-products__portrait-scrollbar" aria-hidden="true">
-        <span class="shop-products__portrait-scrollbar-thumb"></span>
-      </div>
-    </section>
-
     {%- if bestseller_cards != blank -%}
       <section id="shop-products-bestseller" class="shop-products__bestseller shop-products__anchor">
         <h2 class="shop-products__section-title shop-products__section-title--center">
@@ -241,6 +188,9 @@
 {%- endif -%}
 
 {{ 'shop-bestsellers-collection.css' | asset_url | stylesheet_tag }}
+{%- if collection.handle == 'all-products' -%}
+  {{ 'clothing-collection-intro.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 
 <script>
   (() => {

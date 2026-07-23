@@ -1,458 +1,49 @@
-<div class="three-steps section section--page-width">
-  <div class=three-steps__inner>
-    <div class="three-steps__wrapper" data-three-steps-pin>
-      <div class="three-steps__pin">
-        <h2 class="three-steps__title">
-          {{ section.settings.main-text }}
-        </h2>
-        <div class="three-steps__content">
-          <div class="three-steps__step is-active">
-            <div class="three-steps__step__content">
-              <h3 class="three-steps__step__title">
-                Choose your style
-              </h3>
-              <p class="three-steps__step__text">
-                Pick the one that feels like them
-              </p>
-            </div>
-            <div class="three-steps__step__image">
-              <img src="{{ 'illustrations/01.svg' | asset_url }}" alt="" width="400" height="400">
-            </div>
-          </div>
+<link rel="stylesheet" href="{{ 'baf-section-three-steps.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-three-steps.css' | asset_url | stylesheet_tag }}</noscript>
 
-          <div class="three-steps__step">
-            <div class="three-steps__step__content">
-              <h3 class="three-steps__step__title">
-                Pick product & details
-              </h3>
-              <p class="three-steps__step__text">
-                Choose how it looks and feels
-              </p>
-            </div>
-            <div class="three-steps__step__image">
-              <img src="{{ 'illustrations/02.svg' | asset_url }}" alt="" width="400" height="400">
-            </div>
-          </div>
+<section class="three-steps section section--page-width" aria-labelledby="three-steps-title-{{ section.id }}">
+  <div class="three-steps__inner">
+    <div class="three-steps__panel">
+      <h2 id="three-steps-title-{{ section.id }}" class="three-steps__title">
+        <span class="three-steps__title-line">How Your Portrait</span><br>
+        <span class="three-steps__title-line">Comes to Life</span>
+      </h2>
 
-          <div class="three-steps__step">
-            <div class="three-steps__step__content">
-              <h3 class="three-steps__step__title">
-                Upload your photo
-              </h3>
-              <p class="three-steps__step__text">
-                Any phone photo will do
-              </p>
-            </div>
-            <div class="three-steps__step__image">
-              <img src="{{ 'illustrations/03.svg' | asset_url }}" alt="" width="400" height="400">
-            </div>
-          </div>
+      <div class="three-steps__list" aria-label="How your portrait comes to life">
+        <div class="three-steps__item">
+          <span class="three-steps__icon" aria-hidden="true">
+            <img src="{{ 'baf-three-steps-artist.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+          </span>
+          <p class="three-steps__text">Each style is designed by an award-winning artist.</p>
         </div>
-        {% if section.settings.button_text != blank %}
-          <div class="three-steps__button three-steps__button--sticky">
-            <a href="{{ section.settings.button_link }}" class="button">
-              {{ section.settings.button_text }}
-            </a>
-          </div>
-        {% endif %}
-      </div>
-      <div class="three-steps__checkpoints" aria-hidden="true">
-        <span class="three-steps__checkpoint" data-three-steps-checkpoint="0"></span>
-        <span class="three-steps__checkpoint" data-three-steps-checkpoint="1"></span>
-        <span class="three-steps__checkpoint" data-three-steps-checkpoint="2"></span>
+
+        <div class="three-steps__item">
+          <span class="three-steps__icon" aria-hidden="true">
+            <img src="{{ 'baf-three-steps-iphone-config.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+          </span>
+          <p class="three-steps__text">Choose your style and finishing details, then upload your dog’s photo.</p>
+        </div>
+
+        <div class="three-steps__item">
+          <span class="three-steps__icon" aria-hidden="true">
+            <img src="{{ 'baf-three-steps-custom-portrait.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+          </span>
+          <p class="three-steps__text">Our team carefully ensures that every detail feels true to your dog, creating a beautifully finished portrait that captures their unique character.</p>
+        </div>
       </div>
     </div>
-
-    {% if section.settings.button_text != blank %}
-      <div class="three-steps__button three-steps__button--end">
-        <a href="{{ section.settings.button_link }}" class="button">
-          {{ section.settings.button_text }}
-        </a>
-      </div>
-    {% endif %}
-    
   </div>
-</div>
-
-{% javascript %}
-  (function () {
-    if (window.BAFThreeStepsPinReady) return;
-    window.BAFThreeStepsPinReady = true;
-
-    var media = window.matchMedia('(max-width: 749px)');
-    var pinTop = 96;
-    var scenes = [];
-    var ticking = false;
-
-    function setActiveStep(scene, activeIndex) {
-      scene.querySelectorAll('.three-steps__step').forEach(function (step, index) {
-        step.classList.toggle('is-active', index === activeIndex);
-      });
-    }
-
-    function clearPinState(scene) {
-      scene.classList.remove('is-pin-active', 'is-pin-after');
-    }
-
-    function measureScenes() {
-      scenes = Array.prototype.map.call(document.querySelectorAll('[data-three-steps-pin]'), function (scene) {
-        var pin = scene.querySelector('.three-steps__pin');
-
-        clearPinState(scene);
-        setActiveStep(scene, 0);
-
-        return {
-          element: scene,
-          top: scene.getBoundingClientRect().top + (window.pageYOffset || 0),
-          height: scene.offsetHeight,
-          pinHeight: pin ? pin.offsetHeight : 0
-        };
-      });
-
-      updatePins();
-    }
-
-    function updatePins() {
-      ticking = false;
-
-      if (!media.matches) {
-        scenes.forEach(function (item) {
-          clearPinState(item.element);
-          item.element.querySelectorAll('.three-steps__step').forEach(function (step) {
-            step.classList.remove('is-active');
-          });
-        });
-        return;
-      }
-
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-
-      scenes.forEach(function (item) {
-        var scene = item.element;
-        var start = item.top - pinTop;
-        var end = item.top + item.height - item.pinHeight - pinTop;
-        var travel = Math.max(end - start, 1);
-
-        if (scrollY < start) {
-          clearPinState(scene);
-          setActiveStep(scene, 0);
-          return;
-        }
-
-        if (scrollY >= end) {
-          scene.classList.remove('is-pin-active');
-          scene.classList.add('is-pin-after');
-          setActiveStep(scene, 2);
-          return;
-        }
-
-        scene.classList.add('is-pin-active');
-        scene.classList.remove('is-pin-after');
-        setActiveStep(scene, Math.min(2, Math.floor(((scrollY - start) / travel) * 3)));
-      });
-    }
-
-    function requestUpdate() {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(updatePins);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', measureScenes, { once: true });
-    } else {
-      measureScenes();
-    }
-
-    media.addEventListener?.('change', measureScenes);
-    window.addEventListener('load', measureScenes);
-    window.addEventListener('pageshow', measureScenes);
-    window.addEventListener('orientationchange', measureScenes);
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-  })();
-{% endjavascript %}
-
-{% stylesheet %}
-.three-steps{
-  .three-steps__inner{
-    padding: 80px 20px 0px;
-  }
-
-  .three-steps__title{
-    text-align: center;
-    margin-bottom: 0;
-    font-size: var(--baf-display-extra-large-size);
-    line-height: 1;
-  }
-
-  .three-steps__step{
-    margin: 40px 0 80px;
-
-    .three-steps__step__content{
-      position: relative;
-      text-align: center;
-      color: var(--brown);
-      max-width: 260px;
-      margin: 0 auto;
-
-      .three-steps__step__title{
-        font-family: var(--baf-text-family);
-        font-size: var(--baf-text-medium-size);
-        font-weight: var(--baf-text-weight);
-        line-height: normal;
-        color: var(--beige);
-        background-color: var(--green);
-        width: fit-content;
-        margin: 0 auto;
-        padding: 4px 12px;
-        border-radius: 1000px;
-      }
-      .three-steps__step__text{
-        font-family: "display", "Times New Roman", serif !important;
-        font-weight: normal !important;
-        font-size: var(--baf-display-medium-size);
-        line-height: 1em;
-        margin: 30px 0 0;
-      }
-    }
-
-    .three-steps__step__image{
-      img{
-        width: 140px;
-        margin: 20px auto;
-      }
-    }
-  }
-
-  .three-steps__button{
-    text-align: center;
-
-    .button{
-      display: inline-block;
-    }
-  }
-
-  .three-steps__button--sticky{
-    display: none;
-  }
-
-  .three-steps__checkpoints{
-    display: none;
-  }
-
-  @media(max-width: 749px){
-    .three-steps__inner{
-      padding: 0 20px 20px;
-    }
-
-    .three-steps__wrapper{
-      min-height: 300svh;
-      position: relative;
-      padding-top: 0;
-    }
-
-    .three-steps__pin{
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      height: calc(100svh - 116px);
-      min-height: 0;
-      display: grid;
-      grid-template-rows: auto auto auto;
-      align-content: center;
-      align-items: center;
-      row-gap: clamp(28px, 6svh, 42px);
-      padding: 0 0 max(12px, env(safe-area-inset-bottom));
-      box-sizing: border-box;
-    }
-
-    .three-steps__wrapper.is-pin-active .three-steps__pin{
-      position: fixed;
-      top: 96px;
-      right: 20px;
-      left: 20px;
-      z-index: var(--layer-flat, 1);
-    }
-
-    .three-steps__wrapper.is-pin-after .three-steps__pin{
-      top: auto;
-      bottom: 0;
-    }
-
-    .three-steps__title{
-      position: relative;
-      z-index: 2;
-      margin: 0;
-      width: max-content;
-      max-width: 100%;
-      justify-self: center;
-      white-space: nowrap;
-      font-size: min(var(--baf-display-extra-large-size), 11.5vw);
-    }
-
-    .three-steps__content{
-      display: grid;
-      grid-template: "step" auto / 1fr;
-      align-items: center;
-      align-self: center;
-      width: 100%;
-      height: auto;
-      min-height: clamp(300px, 44svh, 360px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .three-steps__step{
-      grid-area: step;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 0;
-      margin: 0;
-      padding: 0;
-      background: var(--beige);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity 260ms ease, visibility 0ms linear 260ms;
-
-      .three-steps__step__content{
-        .three-steps__step__text{
-          font-size: var(--baf-display-medium-size);
-          margin-top: clamp(14px, 3svh, 22px);
-        }
-      }
-
-      .three-steps__step__image{
-        img{
-          width: clamp(96px, 28vw, 128px);
-          max-height: 24svh;
-          margin: clamp(10px, 2svh, 16px) auto 0;
-        }
-      }
-    }
-
-    .three-steps__step.is-active{
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transition-delay: 0ms;
-    }
-
-    .three-steps__button--sticky{
-      display: block;
-      position: relative;
-      z-index: 2;
-      align-self: center;
-      margin: 0;
-    }
-
-    .three-steps__button--end{
-      display: none;
-    }
-
-    .three-steps__checkpoints{
-      display: none;
-    }
-  }
-
-  @media(min-width: 750px){
-
-    .three-steps__inner{
-      padding: 120px 0 40px;
-    }
-
-    .three-steps__content{
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .three-steps__step__image{
-      img{
-        width: 160px;
-      }
-    }
-
-    .three-steps__title{
-      line-height: 1;
-    }
-
-    .three-steps__step{
-      margin: 80px 0 60px;
-      width: 220px;
-
-      .three-steps__step__content{
-        max-width: none;
-
-        .three-steps__step__text{
-          margin: 50px 0 30px;
-        }
-      }
-    }
-  }
-
-  @media(min-width: 750px) and (max-width: 1199px){
-    .three-steps__inner{
-      grid-column: 1 / -1;
-      padding-inline: max(24px, var(--page-margin));
-    }
-
-    .three-steps__content{
-      max-width: min(940px, calc(100vw - 48px));
-      gap: 28px;
-      justify-content: center;
-    }
-
-    .three-steps__step{
-      width: clamp(220px, 29vw, 280px);
-    }
-  }
-
-  @media(min-width: 1200px){
-    
-
-    .three-steps__step{
-      width: 260px;
-
-      .three-steps__step__image{
-      img{
-        width: 250px;
-        height: 260px;
-      }
-    }
-    }
-  }
-}
-
-{% endstylesheet %}
+</section>
 
 {% schema %}
 {
-  "name": "Three Steps",
+  "name": "Portrait process",
   "settings": [
     {
       "type": "text",
       "id": "main-text",
       "label": "Main Text",
-      "default": "It only takes three steps"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button text",
-      "default": "Start your portrait"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
+      "default": "How Your Portrait Comes to Life"
     }
   ]
 }

@@ -40,7 +40,7 @@ main.content-for-layout .more-from.section {
 }
 
 .more-from__end-spacer {
-  height: 240px;
+  height: 80px;
 }
 
 .more-from--scroll .more-from__cta,
@@ -203,6 +203,6 @@ main.content-for-layout .more-from.section {
   }
 
   .more-from__end-spacer {
-    height: 160px;
+    height: 53px;
   }
 }

@@ -1,0 +1,228 @@
+.home-dog-people-reviews {
+    --home-review-card-width: min(78vw, 310px);
+    --home-review-edge-inset: max(var(--page-margin), calc((100vw - var(--home-review-card-width)) / 2));
+    --home-review-scrollbar-offset: calc(var(--home-review-edge-inset) - var(--page-margin));
+
+    margin: 0;
+    color: var(--brown);
+  }
+
+  .home-dog-people-reviews__inner {
+    margin-inline: var(--page-margin);
+    padding: 28px 0 32px;
+    background: var(--beige);
+  }
+
+  .home-dog-people-reviews__header {
+    max-width: 34rem;
+    margin: 0 auto 34px;
+    text-align: center;
+  }
+
+  .home-dog-people-reviews__title,
+  .home-dog-people-review__author,
+  .home-dog-people-review__dog,
+  .home-dog-people-review__body {
+    margin: 0;
+  }
+
+  .home-dog-people-reviews__title {
+    color: var(--brown);
+    font-family: "display", serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    text-wrap: balance;
+    text-transform: none;
+  }
+
+  .home-dog-people-reviews__grid {
+    display: flex;
+    gap: 10px;
+    margin-inline: calc(-1 * var(--page-margin));
+    padding-inline: var(--home-review-edge-inset);
+    overflow-x: auto;
+    scroll-padding-inline: var(--home-review-edge-inset);
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .home-dog-people-reviews__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-dog-people-review {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 var(--home-review-card-width);
+    min-height: 148px;
+    gap: 10px;
+    padding: 14px;
+    border: 0;
+    border-radius: 20px;
+    background: var(--cream);
+    color: var(--brown);
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+
+  .home-dog-people-reviews__scrollbar {
+    position: relative;
+    display: block;
+    width: auto;
+    height: 22px;
+    margin: 18px var(--home-review-scrollbar-offset) 0;
+    cursor: pointer;
+  }
+
+  .home-dog-people-reviews__scrollbar[hidden] {
+    display: none;
+  }
+
+  .home-dog-people-reviews__scrollbar::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--brown) 18%, transparent);
+  }
+
+  .home-dog-people-reviews__scrollbar-thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    width: 34px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--brown);
+    transform: translateX(0);
+    transition: width 0.1s linear;
+  }
+
+  .home-dog-people-review__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: color-mix(in srgb, var(--brown) 48%, transparent);
+    font-family: var(--baf-text-family);
+    font-size: var(--baf-text-medium-size);
+    font-weight: var(--baf-text-weight);
+    line-height: 1;
+  }
+
+  .home-dog-people-review__stars {
+    color: var(--green);
+    font-size: var(--baf-text-large-size);
+    font-weight: var(--baf-text-bold-weight);
+    line-height: 1;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .home-dog-people-review__time {
+    font-size: var(--baf-text-small-size);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .home-dog-people-review__body {
+    color: var(--brown);
+    font-family: var(--baf-text-family);
+    font-size: var(--baf-text-medium-size);
+    font-weight: var(--baf-text-weight);
+    line-height: 1.28;
+    text-wrap: pretty;
+  }
+
+  .home-dog-people-review__footer {
+    display: grid;
+    gap: 4px;
+    margin-top: auto;
+  }
+
+  .home-dog-people-review__author {
+    color: var(--brown);
+    font-family: var(--baf-text-bold-family);
+    font-size: var(--baf-text-bold-medium-size);
+    font-weight: var(--baf-text-bold-weight);
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+
+  .home-dog-people-review__dog {
+    color: color-mix(in srgb, var(--brown) 52%, transparent);
+    font-family: var(--baf-text-family);
+    font-size: var(--baf-text-medium-size);
+    font-weight: var(--baf-text-weight);
+    line-height: 1.2;
+  }
+
+  @media (min-width: 750px) {
+    .home-dog-people-reviews {
+      --home-review-card-width: min(42vw, 330px);
+      --home-review-edge-inset: var(--page-margin);
+    }
+
+    .home-dog-people-reviews__inner {
+      padding: 32px 0 38px;
+    }
+
+    .home-dog-people-reviews__header {
+      margin-bottom: 40px;
+    }
+
+    .home-dog-people-review {
+      min-height: 156px;
+      padding: 16px;
+    }
+  }
+
+  @media (min-width: 990px) and (orientation: landscape) {
+    .home-dog-people-reviews__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-inline: auto;
+      max-width: 940px;
+      padding-inline: 0;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    .home-dog-people-reviews__scrollbar {
+      display: none;
+    }
+
+    .home-dog-people-review {
+      min-height: 156px;
+      padding: 16px;
+      cursor: default;
+    }
+  }
+
+  @media (min-width: 1200px) and (orientation: landscape) {
+    .home-dog-people-reviews__inner {
+      padding: 24px 48px 44px;
+    }
+
+    .home-dog-people-reviews__header {
+      margin-bottom: 48px;
+    }
+
+    .home-dog-people-reviews__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 1040px;
+      gap: 14px;
+    }
+
+    .home-dog-people-review {
+      min-height: 160px;
+    }
+  }

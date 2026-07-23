@@ -4,6 +4,7 @@
   @param {object} image - image object
   @param {number} [height] - custom image height
   @param {string} [class] - additional classes
+  @param {string} [alt] - image alt text
   @param {string} [text_fallback] - text to display if image is blank
   @param {boolean} [unset_image_tag] - if true, ignores the image focal point
   @param {string} [style] - additional styles
@@ -13,12 +14,6 @@
 {%- enddoc -%}
 {% if image != blank %}
   {% assign image_height = height | default: image.height %}
-  {% assign image_height_2x = height | default: image_height | times: 2 %}
-  {% assign image_height_3x = height | default: image_height | times: 3 %}
-
-  {% capture image_srcset -%}
-    {{ image | image_url: height: image_height }} 1x, {{ image | image_url: height: image_height_2x }} 2x, {{ image | image_url: height: image_height_3x }} 3x
-  {%- endcapture %}
 
   {% assign style_value = style | default: '' %}
 
@@ -26,7 +21,43 @@
     {% assign style_value = style_value | append: 'object-position: inherit;' %}
   {% endif %}
 
-  {{ image | image_url: height: image_height | image_tag: class: class, srcset: image_srcset, style: style_value }}
+  {% if height %}
+    {% assign image_height_2x = image_height | times: 2 %}
+    {% assign image_height_3x = image_height | times: 3 %}
+
+    {% capture image_srcset -%}
+      {{ image | image_url: height: image_height }} 1x, {{ image | image_url: height: image_height_2x }} 2x, {{ image | image_url: height: image_height_3x }} 3x
+    {%- endcapture %}
+
+    {% if alt != blank %}
+      {{ image | image_url: height: image_height | image_tag: class: class, srcset: image_srcset, style: style_value, alt: alt }}
+    {% else %}
+      {{ image | image_url: height: image_height | image_tag: class: class, srcset: image_srcset, style: style_value }}
+    {% endif %}
+  {% else %}
+    {% if alt != blank %}
+      {{
+        image
+        | image_url: width: 1920
+        | image_tag:
+          class: class,
+          widths: '240, 352, 480, 640, 832, 1200, 1600, 1920',
+          sizes: 'auto, (min-width: 750px) 100vw, 100vw',
+          style: style_value,
+          alt: alt
+      }}
+    {% else %}
+      {{
+        image
+        | image_url: width: 1920
+        | image_tag:
+          class: class,
+          widths: '240, 352, 480, 640, 832, 1200, 1600, 1920',
+          sizes: 'auto, (min-width: 750px) 100vw, 100vw',
+          style: style_value
+      }}
+    {% endif %}
+  {% endif %}
 {% elsif text_fallback %}
   {{ text_fallback }}
 {% endif %}

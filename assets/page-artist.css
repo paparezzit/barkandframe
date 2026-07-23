@@ -1,5 +1,5 @@
 .artists-heading {
-    padding: 80px var(--page-margin) 70px;
+    padding: 48px var(--page-margin) 32px;
     text-align: center;
   }
 
@@ -17,17 +17,15 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 40px var(--page-margin);
+    padding: 24px var(--page-margin);
     max-width: calc(1060px + (2 * var(--page-margin)));
     margin: 0 auto;
-    transform: translateY(30px);
   }
 
   .artists-page__intro-image {
     overflow: hidden;
     width: 70%;
-    margin: 0 auto 40px;
-    transform: translateY(-55px);
+    margin: 0 auto 20px;
   }
 
   .artists-page__intro-image img {
@@ -40,14 +38,14 @@
   .artists-page__list {
     display: flex;
     flex-direction: column;
-    gap: 80px;
-    padding: 60px var(--page-margin) 0;
+    gap: 44px;
+    padding: 28px var(--page-margin) 0;
     max-width: calc(1413px + (2 * var(--page-margin)));
     margin: 0 auto;
   }
 
   .artists-page__end-spacer {
-    height: 180px;
+    height: 56px;
   }
 
   .artists-page__item {
@@ -73,7 +71,7 @@
   .artists-page__styles-section {
     display: flex;
     gap: 20px;
-    padding: 30px 20px;
+    padding: 18px 20px;
   }
 
   .artists-page__styles-title {
@@ -207,7 +205,7 @@
   @media screen and (min-width: 750px) {
     .artists-page__intro{
       flex-direction: row;
-      margin-bottom: 60px;
+      margin-bottom: 24px;
 
       .artists-page__intro-image{
         flex: 1;
@@ -239,20 +237,20 @@
 
   @media screen and (max-width: 749px) {
     .artists-page__end-spacer {
-      height: 120px;
+      height: 48px;
     }
 
     .artists-page__list {
-      gap: 120px;
-      padding-top: 120px;
+      gap: 48px;
+      padding-top: 32px;
     }
 
     .artists-page__styles-section {
-      padding-top: 48px;
+      padding-top: 20px;
     }
 
     .artists-page__styles-section + .artists-page__styles-section {
-      padding-top: 28px;
+      padding-top: 14px;
     }
   }
 
@@ -312,15 +310,15 @@
 
   @media screen and (min-width: 1200px) {
     .artists-heading{
-      padding: 180px 0 100px;
+      padding: 96px 0 48px;
     }
 
     .artists-page__intro{
-      margin: 60px auto 150px;
+      margin: 24px auto 56px;
     }
 
     .artists-page__list{
-      gap: 100px 200px;
+      gap: 56px 120px;
 
       .artists-page__item{
         width: calc(50% - 100px);

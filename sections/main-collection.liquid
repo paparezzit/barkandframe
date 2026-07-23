@@ -32,6 +32,10 @@
   <h1 class="visually-hidden">{{ collection.title }}</h1>
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
+  {%- if collection.handle == 'all-products' -%}
+    {% render 'clothing-collection-intro', section_id: section.id %}
+  {%- endif -%}
+
   <div
     class="collection-wrapper grid gap-style"
   >
@@ -103,6 +107,9 @@
 {%- endif -%}
 
 {{ 'main-collection.css' | asset_url | stylesheet_tag }}
+{%- if collection.handle == 'all-products' -%}
+  {{ 'clothing-collection-intro.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 
 {% schema %}
 {

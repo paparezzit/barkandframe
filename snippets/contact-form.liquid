@@ -19,7 +19,7 @@
   {%- form 'contact', id: form_id, class: 'contact-form__form' -%}
 
     {%- if form.posted_successfully? -%}
-      <div class="contact-form__success" tabindex="-1" autofocus>
+      <div class="contact-form__success" tabindex="-1" autofocus data-generate-lead-success="{{ form_id }}">
         <h4>
           Thanks for reaching out.
         </h4>
@@ -186,7 +186,7 @@
 
       <div class="contact-company-info__group">
         <p><strong>Company ID:</strong> 23808926</p>
-        <p><strong>AT ID:</strong> CZ23808926</p>
+        <p><strong>VAT ID:</strong> CZ23808926</p>
       </div>
 
       <div class="contact-company-info__group">
@@ -208,6 +208,7 @@
 
 </div>
 
+{% render 'generate-lead-analytics' %}
 
 <script>
 (function () {
@@ -245,6 +246,36 @@
   var pendingUploads = 0;
   var failedUploads = 0;
   var SCROLL_STORAGE_KEY = 'bafContactFormScroll:{{ form_id }}';
+  var GENERATE_LEAD_STORAGE_KEY = 'bafGenerateLead:contact:{{ form_id }}';
+  var GENERATE_LEAD_FORM_TYPES = {
+    'general-inquiry': 'General inquiry',
+    'order-issue': 'Order issue',
+    'withdrawal-form': 'Withdrawal form'
+  };
+
+  function getSelectedFormType() {
+    var selected = document.querySelector('.cf-type-radio:checked');
+    var value = selected ? selected.value : 'general-inquiry';
+
+    return GENERATE_LEAD_FORM_TYPES[value] || 'Other';
+  }
+
+  function storeGenerateLead() {
+    var emailInput = document.getElementById('cf-email');
+    if (!emailInput || !window.BAFGenerateLead) return;
+
+    window.BAFGenerateLead.store(GENERATE_LEAD_STORAGE_KEY, {
+      formType: getSelectedFormType(),
+      email: emailInput.value
+    });
+  }
+
+  function publishGenerateLeadOnSuccess() {
+    if (!document.querySelector('[data-generate-lead-success="{{ form_id }}"]')) return;
+    if (!window.BAFGenerateLead) return;
+
+    window.BAFGenerateLead.publishStored(GENERATE_LEAD_STORAGE_KEY);
+  }
 
   function saveScrollPosition() {
     try {
@@ -386,6 +417,24 @@
     previewEl._errorEl = errMsg;
   }
 
+  function publishPhotoUpload(source) {
+    if (
+      !window.Shopify ||
+      !window.Shopify.analytics ||
+      typeof window.Shopify.analytics.publish !== 'function'
+    ) {
+      return;
+    }
+
+    try {
+      window.Shopify.analytics.publish('photo_upload', {
+        source: source
+      });
+    } catch (e) {
+      // Analytics must not block the form upload flow.
+    }
+  }
+
   function uploadToCloudinary(file, previewEl) {
     var cfg = window.ContactFormCloudinary;
     if (!cfg || !cfg.cloudName || !cfg.uploadPreset) return;
@@ -411,6 +460,7 @@
           photoUrls.push(data.secure_url);
           previewEl.dataset.photoUrl = data.secure_url;
           spinner.remove();
+          publishPhotoUpload('contact_form');
         } else {
           markUploadFailed(previewEl, spinner);
         }
@@ -508,6 +558,7 @@
           return;
         }
         saveScrollPosition();
+        storeGenerateLead();
         if (photoUrls.length > 0) {
           var ta = document.getElementById('cf-textarea');
           if (ta) {
@@ -542,6 +593,8 @@
     }
 
   }
+
+  publishGenerateLeadOnSuccess();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {

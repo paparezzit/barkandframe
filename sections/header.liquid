@@ -650,7 +650,7 @@
   }
 {% endstylesheet %}
 
-{% unless request.design_mode %}
+{% unless request.design_mode or request.page_type == 'index' %}
   <script type="module">
     import { hydrate } from '@theme/section-hydration';
     const url = new URL(window.location.href);
@@ -1095,9 +1095,23 @@
       "content": "Cart upsell"
     },
     {
+      "type": "collection",
+      "id": "cart_upsell_collection",
+      "label": "Upsell collection",
+      "info": "Optional. Use a hidden collection of fixed-price duplicate products. Each duplicate can link to the displayed original product with custom.upsell_original_product."
+    },
+    {
       "type": "product_list",
       "id": "cart_upsell_products",
-      "label": "Products",
+      "label": "Display products",
+      "info": "Legacy fallback when no upsell collection is selected.",
+      "limit": 50
+    },
+    {
+      "type": "product_list",
+      "id": "cart_upsell_checkout_products",
+      "label": "Fixed-price checkout products",
+      "info": "Legacy fallback. Select discounted duplicate products in the same order as display products.",
       "limit": 50
     },
     {

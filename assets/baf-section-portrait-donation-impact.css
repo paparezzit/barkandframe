@@ -1,0 +1,561 @@
+.portrait-donation-impact{
+  --site-content-margin: var(--page-margin);
+  margin: 27px 0 48px;
+  position: relative;
+
+  .portrait-donation-impact__stage{
+    position: relative;
+  }
+
+  .portrait-donation-impact__logo{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    img{
+      display: block;
+      width: 90px;
+      height: auto;
+    }
+  }
+
+  .portrait-donation-impact__inner {
+    background: var(--purple);
+    aspect-ratio: 1/1;
+  }
+
+  .portrait-donation-impact__wrapper{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    height: 100%;
+
+    .portrait-donation-impact__bg{
+      position: relative;
+      z-index: 1;
+
+      img{
+        position: absolute;
+        top: -20%;
+        left: calc(-18% - 150px);
+        width: auto;
+        max-width: none;
+        height: 128%;
+        object-fit: contain;
+        object-position: left center;
+      }
+    }
+
+    .portrait-donation-impact__content{
+      padding: 30px 30px 30px 10px;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .portrait-donation-impact__title{
+      font-size: var(--baf-display-medium-size);
+      line-height: 1;
+    }
+
+    .portrait-donation-impact__text{
+      color: var(--brown);
+      font-size: var(--baf-text-medium-size);
+    }
+
+    .portrait-donation-impact__text-shape{
+      display: none;
+    }
+
+    .portrait-donation-impact__button{
+      margin-top: 20px;
+
+      .button{
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+        white-space: normal;
+        background-color: var(--beige);
+        border: 1px solid var(--beige);
+        color: var(--brown);
+
+        &:hover{
+          background-color: var(--purple);
+          border-color: var(--brown);
+        }
+      }
+    }
+  }
+
+  .portrait-donation-impact__image{
+    position: absolute;
+    right: 10px;
+    bottom: -30px;
+
+    img{
+      width: 120px;
+    }
+  }
+
+  @media(max-width: 749px){
+    --site-content-margin: var(--page-margin) !important;
+
+    .portrait-donation-impact__stage{
+      grid-column: 1 / -1;
+      width: calc(100vw - (var(--page-margin) * 2));
+      max-width: calc(100vw - (var(--page-margin) * 2));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .portrait-donation-impact__inner{
+      position: relative;
+      aspect-ratio: auto;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      background: var(--purple);
+    }
+
+    .portrait-donation-impact__wrapper{
+      --portrait-donation-impact-mobile-image-width: calc((((100vw - (var(--page-margin) * 2)) * 0.276) + 308px) * .5);
+      --portrait-donation-impact-mobile-image-height: calc((((100vw - (var(--page-margin) * 2)) * 0.3686) + 411px) * .5);
+      --portrait-donation-impact-mobile-image-top: clamp(238px, 62vw, 276px);
+      --portrait-donation-impact-mobile-image-left: -16px;
+      --portrait-donation-impact-mobile-shape-left: calc((var(--page-margin) * -1) - 16px);
+      --portrait-donation-impact-mobile-shape-top: 46px;
+      --portrait-donation-impact-mobile-image-bottom-bleed: 24px;
+      display: grid;
+      grid-template-columns: 42% 58%;
+      position: relative;
+      z-index: 1;
+      min-height: calc(var(--portrait-donation-impact-mobile-image-top) + var(--portrait-donation-impact-mobile-image-height) - var(--portrait-donation-impact-mobile-image-bottom-bleed));
+      padding-top: 0;
+      box-sizing: border-box;
+
+      .portrait-donation-impact__bg{
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 46%;
+        height: 100%;
+        overflow: visible;
+
+        img{
+          top: auto;
+          bottom: calc(var(--portrait-donation-impact-mobile-image-bottom-bleed) * -1);
+          left: var(--portrait-donation-impact-mobile-image-left);
+          width: var(--portrait-donation-impact-mobile-image-width);
+          height: auto;
+          object-fit: contain;
+          object-position: right bottom;
+        }
+      }
+
+      .portrait-donation-impact__content{
+        grid-column: 1 / -1;
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: clamp(78px, 13vw, 94px) var(--page-margin) clamp(24px, 7vw, 34px);
+        transform: none;
+      }
+
+      .portrait-donation-impact__title,
+      .portrait-donation-impact__text{
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 0;
+      }
+
+      .portrait-donation-impact__title{
+        text-align: center;
+      }
+
+      .portrait-donation-impact__text{
+        display: flow-root;
+        margin-bottom: 0;
+        text-align: left;
+      }
+
+      .portrait-donation-impact__text-shape{
+        display: block;
+        float: left;
+        width: var(--portrait-donation-impact-mobile-image-width);
+        max-width: none;
+        height: auto;
+        margin: var(--portrait-donation-impact-mobile-shape-top) 0 calc(var(--portrait-donation-impact-mobile-image-height) * -1) var(--portrait-donation-impact-mobile-shape-left);
+        opacity: 0;
+        shape-margin: 14px;
+        shape-image-threshold: 0.08;
+        pointer-events: none;
+      }
+
+      .portrait-donation-impact__text p{
+        margin-bottom: 0;
+        text-align: left;
+      }
+
+      .portrait-donation-impact__button{
+        clear: both;
+        display: block;
+        position: relative;
+        z-index: 3;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 60%;
+        max-width: none;
+        margin: 14px calc((var(--page-margin) * -1) + 12px) 0 auto;
+        padding-right: 0;
+        box-sizing: border-box;
+        text-align: center;
+
+        .button{
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: 100% !important;
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 1.22;
+          white-space: normal;
+          overflow-wrap: normal;
+          word-break: normal;
+        }
+      }
+    }
+
+    .portrait-donation-impact__image{
+      right: -8px;
+      bottom: -36px;
+    }
+  }
+
+  @media(min-width: 750px){
+    margin: 40px auto 72px;
+    max-width: 920px;
+
+    .portrait-donation-impact__logo{
+      img{
+        width: 96px;
+      }
+    }
+
+    .portrait-donation-impact__inner{
+      aspect-ratio: 845/520;
+    }
+
+    .portrait-donation-impact__wrapper{
+      grid-template-columns: 1fr 2fr;
+
+      .portrait-donation-impact__title{
+        margin-bottom: 15px
+      }
+
+      .portrait-donation-impact__text{
+        font-size: var(--baf-text-medium-size);
+        width: 240px;
+      }
+
+      .portrait-donation-impact__button{
+        margin-top: 30px
+      }
+    }
+
+    .portrait-donation-impact__image{
+      right: -40px;
+      bottom: -30px;
+
+      img{
+        width: 240px;
+      }
+    }
+  }
+
+  @media(min-width: 750px) and (orientation: portrait){
+    --site-content-margin: var(--page-margin) !important;
+    max-width: none;
+    width: 100%;
+    margin: 40px 0 72px;
+
+    .portrait-donation-impact__logo{
+      img{
+        width: 90px;
+      }
+    }
+
+    .portrait-donation-impact__stage{
+      width: calc(100vw - (var(--page-margin) * 2));
+      max-width: calc(100vw - (var(--page-margin) * 2));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .portrait-donation-impact__inner{
+      position: relative;
+      aspect-ratio: auto;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      background: var(--purple);
+    }
+
+    .portrait-donation-impact__wrapper{
+      --portrait-donation-impact-mobile-image-width: calc((((100vw - (var(--page-margin) * 2)) * 0.276) + 308px) * .5);
+      --portrait-donation-impact-mobile-image-height: calc((((100vw - (var(--page-margin) * 2)) * 0.3686) + 411px) * .5);
+      --portrait-donation-impact-mobile-image-top: clamp(238px, 48vw, 286px);
+      --portrait-donation-impact-mobile-image-left: -16px;
+      --portrait-donation-impact-mobile-shape-left: calc((var(--page-margin) * -1) - 16px);
+      --portrait-donation-impact-mobile-shape-top: 46px;
+      --portrait-donation-impact-mobile-image-bottom-bleed: 36px;
+      display: grid;
+      grid-template-columns: 42% 58%;
+      position: relative;
+      z-index: 1;
+      min-height: calc(var(--portrait-donation-impact-mobile-image-top) + var(--portrait-donation-impact-mobile-image-height) - var(--portrait-donation-impact-mobile-image-bottom-bleed));
+      padding-top: 0;
+      box-sizing: border-box;
+
+      .portrait-donation-impact__bg{
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 46%;
+        height: 100%;
+        overflow: visible;
+
+        img{
+          top: auto;
+          bottom: calc(var(--portrait-donation-impact-mobile-image-bottom-bleed) * -1);
+          left: var(--portrait-donation-impact-mobile-image-left);
+          width: var(--portrait-donation-impact-mobile-image-width);
+          max-width: none;
+          height: auto;
+          object-fit: contain;
+          object-position: right bottom;
+        }
+      }
+
+      .portrait-donation-impact__content{
+        position: relative;
+        z-index: 2;
+        grid-column: 1 / -1;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: clamp(78px, 7vw, 94px) var(--page-margin) 20px;
+        transform: none;
+      }
+
+      .portrait-donation-impact__title,
+      .portrait-donation-impact__text{
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 0;
+      }
+
+      .portrait-donation-impact__title{
+        text-align: center;
+      }
+
+      .portrait-donation-impact__text{
+        display: flow-root;
+        margin-bottom: 0;
+        text-align: left;
+      }
+
+      .portrait-donation-impact__text-shape{
+        display: block;
+        float: left;
+        width: var(--portrait-donation-impact-mobile-image-width);
+        max-width: none;
+        height: auto;
+        margin: var(--portrait-donation-impact-mobile-shape-top) 0 calc(var(--portrait-donation-impact-mobile-image-height) * -1) var(--portrait-donation-impact-mobile-shape-left);
+        opacity: 0;
+        shape-margin: 14px;
+        shape-image-threshold: 0.08;
+        pointer-events: none;
+      }
+
+      .portrait-donation-impact__text p{
+        margin-bottom: 0;
+        text-align: left;
+      }
+
+      .portrait-donation-impact__button{
+        clear: both;
+        display: block;
+        position: relative;
+        z-index: 3;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 60%;
+        max-width: none;
+        margin: 12px calc((var(--page-margin) * -1) + 12px) 0 auto;
+        padding-right: 0;
+        box-sizing: border-box;
+        text-align: center;
+
+        .button{
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: 100% !important;
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 1.22;
+          white-space: normal;
+          overflow-wrap: normal;
+          word-break: normal;
+        }
+      }
+    }
+
+    .portrait-donation-impact__image{
+      right: -8px;
+      bottom: -36px;
+
+      img{
+        width: 120px;
+      }
+    }
+  }
+
+  @media(min-width: 750px) and (orientation: portrait){
+    .portrait-donation-impact__wrapper{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: clamp(24px, 5vw, 42px);
+      min-height: clamp(470px, 68vw, 560px);
+      padding: clamp(82px, 10vw, 100px) clamp(32px, 5vw, 48px) clamp(44px, 6vw, 58px);
+
+      .portrait-donation-impact__bg{
+        position: relative;
+        inset: auto;
+        grid-column: 1;
+        align-self: stretch;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+
+        picture{
+          position: absolute;
+          inset: 0;
+          display: block;
+        }
+
+        img{
+          top: auto;
+          bottom: -82px;
+          left: calc(50% - 215px);
+          width: auto;
+          max-width: none;
+          height: min(112%, 580px);
+          object-fit: contain;
+          object-position: center bottom;
+          transform: translateX(-50%);
+        }
+      }
+
+      .portrait-donation-impact__content{
+        grid-column: 2;
+        align-self: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        transform: translateY(-38px);
+      }
+
+      .portrait-donation-impact__title{
+        font-size: clamp(40px, 5.2vw, 48px);
+        line-height: .95;
+        text-align: left;
+      }
+
+      .portrait-donation-impact__text{
+        display: block;
+        font-size: clamp(16px, 2.2vw, 18px);
+        text-align: left;
+      }
+
+      .portrait-donation-impact__text-shape{
+        display: none;
+      }
+
+      .portrait-donation-impact__button{
+        clear: none;
+        width: 100%;
+        margin: 18px 0 0;
+      }
+    }
+  }
+
+  @media(min-width: 750px) and (orientation: landscape){
+    max-width: 920px;
+    width: 100%;
+
+    .portrait-donation-impact__stage{
+      grid-column: 2;
+      display: block;
+      left: auto;
+      width: auto;
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+      padding-inline: 0;
+      transform: none;
+    }
+
+    .portrait-donation-impact__logo{
+      top: 0;
+    }
+
+    .portrait-donation-impact__inner{
+      width: auto;
+      max-width: none;
+      aspect-ratio: 845/420;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+    }
+
+    .portrait-donation-impact__wrapper{
+      grid-template-columns: 5fr 6fr;
+      padding-top: 0;
+
+      .portrait-donation-impact__bg{
+        position: relative;
+        overflow: hidden;
+
+        picture{
+          position: absolute;
+          inset: 0;
+          display: block;
+        }
+
+        img{
+          position: absolute;
+          left: -48px;
+          bottom: -260px;
+          width: auto;
+          max-width: none;
+          height: calc(100% + 160px);
+          margin: 0;
+          object-fit: contain;
+          object-position: left bottom;
+        }
+      }
+
+      .portrait-donation-impact__content{
+        padding: 8px 80px 8px 0;
+      }
+    }
+  }
+
+}

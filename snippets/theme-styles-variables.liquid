@@ -1,16 +1,41 @@
 {% style %}
   {%- liquid
+    assign baf_uses_local_inter = false
+    if settings.type_body_font.family == 'Inter' or settings.type_subheading_font.family == 'Inter' or settings.type_heading_font.family == 'Inter' or settings.type_accent_font.family == 'Inter'
+      assign baf_uses_local_inter = true
+    endif
+
     assign primary_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
     assign primary_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
     assign primary_font_bold_italic = primary_font_bold | font_modify: 'style', 'italic'
   %}
 
-  {{ settings.type_body_font | font_face: font_display: 'swap' }}
-  {{ primary_font_bold | font_face: font_display: 'swap' }}
-  {{ primary_font_italic | font_face: font_display: 'swap' }}
-  {{ primary_font_bold_italic | font_face: font_display: 'swap' }}
+  {%- if baf_uses_local_inter -%}
+    @font-face {
+      font-family: Inter;
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+      src: url("{{ 'Inter-500.woff2' | asset_url }}") format("woff2");
+    }
 
-  {% if settings.type_subheading_font != settings.type_body_font %}
+    @font-face {
+      font-family: Inter;
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+      src: url("{{ 'Inter-700.woff2' | asset_url }}") format("woff2");
+    }
+  {%- endif -%}
+
+  {% if settings.type_body_font.family != 'Inter' %}
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ primary_font_bold | font_face: font_display: 'swap' }}
+    {{ primary_font_italic | font_face: font_display: 'swap' }}
+    {{ primary_font_bold_italic | font_face: font_display: 'swap' }}
+  {% endif %}
+
+  {% if settings.type_subheading_font.family != 'Inter' and settings.type_subheading_font != settings.type_body_font %}
     {%- liquid
       assign secondary_font_bold = settings.type_subheading_font | font_modify: 'weight', 'bold'
       assign secondary_font_italic = settings.type_subheading_font | font_modify: 'style', 'italic'
@@ -23,7 +48,7 @@
     {{ secondary_font_bold_italic | font_face: font_display: 'swap' }}
   {% endif %}
 
-  {% if settings.type_heading_font != settings.type_body_font and settings.type_heading_font != settings.type_subheading_font %}
+  {% if settings.type_heading_font.family != 'Inter' and settings.type_heading_font != settings.type_body_font and settings.type_heading_font != settings.type_subheading_font %}
     {%- liquid
       assign tertiary_font_bold = settings.type_heading_font | font_modify: 'weight', 'bold'
       assign tertiary_font_italic = settings.type_heading_font | font_modify: 'style', 'italic'
@@ -36,7 +61,7 @@
     {{ tertiary_font_bold_italic | font_face: font_display: 'swap' }}
   {% endif %}
 
-  {% if settings.type_accent_font != settings.type_body_font and settings.type_accent_font != settings.type_subheading_font and settings.type_accent_font != settings.type_heading_font %}
+  {% if settings.type_accent_font.family != 'Inter' and settings.type_accent_font != settings.type_body_font and settings.type_accent_font != settings.type_subheading_font and settings.type_accent_font != settings.type_heading_font %}
     {%- liquid
       assign accent_font_bold = settings.type_accent_font | font_modify: 'weight', 'bold'
       assign accent_font_italic = settings.type_accent_font | font_modify: 'style', 'italic'
@@ -81,16 +106,16 @@
     --letter-spacing-md: 0.13em;
 
     /* Font families */
-    --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body--family: {% if settings.type_body_font.family == 'Inter' %}Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif{% else %}{{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }}{% endif %};
     --font-body--style: {{ settings.type_body_font.style }};
     --font-body--weight: {{ settings.type_body_font.weight }};
-    --font-subheading--family: {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
+    --font-subheading--family: {% if settings.type_subheading_font.family == 'Inter' %}Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif{% else %}{{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }}{% endif %};
     --font-subheading--style: {{ settings.type_subheading_font.style }};
     --font-subheading--weight: {{ settings.type_subheading_font.weight }};
-    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading--family: {% if settings.type_heading_font.family == 'Inter' %}Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif{% else %}{{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }}{% endif %};
     --font-heading--style: {{ settings.type_heading_font.style }};
     --font-heading--weight: {{ settings.type_heading_font.weight }};
-    --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
+    --font-accent--family: {% if settings.type_accent_font.family == 'Inter' %}Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif{% else %}{{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }}{% endif %};
     --font-accent--style: {{ settings.type_accent_font.style }};
     --font-accent--weight: {{ settings.type_accent_font.weight }};
 
@@ -304,7 +329,7 @@
     --baf-text-bold-weight: 700;
     --baf-text-large-size: 17px;
     --baf-text-medium-size: 14px;
-    --baf-text-small-size: 10px;
+    --baf-text-small-size: 12px;
     --baf-text-bold-large-size: var(--baf-text-large-size);
     --baf-text-bold-medium-size: var(--baf-text-medium-size);
     --baf-text-bold-small-size: var(--baf-text-small-size);

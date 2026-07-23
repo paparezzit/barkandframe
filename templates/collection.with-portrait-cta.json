@@ -269,7 +269,8 @@
           "shopify://products/sunday-ride-t-shirt",
           "shopify://products/more-dog-is-more-dog-cap",
           "shopify://products/powered-by-dogs-t-shirt",
-          "shopify://products/chill-vibes-crewneck"
+          "shopify://products/chill-vibes-crewneck",
+          "shopify://products/bloom-t-shirt"
         ],
         "cap_title": "Cap",
         "tshirt_title": "T-Shirt",
@@ -277,7 +278,7 @@
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 60,
-        "sticky_button_enabled": true,
+        "sticky_button_enabled": false,
         "sticky_button_text": "Artist collection",
         "sticky_button_link": "shopify://collections/bark-studio"
       }

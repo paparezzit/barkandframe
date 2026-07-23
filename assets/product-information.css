@@ -373,6 +373,93 @@
     margin-bottom: 40px;
   }
 
+  .product-information__tabs .tab-accordion {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-anchor: none;
+  }
+
+  .product-information__tabs .tab-accordion__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 14px 0;
+    border-bottom: 2px solid var(--cream);
+    color: var(--brown);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .product-information__tabs .tab-accordion__summary:hover {
+    color: var(--brown);
+  }
+
+  .product-information__tabs .tab-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .product-information__tabs .tab-accordion__summary .svg-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: var(--cream);
+  }
+
+  .product-information__tabs .tab-accordion__summary .svg-wrapper svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .product-information__tabs .tab-accordion .svg-wrapper.icon-plus {
+    transition: transform 0.2s ease;
+  }
+
+  .product-information__tabs .tab-accordion[open] .svg-wrapper.icon-plus {
+    transform: rotate(45deg);
+  }
+
+  .product-information__tabs .tab-accordion[open] > summary .icon-plus .vertical {
+    opacity: 1;
+    transform: none;
+  }
+
+  .product-information__tabs .tab-accordion[open] > summary .icon-plus .horizontal {
+    transform: none;
+  }
+
+  .product-information__tabs .tab-accordion__body {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 10px 0 60px;
+    color: var(--brown);
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .product-information__tabs .tab-accordion__body p {
+    margin: 2em 0;
+  }
+
+  .product-information__tabs .tab-accordion__body img {
+    margin: 2em 0;
+    vertical-align: top;
+    max-width: 100%;
+  }
+
   .prod-detail-icons {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -519,7 +606,7 @@
     border-radius: 999px;
     color: var(--cream);
     background: var(--green);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
   }
@@ -551,7 +638,7 @@
 
     .prod-detail-icons__label {
       max-width: none;
-      font-size: 11px;
+      font-size: 12px;
     }
 
     .baf-size-guide {

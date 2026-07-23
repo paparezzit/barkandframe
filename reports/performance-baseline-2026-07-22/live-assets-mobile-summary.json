@@ -1,0 +1,96 @@
+{
+  "label": "mobile",
+  "pageUrl": "https://barkandframe.com/?baf_baseline=mobile_1784732138530",
+  "summary": {
+    "byKind": {
+      "font": 4,
+      "image": 44,
+      "other": 15,
+      "script": 174,
+      "stylesheet": 30,
+      "video": 0
+    },
+    "inlineSvgCount": 114,
+    "totalCount": 267
+  },
+  "byKind": {
+    "other": 15,
+    "stylesheet": 30,
+    "font": 4,
+    "script": 174,
+    "image": 44
+  },
+  "topHosts": [
+    {
+      "host": "barkandframe.com",
+      "count": 246
+    },
+    {
+      "host": "cdn.shopify.com",
+      "count": 4
+    },
+    {
+      "host": "otlp-http-production.shopifysvc.com",
+      "count": 2
+    },
+    {
+      "host": "connect.facebook.net",
+      "count": 2
+    },
+    {
+      "host": "www.googleadservices.com",
+      "count": 2
+    },
+    {
+      "host": "shop.app",
+      "count": 1
+    },
+    {
+      "host": "www.clarity.ms",
+      "count": 1
+    },
+    {
+      "host": "monorail-edge.shopifysvc.com",
+      "count": 1
+    },
+    {
+      "host": "www.googletagmanager.com",
+      "count": 1
+    },
+    {
+      "host": "www.google.com",
+      "count": 1
+    },
+    {
+      "host": "scripts.clarity.ms",
+      "count": 1
+    },
+    {
+      "host": "www.facebook.com",
+      "count": 1
+    },
+    {
+      "host": "googleads.g.doubleclick.net",
+      "count": 1
+    },
+    {
+      "host": "l.clarity.ms",
+      "count": 1
+    },
+    {
+      "host": "unpkg.com",
+      "count": 1
+    },
+    {
+      "host": "report.clarity.ms",
+      "count": 1
+    }
+  ],
+  "domCounts": {
+    "images": 99,
+    "links": 125,
+    "scripts": 66,
+    "sources": 29
+  },
+  "visibleCookieBanner": false
+}

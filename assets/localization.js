@@ -1,6 +1,8 @@
 import { Component } from '@theme/component';
 import { isClickedOutside, normalizeString, onAnimationEnd } from '@theme/utilities';
 
+const returnToMobileDrawerKey = 'baf-return-to-mobile-drawer-after-localization';
+
 /**
  * A custom element that displays a localization form.
  *
@@ -62,6 +64,7 @@ class LocalizationFormComponent extends Component {
 
         if (focusedItem) {
           countryInput.value = focusedItem.dataset.value ?? '';
+          this.#rememberMobileDrawerReturn();
           form.submit();
         }
         break;
@@ -94,6 +97,7 @@ class LocalizationFormComponent extends Component {
     const { countryInput, form } = this.refs;
 
     countryInput.value = countryName;
+    this.#rememberMobileDrawerReturn();
     form?.submit();
   };
 
@@ -109,8 +113,15 @@ class LocalizationFormComponent extends Component {
     if (value) {
       languageInput.value = value;
       this.resizeLanguageInput();
+      this.#rememberMobileDrawerReturn();
       form.submit();
     }
+  }
+
+  #rememberMobileDrawerReturn() {
+    if (!this.closest('.header__drawer--mobile .menu-drawer')) return;
+
+    sessionStorage.setItem(returnToMobileDrawerKey, 'true');
   }
 
   resizeLanguageInput() {

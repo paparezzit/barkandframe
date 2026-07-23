@@ -1,49 +1,27 @@
-{%- unless settings.type_body_font.system?
-  and settings.type_subheading_font.system?
-  and settings.type_heading_font.system?
--%}
-  <link
-    rel="preconnect"
-    href="https://fonts.shopifycdn.com"
-    crossorigin
-  >
-{%- endunless -%}
+{%- comment -%}
+  Bark & Frame uses three local font files in production:
+  PP Acma for display text, Inter 500 for regular UI/body text, and Inter 700 for bold UI/body text.
+  Keep these local preloads stable so Shopify's hosted font URLs do not compete with them.
+{%- endcomment -%}
 
-{% # theme-check-disable %}
-{%- unless settings.type_body_font.system? -%}
-  <link
-    rel="preload"
-    as="font"
-    href="{{ settings.type_body_font | font_url }}"
-    type="font/woff2"
-    crossorigin
-  >
-{%- endunless -%}
-{%- unless settings.type_subheading_font.system? -%}
-  <link
-    rel="preload"
-    as="font"
-    href="{{ settings.type_subheading_font | font_url }}"
-    type="font/woff2"
-    crossorigin
-  >
-{%- endunless -%}
-{%- unless settings.type_heading_font.system? -%}
-  <link
-    rel="preload"
-    as="font"
-    href="{{ settings.type_heading_font | font_url }}"
-    type="font/woff2"
-    crossorigin
-  >
-{%- endunless -%}
-{%- unless settings.type_accent_font.system? -%}
-  <link
-    rel="preload"
-    as="font"
-    href="{{ settings.type_accent_font | font_url }}"
-    type="font/woff2"
-    crossorigin
-  >
-{%- endunless -%}
-{% # theme-check-enable %}
+<link
+  rel="preload"
+  as="font"
+  href="{{ 'PPAcma-Semibold.woff2' | asset_url }}"
+  type="font/woff2"
+  crossorigin
+>
+<link
+  rel="preload"
+  as="font"
+  href="{{ 'Inter-500.woff2' | asset_url }}"
+  type="font/woff2"
+  crossorigin
+>
+<link
+  rel="preload"
+  as="font"
+  href="{{ 'Inter-700.woff2' | asset_url }}"
+  type="font/woff2"
+  crossorigin
+>

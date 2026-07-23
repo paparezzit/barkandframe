@@ -218,7 +218,7 @@ main.content-for-layout .prod-accordion-section.section {
   border-radius: 999px;
   color: var(--cream);
   background: var(--green);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1;
 }
@@ -250,7 +250,7 @@ main.content-for-layout .prod-accordion-section.section {
 
   .prod-detail-icons__label {
     max-width: none;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .baf-size-guide {

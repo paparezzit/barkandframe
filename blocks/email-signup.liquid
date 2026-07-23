@@ -87,6 +87,8 @@
         id="Email-signup__message-success-{{ block.id }}"
         class="email-signup__message email-signup__message--success"
         tabindex="-1"
+        data-generate-lead-success="newsletter"
+        data-generate-lead-block-id="{{ block.id }}"
       >
         <span class="svg-wrapper icon-success">
           {{ 'icon-checkmark.svg' | inline_asset_content }}
@@ -96,6 +98,51 @@
     {%- endif -%}
   {% endform %}
 </div>
+
+{% render 'generate-lead-analytics' %}
+
+<script>
+(function () {
+  var STORAGE_KEY = 'bafGenerateLead:newsletter:{{ block.id }}';
+  var EMAIL_INPUT_ID = 'EmailInput-{{ block.id }}';
+
+  function storeNewsletterLead() {
+    var emailInput = document.getElementById(EMAIL_INPUT_ID);
+    if (!emailInput || !window.BAFGenerateLead) return;
+
+    window.BAFGenerateLead.store(STORAGE_KEY, {
+      formType: 'Newsletter',
+      email: emailInput.value
+    });
+  }
+
+  function publishNewsletterLeadOnSuccess() {
+    var successMessage = document.querySelector(
+      '[data-generate-lead-success="newsletter"][data-generate-lead-block-id="{{ block.id }}"]'
+    );
+
+    if (!successMessage || !window.BAFGenerateLead) return;
+
+    window.BAFGenerateLead.publishStored(STORAGE_KEY);
+  }
+
+  function initNewsletterLeadTracking() {
+    publishNewsletterLeadOnSuccess();
+
+    var emailInput = document.getElementById(EMAIL_INPUT_ID);
+    var form = emailInput && emailInput.form;
+    if (!form) return;
+
+    form.addEventListener('submit', storeNewsletterLead);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNewsletterLeadTracking);
+  } else {
+    initNewsletterLeadTracking();
+  }
+})();
+</script>
 
 {% stylesheet %}
   .email-signup-block {
@@ -292,7 +339,7 @@
   }
 {% endstylesheet %}
 
-{% javascript %}
+<script>
 (function () {
   var input = document.getElementById('EmailInput-{{ block.id }}');
   if (!input) return;
@@ -321,7 +368,7 @@
     });
   });
 })();
-{% endjavascript %}
+</script>
 
 {% schema %}
 {

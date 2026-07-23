@@ -1,0 +1,277 @@
+<link rel="stylesheet" href="{{ 'baf-section-home-dog-people-reviews.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-home-dog-people-reviews.css' | asset_url | stylesheet_tag }}</noscript>
+
+<section class="home-dog-people-reviews section section--page-width" {{ section.shopify_attributes }}>
+  <div class="home-dog-people-reviews__inner force-full-width">
+    <div class="home-dog-people-reviews__header">
+      <h2 class="home-dog-people-reviews__title">{{ section.settings.title | escape }}</h2>
+    </div>
+
+    <div class="home-dog-people-reviews__grid">
+      {%- for block in section.blocks -%}
+        <article class="home-dog-people-review" {{ block.shopify_attributes }}>
+          <div class="home-dog-people-review__meta">
+            <span class="home-dog-people-review__stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            {%- if block.settings.time != blank -%}
+              <span class="home-dog-people-review__time">{{ block.settings.time | escape }}</span>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.text != blank -%}
+            <p class="home-dog-people-review__body">{{ block.settings.text | escape | newline_to_br }}</p>
+          {%- endif -%}
+          <div class="home-dog-people-review__footer">
+            {%- if block.settings.author != blank -%}
+              <p class="home-dog-people-review__author">{{ block.settings.author | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.dog != blank -%}
+              <p class="home-dog-people-review__dog">{{ block.settings.dog | escape }}</p>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    <div class="home-dog-people-reviews__scrollbar" aria-hidden="true">
+      <span class="home-dog-people-reviews__scrollbar-thumb"></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    if (window.__bafHomeDogPeopleReviewsScrollbarBound) return;
+    window.__bafHomeDogPeopleReviewsScrollbarBound = true;
+
+    const sections = document.querySelectorAll('.home-dog-people-reviews');
+    let activeScrollbar = null;
+
+    const hasHorizontalScroll = (grid) => grid.scrollWidth - grid.clientWidth > 1;
+
+    const getParts = (section) => {
+      const grid = section.querySelector('.home-dog-people-reviews__grid');
+      const scrollbar = section.querySelector('.home-dog-people-reviews__scrollbar');
+      const thumb = scrollbar?.querySelector('.home-dog-people-reviews__scrollbar-thumb');
+      return { grid, scrollbar, thumb };
+    };
+
+    const updateScrollbar = (section) => {
+      const { grid, scrollbar, thumb } = getParts(section);
+      if (!grid || !scrollbar || !thumb) return;
+
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+
+      if (maxScroll <= 0) {
+        scrollbar.hidden = true;
+        thumb.style.width = '100%';
+        thumb.style.transform = 'translateX(0)';
+        return;
+      }
+
+      scrollbar.hidden = false;
+
+      const trackWidth = scrollbar.clientWidth;
+      const thumbWidth = Math.max((grid.clientWidth / grid.scrollWidth) * trackWidth, 34);
+      const left = ((trackWidth - thumbWidth) * grid.scrollLeft) / maxScroll;
+
+      thumb.style.width = `${thumbWidth}px`;
+      thumb.style.transform = `translateX(${left}px)`;
+    };
+
+    const scrollFromScrollbar = (section, clientX) => {
+      const { grid, scrollbar, thumb } = getParts(section);
+      if (!grid || !scrollbar || !thumb) return;
+
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const rect = scrollbar.getBoundingClientRect();
+      const thumbWidth = thumb.offsetWidth || 34;
+      const usableWidth = Math.max(rect.width - thumbWidth, 1);
+      const progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+      grid.scrollLeft = progress * maxScroll;
+      updateScrollbar(section);
+    };
+
+    const scrollToReviewCard = (section, card) => {
+      const { grid } = getParts(section);
+      if (!grid || !card || !hasHorizontalScroll(grid)) return;
+
+      const gridStyles = window.getComputedStyle(grid);
+      const borderLeft = parseFloat(gridStyles.borderLeftWidth) || 0;
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      const cardCenter = card.offsetLeft - borderLeft + (card.offsetWidth / 2);
+      const targetLeft = Math.min(Math.max(cardCenter - (grid.clientWidth / 2), 0), maxScroll);
+
+      grid.scrollTo({ left: targetLeft, behavior: 'smooth' });
+      window.requestAnimationFrame(() => updateScrollbar(section));
+    };
+
+    const refreshScrollbars = () => {
+      sections.forEach(updateScrollbar);
+      window.requestAnimationFrame(() => {
+        sections.forEach(updateScrollbar);
+        window.requestAnimationFrame(() => sections.forEach(updateScrollbar));
+      });
+    };
+
+    sections.forEach((section) => {
+      const { grid, scrollbar } = getParts(section);
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+      let pointerStartScrollLeft = 0;
+
+      grid?.addEventListener('scroll', () => updateScrollbar(section), { passive: true });
+      grid?.querySelectorAll('.home-dog-people-review').forEach((card) => {
+        card.addEventListener('pointerdown', (event) => {
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+          pointerStartScrollLeft = grid.scrollLeft;
+        });
+
+        card.addEventListener('click', (event) => {
+          if (!hasHorizontalScroll(grid)) return;
+
+          const movedX = Math.abs(event.clientX - pointerStartX);
+          const movedY = Math.abs(event.clientY - pointerStartY);
+          const scrollMoved = Math.abs(grid.scrollLeft - pointerStartScrollLeft);
+
+          if (movedX > 8 || movedY > 8 || scrollMoved > 4) return;
+
+          scrollToReviewCard(section, card);
+        });
+      });
+      scrollbar?.addEventListener('pointerdown', (event) => {
+        activeScrollbar = section;
+        scrollbar.setPointerCapture?.(event.pointerId);
+        scrollFromScrollbar(section, event.clientX);
+        event.preventDefault();
+      });
+    });
+
+    document.addEventListener('pointermove', (event) => {
+      if (!activeScrollbar) return;
+      scrollFromScrollbar(activeScrollbar, event.clientX);
+      event.preventDefault();
+    });
+
+    document.addEventListener('pointerup', () => {
+      activeScrollbar = null;
+    });
+
+    document.addEventListener('pointercancel', () => {
+      activeScrollbar = null;
+    });
+
+    window.addEventListener('resize', refreshScrollbars);
+    window.addEventListener('load', refreshScrollbars);
+    refreshScrollbars();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Loved by dog people",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Loved by dog people"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "text",
+          "id": "dog",
+          "label": "Dog"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Loved by dog people",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "time": "22 July 2026",
+            "text": "Had niet verwacht dat de lijst zo zwaar zou zijn — hij voelt echt degelijk aan. Hij hangt supermooi bij ons in de gang.",
+            "author": "Femke K.",
+            "dog": "Pixel · Terrier"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "time": "16 July 2026",
+            "text": "Super happy with it!! Looks even better in real life tbh",
+            "author": "Sanne V.",
+            "dog": "Loeka · Beagle"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "time": "14 July 2026",
+            "text": "Sent them one photo of Max, wasnt sure it'd turn out well but it's really him. Even my girlfriend said so straight away",
+            "author": "Bram de Vries",
+            "dog": "Max · Golden Retriever"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "time": "12 July 2026",
+            "text": "Got this for my parents, their dog Nala passed last year. Mom just started crying opening it.",
+            "author": "Joris H.",
+            "dog": "Nala · Australian Shepherd"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "time": "3 July 2026",
+            "text": "Didnt expect the frame to be this heavy, proper solid wood. Looks deadly on the wall.",
+            "author": "Siobhán M.",
+            "dog": "Bailey · Border Collie"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "time": "25 July 2026",
+            "text": "Made this for my ma's birthday, didnt tell her anything. She welled up opening it, kept saying it's Rosie to a tee.",
+            "author": "Declan O.",
+            "dog": "Rosie · Labrador"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

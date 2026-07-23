@@ -117,7 +117,7 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 0,
-        "padding-block-end": 70,
+        "padding-block-end": 35,
         "custom-class": "contact-form-section contact-page-form-section"
       }
     }

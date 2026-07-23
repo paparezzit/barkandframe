@@ -3,6 +3,9 @@
   assign portrait_categories = shop.metaobjects.portrait_category.values
 -%}
 
+<link rel="stylesheet" href="{{ 'baf-section-portrait-styles.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-portrait-styles.css' | asset_url | stylesheet_tag }}</noscript>
+
 <div class="portrait-styles section section--page-width">
   <div class="portrait-styles__inner force-full-width">
     <div class="portrait-styles__wrapper">
@@ -45,10 +48,22 @@
             -%}
             <a href="/pages/portrait?style={{ style.style_id.value | url_encode }}" class="portrait{% if is_soon_style %} portrait--soon{% endif %}" data-style="{{ cat_handles }}">
               <span class="portrait__image">
-                <span class="portrait__media">
-                  {%- if style.preview_image.value -%}
-                    <img src="{{ style.preview_image.value | image_url: width: 800 }}" alt="{{ style.name.value }}" width="800" height="1000" loading="lazy">
-                  {%- endif -%}
+	                <span class="portrait__media">
+	                  {%- assign preview_image = style.preview_image.value -%}
+	                  {%- if preview_image -%}
+	                    {{
+	                      preview_image
+	                      | image_url: width: 320
+	                      | image_tag:
+	                        alt: style.name.value,
+	                        width: preview_image.width,
+	                        height: preview_image.height,
+	                        widths: '120, 160, 200, 240, 320',
+	                        sizes: '(max-width: 749px) 24vw, (max-width: 1199px) 120px, 180px',
+	                        loading: 'lazy',
+	                        decoding: 'async'
+	                    }}
+	                  {%- endif -%}
                 </span>
                 {%- if is_bestseller_style -%}
                   <span class="portrait__badge portrait__badge--bestseller" aria-hidden="true">Bestseller</span>
@@ -63,6 +78,15 @@
               <span class="portrait__label">{{ style.name.value }}</span>
             </a>
           {%- endfor -%}
+          <div class="portrait portrait--value-card" aria-label="From €99. Free shipping">
+            <span class="portrait-value-card__inner">
+              <span class="portrait-value-card__price">
+                <span class="portrait-value-card__prefix">from</span>
+                <span class="portrait-value-card__amount">€99</span>
+              </span>
+              <span class="portrait-value-card__shipping">Free shipping</span>
+            </span>
+          </div>
         </div>
         <div class="portrait-grid-scrollbar" aria-hidden="true">
           <span class="portrait-grid-scrollbar__thumb"></span>
@@ -102,452 +126,46 @@
 
     </div>
 
-    {%- if section.settings.button_text != blank -%}
-      <div class="portrait-styles__button">
-        <a href="{{ section.settings.button_link }}" class="button">
-          {{ section.settings.button_text }}
-        </a>
-      </div>
-    {%- endif -%}
+    <div class="portrait-styles__cta-stack">
+      {%- if section.settings.button_text != blank -%}
+        <div class="portrait-styles__button">
+          <a href="{{ section.settings.button_link }}" class="button">
+            {{ section.settings.button_text }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
 
   </div>
 </div>
 
-{% stylesheet %}
-.portrait-styles{
-  --portrait-hover-scale: 1.55;
-  --portrait-hover-edge-offset: -27.5%;
-  margin: 120px 0;
+<script type="module">
+  const portraitStylesSection = document.querySelector(".portrait-styles");
+  const initPortraitStyles = () => {
+  if (!portraitStylesSection || portraitStylesSection.dataset.portraitStylesReady === "true") return;
+  portraitStylesSection.dataset.portraitStylesReady = "true";
 
-  .portrait-styles__inner{
-    margin-inline: var(--page-margin);
-    padding: 80px 20px 60px;
-    background: #F4EFE5;
-    border-radius: calc(var(--baf-radius-xl) + 40px);
-  }
-
-  .portrait-styles__title{
-    text-align: center;
-    margin-bottom: 0;
-    font-size: var(--baf-display-extra-large-size);
-    line-height: 1;
-  }
-
-  .portrait-styles__title-break{
-    display: none;
-  }
-
-  .portrait-styles__title-space{
-    display: inline;
-  }
-
-  .portrait-grid{
-    margin: 40px -20px 20px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    gap: 10px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-inline: contain;
-
-    &::-webkit-scrollbar{
-      display: none;
-    }
-
-    .portrait{
-      position: relative;
-      aspect-ratio: 5/6;
-      width: clamp(170px, 48vw, 230px);
-      display: inline-block;
-      margin: 0 5px;
-      
-
-      &:first-child{
-        margin-left: 20px;
-      }
-
-      &:last-child{
-        margin-right: 20px;
-      }
-
-      .portrait__image{
-        position: relative;
-        height: 100%;
-        width: 100%;
-        border-radius: 20px;
-        display: block;
-      }
-
-      .portrait__media{
-        position: relative;
-        display: block;
-        height: 100%;
-        width: 100%;
-        border-radius: inherit;
-        overflow: hidden;
-        transition: opacity .3s, transform .3s;
-
-        &::before{
-          content: "";
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          border-radius: inherit;
-          background: var(--beige);
-        }
-
-        img{
-          position: relative;
-          z-index: 1;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center;
-        }
-      }
-
-      .portrait__badge{
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 3;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 15px;
-        padding: 2px 10px;
-        border-radius: 999px;
-        font-size: 10px;
-        font-weight: 500;
-        line-height: 1;
-        text-transform: uppercase;
-        white-space: nowrap;
-        pointer-events: none;
-        transition: top .3s, left .3s, opacity .3s;
-      }
-
-      .portrait__badge--bestseller{
-        background: var(--green);
-        color: var(--beige);
-      }
-
-      .portrait__badge--studio-choice{
-        background: var(--purple);
-        color: var(--brown);
-      }
-
-      .portrait__soon{
-        position: absolute;
-        top: calc(50% - 13px);
-        left: 50%;
-        z-index: 3;
-        transform: translate(-50%, -50%);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2px 6px;
-        border-radius: 1000px;
-        font-size: 10px;
-        line-height: 1;
-        text-transform: uppercase;
-        white-space: nowrap;
-        pointer-events: none;
-        background: var(--brown);
-        color: var(--beige);
-      }
-
-      &.portrait--soon{
-        .portrait__media img{
-          opacity: 0.45;
-        }
-      }
-
-      .portrait__label{
-        background-color: var(--beige);
-        color: var(--green);
-        white-space: nowrap;
-        border-radius: 1000px;
-        padding: 2px 8px;
-        font-size: 10px;
-        transition: opacity .3s;
-        margin: 10px auto 0;
-        display: block;
-        width: fit-content;
-        position: relative;
-      }
-
-      &.faded{
-        .portrait__image{
-          opacity: .27;
-        }
-
-        .portrait__label{
-          opacity: 0;
-          pointer-events: none;
-        }
-
-        .portrait__badge{
-          opacity: 0;
-        }
-
-        .portrait__soon{
-          opacity: 0;
-        }
-      }
-    }
-  }
-
-  .portrait-grid-scrollbar{
-    position: relative;
-    height: 22px;
-    margin: 0 0 24px;
-    cursor: pointer;
-  }
-
-  .portrait-grid-scrollbar::before{
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 10px;
-    height: 2px;
-    background: rgb(76 68 63 / 0.18);
-    border-radius: 1000px;
-  }
-
-  .portrait-grid-scrollbar__thumb{
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 10px;
-    height: 2px;
-    width: 34px;
-    background: var(--brown);
-    border-radius: 1000px;
-    transform: translateX(0);
-    transition: width 0.1s linear;
-  }
-
-  .portrait-selector{
-    .portrait-selector__text{
-      font-weight: 700;
-    }
-
-    .accordion{
-      margin: 40px 0 30px;
-      border-bottom: 1px solid var(--brown);
-
-      .accordion-header{
-        width: 100%;
-        padding: 10px 0;
-        font-size: var(--baf-display-medium-size);
-        border: none;
-        border-top: 1px solid var(--brown);
-        color: var(--brown);
-        text-align:left;
-        background: transparent;
-        cursor: pointer;
-        font-family: "display", "Times New Roman", serif;
-        position: relative;
-
-        &::before, &::after{
-          width: 16px;
-          height: 1px;
-          background-color: var(--brown);
-          content: "";
-          display: block;
-          position: absolute;
-          top: 50%;
-          right: 0;
-          transform-origin: center;
-          transition: transform .3s;
-        }
-
-        &::after{
-          transform: rotate(90deg);
-        }
-      }
-
-      .accordion-item.active{
-        .accordion-header{
-          &::before{
-            transform: rotate(45deg);
-          }
-
-          &::after{
-            transform: rotate(135deg);
-          }
-        }
-      }
-
-      .accordion-content{
-        height:0;
-        overflow:hidden;
-        transition:height .35s ease;
-      }
-
-      .accordion-inner{
-        padding: 0 0 80px;
-        max-width: 420px;
-      }
-    }
-  }
-
-  .portrait-styles__button{
-    text-align: center;
-
-    .button{
-      display: inline-block;
-    }
-  }
-
-  @media(min-width: 1200px){
-    .portrait-styles__inner{
-      padding: 80px 40px 60px
-    }
-
-    .portrait-styles__content{
-      display: flex;
-      flex-direction: row-reverse;
-      gap: 30px;
-      margin: 60px 0 40px;
-
-      .portrait-grid{
-        flex: 6;
-        margin: 0 0 auto;
-        overflow: visible;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 20px 10px;
-
-        .portrait{
-          width: 130px;
-          margin: 0;
-        }
-
-        &:hover{
-          .portrait:not(:hover){
-            .portrait__media{
-              opacity: .27;
-            }
-
-            .portrait__label{
-              opacity: 0;
-              pointer-events: none;
-            }
-          }
-
-          .portrait:hover{
-            z-index: 4;
-            .portrait__media{
-              opacity: 1;
-              transform: scale(var(--portrait-hover-scale));
-            }
-
-            .portrait__badge{
-              top: var(--portrait-hover-edge-offset);
-              left: var(--portrait-hover-edge-offset);
-            }
-
-            .portrait__label{
-              opacity: 1;
-              pointer-events: auto;
-              z-index: 3;
-              bottom: 0;
-            }
-          }
-        }
-      }
-
-      .portrait-grid-scrollbar{
-        display: none;
-      }
-
-      .portrait-selector{
-        flex: 4;
-      }
-    }
-  }
-
-  @media(min-width: 1200px){
-    margin: 90px 0; 
-
-    .portrait-styles__inner{
-      --portrait-styles-cta-top: 1064px;
-      max-width: var(--narrow-page-width);
-      margin-inline: auto;
-      min-height: 1208px;
-      padding: 130px 150px 100px;
-      position: relative;
-    }
-
-    .portrait-styles__title{
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .portrait-styles__content{
-      margin: 90px 0 60px;
-      gap: 40px;
-
-      .portrait-grid{
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        flex: 6;
-        
-        .portrait{
-          .portrait__label{
-          }
-        }
-      }
-    }
-
-    .portrait-selector{
-      .portrait-selector__text{
-        font-size: 18px;
-        margin-bottom: 100px;
-        color: var(--brown);
-      }
-
-      .accordion{
-        .accordion-header{
-          padding: 15px 0;
-
-          &::before, &::after{
-            width: 28px;
-          }
-        }
-      }
-    }
-
-    .portrait-styles__button{
-      position: absolute;
-      top: var(--portrait-styles-cta-top);
-      left: 50%;
-      transform: translateX(-50%);
-      width: max-content;
-    }
-  }
-
-  @media(max-width: 1199px){
-    .portrait-styles__title-break{
-      display: initial;
-    }
-
-    .portrait-styles__title-space{
-      display: none;
-    }
-  }
-}
-
-{% endstylesheet %}
-
-{% javascript %}
   const headers = document.querySelectorAll(".accordion-header");
   const portraits = document.querySelectorAll(".portrait-grid .portrait");
   const portraitGrid = document.querySelector(".portrait-grid");
   const portraitGridScrollbar = document.querySelector(".portrait-grid-scrollbar");
   const portraitGridThumb = portraitGridScrollbar?.querySelector(".portrait-grid-scrollbar__thumb");
+
+  function syncPortraitGridTileWidth(){
+    if (!portraitGrid) return;
+
+    const labels = portraitGrid.querySelectorAll(".portrait:not(.portrait--value-card) .portrait__label");
+    const computed = window.getComputedStyle(portraitGrid);
+    const minTileWidth = parseFloat(computed.getPropertyValue("--portrait-style-min-tile-size")) || 108;
+    let labelWidth = 0;
+
+    labels.forEach(label => {
+      labelWidth = Math.max(labelWidth, Math.ceil(label.scrollWidth));
+    });
+
+    const tileWidth = Math.max(minTileWidth, labelWidth);
+    portraitGrid.style.setProperty("--portrait-style-tile-size", `${tileWidth}px`);
+  }
 
   function closeItem(item){
 
@@ -602,7 +220,9 @@
       openItem(item);
 
       portraits.forEach(portrait => {
-        if (portrait.dataset.style.includes(header.dataset.key)) {
+        const portraitStyleGroups = portrait.dataset.style || "";
+
+        if (portraitStyleGroups.includes(key)) {
           portrait.classList.remove("faded");
         } else {
           portrait.classList.add("faded");
@@ -651,8 +271,10 @@
   }
 
   function refreshPortraitGridScrollbar(){
+    syncPortraitGridTileWidth();
     updatePortraitGridScrollbar();
     requestAnimationFrame(() => {
+      syncPortraitGridTileWidth();
       updatePortraitGridScrollbar();
       requestAnimationFrame(updatePortraitGridScrollbar);
     });
@@ -685,12 +307,27 @@
 
   window.addEventListener("resize", refreshPortraitGridScrollbar);
   window.addEventListener("load", refreshPortraitGridScrollbar);
+  document.fonts?.ready?.then(refreshPortraitGridScrollbar).catch(() => {});
   refreshPortraitGridScrollbar();
-{% endjavascript %}
+  };
+
+  if (portraitStylesSection && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      initPortraitStyles();
+    });
+    observer.observe(portraitStylesSection);
+  } else if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(initPortraitStyles, { timeout: 3000 });
+  } else {
+    window.setTimeout(initPortraitStyles, 1500);
+  }
+</script>
 
 {% schema %}
 {
-  "name": "Three Steps",
+  "name": "Pick a style",
   "settings": [
     {
       "type": "text",

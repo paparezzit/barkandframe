@@ -103,24 +103,82 @@
             <div
               class="cart-drawer__summary"
             >
+              <div class="cart-drawer__reasons" aria-label="Portrait benefits">
+                <div class="cart-drawer__reasons-list">
+                  <div class="cart-drawer__reason">
+                    <img class="cart-drawer__reason-icon cart-drawer__reason-icon--designed" src="{{ 'reason-designed.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+                    <span>Artist<br>Designed</span>
+                  </div>
+                  <div class="cart-drawer__reason">
+                    <img class="cart-drawer__reason-icon cart-drawer__reason-icon--guarantee" src="{{ 'reason-guarantee.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+                    <span>Money-Back<br>Guarantee</span>
+                  </div>
+                  <div class="cart-drawer__reason">
+                    <img class="cart-drawer__reason-icon cart-drawer__reason-icon--donate" src="{{ 'reason-donate.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+                    <span>€2 to Charity<br>per Portrait</span>
+                  </div>
+                </div>
+              </div>
               {%- liquid
+                assign upsell_collection = section.settings.cart_upsell_collection
+                assign upsell_collection_handle = upsell_collection.handle | default: upsell_collection
+                assign upsell_collection_handle = upsell_collection_handle | remove: 'shopify://collections/'
+                if upsell_collection_handle != blank
+                  assign upsell_collection = collections[upsell_collection_handle]
+                endif
                 assign upsell_products = section.settings.cart_upsell_products
-                assign upsell_discount_percent = section.settings.cart_upsell_discount_percent | default: 15
-                assign upsell_discount_multiplier = 100 | minus: upsell_discount_percent
+                assign upsell_checkout_products = section.settings.cart_upsell_checkout_products
+                assign upsell_uses_collection = false
+                if upsell_collection != blank and upsell_collection.products != blank
+                  assign upsell_products = upsell_collection.products
+                  assign upsell_uses_collection = true
+                endif
               -%}
               {%- if upsell_products != blank -%}
                 <div class="cart-drawer__upsell">
                   <h2 class="cart-drawer__upsell-heading">Add and save</h2>
                   <div class="cart-drawer__upsell-products">
-                    {%- for upsell_product in upsell_products -%}
+                    {%- for upsell_list_product in upsell_products -%}
                       {%- liquid
-                        assign upsell_product_handle = upsell_product.handle | default: upsell_product
-                        assign upsell_product_handle = upsell_product_handle | remove: 'shopify://products/'
-                        if upsell_product.title == blank and upsell_product_handle != blank
-                          assign upsell_product = all_products[upsell_product_handle]
+                        assign upsell_product = upsell_list_product
+                        if upsell_uses_collection
+                          assign upsell_checkout_product = upsell_list_product
+                          assign upsell_product = upsell_checkout_product.metafields.custom.upsell_original_product.value
+                          if upsell_product == blank
+                            assign upsell_product_handle = upsell_checkout_product.metafields.custom.upsell_original_handle.value
+                            assign upsell_product_handle = upsell_product_handle | remove: 'shopify://products/'
+                            if upsell_product_handle != blank
+                              assign upsell_product = all_products[upsell_product_handle]
+                            endif
+                          endif
+                          if upsell_product == blank
+                            assign upsell_product = upsell_checkout_product
+                          endif
+                        else
+                          assign upsell_product_index = forloop.index
+                          assign upsell_product_handle = upsell_product.handle | default: upsell_product
+                          assign upsell_product_handle = upsell_product_handle | remove: 'shopify://products/'
+                          if upsell_product.title == blank and upsell_product_handle != blank
+                            assign upsell_product = all_products[upsell_product_handle]
+                          endif
+                          assign upsell_checkout_product = blank
+                          for checkout_product_candidate in upsell_checkout_products
+                            if forloop.index == upsell_product_index
+                              assign upsell_checkout_product = checkout_product_candidate
+                              break
+                            endif
+                          endfor
+                          if upsell_checkout_product == blank
+                            assign upsell_checkout_product = upsell_product
+                          endif
+                          assign upsell_checkout_product_handle = upsell_checkout_product.handle | default: upsell_checkout_product
+                          assign upsell_checkout_product_handle = upsell_checkout_product_handle | remove: 'shopify://products/'
+                          if upsell_checkout_product.title == blank and upsell_checkout_product_handle != blank
+                            assign upsell_checkout_product = all_products[upsell_checkout_product_handle]
+                          endif
                         endif
                       -%}
-                      {%- if upsell_product != blank -%}
+                      {%- if upsell_product != blank and upsell_checkout_product != blank -%}
                         {%- liquid
                           assign upsell_default_color = ''
                           case upsell_product.type
@@ -133,7 +191,7 @@
                           endcase
 
                           assign selected_upsell_variant = blank
-                          for variant in upsell_product.variants
+                          for variant in upsell_checkout_product.variants
                             assign variant_size = variant.option2 | strip
                             if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
                               unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
@@ -149,22 +207,24 @@
                           endfor
 
                           if selected_upsell_variant == blank
-                            assign selected_upsell_variant = upsell_product.selected_or_first_available_variant
+                            assign selected_upsell_variant = upsell_checkout_product.selected_or_first_available_variant
                           endif
 
                           assign first_variant = selected_upsell_variant
                           assign selected_upsell_color = first_variant.option1 | strip
                           assign selected_upsell_size = first_variant.option2 | strip
-                          assign upsell_card_image = first_variant.featured_image | default: upsell_product.featured_image
-                          assign upsell_original_price = first_variant.price | default: upsell_product.price
-                          assign upsell_sale_price = upsell_original_price | times: upsell_discount_multiplier | divided_by: 100.0
-                          assign upsell_sale_price = upsell_sale_price | divided_by: 100.0 | round | times: 100
+                          assign upsell_card_image = first_variant.featured_image | default: upsell_checkout_product.featured_image | default: upsell_product.featured_image
+                          assign upsell_price = first_variant.price | default: upsell_checkout_product.price
+                          assign upsell_compare_price = first_variant.compare_at_price | default: 0
+                          if upsell_compare_price <= upsell_price
+                            assign upsell_compare_price = 0
+                          endif
 
                           assign upsell_seen_colors = ''
                           assign upsell_color_count = 0
                           assign upsell_seen_sizes = ''
                           assign upsell_size_count = 0
-                          for variant in upsell_product.variants
+                          for variant in upsell_checkout_product.variants
                             assign variant_size = variant.option2 | strip
                             if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
                               unless variant_size == 'S' or variant_size == 'M' or variant_size == 'L' or variant_size == 'XL' or variant_size == '2XL' or variant_size == 'XXL'
@@ -189,12 +249,16 @@
                           endfor
                         -%}
                         {%- capture upsell_merch_order_items -%}
-                          {%- render 'baf-merch-printful-map', product: upsell_product -%}
+                          {%- render 'baf-merch-printful-map', product: upsell_checkout_product, production_product: upsell_product -%}
                         {%- endcapture -%}
                         {%- assign upsell_merch_order_items = upsell_merch_order_items | strip -%}
                         <div class="cart-drawer__upsell-card__wrapper">
                           <div
                             class="cart-drawer__upsell-card"
+                            data-product-id="{{ upsell_product.id }}"
+                            data-product-title="{{ upsell_product.title | escape }}"
+                            data-product-url="{{ upsell_product.url }}"
+                            data-checkout-product-id="{{ upsell_checkout_product.id }}"
                             {% if upsell_merch_order_items != blank %}
                               data-baf-merch-order-items="{{ upsell_merch_order_items | escape }}"
                             {% endif %}
@@ -218,15 +282,17 @@
                                 {{- upsell_product.title -}}
                               </a>
                               <div class="cart-drawer__upsell-card-prices">
-                                <span class="cart-drawer__upsell-card-price price">{{ upsell_sale_price | money_without_trailing_zeros }}</span>
-                                {%- if upsell_discount_percent > 0 -%}
-                                  <s class="cart-drawer__upsell-card-compare compare-at-price">{{- upsell_original_price | money_without_trailing_zeros -}}</s>
-                                {%- endif -%}
+                                <span class="cart-drawer__upsell-card-price price">{{ upsell_price | money_without_trailing_zeros }}</span>
+                                <s class="cart-drawer__upsell-card-compare compare-at-price{% if upsell_compare_price <= 0 %} hidden{% endif %}">
+                                  {%- if upsell_compare_price > 0 -%}
+                                    {{- upsell_compare_price | money_without_trailing_zeros -}}
+                                  {%- endif -%}
+                                </s>
                               </div>
                               <div class="cart-drawer__upsell-card-actions">
-                                {%- if upsell_product.variants.size > 1 -%}
+                                {%- if upsell_checkout_product.variants.size > 1 -%}
                                   <select class="cart-drawer__upsell-card-variant" hidden aria-hidden="true" tabindex="-1">
-                                    {%- for variant in upsell_product.variants -%}
+                                    {%- for variant in upsell_checkout_product.variants -%}
                                       {%- liquid
                                         assign variant_size = variant.option2 | strip
                                         if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
@@ -236,18 +302,23 @@
                                         endif
 
                                         assign variant_color = variant.option1 | strip
-                                        assign variant_image = variant.featured_image | default: upsell_product.featured_image
-                                        assign variant_original_price = variant.price
-                                        assign variant_sale_price = variant_original_price | times: upsell_discount_multiplier | divided_by: 100.0
-                                        assign variant_sale_price = variant_sale_price | divided_by: 100.0 | round | times: 100
+                                        assign variant_image = variant.featured_image | default: upsell_checkout_product.featured_image | default: upsell_product.featured_image
+                                        assign variant_price = variant.price
+                                        assign variant_compare_price = variant.compare_at_price | default: 0
+                                        if variant_compare_price <= variant_price
+                                          assign variant_compare_price = 0
+                                        endif
                                       -%}
                                       <option
                                         value="{{ variant.id }}"
                                         data-color="{{ variant_color | escape }}"
                                         data-size="{{ variant_size | escape }}"
-                                        data-price="{{ variant_sale_price | money_without_trailing_zeros | escape }}"
-                                        data-compare="{{ variant_original_price | money_without_trailing_zeros | escape }}"
-                                        data-sale-price="{{ variant_sale_price }}"
+                                        data-price="{{ variant_price | money_without_trailing_zeros | escape }}"
+                                        data-price-cents="{{ variant_price }}"
+                                        {% if variant_compare_price > 0 %}
+                                          data-compare="{{ variant_compare_price | money_without_trailing_zeros | escape }}"
+                                          data-compare-price-cents="{{ variant_compare_price }}"
+                                        {% endif %}
                                         {% if variant_image %}
                                           data-image="{{ variant_image | image_url: width: 300 }}"
                                           data-image-srcset="{{ variant_image | image_url: width: 150 }} 150w, {{ variant_image | image_url: width: 300 }} 300w"
@@ -263,7 +334,7 @@
                                   <div class="cart-drawer__upsell-card-variant-wrap">
                                     <select class="cart-drawer__upsell-card-select cart-drawer__upsell-card-color" data-upsell-color-select aria-label="Color">
                                       {%- assign rendered_upsell_colors = '' -%}
-                                      {%- for variant in upsell_product.variants -%}
+                                      {%- for variant in upsell_checkout_product.variants -%}
                                         {%- liquid
                                           assign variant_size = variant.option2 | strip
                                           if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
@@ -303,7 +374,7 @@
                                   <div class="cart-drawer__upsell-card-variant-wrap">
                                     <select class="cart-drawer__upsell-card-select cart-drawer__upsell-card-size" data-upsell-size-select aria-label="Size">
                                       {%- assign rendered_upsell_sizes = '' -%}
-                                      {%- for variant in upsell_product.variants -%}
+                                      {%- for variant in upsell_checkout_product.variants -%}
                                         {%- liquid
                                           assign variant_size = variant.option2 | strip
                                           if upsell_product.type == 'Crewneck' or upsell_product.type == 'T-Shirt'
@@ -333,7 +404,10 @@
                                   class="cart-drawer__upsell-card-add"
                                   data-upsell-add
                                   data-variant-id="{{ first_variant.id }}"
-                                  data-sale-price="{{ upsell_sale_price }}"
+                                  data-price-cents="{{ upsell_price }}"
+                                  {% if upsell_compare_price > 0 %}
+                                    data-compare-price-cents="{{ upsell_compare_price }}"
+                                  {% endif %}
                                   type="button"
                                 >Add</button>
                               </div>
@@ -381,15 +455,25 @@
         const body = { id: Number(variantId), quantity: 1 };
         const card = btn.closest('.cart-drawer__upsell-card');
         const merchOrderItem = getMerchOrderItem(card, variantId);
-        const salePrice = parsePositiveInteger(btn.dataset.salePrice);
+        const salePrice = parsePositiveInteger(btn.dataset.priceCents);
+        const compareAtPrice = parsePositiveInteger(btn.dataset.comparePriceCents);
+        const hasUpsellDiscount = salePrice > 0 && compareAtPrice > salePrice;
         if (merchOrderItem) body.properties = getMerchLineProperties(merchOrderItem);
-        if (salePrice > 0) {
-          body.properties = {
-            ...(body.properties || {}),
-            _Sale_Price: String(salePrice),
-            _custom_price_shop: String(salePrice),
-          };
-        }
+        body.properties = {
+          ...(body.properties || {}),
+          _baf_display_product_title: card?.dataset.productTitle || '',
+          _baf_display_product_url: card?.dataset.productUrl || '',
+          _baf_display_product_id: card?.dataset.productId || '',
+          _baf_checkout_product_id: card?.dataset.checkoutProductId || '',
+          ...(hasUpsellDiscount
+            ? {
+              _baf_discount_type: 'cart_upsell',
+              _baf_discount_source: 'cart_upsell',
+              _baf_discount_sale_price: String(salePrice),
+              _baf_discount_compare_at_price: String(compareAtPrice),
+            }
+            : {}),
+        };
         if (sectionId) body.sections = sectionId;
 
         const res = await fetch('/cart/add.js', {
@@ -403,6 +487,22 @@
         const data = await res.json();
         if (merchOrderItem && window.BAFOrderSync?.syncCartOrder) {
           await window.BAFOrderSync.syncCartOrder();
+        }
+        if (window.BAFAddToCartAnalytics?.publish) {
+          await window.BAFAddToCartAnalytics.publish({
+            source: 'cart_upsell',
+            lineItem: data,
+            product: {
+              product_id: card?.dataset.productId || '',
+              product_title: card?.dataset.productTitle || '',
+              product_url: card?.dataset.productUrl || '',
+              checkout_product_id: card?.dataset.checkoutProductId || '',
+              variant_id: String(variantId),
+              quantity: 1,
+              sale_price: parsePositiveInteger(btn.dataset.priceCents) || undefined,
+              compare_at_price: parsePositiveInteger(btn.dataset.comparePriceCents) || undefined,
+            },
+          });
         }
 
         document.dispatchEvent(new CustomEvent('cart:update', {
@@ -488,10 +588,15 @@
       const btn = card.querySelector('[data-upsell-add]');
       if (btn) {
         btn.dataset.variantId = selectedOption.value;
-        if (selectedOption.dataset.salePrice) {
-          btn.dataset.salePrice = selectedOption.dataset.salePrice;
+        if (selectedOption.dataset.priceCents) {
+          btn.dataset.priceCents = selectedOption.dataset.priceCents;
         } else {
-          delete btn.dataset.salePrice;
+          delete btn.dataset.priceCents;
+        }
+        if (selectedOption.dataset.comparePriceCents) {
+          btn.dataset.comparePriceCents = selectedOption.dataset.comparePriceCents;
+        } else {
+          delete btn.dataset.comparePriceCents;
         }
       }
 
@@ -506,7 +611,15 @@
       if (price && selectedOption.dataset.price) price.textContent = selectedOption.dataset.price;
 
       const compare = card.querySelector('.cart-drawer__upsell-card-compare');
-      if (compare && selectedOption.dataset.compare) compare.textContent = selectedOption.dataset.compare;
+      if (compare) {
+        if (selectedOption.dataset.compare) {
+          compare.textContent = selectedOption.dataset.compare;
+          compare.classList.remove('hidden');
+        } else {
+          compare.textContent = '';
+          compare.classList.add('hidden');
+        }
+      }
     }
 
     function updateUpsellScrollbar(container) {
@@ -766,6 +879,95 @@
 
     .cart__ctas {
       padding: var(--cart-drawer-summary-padding);
+    }
+  }
+
+  .cart-drawer__reasons {
+    width: 100%;
+    overflow: hidden;
+    padding: 16px 0;
+    color: var(--brown);
+    background: var(--cream);
+  }
+
+  .cart-drawer__reasons-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 6px;
+  }
+
+  .cart-drawer__reason {
+    min-width: 0;
+    min-height: 88px;
+    display: grid;
+    grid-template-rows: 34px auto;
+    align-content: center;
+    justify-items: center;
+    row-gap: 10px;
+    padding: 0 2px;
+    text-align: center;
+  }
+
+  .cart-drawer__reason + .cart-drawer__reason {
+    border-left: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .cart-drawer__reason-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .cart-drawer__reason-icon--guarantee {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cart-drawer__reason span {
+    display: block;
+    max-width: 100%;
+    align-self: start;
+    color: color-mix(in srgb, var(--brown) 63%, transparent);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  @media screen and (max-width: 480px) {
+    .cart-drawer__reasons {
+      padding: 14px 0;
+    }
+
+    .cart-drawer__reasons-list {
+      padding: 0 4px;
+    }
+
+    .cart-drawer__reason {
+      min-height: 80px;
+      grid-template-rows: 31px auto;
+      row-gap: 8px;
+      padding: 0 1px;
+    }
+
+    .cart-drawer__reason-icon {
+      width: 26px;
+      height: 26px;
+    }
+
+    .cart-drawer__reason-icon--guarantee {
+      width: 28px;
+      height: 28px;
+    }
+
+    .cart-drawer__reason span {
+      font-size: 12px;
     }
   }
 

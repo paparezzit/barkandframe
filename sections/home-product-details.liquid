@@ -1,0 +1,431 @@
+<link rel="stylesheet" href="{{ 'baf-section-home-product-details.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-home-product-details.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div id="home-product-details-{{ section.id }}" class="home-product-details section section--page-width">
+  <div class="home-product-details__inner force-full-width">
+    <h2 class="home-product-details__title">
+      {{ section.settings.title | default: 'Product Details' }}
+    </h2>
+
+    <div class="home-product-details__accordions-shell">
+      <div class="home-product-details__accordions">
+      <accordion-custom>
+        <details class="details tab-accordion" open>
+          <summary class="tab-accordion__summary">
+            <span>Size</span>
+            <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+          </summary>
+          <div class="details-content tab-accordion__body">
+            <p>Every portrait comes in multiple sizes, so it can live in your home the way you want it to.</p>
+            <div class="accordion-card">
+              <h4 class="accordion-card__title">Canvas</h4>
+              <div class="size-table-scroll">
+                <div class="size-table">
+                  <div class="size-table__header">
+                    <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                    <span class="size-table__badge size-table__badge--green">UNFRAMED</span>
+                    <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                    <div class="size-table__dim"><strong>20 × 25 cm</strong><span>7.9 × 9.8 in</span></div>
+                    <div class="size-table__dim"><strong>23 × 28 cm</strong><span>9.1 × 11.0 in</span></div>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                    <div class="size-table__dim"><strong>30 × 40 cm</strong><span>11.8 × 15.7 in</span></div>
+                    <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                    <div class="size-table__dim"><strong>51 × 71 cm</strong><span>20.1 × 28.0 in</span></div>
+                    <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="size-table-scrollbar" aria-hidden="true">
+                <span class="size-table-scrollbar__thumb"></span>
+              </div>
+            </div>
+            <div class="accordion-card">
+              <h4 class="accordion-card__title">Paper</h4>
+              <div class="size-table-scroll">
+                <div class="size-table size-table--2col">
+                  <div class="size-table__header">
+                    <span class="size-table__badge size-table__badge--dark">SIZE</span>
+                    <span class="size-table__badge size-table__badge--green">FRAMED</span>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Small</strong><span>For a desk or hallway</span></div>
+                    <div class="size-table__dim"><strong>24 × 33 cm</strong><span>9.4 × 13.0 in</span></div>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Medium</strong><span>For the wall you pass every morning</span></div>
+                    <div class="size-table__dim"><strong>33 × 43 cm</strong><span>13.0 × 16.9 in</span></div>
+                  </div>
+                  <div class="size-table__row">
+                    <div class="size-table__label"><strong>Large</strong><span>Statement piece</span></div>
+                    <div class="size-table__dim"><strong>54 × 74 cm</strong><span>21.3 × 29.1 in</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="size-table-scrollbar" aria-hidden="true">
+                <span class="size-table-scrollbar__thumb"></span>
+              </div>
+            </div>
+          </div>
+        </details>
+      </accordion-custom>
+
+      <accordion-custom>
+        <details class="details tab-accordion">
+          <summary class="tab-accordion__summary">
+            <span>Materials</span>
+            <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+          </summary>
+          <div class="details-content tab-accordion__body">
+            <p>
+              Printed on gallery-quality paper with a clean, precise finish that captures fine detail and tonal depth of colors while maintaining clarity.
+            </p>
+            <div class="tab-accordion__image-grid">
+              <picture>
+                <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-configurator-paper-portrait-work-in-progress-jack-russell-gentleman-style-watercolour-mobile.jpg' | asset_url }}">
+                <img src="{{ 'make-portrait/bark-and-frame-configurator-paper-portrait-work-in-progress-jack-russell-gentleman-style-watercolour.jpg' | asset_url }}" alt="Paper portrait work in progress" loading="lazy">
+              </picture>
+              <picture>
+                <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-configurator-paper-material-close-up-texture-matte-gallery-quality-mobile.jpg' | asset_url }}">
+                <img src="{{ 'make-portrait/bark-and-frame-configurator-paper-material-close-up-texture-matte-gallery-quality.jpg' | asset_url }}" alt="Paper material close-up texture" loading="lazy">
+              </picture>
+            </div>
+            <p>
+              Canvas introduces a structured surface with visible texture that interacts with light, adding depth and reducing glare. The result feels more physical and holds its presence as an object.
+            </p>
+            <div class="tab-accordion__image-grid">
+              <picture>
+                <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-configurator-canvas-portrait-work-in-progress-jack-russell-gentleman-style-oil-painting-mobile.jpg' | asset_url }}">
+                <img src="{{ 'make-portrait/bark-and-frame-configurator-canvas-portrait-work-in-progress-jack-russell-gentleman-style-oil-painting.jpg' | asset_url }}" alt="Canvas portrait work in progress" loading="lazy">
+              </picture>
+              <picture>
+                <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-configurator-canvas-material-close-up-texture-natural-cotton-weave-mobile.jpg' | asset_url }}">
+                <img src="{{ 'make-portrait/bark-and-frame-configurator-canvas-material-close-up-texture-natural-cotton-weave.jpg' | asset_url }}" alt="Canvas material close-up texture" loading="lazy">
+              </picture>
+            </div>
+            <p>
+              The same material standards are applied across all formats, ensuring consistency in detail, color, and durability.
+              <br>
+              The printed portrait also includes the artist’s printed signature as part of the final design.
+            </p>
+          </div>
+        </details>
+      </accordion-custom>
+
+      <accordion-custom>
+        <details class="details tab-accordion">
+          <summary class="tab-accordion__summary">
+            <span>Framing</span>
+            <span class="svg-wrapper icon-plus">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+          </summary>
+          <div class="details-content tab-accordion__body">
+            <p>Frames are solid, minimal, and made to support the artwork without competing with it. Four options across two collections, all in real wood.</p>
+            <div class="accordion-card">
+              <h4 class="accordion-card__title">Essential frames</h4>
+              <p class="accordion-card__desc">Black or white. Ayous wood for paper portraits, pine for canvas. The wall stays calm, the artwork takes the lead.</p>
+              <div class="accordion-card__grid">
+                <div class="accordion-card__item">
+                  <picture>
+                    <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-canvas-black-frame-corner-detail-real-wood-artist-signature-mobile.jpg' | asset_url }}">
+                    <img src="{{ 'make-portrait/bark-and-frame-canvas-black-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Black frame" loading="lazy">
+                  </picture>
+                  <h5 class="accordion-card__item-name">Black</h5>
+                  <p class="accordion-card__item-desc">Defined edge, modern feel.</p>
+                </div>
+                <div class="accordion-card__item">
+                  <picture>
+                    <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-canvas-white-frame-corner-detail-real-wood-artist-signature-mobile.jpg' | asset_url }}">
+                    <img src="{{ 'make-portrait/bark-and-frame-canvas-white-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="White frame" loading="lazy">
+                  </picture>
+                  <h5 class="accordion-card__item-name">White</h5>
+                  <p class="accordion-card__item-desc">Soft, minimal, blends in.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-card">
+              <h4 class="accordion-card__title">Premium woods</h4>
+              <p class="accordion-card__desc">Oak for paper portraits, walnut for canvas. Both have a visible natural grain that gives the piece real surface presence and a quiet weight on the wall.</p>
+              <div class="accordion-card__grid">
+                <div class="accordion-card__item">
+                  <picture>
+                    <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-canvas-oak-frame-corner-detail-real-wood-artist-signature-mobile.jpg' | asset_url }}">
+                    <img src="{{ 'make-portrait/bark-and-frame-canvas-oak-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Premium Oak frame" loading="lazy">
+                  </picture>
+                  <h5 class="accordion-card__item-name">Premium Oak</h5>
+                  <p class="accordion-card__item-desc">Light, warm, natural grain.<br>For paper portraits.</p>
+                </div>
+                <div class="accordion-card__item">
+                  <picture>
+                    <source media="(max-width: 749px)" srcset="{{ 'make-portrait-bark-and-frame-canvas-walnut-frame-corner-detail-real-wood-artist-signature-mobile.jpg' | asset_url }}">
+                    <img src="{{ 'make-portrait/bark-and-frame-canvas-walnut-frame-corner-detail-real-wood-artist-signature.jpg' | asset_url }}" alt="Walnut frame" loading="lazy">
+                  </picture>
+                  <h5 class="accordion-card__item-name">Premium Walnut</h5>
+                  <p class="accordion-card__item-desc">Deep, rich, more weight.<br>For canvas portraits.</p>
+                </div>
+              </div>
+            </div>
+            <p>Crafted with precise joints for stability, made to hold its form over time. Each frame arrives fully assembled and ready to hang.</p>
+          </div>
+        </details>
+      </accordion-custom>
+
+      </div>
+    </div>
+
+    <div class="home-product-details__button-row">
+      <a class="button" href="/pages/portrait?step=1">
+        Order your portrait
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const section = document.getElementById('home-product-details-{{ section.id }}');
+    if (!section) return;
+
+    const accordions = Array.from(section.querySelectorAll('.home-product-details__accordions .tab-accordion'));
+    const accordionsShell = section.querySelector('.home-product-details__accordions-shell');
+    let sizeTableScrollbarInstances = [];
+    let scrollFrame = null;
+    let scrollAnchorTimer = null;
+    let scrollAnchorState = null;
+    let pendingAccordionScrollTarget = null;
+
+    const updateSizeTableScrollbars = () => {
+      sizeTableScrollbarInstances.forEach((instance) => {
+        const { container, scrollbar, thumb } = instance;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+
+        if (maxScroll <= 1) {
+          scrollbar.hidden = true;
+          thumb.style.width = '100%';
+          thumb.style.transform = 'translateX(0)';
+          return;
+        }
+
+        scrollbar.hidden = false;
+        const trackWidth = scrollbar.clientWidth;
+        const thumbWidth = Math.max((container.clientWidth / container.scrollWidth) * trackWidth, 34);
+        const left = ((trackWidth - thumbWidth) * container.scrollLeft) / maxScroll;
+
+        thumb.style.width = `${thumbWidth}px`;
+        thumb.style.transform = `translateX(${left}px)`;
+      });
+    };
+
+    const scrollSizeTableFromScrollbar = (instance, clientX) => {
+      const { container, scrollbar, thumb } = instance;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const rect = scrollbar.getBoundingClientRect();
+      const thumbWidth = thumb.offsetWidth || 34;
+      const usableWidth = Math.max(rect.width - thumbWidth, 1);
+      const progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
+
+      container.scrollLeft = progress * maxScroll;
+      updateSizeTableScrollbars();
+    };
+
+    const initSizeTableScrollbars = () => {
+      sizeTableScrollbarInstances = [];
+
+      section.querySelectorAll('.size-table-scroll').forEach((container) => {
+        const scrollbar = container.nextElementSibling;
+        if (!scrollbar || !scrollbar.classList.contains('size-table-scrollbar')) return;
+
+        const thumb = scrollbar.querySelector('.size-table-scrollbar__thumb');
+        if (!thumb) return;
+
+        const instance = {
+          container,
+          scrollbar,
+          thumb,
+          isDragging: false
+        };
+
+        sizeTableScrollbarInstances.push(instance);
+        container.addEventListener('scroll', updateSizeTableScrollbars, { passive: true });
+        scrollbar.addEventListener('pointerdown', (event) => {
+          instance.isDragging = true;
+          if (scrollbar.setPointerCapture) scrollbar.setPointerCapture(event.pointerId);
+          scrollSizeTableFromScrollbar(instance, event.clientX);
+        });
+        scrollbar.addEventListener('pointermove', (event) => {
+          if (!instance.isDragging) return;
+          scrollSizeTableFromScrollbar(instance, event.clientX);
+        });
+
+        const stopDragging = (event) => {
+          instance.isDragging = false;
+          if (event && scrollbar.releasePointerCapture) scrollbar.releasePointerCapture(event.pointerId);
+        };
+
+        scrollbar.addEventListener('pointerup', stopDragging);
+        scrollbar.addEventListener('pointercancel', stopDragging);
+      });
+
+      updateSizeTableScrollbars();
+    };
+
+    const getHeaderOffset = () => {
+      let headerHeight = 0;
+      const bodyStyles = window.getComputedStyle(document.body);
+      const cssHeaderHeight = parseFloat(bodyStyles.getPropertyValue('--header-height')) || 0;
+      const header = document.querySelector('#header-component') || document.querySelector('.header-section');
+
+      if (header) {
+        const headerRect = header.getBoundingClientRect();
+        headerHeight = Math.max(headerHeight, headerRect.height || 0);
+      }
+
+      headerHeight = Math.max(headerHeight, cssHeaderHeight);
+      return Math.round(headerHeight + 16);
+    };
+
+    const lockScrollAnchoring = () => {
+      if (!scrollAnchorState) {
+        scrollAnchorState = {
+          html: document.documentElement.style.overflowAnchor,
+          body: document.body ? document.body.style.overflowAnchor : ''
+        };
+      }
+
+      document.documentElement.style.overflowAnchor = 'none';
+      if (document.body) document.body.style.overflowAnchor = 'none';
+
+      if (scrollAnchorTimer) window.clearTimeout(scrollAnchorTimer);
+      scrollAnchorTimer = window.setTimeout(() => {
+        if (!scrollAnchorState) return;
+        document.documentElement.style.overflowAnchor = scrollAnchorState.html;
+        if (document.body) document.body.style.overflowAnchor = scrollAnchorState.body;
+        scrollAnchorState = null;
+        scrollAnchorTimer = null;
+      }, 900);
+    };
+
+    const animateAccordionScroll = (targetTop, onComplete) => {
+      targetTop = Math.max(0, Math.round(targetTop));
+      lockScrollAnchoring();
+
+      if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = null;
+
+      const startTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const distance = targetTop - startTop;
+
+      if (Math.abs(distance) < 1) {
+        window.scrollTo(0, targetTop);
+        if (typeof onComplete === 'function') onComplete();
+        return;
+      }
+
+      const duration = Math.min(650, Math.max(260, Math.abs(distance) * 0.3));
+      let startTime = null;
+
+      const easeOutCubic = (progress) => 1 - Math.pow(1 - progress, 3);
+
+      const step = (timestamp) => {
+        if (startTime === null) startTime = timestamp;
+        const progress = Math.min(1, (timestamp - startTime) / duration);
+
+        window.scrollTo(0, startTop + distance * easeOutCubic(progress));
+
+        if (progress < 1) {
+          scrollFrame = window.requestAnimationFrame(step);
+          return;
+        }
+
+        window.scrollTo(0, targetTop);
+        scrollFrame = null;
+        if (typeof onComplete === 'function') onComplete();
+      };
+
+      scrollFrame = window.requestAnimationFrame(step);
+    };
+
+    const scrollToAccordionStart = () => {
+      const accordionSection = accordionsShell || section;
+      const getTargetTop = () => accordionSection.getBoundingClientRect().top + window.pageYOffset - getHeaderOffset();
+
+      lockScrollAnchoring();
+      scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = window.requestAnimationFrame(() => {
+          animateAccordionScroll(getTargetTop(), () => {
+            window.requestAnimationFrame(() => {
+              const correctedTop = Math.max(0, Math.round(getTargetTop()));
+              const currentTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+              if (Math.abs(correctedTop - currentTop) > 2) {
+                window.scrollTo(0, correctedTop);
+              }
+            });
+          });
+        });
+      });
+    };
+
+    const markAccordionScrollIntent = (details) => {
+      pendingAccordionScrollTarget = details;
+      lockScrollAnchoring();
+    };
+
+    initSizeTableScrollbars();
+    window.addEventListener('resize', updateSizeTableScrollbars, { passive: true });
+
+    accordions.forEach((details) => {
+      const summary = details.querySelector('.tab-accordion__summary');
+      if (summary) {
+        summary.addEventListener('click', () => markAccordionScrollIntent(details), true);
+        summary.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') markAccordionScrollIntent(details);
+        }, true);
+      }
+
+      details.addEventListener('toggle', () => {
+        const shouldScrollToAccordion = pendingAccordionScrollTarget === details;
+        if (shouldScrollToAccordion) pendingAccordionScrollTarget = null;
+
+        if (!details.open) return;
+
+        accordions.forEach((other) => {
+          if (other !== details && other.open) other.open = false;
+        });
+
+        updateSizeTableScrollbars();
+        if (shouldScrollToAccordion) scrollToAccordionStart();
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product Details",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Product Details"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Details"
+    }
+  ]
+}
+{% endschema %}

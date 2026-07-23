@@ -139,7 +139,7 @@
   }
 
   .variant-option__swatch-name {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.2;
     text-align: center;
     color: var(--brown);

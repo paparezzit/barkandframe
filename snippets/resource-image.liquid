@@ -92,7 +92,7 @@
     endcase
   endif
 
-  assign widths = '240, 352, 832, 1200, 1600, 1920, 2560, 3840'
+  assign widths = '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840'
 
   # Generate placeholder info based on content type
   if content_type == 'articles'
@@ -149,11 +149,14 @@
       {% render 'overlay', settings: block_settings %}
     {%- endif -%}
 
-    {{
-      image_resource
-      | image_url: width: 3840
-      | image_tag: widths: widths, class: 'image-block__image', sizes: sizes, loading: loading
-    }}
+    <picture class="image-block__picture">
+      {% render 'mobile-image-source', image: image_resource %}
+      {{
+        image_resource
+        | image_url: width: 3840
+        | image_tag: widths: widths, class: 'image-block__image', sizes: sizes, loading: loading
+      }}
+    </picture>
   </div>
 {% else %}
   <div
@@ -203,6 +206,12 @@
 
   .resource-image .image-block__image {
     object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .resource-image .image-block__picture {
+    display: block;
     width: 100%;
     height: 100%;
   }

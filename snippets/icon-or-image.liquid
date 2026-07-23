@@ -25,16 +25,23 @@
   </svg>
 {%- elsif image_upload != blank -%}
   {% liquid
-    assign media_width_desktop = '100vw'
-    assign media_width_mobile = '100vw'
-    assign sizes = '(min-width: 1024px) 1024px, ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
-    assign widths = '240, 352, 832, 1200'
+    assign image_width = width | default: 24
+    assign image_width_2x = image_width | times: 2
+    assign image_width_3x = image_width | times: 3
+    assign sizes = image_width | append: 'px'
+    capture widths
+      echo image_width
+      echo ', '
+      echo image_width_2x
+      echo ', '
+      echo image_width_3x
+    endcapture
   %}
 
   {% assign image_style = 'width: ' | append: width | append: 'px;' %}
   {{
     image_upload
-    | image_url: width: 1200
+    | image_url: width: image_width_3x
     | image_tag: widths: widths, class: class_name, style: image_style, sizes: sizes
   }}
 {%- endif -%}

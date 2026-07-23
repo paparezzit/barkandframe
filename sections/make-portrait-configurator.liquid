@@ -23,32 +23,57 @@
   ].filter(s => s.name).sort((a, b) => a.order - b.order);
   window.MakePortraitOverviewImages = {
     {%- for block in section.blocks -%}
-      {%- if block.type == 'overview_style' and block.settings.style_id != blank -%}
+        {%- if block.type == 'overview_style' and block.settings.style_id != blank -%}
         {%- assign _overview_style_id = block.settings.style_id | strip -%}
         {%- assign _overview_style_name = block.settings.style_name | strip -%}
-        {%- assign _overview_style_preview = blank -%}
         {%- assign _overview_style_alt = block.settings.style_name | default: '' -%}
+        {%- assign _overview_wall_asset = '' -%}
+        {%- assign _overview_wall_mobile_asset = '' -%}
+        {%- case _overview_style_id -%}
+          {%- when 'the_gentleman' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-the-gentleman-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-the-gentleman-mobile.jpg' -%}
+          {%- when 'studio_pencil' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-studio-pencil-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-studio-pencil-mobile.jpg' -%}
+          {%- when 'the_duchess' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-the-duchess-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-the-duchess-mobile.jpg' -%}
+          {%- when 'atelier_sketch' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-atelier-sketch-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-atelier-sketch-mobile.jpg' -%}
+          {%- when 'pure_portrait' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-pure-portrait-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-pure-portrait-mobile.jpg' -%}
+          {%- when 'dream' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-dream-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-dream-mobile.jpg' -%}
+          {%- when 'studio_watercolour' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-studio-watercolour-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-studio-watercolour-mobile.jpg' -%}
+          {%- when 'la_parisienne' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-la-parisienne-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-la-parisienne-mobile.jpg' -%}
+          {%- when 'indigo' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-indigo-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-indigo-mobile.jpg' -%}
+          {%- when 'studio_pop' -%}
+            {%- assign _overview_wall_asset = 'overview-see-it-at-home-studio-pop-desktop.jpg' -%}
+            {%- assign _overview_wall_mobile_asset = 'overview-see-it-at-home-studio-pop-mobile.jpg' -%}
+        {%- endcase -%}
         {%- for style in _portrait_styles -%}
           {%- assign _style_id = style.style_id.value | strip -%}
           {%- assign _style_name = style.name.value | strip -%}
           {%- if _style_id == _overview_style_id or _style_name == _overview_style_name -%}
-            {%- assign _overview_style_preview = style.preview_image.value -%}
             {%- assign _overview_style_alt = style.name.value | default: block.settings.style_name | default: '' -%}
             {%- break -%}
           {%- endif -%}
         {%- endfor -%}
         {{ _overview_style_id | json }}: {
-          photo: {
-            src: {%- if block.settings.photo_image != blank -%}{{ block.settings.photo_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
-            alt: {{ block.settings.photo_image.alt | default: block.settings.style_name | default: '' | json }}
-          },
-          artist: {
-            src: {%- if _overview_style_preview != blank -%}{{ _overview_style_preview | image_url: width: 520 | json }}{%- elsif block.settings.artist_image != blank -%}{{ block.settings.artist_image | image_url: width: 520 | json }}{%- else -%}null{%- endif -%},
-            alt: {{ _overview_style_alt | json }}
-          },
           wall: {
-            src: {%- if block.settings.wall_image != blank -%}{{ block.settings.wall_image | image_url: width: 1040 | json }}{%- else -%}null{%- endif -%},
-            alt: {{ block.settings.wall_image.alt | default: block.settings.style_name | default: '' | json }}
+            src: {%- if _overview_wall_asset != blank -%}{{ _overview_wall_asset | asset_url | json }}{%- elsif block.settings.wall_image != blank -%}{{ block.settings.wall_image | image_url: width: 1600 | json }}{%- else -%}null{%- endif -%},
+            mobileSrc: {%- if _overview_wall_mobile_asset != blank -%}{{ _overview_wall_mobile_asset | asset_url | json }}{%- elsif block.settings.wall_image != blank -%}{{ block.settings.wall_image | image_url: width: 800 | json }}{%- else -%}null{%- endif -%},
+            alt: {{ _overview_style_alt | default: block.settings.style_name | default: '' | json }}
           }
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endif -%}
@@ -346,7 +371,7 @@
             >
               {%- if _btn_img -%}
                 <div class="style-picker__item__img">
-                  <img src="{{ _btn_img | image_url: width: 120 }}" width="120" height="160" alt="{{ style.name.value }}" loading="lazy">
+                  <img src="{{ _btn_img | image_url: width: 180 }}" width="180" height="180" alt="{{ style.name.value }}" loading="lazy">
                   {%- if _style_tag != blank -%}
                     <span class="style-picker__tag">{{ _style_tag | replace: '-', ' ' | capitalize | replace: 'Sold out', 'Soon' }}</span>
                   {%- endif -%}
@@ -769,42 +794,35 @@
       <div class="make-portrait__tab-panels">
         <div class="tab-panel" id="tab-overview" data-tab="overview" role="tabpanel">
           <div class="tab-overview">
-            <h2 class="tab-overview__heading">It’s that simple</h2>
-            <div class="tab-overview__steps" aria-label="How it works">
-              <div class="tab-overview__step">
-                <h3 class="tab-overview__step-pill">Choose your style</h3>
-                <p class="tab-overview__step-title">Pick the one that<br>feels like them</p>
-                <img class="tab-overview__step-img" src="{{ 'illustrations/01.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
+            <section class="tab-overview__life" aria-labelledby="tab-overview-life-title">
+              <h2 id="tab-overview-life-title" class="tab-overview__life-heading">How Your Portrait<br>Comes to Life</h2>
+              <div class="tab-overview__life-list" aria-label="How your portrait comes to life">
+                <div class="tab-overview__life-item">
+                  <span class="tab-overview__life-icon" aria-hidden="true">
+                    <img src="{{ 'baf-three-steps-artist.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+                  </span>
+                  <p class="tab-overview__life-text">Each style is designed by an award-winning artist.</p>
+                </div>
+                <div class="tab-overview__life-item">
+                  <span class="tab-overview__life-icon" aria-hidden="true">
+                    <img src="{{ 'baf-three-steps-iphone-config.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+                  </span>
+                  <p class="tab-overview__life-text">Choose your style and finishing details, then upload your dog’s photo.</p>
+                </div>
+                <div class="tab-overview__life-item">
+                  <span class="tab-overview__life-icon" aria-hidden="true">
+                    <img src="{{ 'baf-three-steps-custom-portrait.svg' | asset_url }}" alt="" width="216" height="216" loading="lazy" decoding="async">
+                  </span>
+                  <p class="tab-overview__life-text">Our team carefully ensures that every detail feels true to your dog, creating a beautifully finished portrait that captures their unique character.</p>
+                </div>
               </div>
-              <div class="tab-overview__step">
-                <h3 class="tab-overview__step-pill">Pick product &amp; details</h3>
-                <p class="tab-overview__step-title">Choose how it<br>looks and feels</p>
-                <img class="tab-overview__step-img" src="{{ 'illustrations/02.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
-              </div>
-              <div class="tab-overview__step">
-                <h3 class="tab-overview__step-pill">Upload your photo</h3>
-                <p class="tab-overview__step-title">Any phone<br>photo will do</p>
-                <img class="tab-overview__step-img" src="{{ 'illustrations/03.svg' | asset_url }}" alt="" width="400" height="400" loading="lazy">
-              </div>
-            </div>
-            <div class="tab-overview__steps-scrollbar" aria-hidden="true">
-              <span class="tab-overview__steps-scrollbar-thumb"></span>
-            </div>
+            </section>
             <p>
               A portrait of your dog isn’t just wall art. It’s a way to give shape to a relationship made of small, everyday moments. Designed by our small studio of award-winning artists in their signature style. Their character. Their posture. The details only you would notice.
             </p>
             <div class="tab-overview__composite" id="mp-overview-media">
-              <figure class="tab-overview__image-card tab-overview__image-card--photo">
-                <img id="mp-overview-photo" src="" alt="" width="263" height="350" loading="lazy">
-                <figcaption class="tab-overview__photo-label tab-overview__photo-label--photo">Your photo</figcaption>
-              </figure>
-              <figure class="tab-overview__image-card tab-overview__image-card--artist">
-                <img id="mp-overview-artist" src="" alt="" width="200" height="243" loading="lazy">
-                <figcaption class="tab-overview__photo-label tab-overview__photo-label--artist">Style designed by artists</figcaption>
-              </figure>
               <figure class="tab-overview__image-card tab-overview__image-card--wall">
-                <img id="mp-overview-wall" src="" alt="" width="709" height="478" loading="lazy">
-                <figcaption class="tab-overview__photo-label tab-overview__photo-label--wall">On your wall</figcaption>
+                <img id="mp-overview-wall" src="" alt="" width="1534" height="2048" loading="lazy">
               </figure>
             </div>
           </div>
@@ -1150,7 +1168,7 @@
   }
   function getDeliveryDate() {
     var d = new Date();
-    d.setDate(d.getDate() + 16);
+    d.setDate(d.getDate() + 14);
     var dd = String(d.getDate()).padStart(2, '0');
     var mm = String(d.getMonth() + 1).padStart(2, '0');
     var yyyy = d.getFullYear();
@@ -1159,16 +1177,12 @@
   function $(selector) {
     return document.getElementById(selector);
   }
-  var overviewCompositeBase = { width: 1036, height: 1020 };
+  var overviewCompositeBase = { width: 1036, height: 1320 };
   var overviewCompositeBoxes = {
-    photo: { x: 0, y: 154, width: 262 },
-    artist: { x: 476, y: 100, width: 198 },
-    wall: { x: 328, y: 542, width: 708 }
+    wall: { x: 40, y: 0, width: 956 }
   };
   var overviewCompositeBoxesCompact = {
-    photo: { x: 0, y: 154, width: 262 },
-    artist: { x: 476, y: 0, width: 198 },
-    wall: { x: 328, y: 542, width: 708 }
+    wall: { x: 40, y: 0, width: 956 }
   };
   function layoutOverviewComposite() {
     var media = $('mp-overview-media');
@@ -1196,9 +1210,18 @@
     var card = img.closest('.tab-overview__image-card');
     if (!data || !data.src) {
       img.removeAttribute('src');
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
       img.alt = '';
       if (card) card.hidden = true;
       return;
+    }
+    if (data.mobileSrc) {
+      img.srcset = data.mobileSrc + ' 600w, ' + data.src + ' 1534w';
+      img.sizes = '(max-width: 749px) 92vw, (min-width: 1040px) 956px, 92vw';
+    } else {
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
     }
     img.onload = layoutOverviewComposite;
     img.src = data.src;
@@ -1206,114 +1229,11 @@
     if (card) card.hidden = false;
     window.requestAnimationFrame(layoutOverviewComposite);
   }
-  function getSelectedStyleOverviewImage() {
-    if (state.style && state.style.imageUrl) {
-      return { src: state.style.imageUrl, alt: state.style.name || '' };
-    }
-    var styles = window.MakePortraitStyles || [];
-    for (var i = 0; i < styles.length; i++) {
-      if (styles[i] && styles[i].id === state.styleId && styles[i].imageUrl) {
-        return { src: styles[i].imageUrl, alt: styles[i].name || '' };
-      }
-    }
-    return null;
-  }
   function updateOverviewImages() {
     var overviewMap = window.MakePortraitOverviewImages || {};
     var bucket = overviewMap[state.styleId] || null;
-    setOverviewImage('photo', bucket && bucket.photo);
-    setOverviewImage('artist', (bucket && bucket.artist) || getSelectedStyleOverviewImage());
     setOverviewImage('wall', bucket && bucket.wall);
     window.requestAnimationFrame(layoutOverviewComposite);
-  }
-  function initOverviewLabelParallax() {
-    var media = $('mp-overview-media');
-    if (!media || !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var labels = [
-      { el: media.querySelector('.tab-overview__photo-label--photo'), strength: 0.026 },
-      { el: media.querySelector('.tab-overview__photo-label--artist'), strength: 0.034 },
-      { el: media.querySelector('.tab-overview__photo-label--wall'), strength: 0.022 }
-    ].filter(function (item) {
-      return item.el;
-    });
-    var ticking = false;
-    function clamp(value, min, max) {
-      return Math.min(max, Math.max(min, value));
-    }
-    function update() {
-      ticking = false;
-      var rect = media.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      var mediaCenter = rect.top + rect.height / 2;
-      var viewportCenter = window.innerHeight / 2;
-      var distanceFromCenter = viewportCenter - mediaCenter;
-      labels.forEach(function (item) {
-        var offset = clamp(distanceFromCenter * item.strength, -12, 12);
-        item.el.style.setProperty('--overview-label-parallax', offset.toFixed(2) + 'px');
-      });
-    }
-    function requestUpdate() {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
-    }
-    update();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
-  }
-  function initOverviewStepsScrollbar() {
-    var container = document.querySelector('.tab-overview__steps');
-    var scrollbar = document.querySelector('.tab-overview__steps-scrollbar');
-    var thumb = scrollbar && scrollbar.querySelector('.tab-overview__steps-scrollbar-thumb');
-    if (!container || !scrollbar || !thumb) return;
-    var isDragging = false;
-    function update() {
-      var maxScroll = container.scrollWidth - container.clientWidth;
-      if (window.innerWidth >= 750 || maxScroll <= 0) {
-        scrollbar.hidden = true;
-        thumb.style.width = '100%';
-        thumb.style.transform = 'translateX(0)';
-        return;
-      }
-      scrollbar.hidden = false;
-      var trackWidth = scrollbar.clientWidth;
-      var thumbWidth = Math.max((container.clientWidth / container.scrollWidth) * trackWidth, 34);
-      var left = ((trackWidth - thumbWidth) * container.scrollLeft) / maxScroll;
-      thumb.style.width = thumbWidth + 'px';
-      thumb.style.transform = 'translateX(' + left + 'px)';
-    }
-    function scrollFromScrollbar(clientX) {
-      var maxScroll = container.scrollWidth - container.clientWidth;
-      if (maxScroll <= 0) return;
-      var rect = scrollbar.getBoundingClientRect();
-      var thumbWidth = thumb.offsetWidth || 34;
-      var usableWidth = Math.max(rect.width - thumbWidth, 1);
-      var progress = Math.min(Math.max((clientX - rect.left - thumbWidth / 2) / usableWidth, 0), 1);
-      container.scrollLeft = progress * maxScroll;
-      update();
-    }
-    container.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', function () {
-      window.requestAnimationFrame(update);
-    });
-    scrollbar.addEventListener('pointerdown', function (event) {
-      isDragging = true;
-      scrollbar.setPointerCapture && scrollbar.setPointerCapture(event.pointerId);
-      scrollFromScrollbar(event.clientX);
-    });
-    scrollbar.addEventListener('pointermove', function (event) {
-      if (!isDragging) return;
-      scrollFromScrollbar(event.clientX);
-    });
-    function stopDragging(event) {
-      isDragging = false;
-      if (event && scrollbar.releasePointerCapture) {
-        scrollbar.releasePointerCapture(event.pointerId);
-      }
-    }
-    scrollbar.addEventListener('pointerup', stopDragging);
-    scrollbar.addEventListener('pointercancel', stopDragging);
-    window.requestAnimationFrame(update);
   }
   var sizeTableScrollbarInstances = [];
   function updateSizeTableScrollbars() {
@@ -2411,11 +2331,19 @@
     var isCanvas = state.productCategory === 'canvas' || handle === canvasHandles.unframed || handle === canvasHandles.framed;
     if (!isCanvas) return null;
     var bucket = getCanvasSizeBucket(value);
-    var displaySizes = {
+    var unframedDisplaySizes = {
+      '8x10':  { cm: '20 \u00D7 25 cm', inches: '7.9 \u00D7 9.8 in' },
+      '12x16': { cm: '30 \u00D7 40 cm', inches: '11.8 \u00D7 15.7 in' },
+      '20x28': { cm: '51 \u00D7 71 cm', inches: '20.1 \u00D7 28.0 in' }
+    };
+    var framedDisplaySizes = {
       '8x10':  { cm: '23 \u00D7 28 cm', inches: '9.1 \u00D7 11.0 in' },
       '12x16': { cm: '33 \u00D7 43 cm', inches: '13.0 \u00D7 16.9 in' },
       '20x28': { cm: '54 \u00D7 74 cm', inches: '21.3 \u00D7 29.1 in' }
     };
+    var displaySizes = (state.canvasFrameChoice === 'framed' || handle === canvasHandles.framed)
+      ? framedDisplaySizes
+      : unframedDisplaySizes;
     return bucket ? displaySizes[bucket] || null : null;
   }
   function getSizeDimensions(value) {
@@ -2548,11 +2476,6 @@
     }, null) || fallbackVariant || null;
   }
   function getVisualizerSizeValue() {
-    var sizeOpt = getProductSizeOption(state.product);
-    var visualVariant = getLargestSizeVariantForPreview(state.variant, window.MakePortraitStylePreviews || {});
-    if (sizeOpt && visualVariant && visualVariant.options) {
-      return visualVariant.options[sizeOpt.position] || getSelectedSizeValue();
-    }
     return getSelectedSizeValue();
   }
   function addOptionBadge(btn, label) {
@@ -3755,8 +3678,6 @@
     updateDeliveryDates();
     initTabs();
     initSmartSticky();
-    initOverviewLabelParallax();
-    initOverviewStepsScrollbar();
     initSizeTableScrollbars();
     initDonationImageParallax();
     initMobileSubtotalCover();
@@ -3806,7 +3727,6 @@
         event.stopPropagation();
         lockProductAccordionScrollAnchoring();
         selectStyle(btn.dataset.styleId);
-        switchTab('overview');
         if (event.detail > 0 && typeof btn.blur === 'function') btn.blur();
         scrollStepOneStyleChoiceToPreview();
       }, true);

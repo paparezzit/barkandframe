@@ -6,6 +6,18 @@
   assign heading = block_settings.heading
   assign color_scheme = block_settings.color_scheme
   assign show_as_accordion = block_settings.show_as_accordion
+  assign is_footer_menu = false
+  if section.id == 'footer' or section.location == 'footer'
+    assign is_footer_menu = true
+  endif
+  assign footer_shop_menu = false
+  if is_footer_menu and heading == 'Shop' and menu.handle == 'footer'
+    assign footer_shop_menu = true
+    assign footer_shop_portraits_path = '/pages/portrait'
+    assign footer_shop_portraits_url = pages['portrait'].url | default: footer_shop_portraits_path
+    assign footer_shop_clothing_path = '/collections/all-products'
+    assign footer_shop_clothing_url = collections['all-products'].url | default: footer_shop_clothing_path
+  endif
   if show_as_accordion == true and block_settings.accordion_dividers == true
     assign dividers_enabled = true
   endif
@@ -52,10 +64,20 @@
       </summary>
 
       <div class="details-content">
-        {% if menu %}
+        {% if footer_shop_menu %}
+          <ul class="list-unstyled">
+            <li class="menu__item {{ block_settings.link_preset }}{% if request.path == footer_shop_portraits_path %} menu__item--active{% endif %}">
+              <a href="{{ footer_shop_portraits_url }}">Portraits</a>
+            </li>
+            <li class="menu__item {{ block_settings.link_preset }}{% if request.path == footer_shop_clothing_path %} menu__item--active{% endif %}">
+              <a href="{{ footer_shop_clothing_url }}">Clothing</a>
+            </li>
+          </ul>
+        {% elsif menu %}
           <ul class="list-unstyled">
             {% for link in menu.links %}
               {% assign menu_link_url = link.url | split: '?' | first %}
+              {% if is_footer_menu and menu_link_url == '/pages/see-it-at-home' %}{% continue %}{% endif %}
               {% if link.type == 'collection_link' and link.object.all_products_count == 0 and link.object.template_suffix != 'with-portrait-cta' and menu_link_url != '/collections/bark-studio' %}{% continue %}{% endif %}
               {% assign link_title = link.title %}
               {% if menu.handle == 'info-menu' and link.title == 'Contact' %}

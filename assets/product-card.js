@@ -325,6 +325,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOver = (event) => {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -346,6 +348,8 @@ export class ProductCard extends Component {
    * @param {PointerEvent} event
    */
   #handleSwatchPointerOut = (event) => {
+    if (this.isInProductListing) return;
+
     if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(
@@ -362,6 +366,8 @@ export class ProductCard extends Component {
    * @param {MouseEvent} event
    */
   #handleSwatchClick = (event) => {
+    if (this.isInProductListing) return;
+
     if (!(event.target instanceof Element)) return;
 
     const swatchLabel = event.target.closest(

@@ -26,20 +26,23 @@
     {% render 'border-override', settings: block_settings %}
   {%- endcapture -%}
 
-  {{
-    image
-    | image_url: width: 3840
-    | image_tag:
-      width: image.width,
-      widths: '240, 352, 832, 1200, 1600, 1920, 2560, 3840',
-      height: image.height,
-      class: 'blog-post-featured-image__image border-style',
-      style: image_border_style,
-      sizes: 'auto, (min-width: 750px) 100vw, 100vw',
-      loading: 'eager',
-      fetchpriority: 'high',
-      alt: image.alt
-  }}
+  <picture class="blog-post-featured-image__picture">
+    {% render 'mobile-image-source', image: image %}
+    {{
+      image
+      | image_url: width: 3840
+      | image_tag:
+        width: image.width,
+        widths: '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840',
+        height: image.height,
+        class: 'blog-post-featured-image__image border-style',
+        style: image_border_style,
+        sizes: 'auto, (min-width: 750px) 100vw, 100vw',
+        loading: 'eager',
+        fetchpriority: 'high',
+        alt: image.alt
+    }}
+  </picture>
 </div>
 
 {% stylesheet %}
@@ -54,6 +57,12 @@
 
   .blog-post-featured-image.size-style {
     --width: var(--size-style-width, 100%);
+  }
+
+  .blog-post-featured-image__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .blog-post-featured-image--height-fit {

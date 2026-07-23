@@ -36,23 +36,128 @@
 {% liquid
   assign media_width_desktop = '100vw'
   assign media_width_mobile = '100vw'
+  assign mobile_widths = ''
+  assign image_render_width = 3840
+  assign image_loading = ''
+  assign image_decoding = ''
+  assign image_fetchpriority = ''
+  assign image_asset = block_settings.image_asset | default: '' | strip
+  assign mobile_image_asset = block_settings.mobile_image_asset | default: '' | strip
+  assign image_alt = block_settings.alt | default: block_settings.image.alt | default: ''
+  assign parent_main_text = section.settings['main-text'] | default: ''
+  assign section_title = section.settings.title | default: ''
   assign sizes = 'auto, (min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
-  assign widths = '240, 352, 832, 1200, 1600, 1920, 2560, 3840'
+  assign widths = '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840'
+
+  if request.page_type == 'index' and section_title == 'See it at home'
+    assign media_width_desktop = '180px'
+    assign media_width_mobile = '150px'
+    assign image_render_width = 240
+    assign widths = '160, 200, 240'
+    assign mobile_widths = '160, 200'
+    assign image_loading = 'lazy'
+    assign image_decoding = 'async'
+    assign image_fetchpriority = 'low'
+    assign sizes = '(min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
+
+    if block_settings.link contains 'style=studio_pencil'
+      assign image_asset = 'overview-see-it-at-home-studio-pencil-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-studio-pencil-mobile.jpg'
+      assign image_alt = 'Studio Pencil'
+    elsif block_settings.link contains 'style=dream'
+      assign image_asset = 'overview-see-it-at-home-dream-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-dream-mobile.jpg'
+      assign image_alt = 'Dream'
+    elsif block_settings.link contains 'style=indigo'
+      assign image_asset = 'overview-see-it-at-home-indigo-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-indigo-mobile.jpg'
+      assign image_alt = 'Indigo'
+    elsif block_settings.link contains 'style=studio_pop'
+      assign image_asset = 'overview-see-it-at-home-studio-pop-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-studio-pop-mobile.jpg'
+      assign image_alt = 'Studio Pop'
+    elsif block_settings.link contains 'style=the_gentleman'
+      assign image_asset = 'overview-see-it-at-home-the-gentleman-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-the-gentleman-mobile.jpg'
+      assign image_alt = 'The Gentleman'
+    elsif block_settings.link contains 'style=la_parisienne'
+      assign image_asset = 'overview-see-it-at-home-la-parisienne-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-la-parisienne-mobile.jpg'
+      assign image_alt = 'La Parisienne'
+    elsif block_settings.link contains 'style=the_duchess'
+      assign image_asset = 'overview-see-it-at-home-the-duchess-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-the-duchess-mobile.jpg'
+      assign image_alt = 'The Duchess'
+    elsif block_settings.link contains 'style=pure_portrait'
+      assign image_asset = 'overview-see-it-at-home-pure-portrait-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-pure-portrait-mobile.jpg'
+      assign image_alt = 'Pure Portrait'
+    elsif block_settings.link contains 'style=studio_watercolour'
+      assign image_asset = 'overview-see-it-at-home-studio-watercolour-desktop.jpg'
+      assign mobile_image_asset = 'overview-see-it-at-home-studio-watercolour-mobile.jpg'
+      assign image_alt = 'Studio Watercolour'
+    endif
+  elsif parent_main_text contains 'beyond portraits'
+    assign media_width_desktop = '400px'
+    assign media_width_mobile = '60vw'
+    assign image_render_width = 900
+    assign sizes = 'auto, (min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
+    assign widths = '160, 240, 320, 400, 480, 600, 720, 900'
+  endif
 %}
 
 {% capture image %}
-  {%- if block_settings.image -%}
-    {{
-      block_settings.image
-      | image_url: width: 3840
-      | image_tag:
-        width: block_settings.image.width,
-        widths: widths,
-        height: block_settings.image.height,
-        class: 'image-block__image border-style',
-        style: image_border_style,
-        sizes: sizes
-    }}
+  {%- if image_asset != blank -%}
+    <picture class="image-block__picture">
+      {%- if mobile_image_asset != blank -%}
+        <source media="(max-width: 749px)" srcset="{{ mobile_image_asset | asset_url }}">
+      {%- endif -%}
+      <img
+        src="{{ image_asset | asset_url }}"
+        alt="{{ image_alt | escape }}"
+        width="1534"
+        height="2048"
+        class="image-block__image border-style"
+        style="{{ image_border_style }}"
+        sizes="{{ sizes }}"
+        {% if image_loading != blank %}loading="{{ image_loading }}"{% endif %}
+        {% if image_decoding != blank %}decoding="{{ image_decoding }}"{% endif %}
+        {% if image_fetchpriority != blank %}fetchpriority="{{ image_fetchpriority }}"{% endif %}
+        draggable="false"
+      >
+    </picture>
+  {%- elsif block_settings.image -%}
+    <picture class="image-block__picture">
+      {% render 'mobile-image-source', image: block_settings.image, sizes: media_width_mobile, widths: mobile_widths %}
+      {% if image_loading != blank %}
+        {{
+          block_settings.image
+          | image_url: width: image_render_width
+          | image_tag:
+            width: block_settings.image.width,
+            widths: widths,
+            height: block_settings.image.height,
+            class: 'image-block__image border-style',
+            style: image_border_style,
+            sizes: sizes,
+            loading: image_loading,
+            decoding: image_decoding,
+            fetchpriority: image_fetchpriority
+        }}
+      {% else %}
+        {{
+          block_settings.image
+          | image_url: width: image_render_width
+          | image_tag:
+            width: block_settings.image.width,
+            widths: widths,
+            height: block_settings.image.height,
+            class: 'image-block__image border-style',
+            style: image_border_style,
+            sizes: sizes
+        }}
+      {% endif %}
+    </picture>
   {%- else -%}
     <div class="placeholder-image border-style size-style" style="{{ image_border_style }}">
       {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hero__image' }}
@@ -107,6 +212,15 @@
     height: 100%;
   }
 
+  .image-block__picture {
+    display: block;
+    width: 100%;
+  }
+
+  .image-block--height-fill .image-block__picture {
+    height: 100%;
+  }
+
   .image-block__image {
     object-fit: cover;
     aspect-ratio: var(--ratio);
@@ -118,7 +232,7 @@
   "name": "t:names.image",
   "tag": null,
   "settings": [
-    {
+	{
       "type": "image_picker",
       "id": "image",
       "label": "t:settings.image"

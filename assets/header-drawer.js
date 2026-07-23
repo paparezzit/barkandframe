@@ -3,6 +3,7 @@ import { trapFocus, removeTrapFocus } from '@theme/focus';
 import { onAnimationEnd } from '@theme/utilities';
 
 const skipMenuNavigationTransitionKey = 'skip-header-drawer-navigation-transition';
+const returnToMobileDrawerKey = 'baf-return-to-mobile-drawer-after-localization';
 
 /**
  * A custom element that manages the main menu drawer.
@@ -21,6 +22,7 @@ class HeaderDrawer extends Component {
     this.addEventListener('keyup', this.#onKeyUp);
     this.addEventListener('click', this.#onMenuLinkClick);
     this.#setupAnimatedElementListeners();
+    this.#restoreAfterLocalizationSubmit();
   }
 
   disconnectedCallback() {
@@ -162,6 +164,23 @@ class HeaderDrawer extends Component {
     const allAnimated = this.querySelectorAll('.menu-drawer__animated-element');
     allAnimated.forEach((element) => {
       element.addEventListener('animationend', removeWillChangeOnAnimationEnd);
+    });
+  }
+
+  #restoreAfterLocalizationSubmit() {
+    if (!this.classList.contains('header__drawer--mobile')) return;
+    if (sessionStorage.getItem(returnToMobileDrawerKey) !== 'true') return;
+
+    sessionStorage.removeItem(returnToMobileDrawerKey);
+
+    requestAnimationFrame(() => {
+      this.refs.details.setAttribute('open', '');
+      this.open();
+
+      const openSubmenus = this.querySelectorAll('details[open]');
+      openSubmenus.forEach((details) => {
+        if (details !== this.refs.details) reset(details);
+      });
     });
   }
 }

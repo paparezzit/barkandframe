@@ -1,0 +1,385 @@
+{%- liquid
+  assign feed_title = section.settings.title
+  assign feed_button_label = section.settings.button_label
+  assign feed_button_link = section.settings.button_link
+-%}
+
+<link rel="stylesheet" href="{{ 'baf-section-see-it-at-home.css' | asset_url }}" media="print, (min-width: 990px)" onload="this.onload=null;this.media='all'">
+<noscript>{{ 'baf-section-see-it-at-home.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="see-it-at-home{% if section.settings.compact_spacing %} see-it-at-home--compact{% endif %}">
+  <div class="section section--page-width">
+    <div class="see-it-at-home__inner">
+      {%- if feed_title != blank -%}
+        <h2 class="see-it-at-home__title">
+          {{ feed_title }}
+        </h2>
+      {%- endif -%}
+
+      {%- if feed_button_label != blank and feed_button_link != blank -%}
+        <a href="{{ feed_button_link }}" class="button see-it-at-home__button" target="_blank" rel="noopener noreferrer">{{ feed_button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="see-it-at-home__carousel" data-see-home-carousel>
+    <div class="see-it-at-home__viewport">
+      {% content_for 'blocks' %}
+    </div>
+    <slideshow-arrows class="see-it-at-home__carousel-arrows product-gallery__arrows" position="center">
+      <button
+        class="see-it-at-home__carousel-arrow slideshow-control slideshow-control--previous button button-unstyled button-unstyled--transparent"
+        type="button"
+        aria-label="Previous image"
+        data-see-home-prev
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <button
+        class="see-it-at-home__carousel-arrow slideshow-control slideshow-control--next button button-unstyled button-unstyled--transparent"
+        type="button"
+        aria-label="Next image"
+        data-see-home-next
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="miter">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </slideshow-arrows>
+  </div>
+</div>
+
+
+
+<script type="module">
+document.addEventListener("DOMContentLoaded", () => {
+  const initSeeItAtHome = (feed) => {
+    if (feed.dataset.seeItAtHomeReady === "true") return;
+    feed.dataset.seeItAtHomeReady = "true";
+
+    const marquee = feed.querySelector("marquee-component");
+    const prev = feed.querySelector("[data-see-home-prev]");
+    const next = feed.querySelector("[data-see-home-next]");
+    if (!marquee || !prev || !next) return;
+
+    const wrapper = marquee.querySelector(".marquee__wrapper");
+    const content = marquee.querySelector(".marquee__content");
+
+    if (!wrapper || !content) return;
+
+    let loopPoint = 0;
+    let itemCount = 0;
+    let currentIndex = 0;
+    let isButtonScrolling = false;
+    let buttonScrollTimer = null;
+    let normalizeTimer = null;
+    let refreshFrame = null;
+    let lastMeasuredWidth = Math.round(marquee.clientWidth || window.innerWidth);
+    const setCount = 5;
+    const middleSetIndex = Math.floor(setCount / 2);
+
+    function stabilizeImages(root) {
+      root.querySelectorAll("img").forEach(image => {
+        image.setAttribute("loading", "lazy");
+        image.setAttribute("decoding", "async");
+        image.setAttribute("fetchpriority", "low");
+        image.draggable = false;
+      });
+    }
+
+    function prepareInfiniteMarquee() {
+      marquee.setAttribute("data-disabled", "");
+      marquee.setAttribute("data-ready", "");
+      wrapper.querySelectorAll(".marquee__content[aria-hidden='true']").forEach(clone => clone.remove());
+
+      const sets = Array.from(content.querySelectorAll(".marquee__repeated-items"));
+      const baseSet = sets[0];
+      if (!baseSet) return false;
+
+      const baseItemCount = baseSet.querySelectorAll(".image-block").length;
+      const preparedItemCount = Number.parseInt(content.dataset.infiniteItemCount || "0", 10);
+      const shouldRebuild = content.dataset.infinitePrepared !== "true" ||
+        sets.length !== setCount ||
+        preparedItemCount !== baseItemCount;
+
+      if (!shouldRebuild) return false;
+
+      stabilizeImages(baseSet);
+
+      sets.forEach((set, index) => {
+        if (index > 0) set.remove();
+      });
+
+      for (let i = 1; i < setCount; i += 1) {
+        const clone = baseSet.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        stabilizeImages(clone);
+        content.appendChild(clone);
+      }
+
+      content.dataset.infinitePrepared = "true";
+      content.dataset.infiniteSetCount = String(setCount);
+      content.dataset.infiniteItemCount = String(baseItemCount);
+      delete marquee.dataset.infiniteRailReady;
+
+      return true;
+    }
+
+    function jumpWithoutAnimation(left) {
+      marquee.style.scrollBehavior = "auto";
+      marquee.scrollLeft = Math.round(left);
+      marquee.offsetHeight;
+      marquee.style.scrollBehavior = "";
+    }
+
+    function measureLoopPoint() {
+      const sets = content.querySelectorAll(".marquee__repeated-items");
+      const firstSet = sets[0];
+      const secondSet = sets[1];
+      loopPoint = firstSet && secondSet
+        ? secondSet.offsetLeft - firstSet.offsetLeft
+        : 0;
+    }
+
+    function getSets() {
+      return Array.from(content.querySelectorAll(".marquee__repeated-items"));
+    }
+
+    function getTile(index, setIndex = middleSetIndex) {
+      const set = getSets()[setIndex];
+      return set ? set.querySelectorAll(".image-block")[index] : null;
+    }
+
+    function getScrollLeftForTile(tile) {
+      if (!tile) return marquee.scrollLeft;
+
+      const tileRect = tile.getBoundingClientRect();
+      const marqueeRect = marquee.getBoundingClientRect();
+      const tileCenter = tileRect.left + (tileRect.width / 2);
+      const viewportCenter = marqueeRect.left + (marquee.clientWidth / 2);
+
+      return marquee.scrollLeft + tileCenter - viewportCenter;
+    }
+
+    function getScrollLeftForIndex(index, setIndex = middleSetIndex) {
+      return getScrollLeftForTile(getTile(index, setIndex));
+    }
+
+    function jumpToIndex(index, setIndex = middleSetIndex) {
+      jumpWithoutAnimation(getScrollLeftForIndex(index, setIndex));
+    }
+
+    function getStep() {
+      const firstSet = content.querySelector(".marquee__repeated-items");
+      const tiles = firstSet
+        ? firstSet.querySelectorAll(".image-block")
+        : marquee.querySelectorAll(".marquee__repeated-items .image-block");
+
+      if (tiles.length > 1) {
+        return Math.abs(tiles[1].offsetLeft - tiles[0].offsetLeft);
+      }
+
+      const tile = tiles[0];
+      const gap = firstSet ? parseFloat(getComputedStyle(firstSet).gap) || 0 : parseFloat(getComputedStyle(wrapper).gap) || 0;
+      return tile ? tile.getBoundingClientRect().width + gap : marquee.clientWidth;
+    }
+
+    function measureRail() {
+      measureLoopPoint();
+      const firstSet = content.querySelector(".marquee__repeated-items");
+      itemCount = firstSet ? firstSet.querySelectorAll(".image-block").length : 0;
+      if (itemCount > 0 && (currentIndex < 0 || currentIndex >= itemCount)) {
+        currentIndex = Math.floor(itemCount / 2);
+      }
+      lastMeasuredWidth = Math.round(marquee.clientWidth || window.innerWidth);
+    }
+
+    function getClosestIndex() {
+      const firstSet = content.querySelector(".marquee__repeated-items");
+      const referenceLinks = firstSet ? Array.from(firstSet.querySelectorAll(".image-block")) : [];
+      const viewportCenter = marquee.getBoundingClientRect().left + (marquee.clientWidth / 2);
+      const closestTile = Array.from(marquee.querySelectorAll(".marquee__repeated-items .image-block"))
+        .map(tile => {
+          const rect = tile.getBoundingClientRect();
+          return {
+            tile,
+            delta: Math.abs((rect.left + (rect.width / 2)) - viewportCenter),
+          };
+        })
+        .sort((a, b) => a.delta - b.delta)[0]?.tile;
+
+      if (!closestTile) return currentIndex;
+
+      const closestHref = closestTile.getAttribute("href");
+      const index = referenceLinks.findIndex(tile => tile.getAttribute("href") === closestHref);
+
+      return index >= 0 ? index : currentIndex;
+    }
+
+    function normalizePosition() {
+      if (loopPoint <= 0 || setCount < 3 || isButtonScrolling) return;
+
+      currentIndex = getClosestIndex();
+      jumpToIndex(currentIndex, middleSetIndex);
+    }
+
+    function refreshMarquee() {
+      const rebuilt = prepareInfiniteMarquee();
+      measureRail();
+
+      if (loopPoint <= 0) return;
+
+      if (rebuilt || !marquee.dataset.infiniteRailReady) {
+        currentIndex = Math.floor(itemCount / 2);
+        jumpToIndex(currentIndex, middleSetIndex);
+        marquee.dataset.infiniteRailReady = "true";
+      } else {
+        normalizePosition();
+      }
+    }
+
+    function queueRefreshMarquee() {
+      if (refreshFrame) return;
+      refreshFrame = window.requestAnimationFrame(() => {
+        refreshFrame = null;
+        refreshMarquee();
+      });
+    }
+
+    function handleResize() {
+      const currentWidth = Math.round(marquee.clientWidth || window.innerWidth);
+      if (Math.abs(currentWidth - lastMeasuredWidth) < 2) return;
+      lastMeasuredWidth = currentWidth;
+      queueRefreshMarquee();
+    }
+
+    function scrollByDirection(direction) {
+      if (isButtonScrolling) return;
+
+      refreshMarquee();
+      const step = getStep();
+      if (step <= 0 || loopPoint <= 0) return;
+
+      normalizePosition();
+
+      const previousIndex = currentIndex;
+      const nextIndex = (currentIndex + direction + itemCount) % itemCount;
+      let targetSetIndex = middleSetIndex;
+
+      if (direction > 0 && nextIndex <= previousIndex) {
+        targetSetIndex = middleSetIndex + 1;
+      } else if (direction < 0 && nextIndex >= previousIndex) {
+        targetSetIndex = middleSetIndex - 1;
+      }
+
+      jumpToIndex(previousIndex, middleSetIndex);
+      currentIndex = nextIndex;
+
+      isButtonScrolling = true;
+      clearTimeout(buttonScrollTimer);
+      buttonScrollTimer = window.setTimeout(() => {
+        isButtonScrolling = false;
+        jumpToIndex(currentIndex, middleSetIndex);
+      }, 520);
+
+      marquee.scrollTo({ left: getScrollLeftForIndex(nextIndex, targetSetIndex), behavior: "smooth" });
+    }
+
+    refreshMarquee();
+    requestAnimationFrame(refreshMarquee);
+    window.setTimeout(refreshMarquee, 400);
+
+    prev.addEventListener("click", () => {
+      scrollByDirection(-1);
+    });
+
+    next.addEventListener("click", () => {
+      scrollByDirection(1);
+    });
+
+    marquee.addEventListener("scroll", () => {
+      clearTimeout(normalizeTimer);
+      if (isButtonScrolling) return;
+      normalizeTimer = window.setTimeout(normalizePosition, 180);
+    }, { passive: true });
+
+    marquee.addEventListener("scrollend", () => {
+      if (isButtonScrolling) return;
+      normalizePosition();
+    }, { passive: true });
+
+    marquee.querySelectorAll("img").forEach(image => {
+      if (!image.complete) image.addEventListener("load", queueRefreshMarquee, { once: true });
+    });
+
+    window.addEventListener("resize", handleResize, { passive: true });
+  };
+
+  const scheduleSeeItAtHome = (feed) => {
+    const init = () => initSeeItAtHome(feed);
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        observer.disconnect();
+        init();
+      }, { rootMargin: "700px 0px" });
+      observer.observe(feed);
+      return;
+    }
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(init, { timeout: 3000 });
+    } else {
+      window.setTimeout(init, 1500);
+    }
+  };
+
+  document.querySelectorAll(".see-it-at-home").forEach(scheduleSeeItAtHome);
+});
+
+</script>
+
+{% schema %}
+{
+  "name": "See it at home",
+  "class": "container-background-image",
+  "blocks": [
+    {
+      "type": "_marquee"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Follow Us"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "@bark_and_frame"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "compact_spacing",
+      "label": "Use compact spacing",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "See it at home",
+      "category": "t:categories.storytelling"
+    }
+  ]
+}
+{% endschema %}

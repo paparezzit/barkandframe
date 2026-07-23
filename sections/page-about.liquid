@@ -1,28 +1,41 @@
 <div class="about-page">
+  {%- liquid
+    assign about_s1_main_desktop = 'about-us-founder-patrik-finn-desktop.jpg'
+    assign about_s1_main_mobile = 'about-us-founder-patrik-finn-mobile.jpg'
+    assign about_s1_sketch_desktop = 'about-us-charcoal-sketch-jack-russell-desktop.jpg'
+    assign about_s1_sketch_mobile = 'about-us-charcoal-sketch-jack-russell-mobile.jpg'
+    assign about_s1_sofa_desktop = 'about-us-finn-grey-sofa-desktop.jpg'
+    assign about_s1_sofa_mobile = 'about-us-finn-grey-sofa-mobile.jpg'
+    assign about_s3_main_desktop = 'about-us-hanging-gentleman-portrait-desktop.jpg'
+    assign about_s3_main_mobile = 'about-us-hanging-gentleman-portrait-mobile.jpg'
+  -%}
 
   <div class="about-hero">
     <h1 class="about-hero__title">{{ section.settings.hero_title }}</h1>
   </div>
 
   {%- if section.settings.s1_photo_1 != blank or section.settings.s1_heading != blank or section.settings.s1_text != blank -%}
-  <div class="about-split">
+  <div class="about-split about-split--intro">
     <div class="about-split__photos">
       <div class="about-photo-grid">
-        {%- if section.settings.s1_photo_1 != blank -%}
-          <div class="about-photo-grid__item about-photo-grid__item--main">
-            {{- section.settings.s1_photo_1 | image_url: width: 800 | image_tag: loading: 'eager', widths: '400, 600, 800' -}}
-          </div>
-        {%- endif -%}
-        {%- if section.settings.s1_photo_2 != blank -%}
-          <div class="about-photo-grid__item about-photo-grid__item--medium" data-parallax>
-            {{- section.settings.s1_photo_2 | image_url: width: 450 | image_tag: loading: 'eager', widths: '220, 300, 450' -}}
-          </div>
-        {%- endif -%}
-        {%- if section.settings.s1_photo_3 != blank -%}
-          <div class="about-photo-grid__item about-photo-grid__item--small" data-parallax="-10dvh">
-            {{- section.settings.s1_photo_3 | image_url: width: 400 | image_tag: loading: 'eager', widths: '220, 300, 400' -}}
-          </div>
-        {%- endif -%}
+        <div class="about-photo-grid__item about-photo-grid__item--main">
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ about_s1_main_mobile | asset_url }}">
+            <img src="{{ about_s1_main_desktop | asset_url }}" alt="Patrik and Finn in the studio" width="1049" height="1400" loading="eager" fetchpriority="high" decoding="async">
+          </picture>
+        </div>
+        <div class="about-photo-grid__item about-photo-grid__item--medium" data-parallax>
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ about_s1_sketch_mobile | asset_url }}">
+            <img src="{{ about_s1_sketch_desktop | asset_url }}" alt="Hand-drawn Jack Russell charcoal sketch" width="1120" height="1400" loading="eager" decoding="async">
+          </picture>
+        </div>
+        <div class="about-photo-grid__item about-photo-grid__item--small" data-parallax="-10dvh">
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ about_s1_sofa_mobile | asset_url }}">
+            <img src="{{ about_s1_sofa_desktop | asset_url }}" alt="Finn at home on a grey sofa" width="1050" height="1400" loading="eager" decoding="async">
+          </picture>
+        </div>
       </div>
     </div>
     <div class="about-split__content">
@@ -63,7 +76,10 @@
       <div class="about-photo-grid">
         {%- if section.settings.s3_photo_1 != blank -%}
           <div class="about-photo-grid__item about-photo-grid__item--main">
-            {{- section.settings.s3_photo_1 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 600, 900' -}}
+            <picture>
+              <source media="(max-width: 749px)" srcset="{{ about_s3_main_mobile | asset_url }}">
+              <img src="{{ about_s3_main_desktop | asset_url }}" alt="Jack Russell portrait being hung at home" width="933" height="1400" loading="lazy" decoding="async">
+            </picture>
           </div>
         {%- endif -%}
         {%- if section.settings.s3_photo_2 != blank -%}
@@ -80,7 +96,14 @@
     </div>
     <div class="about-split__content">
       {%- if section.settings.s3_heading != blank -%}
-        <h2 class="about-split__heading">{{ section.settings.s3_heading }}</h2>
+        {%- assign s3_heading_parts = section.settings.s3_heading | split: ' & ' -%}
+        <h2 class="about-split__heading">
+          {%- if s3_heading_parts.size == 2 -%}
+            {{ s3_heading_parts | first }} <span class="about-split__heading-nowrap">&amp; {{ s3_heading_parts | last }}</span>
+          {%- else -%}
+            {{ section.settings.s3_heading }}
+          {%- endif -%}
+        </h2>
       {%- endif -%}
       {%- if section.settings.s3_text != blank -%}
         <div class="about-split__body rte">{{ section.settings.s3_text }}</div>

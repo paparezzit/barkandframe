@@ -1,0 +1,313 @@
+- banner:
+  - link "PageSpeed Insights logo PageSpeed Insights":
+    - /url: ./
+    - img "PageSpeed Insights logo"
+    - generic: PageSpeed Insights
+  - button "Zkopírovat odkaz":
+    - generic: Zkopírovat odkaz
+  - generic: Dokumenty
+  - link "Dokumenty":
+    - /url: https://developers.google.com/speed/docs/insights/v5/about
+- generic: Hlášení z 22. 7. 2026 16:57:43
+- textbox:
+  - /placeholder: Zadejte adresu URL webové stránky
+  - text: https://barkandframe.com/
+- paragraph: Zadejte platnou adresu URL
+- button "Analyzovat":
+  - generic: Analyzovat
+- tablist:
+  - tab "Mobil" [selected]:
+    - generic: smartphone
+    - generic: Mobil
+  - tab "Počítač":
+    - generic: computer
+    - generic: Počítač
+- tabpanel "Mobil":
+  - generic: Objevte, co zažívají skuteční uživatelé
+  - button "button":
+  - generic: Žádná data
+  - separator
+  - generic: Diagnostikujte problémy s výkonem
+  - article:
+    - link "59 Výkon":
+      - /url: "#performance"
+      - generic: "59"
+      - generic: Výkon
+    - link "94 Přístupnost":
+      - /url: "#accessibility"
+      - generic: "94"
+      - generic: Přístupnost
+    - link "73 Doporučené postupy":
+      - /url: "#best-practices"
+      - generic: "73"
+      - generic: Doporučené postupy
+    - link "100 SEO":
+      - /url: "#seo"
+      - generic: "100"
+      - generic: SEO
+    - link "2/3 Procházení agenty":
+      - /url: "#agentic-browsing"
+      - generic: 2/3
+      - generic: Procházení agenty
+    - text: Hodnoty jsou odhady a mohou se lišit.
+    - link "Skóre výkonu se počítá":
+      - /url: https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/?utm_source=lighthouse&utm_medium=lr
+    - text: přímo z těchto metrik.
+    - link "Zobrazit kalkulačku.":
+      - /url: https://googlechrome.github.io/lighthouse/scorecalc/#FCP=4651&LCP=15795&TBT=139&CLS=0.04&SI=6299&TTI=15945&device=mobile&version=13.4.0
+    - generic: 0–49
+    - generic: 50–89
+    - generic: 90–100
+    - img "Final Screenshot"
+    - checkbox "Toggle the display of metric descriptions"
+    - generic: Metriky
+    - generic: Rozbalit zobrazení
+    - generic: First Contentful Paint
+    - generic: 4,7 s
+    - generic: Largest Contentful Paint
+    - generic: 15,8 s
+    - generic: Total Blocking Time
+    - generic: 140 ms
+    - generic: Cumulative Layout Shift
+    - generic: "0.039"
+    - generic: Speed Index
+    - generic: 6,3 s
+    - list:
+      - listitem: Captured at 22. 7. 2026 16:57 SELČ
+      - listitem: Emulované zařízení Moto G Power with Lighthouse 13.4.0
+      - listitem: Návštěva jedné stránky
+      - listitem: První načtení stránky
+      - listitem: Pomalé omezení 4G
+      - listitem: Using HeadlessChromium 149.0.7827.155 with lr
+    - button "Zobrazit stromovou mapu"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - img "Screenshot"
+    - generic: "Zobrazit audity relevantní pro:"
+    - radio "All" [checked]
+    - generic: All
+    - radio "FCP"
+    - generic "First Contentful Paint": FCP
+    - radio "LCP"
+    - generic "Largest Contentful Paint": LCP
+    - radio "TBT"
+    - generic "Total Blocking Time": TBT
+    - radio "CLS"
+    - generic "Cumulative Layout Shift": CLS
+    - generic: Statistiky
+    - 'generic "Požadavky blokující vykreslování —Odh. úspora: 760 ms"':
+      - generic: Požadavky blokující vykreslování
+      - text: "—Odh. úspora: 760 ms"
+    - 'generic "Používejte efektivní dobu platnosti mezipaměti —Odh. úspora: 171 KiB"':
+      - generic: Používejte efektivní dobu platnosti mezipaměti
+      - text: "—Odh. úspora: 171 KiB"
+    - generic "Vynucené přeformátování":
+      - generic: Vynucené přeformátování
+    - generic "Strom síťových závislostí":
+      - generic: Strom síťových závislostí
+    - 'generic "Zlepšete zobrazování obrázků —Odh. úspora: 44 KiB"':
+      - generic: Zlepšete zobrazování obrázků
+      - text: "—Odh. úspora: 44 KiB"
+    - 'generic "Starší JavaScript —Odh. úspora: 13 KiB"':
+      - generic: Starší JavaScript
+      - text: "—Odh. úspora: 13 KiB"
+    - generic "Viníci změny rozvržení":
+      - generic: Viníci změny rozvržení
+    - generic "Rozdělení LCP":
+      - generic: Rozdělení LCP
+    - generic "Třetí strany":
+      - generic: Třetí strany
+    - text: Tyto statistiky jsou k dispozici také na panelu Výkon v Nástrojích pro vývojáře Chrome – k zobrazení podrobnějších informací
+    - link "zaznamenejte trasování":
+      - /url: https://developer.chrome.com/docs/devtools/performance/reference?utm_source=lighthouse&utm_medium=lr
+    - text: .
+    - generic: Diagnostika
+    - generic "Minimalizujte práci v hlavním podprocesu —3,1 s":
+      - generic: Minimalizujte práci v hlavním podprocesu
+      - text: —3,1 s
+    - 'generic "Odstraňte nepoužívané styly CSS —Odh. úspora: 62 KiB"':
+      - generic: Odstraňte nepoužívané styly CSS
+      - text: "—Odh. úspora: 62 KiB"
+    - 'generic "Odstraňte nepoužívaný JavaScript —Odh. úspora: 266 KiB"':
+      - generic: Odstraňte nepoužívaný JavaScript
+      - text: "—Odh. úspora: 266 KiB"
+    - generic "Obrázkové prvky nemají explicitní označení width a height":
+      - text: Obrázkové prvky nemají explicitní označení
+      - code: width
+      - text: a
+      - code: height
+    - generic "Předejděte přenášení enormního množství dat —Celková velikost byla 3 225 KiB":
+      - generic: Předejděte přenášení enormního množství dat
+      - text: —Celková velikost byla 3 225 KiB
+    - generic "V hlavním podprocesu nepoužívejte dlouhé úlohy —Bylo nalezeno 10 dlouhých úloh":
+      - generic: V hlavním podprocesu nepoužívejte dlouhé úlohy
+      - text: —Bylo nalezeno 10 dlouhých úloh
+    - generic "Hodnoty časování uživatelů —32 časování uživatelů":
+      - generic: Hodnoty časování uživatelů
+      - text: —32 časování uživatelů
+    - generic "Nepoužívejte neskládané animace —Bylo nalezeno 9 animovaných prvků":
+      - generic: Nepoužívejte neskládané animace
+      - text: —Bylo nalezeno 9 animovaných prvků
+    - text: Další informace o výkonu vaší aplikace. Tyto hodnoty nemají
+    - link "přímý vliv":
+      - /url: https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/?utm_source=lighthouse&utm_medium=lr
+    - text: na skóre výkonu.
+    - generic "Úspěšné audity (10) Zobrazit":
+      - generic: Úspěšné audity (10)
+      - generic: Zobrazit
+    - text: —
+    - heading "94 Přístupnost" [level=2]:
+      - generic: "94"
+      - generic: Přístupnost
+    - text: Tyto kontroly odhalují příležitosti ke
+    - link "zlepšení přístupnosti webové aplikace":
+      - /url: https://developer.chrome.com/docs/lighthouse/accessibility/?utm_source=lighthouse&utm_medium=lr
+    - text: . Automatická kontrola dokáže rozpoznat pouze část problémů a nezaručuje, že je ebová aplikace přístupná. Doporučujeme proto provést také
+    - link "ruční testování":
+      - /url: https://web.dev/articles/how-to-review?utm_source=lighthouse&utm_medium=lr
+    - text: .
+    - generic: Kontrast
+    - generic "Barvy pozadí a popředí nemají dostatečný kontrastní poměr.":
+      - generic: Barvy pozadí a popředí nemají dostatečný kontrastní poměr.
+    - generic: Toto jsou příležitosti ke zlepšení čitelnosti obsahu.
+    - generic: Názvy a štítky
+    - generic "Odkazy nemají rozeznatelné názvy":
+      - generic: Odkazy nemají rozeznatelné názvy
+    - generic "Prvky obrázků nemají atributy [alt] s redundantním textem.":
+      - text: Prvky obrázků nemají atributy
+      - code: "[alt]"
+      - text: s redundantním textem.
+    - generic: Toto jsou příležitosti ke zlepšení sémantiky ovládacích prvků v aplikaci. Mohou zlepšit prostředí pro uživatele asistenčních technologií, jako jsou například čtečky obrazovek.
+    - generic: ARIA
+    - generic "ID ARIA jsou unikátní":
+      - generic: ID ARIA jsou unikátní
+    - generic: Toto jsou příležitosti ke zlepšení používání specifikace ARIA ve vaší aplikaci, které mohou zlepšit prostředí pro uživatele asistenčních technologií, jako jsou čtečky obrazovek.
+    - generic "Další položky k ruční kontrole (10) Zobrazit":
+      - generic: Další položky k ruční kontrole (10)
+      - generic: Zobrazit
+    - text: Tyto položky se týkají oblastí, které v současné době automatické testování nedokáže pokrýt. Další informace najdete v průvodci
+    - link "provedením kontroly přístupnosti":
+      - /url: https://web.dev/articles/how-to-review?utm_source=lighthouse&utm_medium=lr
+    - text: .
+    - generic "Úspěšné audity (28) Zobrazit":
+      - generic: Úspěšné audity (28)
+      - generic: Zobrazit
+    - generic "Není relevantní (31) Zobrazit":
+      - generic: Není relevantní (31)
+      - generic: Zobrazit
+    - heading "73 Doporučené postupy" [level=2]:
+      - generic: "73"
+      - generic: Doporučené postupy
+    - generic: Obecné
+    - generic "Používá zastaralá rozhraní API —Bylo nalezeno 1 upozornění":
+      - generic: Používá zastaralá rozhraní API
+      - text: —Bylo nalezeno 1 upozornění
+    - generic "Do konzole byly zaprotokolovány chyby prohlížeče":
+      - generic: Do konzole byly zaprotokolovány chyby prohlížeče
+    - generic "Problémy byly zaprotokolovány na panelu Issues v Chrome DevTools":
+      - text: Problémy byly zaprotokolovány na panelu
+      - code: Issues
+      - text: v Chrome DevTools
+    - generic "Byly zjištěny javascriptové knihovny":
+      - generic: Byly zjištěny javascriptové knihovny
+    - generic: Důvěra a bezpečí
+    - generic "Zajistěte, aby zásady CSP byly účinné proti útokům XSS":
+      - generic: Zajistěte, aby zásady CSP byly účinné proti útokům XSS
+    - generic "Použijte přísné zásady HSTS":
+      - generic: Použijte přísné zásady HSTS
+    - generic "Pomocí záhlaví COOP zajistěte správnou izolaci zdroje":
+      - generic: Pomocí záhlaví COOP zajistěte správnou izolaci zdroje
+    - generic "Pomocí důvěryhodných typů zmírněte riziko útoků XSS přes model DOM":
+      - generic: Pomocí důvěryhodných typů zmírněte riziko útoků XSS přes model DOM
+    - generic: Kompatibilita s prohlížeči
+    - generic "Funkce Baseline":
+      - generic: Funkce Baseline
+    - generic "Úspěšné audity (10) Zobrazit":
+      - generic: Úspěšné audity (10)
+      - generic: Zobrazit
+    - generic "Není relevantní (2) Zobrazit":
+      - generic: Není relevantní (2)
+      - generic: Zobrazit
+    - heading "100 SEO" [level=2]:
+      - generic: "100"
+      - generic: SEO
+    - text: Tyto kontroly zajišťují, aby vaše stránka dodržovala základní radu ohledně optimalizace pro vyhledávače. Mnoho dalších faktorů, které ovlivňují umístění ve výsledcích vyhledávání, Lighthouse nehodnotí, např. výkon metrik
+    - link "Core Web Vitals":
+      - /url: https://web.dev/explore/vitals?utm_source=lighthouse&utm_medium=lr
+    - text: .
+    - link "Další informace o základních požadavcích Vyhledávání Google":
+      - /url: https://support.google.com/webmasters/answer/35769
+    - generic "Další položky k ruční kontrole (1) Skrýt":
+      - generic: Další položky k ruční kontrole (1)
+      - generic: Skrýt
+    - generic "Strukturovaná data jsou platná":
+      - generic: Strukturovaná data jsou platná
+    - generic: Chcete-li zkontrolovat dodržování dalších doporučených postupů pro SEO, spusťte pro svůj web tyto další validátory.
+    - generic "Úspěšné audity (10) Zobrazit":
+      - generic: Úspěšné audity (10)
+      - generic: Zobrazit
+    - heading "2/3 Procházení agenty" [level=2]:
+      - generic: 2/3
+      - generic: Procházení agenty
+    - text: Tyto kontroly zajišťují vysoce kvalitní,
+    - link "prohledávatelné weby pro AI agenty":
+      - /url: https://goo.gle/lighthouse-agentic-web
+    - text: a ověřují správnost integrací WebMCP. Tato kategorie je stále ve vývoji a může se změnit.
+    - generic: Přístupnost agenta
+    - generic "Strom přístupnosti není vytvořen správně":
+      - generic: Strom přístupnosti není vytvořen správně
+    - generic: Tyto audity upozorňují na doporučené postupy ke zlepšení přístupnosti webu pro AI agenty.
+    - generic "Úspěšné audity (2) Zobrazit":
+      - generic: Úspěšné audity (2)
+      - generic: Zobrazit
+    - text: —
+    - generic "Není relevantní (3) Zobrazit":
+      - generic: Není relevantní (3)
+      - generic: Zobrazit
+- text: — — — — — — — — — — — — — —
+- contentinfo:
+  - generic: Další informace o PageSpeed Insights
+  - link "Co je nového":
+    - /url: https://developers.google.com/speed/docs/insights/release_notes
+  - link "Dokumentace":
+    - /url: https://developers.google.com/speed/docs/insights/v5/about
+  - link "Další informace o výkonu webů":
+    - /url: https://developers.google.com/speed
+  - link "Zeptejte se na webu Stack Overflow":
+    - /url: https://stackoverflow.com/questions/tagged/pagespeed-insights
+  - link "Seznam příjemců":
+    - /url: https://groups.google.com/g/pagespeed-insights-discuss
+  - generic: Související obsah
+  - link "Aktualizace":
+    - /url: https://developer.chrome.com/blog
+  - link "Základy webu":
+    - /url: https://developers.google.com/focus/web-development
+  - link "Případové studie":
+    - /url: https://web.dev/case-studies
+  - link "Podcasty":
+    - /url: https://web.dev/shows
+  - generic: Spojení
+  - link "Twitter":
+    - /url: https://twitter.com/ChromiumDev
+  - link "YouTube":
+    - /url: https://www.youtube.com/user/ChromeDevelopers
+  - link "Google Developers Logo":
+    - /url: https://developers.google.com/
+    - img "Google Developers Logo"
+  - link "Chrome":
+    - /url: https://developer.chrome.com/
+  - link "Firebase":
+    - /url: https://firebase.google.com/
+  - link "Všechny produkty":
+    - /url: https://developers.google.com/products/
+  - link "Smluvní podmínky a zásady ochrany soukromí":
+    - /url: https://policies.google.com/
+  - text: Podrobnosti popisují
+  - link "zásady pro weby Google Developers":
+    - /url: https://developers.google.com/terms/site-policies
+  - text: .

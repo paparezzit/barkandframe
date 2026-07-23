@@ -1,0 +1,110 @@
+<script>
+(function () {
+  if (window.BAFGenerateLead) return;
+
+  window.BAFGenerateLead = (function () {
+    function normalizeEmail(email) {
+      return String(email || '').trim().toLowerCase();
+    }
+
+    function removeStoredLead(storageKey) {
+      try {
+        sessionStorage.removeItem(storageKey);
+      } catch (e) {}
+    }
+
+    function readStoredLead(storageKey) {
+      try {
+        return JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function sha256Hex(value) {
+      if (!window.crypto || !window.crypto.subtle || !window.TextEncoder) {
+        return Promise.resolve('');
+      }
+
+      return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
+        .then(function (hashBuffer) {
+          return Array.prototype.map.call(new Uint8Array(hashBuffer), function (byte) {
+            return ('00' + byte.toString(16)).slice(-2);
+          }).join('');
+        })
+        .catch(function () {
+          return '';
+        });
+    }
+
+    function canPublish() {
+      return (
+        window.Shopify &&
+        window.Shopify.analytics &&
+        typeof window.Shopify.analytics.publish === 'function'
+      );
+    }
+
+    function publishLead(lead, storageKey, attempt) {
+      var formType = lead && lead.formType ? lead.formType : 'Other';
+      var email = normalizeEmail(lead && lead.email);
+      var currentAttempt = attempt || 0;
+
+      if (!email) {
+        removeStoredLead(storageKey);
+        return;
+      }
+
+      sha256Hex(email).then(function (emailHashed) {
+        if (canPublish()) {
+          try {
+            var published = window.Shopify.analytics.publish('generate_lead', {
+              form: {
+                type: formType
+              },
+              user: {
+                email: email,
+                email_hashed: emailHashed
+              },
+              clear: true
+            });
+
+            if (published !== false) {
+              removeStoredLead(storageKey);
+              return;
+            }
+          } catch (e) {}
+        }
+
+        if (currentAttempt < 30) {
+          setTimeout(function () {
+            publishLead(lead, storageKey, currentAttempt + 1);
+          }, 500);
+        }
+      });
+    }
+
+    function store(storageKey, lead) {
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({
+          formType: lead.formType || 'Other',
+          email: normalizeEmail(lead.email),
+          createdAt: new Date().toISOString()
+        }));
+      } catch (e) {}
+    }
+
+    function publishStored(storageKey) {
+      var lead = readStoredLead(storageKey);
+      if (!lead) return;
+
+      publishLead(lead, storageKey, 0);
+    }
+
+    return {
+      store: store,
+      publishStored: publishStored
+    };
+  })();
+})();
+</script>

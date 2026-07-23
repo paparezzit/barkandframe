@@ -4,6 +4,7 @@ import { ThemeEvents, CartAddEvent, CartErrorEvent, VariantUpdateEvent } from '@
 import { cartPerformance } from '@theme/performance';
 import { morph } from '@theme/morph';
 import { syncBafOrderAttribute } from '@theme/baf-order-sync';
+import { publishBafAddToCart } from '@theme/baf-add-to-cart-analytics';
 
 export const ADD_TO_CART_TEXT_ANIMATION_DURATION = 2000;
 
@@ -62,8 +63,9 @@ export class AddToCartComponent extends Component {
     this.animateAddToCart();
 
     const animationEnabled = this.dataset.addToCartAnimation === 'true';
+    const clickTarget = event.target instanceof Element ? event.target : null;
 
-    if (animationEnabled && !event.target.closest('.quick-add-modal')) {
+    if (animationEnabled && !clickTarget?.closest('.quick-add-modal')) {
       this.#animateFlyToCart();
     }
   }
@@ -261,16 +263,30 @@ class ProductFormComponent extends Component {
             }, 5000);
           }
 
-          return this.#syncMerchOrderAttribute(hasMerchOrderItem).then(() => {
-            this.dispatchEvent(
-              new CartAddEvent({}, id.toString(), {
-                source: 'product-form-component',
-                itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
-                productId: this.dataset.productId,
-                sections: response.sections,
+          return this.#syncMerchOrderAttribute(hasMerchOrderItem)
+            .then(() =>
+              publishBafAddToCart({
+                source: 'shop',
+                formData,
+                lineItem: response,
+                product: {
+                  product_id: this.dataset.productId,
+                  product_url: this.dataset.productUrl || '',
+                  product_title:
+                    this.dataset.productTitle || this.closest('quick-add-component')?.dataset.productTitle || '',
+                },
               })
-            );
-          });
+            )
+            .then(() => {
+              this.dispatchEvent(
+                new CartAddEvent({}, id.toString(), {
+                  source: 'product-form-component',
+                  itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
+                  productId: this.dataset.productId,
+                  sections: response.sections,
+                })
+              );
+            });
         }
       })
       .catch((error) => {

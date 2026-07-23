@@ -1,0 +1,179 @@
+.wearable-art-products {
+  --shop-products-grid-gap: 20px;
+  --shop-products-panel-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+  --shop-products-content-width: var(--shop-products-panel-width);
+  --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 3)) / 4);
+  --site-content-margin: var(--page-margin);
+  padding-block: var(--padding-block-start) 0;
+  background: var(--beige);
+}
+
+main.content-for-layout .wearable-art-products.section {
+  --site-content-margin: var(--page-margin);
+}
+
+.wearable-art-products__inner {
+  width: var(--shop-products-content-width);
+  justify-self: center;
+  margin-inline: auto;
+  padding-top: 0;
+}
+
+.wearable-art-products__anchor {
+  scroll-margin-top: 120px;
+}
+
+.wearable-art-products__bestseller {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: var(--shop-products-panel-width);
+  max-width: 100%;
+  margin: 64px auto 0;
+  padding: 63px 0 77px;
+  overflow: visible;
+  border-radius: var(--baf-radius-oval);
+  background: transparent;
+}
+
+.wearable-art-products__bestseller::before {
+  content: "";
+  position: absolute;
+  inset: -18px 0 13px;
+  z-index: -1;
+  border-radius: inherit;
+  background: #f4efe5;
+  transform: scaleY(0.833333);
+  transform-origin: center;
+}
+
+.wearable-art-products__section-title {
+  margin: 0 0 24px;
+  color: var(--brown);
+  font-family: "display", serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: none;
+}
+
+.wearable-art-products__section-title--center {
+  text-align: center;
+}
+
+.wearable-art-products__bestseller-carousel {
+  position: relative;
+  width: 100vw;
+  margin-inline: calc((100% - 100vw) / 2);
+}
+
+.wearable-art-products .shop-products__rail {
+  width: 100vw;
+  margin-block-start: calc(-1 * var(--hover-lift-amount));
+  margin-inline: 0;
+  padding-block-start: var(--hover-lift-amount);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
+.wearable-art-products .shop-products__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.wearable-art-products .shop-products__rail-track {
+  display: flex;
+  gap: var(--shop-products-grid-gap);
+  width: max-content;
+  margin: 0;
+  padding-inline: max(var(--page-margin), calc((100vw - var(--page-content-width)) / 2));
+  list-style: none;
+  backface-visibility: hidden;
+}
+
+.wearable-art-products .shop-products__rail-track .product-card__content {
+  isolation: isolate;
+}
+
+.wearable-art-products .shop-products__rail-track .card-gallery {
+  position: relative;
+  z-index: 1;
+}
+
+.wearable-art-products .shop-products__rail-track .baf-product-card-bubble {
+  z-index: 3;
+  transform: translate3d(0, 0, 1px);
+  backface-visibility: hidden;
+}
+
+.wearable-art-products product-swatches,
+.wearable-art-products swatches-variant-picker-component,
+.wearable-art-products .variant-option--swatches {
+  display: none !important;
+}
+
+.wearable-art-products .shop-products__rail-item {
+  flex: 0 0 var(--shop-products-card-width);
+  width: var(--shop-products-card-width);
+  min-width: 0;
+  max-width: var(--shop-products-card-width);
+  transition: transform var(--hover-transition-duration) var(--hover-transition-timing);
+}
+
+.wearable-art-products .wearable-art-products__bestseller-arrows {
+  top: var(--hover-lift-amount);
+  right: 0;
+  bottom: auto;
+  left: 0;
+  height: calc(var(--shop-products-card-width) * 1.26);
+  z-index: 5;
+  padding-inline: max(20px, var(--page-margin));
+}
+
+.wearable-art-products .wearable-art-products__bestseller-arrow {
+  opacity: 1;
+}
+
+.wearable-art-products .wearable-art-products__bestseller-arrow:hover {
+  opacity: 1;
+}
+
+@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .wearable-art-products .shop-products__rail-item:hover {
+    transform: translateY(calc(-1 * var(--hover-lift-amount)));
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .wearable-art-products {
+    --shop-products-card-width: calc((var(--shop-products-content-width) - (var(--shop-products-grid-gap) * 2)) / 3);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .wearable-art-products {
+    --shop-products-grid-gap: 12px;
+    --shop-products-card-width: calc((var(--shop-products-content-width) - var(--shop-products-grid-gap)) / 2);
+  }
+
+  .wearable-art-products__bestseller {
+    margin-top: 42px;
+    padding: 43px 0 53px;
+    border-radius: var(--baf-radius-xl);
+  }
+
+  .wearable-art-products__section-title {
+    margin-bottom: 14px;
+    font-size: var(--baf-display-large-size);
+  }
+
+  .wearable-art-products .shop-products__rail-track {
+    gap: var(--shop-products-grid-gap);
+  }
+
+  .wearable-art-products .wearable-art-products__bestseller-arrows {
+    padding-inline: 12px;
+  }
+}

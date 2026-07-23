@@ -12,6 +12,11 @@ query Input {
       legacyPrice: attribute(key: "_custom_price") {
         value
       }
+      sellingPlanAllocation {
+        sellingPlan {
+          id
+        }
+      }
     }
   }
 }

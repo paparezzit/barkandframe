@@ -28,6 +28,9 @@
   assign artists_path = '/pages/our-artists'
   assign artists_url = pages['our-artists'].url | default: artists_path
   assign artists_title = 'Our artists'
+  assign clothing_path = '/collections/all-products'
+  assign clothing_url = 'https://barkandframe.com/collections/all-products'
+  assign clothing_title = 'Clothing'
   assign has_about_link = false
   assign has_artists_link = false
   for link in block_settings.menu.links
@@ -57,9 +60,21 @@
     {% if link_title == 'our artists' or link_title == 'our artist' or link.url == artists_url or link.url == artists_path %}
       {% assign is_artists_link = true %}
     {% endif %}
+    {% assign is_shop_link = false %}
+    {% if link_title == 'shop' %}
+      {% assign is_shop_link = true %}
+    {% endif %}
+    {% assign menu_link_title = link.title %}
     {% assign menu_link_url = link.url %}
     {% assign menu_link_active = link.active %}
-    {% if is_about_link %}
+    {% if is_shop_link %}
+      {% assign menu_link_title = clothing_title %}
+      {% assign menu_link_url = clothing_url %}
+      {% assign menu_link_active = false %}
+      {% if request.path == clothing_path %}
+        {% assign menu_link_active = true %}
+      {% endif %}
+    {% elsif is_about_link %}
       {% assign menu_link_url = about_url %}
       {% assign menu_link_active = false %}
       {% if request.path == about_path or request.path == about_url %}
@@ -84,16 +99,16 @@
         href="{{ menu_link_url }}"
         data-skip-node-update="true"
         class="menu-list__link{% if menu_link_active %} menu-list__link--active{% endif %}"
-        {%- if link.links != blank -%}
+        {%- if link.links != blank and is_shop_link == false -%}
           aria-controls="submenu-{{ forloop.index }}"
           aria-haspopup="true"
           aria-expanded="false"
         {%- endif -%}
         ref="menuitem"
       >
-        <span class="menu-list__link-title">{{- link.title -}}</span>
+        <span class="menu-list__link-title">{{- menu_link_title -}}</span>
       </a>
-      {%- if link.links != blank -%}
+      {%- if link.links != blank and is_shop_link == false -%}
         <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
           <div
             id="submenu-{{ forloop.index }}"
@@ -191,7 +206,15 @@
     on:pointerenter="/activate"
     on:pointerleave="/deactivate"
   >
-    <button role="menuitem" class="button menu-list__link button-unstyled">
+    {% comment %}
+      BAF Agentic Browsing guard: keep this as a plain button.
+      Do not add role="menuitem"; Lighthouse flags it outside menu/menubar parents.
+    {% endcomment %}
+    <button
+      type="button"
+      class="button menu-list__link button-unstyled"
+      aria-haspopup="true"
+    >
       <span class="menu-list__link-title">{{ 'actions.more' | t }}</span>
     </button>
   </li>

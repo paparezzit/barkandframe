@@ -1,7 +1,6 @@
 {%- liquid
   assign klaviyo_public_key = 'V6mwd3'
   assign klaviyo_list_id    = 'XGb23F'
-  assign popup_delay_ms     = settings.klaviyo_popup_delay | times: 1000 | default: 3000
   assign show_klaviyo_sticky = false
   if template.name == 'index'
     assign show_klaviyo_sticky = true
@@ -346,7 +345,7 @@
   border: none;
   
   font-family: var(--font-body--family);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: none;
   cursor: pointer;
@@ -470,7 +469,6 @@
 (function () {
   var PUBLIC_KEY  = {{ klaviyo_public_key | json }};
   var LIST_ID     = {{ klaviyo_list_id | json }};
-  var DELAY_MS    = {{ popup_delay_ms }};
   var STORAGE_KEY = 'bnf_klav_v1';
 
   var popup  = document.getElementById('klav-popup');
@@ -528,7 +526,7 @@
     var state = getState();
     if (state === 'subscribed' || state === 'hidden') return;
     if (state === 'dismissed') { stickySlideIn(); return; }
-    setTimeout(openPopup, DELAY_MS);
+    stickySlideIn();
   }
 
   // Close X button

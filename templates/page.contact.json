@@ -2456,9 +2456,9 @@
         "custom-class": "page-contact",
         "section_width": "page-width-narrow",
         "content_direction": "column",
-        "gap": 32,
+        "gap": 20,
         "color_scheme": "scheme-2",
-        "padding-block-start": 40,
+        "padding-block-start": 24,
         "padding-block-end": 0
       }
     }

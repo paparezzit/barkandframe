@@ -1,0 +1,34 @@
+{%- liquid
+  assign intro_title_id = 'clothing-collection-intro-title'
+  if section_id != blank
+    assign intro_title_id = intro_title_id | append: '-' | append: section_id
+  endif
+
+  assign bark_studio_artist = collections['bark-studio'].metafields.custom.artist.value
+  assign bark_studio_signature = bark_studio_artist.signature.value
+-%}
+
+<div class="clothing-collection-intro" aria-labelledby="{{ intro_title_id }}">
+  <div class="clothing-collection-intro__hero">
+    <h2 id="{{ intro_title_id }}" class="clothing-collection-intro__title">Clothing</h2>
+    <div class="clothing-collection-intro__signature">
+      <span class="clothing-collection-intro__by">by</span>
+      {%- if bark_studio_signature != blank -%}
+        <img
+          class="clothing-collection-intro__artist-signature"
+          src="{{ bark_studio_signature | image_url: width: 360 }}"
+          alt=""
+          width="{{ bark_studio_signature.width | default: 360 }}"
+          height="{{ bark_studio_signature.height | default: 90 }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        <span class="clothing-collection-intro__artist-fallback">M. Vakht</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <p class="clothing-collection-intro__copy">
+    Designs that say dog person without saying it out loud. Made for long walks, lazy mornings and everything in between.
+  </p>
+</div>

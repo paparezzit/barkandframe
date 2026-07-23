@@ -1,0 +1,510 @@
+main.content-for-layout[data-template^="index"] {
+  --baf-home-gap: 64px;
+  --baf-home-logo-gap: 26px;
+  --baf-home-gap-after-logo: var(--baf-home-logo-gap);
+  --baf-home-reviews-gap: 26px;
+  --baf-home-three-steps-extra-gap: 16px;
+  --baf-home-wearable-gap: 40px;
+  --baf-home-after-wearable-gap: 18px;
+  --baf-home-panel-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+}
+
+main.content-for-layout[data-template^="index"] .section--custom-slideshow,
+main.content-for-layout[data-template^="index"] .custom-slideshow,
+main.content-for-layout[data-template^="index"] .home-logo-strip,
+main.content-for-layout[data-template^="index"] .portrait-styles,
+main.content-for-layout[data-template^="index"] .artist-intro,
+main.content-for-layout[data-template^="index"] .three-steps,
+main.content-for-layout[data-template^="index"] .home-dog-people-reviews,
+main.content-for-layout[data-template^="index"] .wearable-art-products,
+main.content-for-layout[data-template^="index"] .portrait-donation-impact,
+main.content-for-layout[data-template^="index"] .cta-section {
+  margin-bottom: 0 !important;
+}
+
+main.content-for-layout[data-template^="index"] .custom-slideshow {
+  margin-top: 0 !important;
+}
+
+main.content-for-layout[data-template^="index"] .home-logo-strip {
+  margin-top: var(--baf-home-logo-gap) !important;
+  padding-bottom: 8px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles {
+  margin-top: var(--baf-home-gap-after-logo) !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro,
+main.content-for-layout[data-template^="index"] .three-steps,
+main.content-for-layout[data-template^="index"] .wearable-art-products {
+  margin-top: var(--baf-home-gap) !important;
+}
+
+main.content-for-layout[data-template^="index"] .home-dog-people-reviews {
+  margin-top: var(--baf-home-reviews-gap) !important;
+}
+
+main.content-for-layout[data-template^="index"] .three-steps,
+main.content-for-layout[data-template^="index"] .wearable-art-products {
+  margin-top: calc(var(--baf-home-gap) + var(--baf-home-three-steps-extra-gap)) !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-donation-impact {
+  margin-top: var(--baf-home-after-wearable-gap) !important;
+}
+
+main.content-for-layout[data-template^="index"] [id*="__section_no_barriers_faq"] {
+  margin-top: 48px !important;
+}
+
+main.content-for-layout[data-template^="index"] .cta-section {
+  margin-top: calc(var(--baf-home-gap) + 30px) !important;
+  margin-right: 0 !important;
+  margin-bottom: var(--baf-home-gap) !important;
+  margin-left: 0 !important;
+  max-width: none !important;
+  position: relative !important;
+  z-index: var(--layer-flat) !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro,
+main.content-for-layout[data-template^="index"] .wearable-art-products {
+  max-width: none !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles__inner,
+main.content-for-layout[data-template^="index"] .artist-intro__wrapper,
+main.content-for-layout[data-template^="index"] .cta-section__inner {
+  width: var(--baf-home-panel-width) !important;
+  max-width: var(--baf-home-panel-width) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  box-sizing: border-box !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+  padding-top: 52px !important;
+  padding-bottom: 46px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles__content {
+  margin-top: 30px !important;
+  margin-bottom: 24px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-grid {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-grid-scrollbar {
+  margin-bottom: 18px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-selector .accordion {
+  margin-top: 28px !important;
+  margin-bottom: 22px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-selector .accordion-inner {
+  padding-bottom: 48px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+  padding-top: 70px !important;
+  padding-bottom: 26px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__title {
+  margin-bottom: 28px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__inner {
+  gap: 24px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__content {
+  gap: 26px !important;
+}
+
+main.content-for-layout[data-template^="index"] .three-steps__inner {
+  padding: 0 max(20px, var(--page-margin)) !important;
+}
+
+main.content-for-layout[data-template^="index"] .wearable-art-products {
+  margin-top: var(--baf-home-wearable-gap) !important;
+  padding-block: 0 !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-donation-impact__wrapper .portrait-donation-impact__content {
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+}
+
+main.content-for-layout[data-template^="index"] .cta-section__inner {
+  padding-top: 72px !important;
+  padding-bottom: 64px !important;
+}
+
+@media (max-width: 749px) {
+  main.content-for-layout[data-template^="index"] {
+    --baf-home-gap: 42px;
+    --baf-home-logo-gap: 18px;
+    --baf-home-gap-after-logo: var(--baf-home-logo-gap);
+    --baf-home-reviews-gap: 24px;
+    --baf-home-wearable-gap: 28px;
+    --baf-home-after-wearable-gap: 14px;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slideshow__track {
+    min-height: 62svh !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content {
+    padding-top: 26px !important;
+    padding-bottom: 60px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+    padding-top: 38px !important;
+    padding-bottom: 34px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__content {
+    margin-top: 24px !important;
+    margin-bottom: 18px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-grid {
+    margin-top: 38px !important;
+    margin-bottom: 18px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-grid-scrollbar {
+    margin-bottom: 16px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-selector .accordion {
+    margin-top: 22px !important;
+    margin-bottom: 18px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-selector .accordion-inner {
+    padding-bottom: 36px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    padding-top: 66px !important;
+    padding-bottom: 22px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__title {
+    margin-bottom: 24px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__inner {
+    gap: 6px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__content {
+    padding: 14px 28px 28px !important;
+    gap: 22px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .three-steps__inner {
+    padding: 0 !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-donation-impact {
+    margin-top: var(--baf-home-after-wearable-gap) !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-donation-impact__wrapper .portrait-donation-impact__content {
+    padding-top: 74px !important;
+    padding-bottom: 24px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .cta-section {
+    margin-top: calc(var(--baf-home-gap) + 30px) !important;
+    margin-bottom: 44px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .cta-section__inner {
+    height: auto !important;
+    min-height: 467px !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+}
+
+@media (min-width: 750px) {
+  main.content-for-layout[data-template^="index"] {
+    --baf-home-gap: 58px;
+    --baf-home-logo-gap: 24px;
+    --baf-home-gap-after-logo: var(--baf-home-logo-gap);
+    --baf-home-reviews-gap: 28px;
+    --baf-home-wearable-gap: 34px;
+    --baf-home-after-wearable-gap: 16px;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+    padding-top: 46px !important;
+    padding-bottom: 42px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__content {
+    margin-bottom: 42px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    padding-top: 70px !important;
+    padding-bottom: 30px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .three-steps__inner {
+    padding: 0 !important;
+  }
+}
+
+@media (min-width: 750px) and (max-width: 1199px) {
+  main.content-for-layout[data-template^="index"] .portrait-grid {
+    margin-top: 38px !important;
+    margin-bottom: 18px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  main.content-for-layout[data-template^="index"] {
+    --baf-home-gap: 68px;
+    --baf-home-logo-gap: 28px;
+    --baf-home-gap-after-logo: var(--baf-home-logo-gap);
+    --baf-home-reviews-gap: 26px;
+    --baf-home-wearable-gap: 40px;
+    --baf-home-after-wearable-gap: 18px;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slideshow__track {
+    height: min(53.846vw, calc(100dvh - var(--header-height) - 116px)) !important;
+    max-height: calc(100dvh - var(--header-height) - 116px) !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+    --portrait-styles-cta-top: 982px !important;
+    min-height: 1110px !important;
+    padding: 88px 130px 74px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__content {
+    margin-top: 58px !important;
+    margin-bottom: 42px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-selector .portrait-selector__text {
+    margin-bottom: 56px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    padding: 72px 92px 28px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__title {
+    margin-bottom: 26px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .three-steps__inner {
+    padding: 0 var(--page-margin) !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-donation-impact {
+    margin-top: var(--baf-home-after-wearable-gap) !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-donation-impact__wrapper .portrait-donation-impact__content {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .cta-section {
+    max-width: none !important;
+    margin-top: calc(var(--baf-home-gap) + 32px) !important;
+    margin-right: 0 !important;
+    margin-bottom: var(--baf-home-gap) !important;
+    margin-left: 0 !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .cta-section__inner {
+    height: 68dvh !important;
+    min-height: 560px !important;
+    padding-right: 140px !important;
+    padding-left: 140px !important;
+  }
+}
+
+@media (min-width: 750px) and (orientation: portrait) {
+  main.content-for-layout[data-template^="index"] .portrait-donation-impact__wrapper .portrait-donation-impact__content {
+    padding-top: 94px !important;
+    padding-bottom: 20px !important;
+  }
+}
+
+@media (orientation: portrait) {
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slideshow__track {
+    height: 79.71svh !important;
+    min-height: 79.71svh !important;
+    max-height: none !important;
+  }
+}
+
+@media (min-width: 750px) and (orientation: portrait) {
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slideshow__track {
+    height: 79.71svh !important;
+    min-height: 79.71svh !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content {
+    padding-top: 28px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content .slide__title {
+    font-size: var(--baf-display-large-size) !important;
+  }
+}
+
+@media (min-width: 1200px) and (orientation: portrait) {
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slideshow__track {
+    height: 79.71svh !important;
+    min-height: 79.71svh !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content {
+    padding-top: 32px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content .slide__title {
+    font-size: var(--baf-display-large-size) !important;
+  }
+}
+
+/* Emergency rollback: keep Artist intro on its section-owned layout. */
+main.content-for-layout[data-template^="index"] .artist-intro {
+  max-width: calc(var(--narrow-page-width) + 2 * var(--page-margin)) !important;
+  padding-right: var(--page-margin) !important;
+  padding-left: var(--page-margin) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+  width: auto !important;
+  max-width: 360px !important;
+  padding: 132px 0 26px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__title {
+  max-width: none !important;
+  margin: 0 0 40px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__inner {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__image {
+  padding: 0 18px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  padding: 30px !important;
+  gap: 30px !important;
+  text-align: center !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__text {
+  max-width: 360px !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro__btn {
+  margin: 0 auto !important;
+  align-self: flex-start !important;
+}
+
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  main.content-for-layout[data-template^="index"] .artist-intro {
+    margin: 80px auto !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    max-width: 660px !important;
+    padding: 100px 68px 38px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__title {
+    max-width: 560px !important;
+    margin: 0 auto 34px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__image {
+    padding: 0 !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__content {
+    align-items: center !important;
+    padding: 22px 0 0 !important;
+    gap: 26px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__text {
+    max-width: 440px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__btn {
+    align-self: center !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  main.content-for-layout[data-template^="index"] .artist-intro {
+    max-width: 1240px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    max-width: 1120px !important;
+    padding: 72px 92px 34px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__title {
+    max-width: 620px !important;
+    margin: 0 auto 26px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__inner {
+    grid-template-columns: 360px minmax(320px, 380px) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 34px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__image {
+    padding: 0 !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__content {
+    align-items: stretch !important;
+    padding: 0 !important;
+    gap: 28px !important;
+    text-align: left !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__btn {
+    margin: 0 !important;
+  }
+}

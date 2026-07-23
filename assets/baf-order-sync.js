@@ -60,6 +60,33 @@ function getPositiveIntegerProperty(properties, key) {
 }
 
 /**
+ * @param {Record<string, unknown> | null | undefined} properties
+ * @returns {Record<string, unknown> | null}
+ */
+function buildDiscount(properties) {
+  const discountType = getProperty(properties, '_baf_discount_type');
+  const salePrice =
+    getPositiveIntegerProperty(properties, '_baf_discount_sale_price') ||
+    getPositiveIntegerProperty(properties, '_Sale_Price');
+  const compareAtPrice = getPositiveIntegerProperty(properties, '_baf_discount_compare_at_price');
+  const discountSource = getProperty(properties, '_baf_discount_source');
+  const displayProductId = getProperty(properties, '_baf_display_product_id');
+  const checkoutProductId = getProperty(properties, '_baf_checkout_product_id');
+
+  if (!discountType && salePrice <= 0 && compareAtPrice <= 0) return null;
+
+  return {
+    type: discountType || 'cart_upsell',
+    ...(discountSource ? { source: discountSource } : {}),
+    ...(salePrice > 0 ? { sale_price: salePrice } : {}),
+    ...(compareAtPrice > 0 ? { compare_at_price: compareAtPrice } : {}),
+    ...(compareAtPrice > salePrice && salePrice > 0 ? { amount: compareAtPrice - salePrice } : {}),
+    ...(displayProductId ? { display_product_id: displayProductId } : {}),
+    ...(checkoutProductId ? { checkout_product_id: checkoutProductId } : {}),
+  };
+}
+
+/**
  * @param {unknown} rawOrder
  * @returns {{items: Array<Record<string, unknown>>}}
  */
@@ -138,13 +165,8 @@ function buildMerchOrderItem(cartLine) {
   const production = getJsonObjectProperty(properties, '_baf_production');
   if (production) orderItem.production = production;
 
-  const salePrice = getPositiveIntegerProperty(properties, '_Sale_Price');
-  if (salePrice > 0) {
-    orderItem.discount = {
-      type: 'cart_upsell',
-      sale_price: salePrice,
-    };
-  }
+  const discount = buildDiscount(properties);
+  if (discount) orderItem.discount = discount;
 
   return orderItem;
 }

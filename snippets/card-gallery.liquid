@@ -13,6 +13,10 @@
   assign product = closest.product
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
+  assign product_media_widths = '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840'
+  assign product_media_image_width = 3840
+  assign use_static_lazy_sizes = false
+  assign force_lazy_loading = false
 
   # if the card-gallery has a section.settings.product_card_size:
   # assume grid-template autofill(card-size, 1fr) and calculate the sizes attribute based on the minimum card size
@@ -32,6 +36,19 @@
     assign viewport_width = 100.0 | divided_by: section.settings.columns
     assign sizes_attribute = '(min-width: 750px) [viewport_width]vw, 100vw' | replace: '[viewport_width]', viewport_width
     assign image_sizes = sizes_attribute | strip
+  endif
+
+  if request.page_type == 'index' and section.id contains 'section_wearable_art_products'
+    assign image_sizes = '(max-width: 749px) 38vw, (max-width: 989px) 31vw, 25vw'
+    assign product_media_widths = '160, 240, 320, 384, 640'
+    assign product_media_image_width = 640
+    assign use_static_lazy_sizes = true
+    assign force_lazy_loading = true
+  elsif section.id contains 'shop_bestsellers_collection'
+    assign image_sizes = '(max-width: 749px) 38vw, (max-width: 989px) 31vw, 25vw'
+    assign product_media_widths = '160, 240, 320, 384, 640'
+    assign product_media_image_width = 640
+    assign use_static_lazy_sizes = true
   endif
 
   assign ratio = '1'
@@ -137,7 +154,11 @@
       capture slides
         for media in media_list_to_show
           assign loading = 'lazy'
-          assign sizes = 'auto, ' | append: image_sizes
+          if use_static_lazy_sizes
+            assign sizes = image_sizes
+          else
+            assign sizes = 'auto, ' | append: image_sizes
+          endif
 
           assign hidden = false
           assign attributes = ''
@@ -171,7 +192,17 @@
             continue
           endif
 
-          if forloop.first and section.index == null or section.index < 5
+          assign should_eager_load = false
+          if forloop.first
+            if section.index == null or section.index < 5
+              assign should_eager_load = true
+            endif
+          endif
+          if force_lazy_loading
+            assign should_eager_load = false
+          endif
+
+          if should_eager_load
             assign loading = 'eager'
             assign sizes = image_sizes
           endif
@@ -182,7 +213,7 @@
           endif
 
           capture slideshow_children
-            render 'product-media', media: media, sizes: sizes, loading: loading, preview_image_only: true
+            render 'product-media', media: media, sizes: sizes, widths: product_media_widths, image_width: product_media_image_width, loading: loading, preview_image_only: true
           endcapture
 
           render 'slideshow-slide', slide_id: media.id, index: forloop.index, hidden: hidden, class: class, attributes: attributes, children: slideshow_children, media_fit: media_fit

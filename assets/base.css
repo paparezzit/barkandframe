@@ -4466,6 +4466,9 @@ footer.shopify-section-group-footer-group::before {
 
 @font-face {
   font-family: display;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
   src: url('PPAcma-Semibold.woff2') format('woff2'),
        url('PPAcma-Semibold.woff') format('woff');
 }
@@ -4885,7 +4888,7 @@ slideshow-component.slideshow--homepage{
 .page-contact h1{
   font-family: "display", serif;
   line-height: 1 !important;
-  margin: 50px auto 16px !important;
+  margin: 64px auto 28px !important;
 }
 
 .page-contact h2{
@@ -4898,24 +4901,24 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact > .section-content-wrapper{
-  gap: 80px;
+  gap: 36px;
 }
 
 .page-contact{
   --faq-illustration-size: 250px;
   --faq-illustration-scale: 1;
-  --faq-last-section-bottom: 250px;
+  --faq-last-section-bottom: 72px;
 }
 
 @media(max-width: 749px){
   .page-contact{
     --faq-illustration-size: 162.5px;
-    --faq-last-section-bottom: 160px;
+    --faq-last-section-bottom: 40px;
   }
 
   .page-contact h1{
-    margin-top: clamp(130px, 22svh, 190px) !important;
-    margin-bottom: 24px !important;
+    margin-top: 64px !important;
+    margin-bottom: 20px !important;
   }
 }
 
@@ -4947,8 +4950,8 @@ slideshow-component.slideshow--homepage{
   align-self: center;
   text-align: center;
   transform: none !important;
-  padding-bottom: 140px !important;
-  margin-top: -32px !important;
+  padding-bottom: 24px !important;
+  margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
 
@@ -4961,7 +4964,7 @@ slideshow-component.slideshow--homepage{
 }
 
 .page-contact .faq-contact-us-section{
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq),
@@ -4975,12 +4978,12 @@ slideshow-component.slideshow--homepage{
   display: grid !important;
   grid-template-columns: 1fr;
   align-items: center;
-  gap: 80px !important;
+  gap: 36px !important;
   width: 100% !important;
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq) + .group-block:has(.section-faq){
-  margin-top: 38px !important;
+  margin-top: 20px !important;
 }
 
 .page-contact > .section-content-wrapper > .group-block:has(.section-faq):last-child{
@@ -5031,7 +5034,13 @@ slideshow-component.slideshow--homepage{
 
 .contact-form-section.contact-page-form-section{
   margin-top: 0;
+  margin-bottom: 0;
   padding-top: 40px;
+}
+
+.contact-form-section.contact-page-form-section > .custom-section-content > .section-content-wrapper{
+  --padding-block-end: 0 !important;
+  padding-block-end: 0 !important;
 }
 
 .contact-page-form-section .image-block[class*="image_contact_dog_intro"]{
@@ -5374,7 +5383,7 @@ slideshow-component.slideshow--homepage{
 .contact-company-info {
   width: min(560px, calc(100vw - 48px));
   aspect-ratio: 1 / 1;
-  margin: 170px auto 0;
+  margin: 56px auto;
   border-radius: 50%;
   background: #F4EFE5;
   color: var(--brown);
@@ -5447,7 +5456,8 @@ slideshow-component.slideshow--homepage{
     max-width: none;
     aspect-ratio: 1 / 1;
     box-sizing: border-box;
-    margin-top: 114px;
+    margin-top: 38px;
+    margin-bottom: 38px;
     position: relative;
     left: 50%;
     margin-left: 0;
@@ -5480,11 +5490,11 @@ slideshow-component.slideshow--homepage{
 @media(min-width: 750px){
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content,
   .page-contact .faq-contact-us-section > .group-block-content{
-    row-gap: 56px !important;
+    row-gap: 40px !important;
   }
 
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) + .group-block:has(.section-faq){
-    margin-top: 56px !important;
+    margin-top: 28px !important;
   }
 
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .image-block,
@@ -5496,15 +5506,15 @@ slideshow-component.slideshow--homepage{
   }
 
   .page-contact > .section-content-wrapper{
-    gap: 120px !important;
+    gap: 72px !important;
   }
 
   .page-contact .faq-intro-copy{
-    margin-top: -56px !important;
+    margin-top: 0 !important;
   }
 
   .page-contact .image-block{
-    padding-top: 50px;
+    padding-top: 24px;
   }
 
   .page-contact .image-block img{
@@ -5514,7 +5524,7 @@ slideshow-component.slideshow--homepage{
 
   .page-contact h1{
     font-size: 96px;
-    margin: 200px 0 47px !important;
+    margin: 64px 0 44px !important;
   }
 
   .page-contact h2{
@@ -5526,7 +5536,7 @@ slideshow-component.slideshow--homepage{
   }
 
   .page-contact .faq-contact-us-section{
-    margin-top: 60px;
+    margin-top: 28px;
   }
 
   .contact-form-section{
@@ -5564,7 +5574,7 @@ slideshow-component.slideshow--homepage{
 
   .contact-form-section.contact-page-form-section{
     margin-top: 0;
-    margin-bottom: 180px;
+    margin-bottom: 0;
     padding-top: 40px;
   }
 }
@@ -5574,7 +5584,7 @@ slideshow-component.slideshow--homepage{
   .page-contact .faq-contact-us-section > .group-block-content{
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
     column-gap: 0 !important;
-    row-gap: 56px !important;
+    row-gap: 40px !important;
   }
 
   .page-contact > .section-content-wrapper > .group-block:has(.section-faq) > .group-block-content > .group-block,
@@ -5588,6 +5598,84 @@ slideshow-component.slideshow--homepage{
 @media(min-width: 1200px){
   .page-contact{
     --faq-illustration-size: 300px;
-    --faq-last-section-bottom: 300px;
+    --faq-last-section-bottom: 72px;
   }
+}
+
+main.content-for-layout[data-template^="index"] .custom-slideshow {
+  margin-bottom: 27px !important;
+}
+
+main.content-for-layout[data-template^="index"] .home-logo-strip {
+  padding-top: 3px !important;
+  padding-bottom: 8px !important;
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles {
+  margin-top: 40px !important;
+}
+
+@media(max-width: 749px){
+  main.content-for-layout[data-template^="index"] .custom-slideshow {
+    margin-bottom: 27px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .home-logo-strip {
+    padding-top: 3px !important;
+    padding-bottom: 7px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles {
+    margin-top: 40px !important;
+  }
+}
+
+@media(min-width: 750px){
+  main.content-for-layout[data-template^="index"] .custom-slideshow {
+    margin-bottom: 40px !important;
+  }
+}
+
+@media(orientation: portrait){
+  main.content-for-layout[data-template^="index"] .custom-slideshow {
+    margin-bottom: 30px !important;
+  }
+}
+
+@media(min-width: 750px) and (orientation: portrait){
+  main.content-for-layout[data-template^="index"] .custom-slideshow {
+    margin-bottom: 40px !important;
+  }
+}
+
+@media(min-width: 1200px){
+  main.content-for-layout[data-template^="index"] .portrait-styles {
+    margin-top: 30px !important;
+  }
+}
+
+main.content-for-layout[data-template^="index"] {
+  --baf-home-strip-width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+}
+
+main.content-for-layout[data-template^="index"] .portrait-styles__inner,
+main.content-for-layout[data-template^="index"] .artist-intro__wrapper,
+main.content-for-layout[data-template^="index"] .cta-section {
+  box-sizing: border-box !important;
+  width: var(--baf-home-strip-width) !important;
+  max-width: var(--baf-home-strip-width) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+main.content-for-layout[data-template^="index"] .artist-intro {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  max-width: none !important;
+}
+
+main.content-for-layout[data-template^="index"] .cta-section__inner {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }

@@ -3,6 +3,10 @@
   if product_resource == blank
     assign product_resource = closest.product
   endif
+  assign production_product_resource = production_product
+  if production_product_resource == blank
+    assign production_product_resource = product_resource
+  endif
 
   assign product_type = product_resource.type
   assign is_merch = false
@@ -10,13 +14,13 @@
     assign is_merch = true
   endif
 
-  assign product_title_parts = product_resource.title | split: ' | '
+  assign product_title_parts = production_product_resource.title | split: ' | '
   assign design_name = product_title_parts | first | strip
   assign product_name = product_title_parts | last | strip
   if design_name == blank
-    assign design_name = product_resource.title
+    assign design_name = production_product_resource.title
   endif
-  if product_name == blank or product_name == product_resource.title
+  if product_name == blank or product_name == production_product_resource.title
     assign product_name = product_type
   endif
 -%}

@@ -6,11 +6,11 @@ export default function run(input) {
     : 1;
 
   for (const line of input.cart.lines) {
-    const value = line.salePrice?.value ?? line.shopCurrencyPrice?.value ?? line.legacyPrice?.value;
-    if (!value) continue;
+    if (line.sellingPlanAllocation) continue;
 
-    const cents = parseInt(value, 10);
-    if (!cents || cents <= 0) continue;
+    const value = line.salePrice?.value ?? line.shopCurrencyPrice?.value ?? line.legacyPrice?.value;
+    const cents = parsePositiveCents(value);
+    if (!cents) continue;
 
     const hasShopCurrencyPrice = Boolean(line.salePrice?.value ?? line.shopCurrencyPrice?.value);
     const priceCents = hasShopCurrencyPrice
@@ -19,7 +19,7 @@ export default function run(input) {
     const amount = (priceCents / 100).toFixed(2);
 
     operations.push({
-      update: {
+      lineUpdate: {
         cartLineId: line.id,
         price: {
           adjustment: {
@@ -31,4 +31,14 @@ export default function run(input) {
   }
 
   return { operations };
+}
+
+function parsePositiveCents(value) {
+  if (typeof value !== 'string') return 0;
+
+  const normalized = value.trim();
+  if (!/^\d+$/.test(normalized)) return 0;
+
+  const cents = Number(normalized);
+  return Number.isSafeInteger(cents) && cents > 0 ? cents : 0;
 }

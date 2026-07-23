@@ -1,7 +1,10 @@
 <div class="portrait-formats section section--page-width">
   <div class=portrait-formats__inner>
     <div class="portrait-formats__bg">
-      <img src="{{ 'portait-formats-bg.jpg' | asset_url }}" alt="" data-parallax width="1200" height="800">
+      <picture data-parallax>
+        <source media="(max-width: 749px)" srcset="{{ 'portait-formats-bg-mobile.jpg' | asset_url }}">
+        <img src="{{ 'portait-formats-bg.jpg' | asset_url }}" alt="" width="1200" height="800">
+      </picture>
     </div>
     <div class="portrait-formats__wrapper">
       <h2 class="portrait-formats__title">
@@ -47,8 +50,15 @@
       height: 100%;
       transition: opacity .3s;
 
-      img{
+      picture{
+        display: block;
+        width: 100%;
         height: 110%;
+      }
+
+      img{
+        width: 100%;
+        height: 100%;
         object-fit: cover;
         object-position: center;
       }

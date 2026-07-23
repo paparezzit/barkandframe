@@ -5,6 +5,7 @@
   @param {boolean} [preview_image_only] - Renders only the preview image without controls.
   @param {string} [widths] - Image widths for responsive images.
   @param {string} [sizes] - Image sizes for responsive images.
+  @param {number} [image_width] - Largest rendered image width.
   @param {string} [loading] - The loading attribute for the image.
   @param {object} [block] - The block object.
   @param {object} [section] - The section object.
@@ -17,7 +18,8 @@
 {%- enddoc -%}
 
 {% liquid
-  assign widths = widths | default: '240, 352, 832, 1200, 1600, 1920, 2560, 3840'
+  assign widths = widths | default: '240, 352, 480, 640, 832, 1200, 1600, 1920, 2560, 3840'
+  assign image_width = image_width | default: 3840
 %}
 
 <div
@@ -35,7 +37,7 @@
   %}
   {{
     media.preview_image
-    | image_url: width: 3840
+    | image_url: width: image_width
     | image_tag:
       widths: widths,
       alt: media.alt,

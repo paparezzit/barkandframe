@@ -1,0 +1,102 @@
+.clothing-collection-intro {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 360px);
+  align-items: start;
+  gap: clamp(18px, 4vw, 42px);
+  justify-self: center;
+  width: fit-content;
+  max-width: calc(100vw - (var(--page-margin, 20px) * 2));
+  margin: 52px auto 0;
+  color: var(--brown);
+}
+
+.clothing-collection-intro + .shop-products__inner .shop-products__bestseller {
+  margin-top: 64px;
+}
+
+.clothing-collection-intro__hero {
+  min-width: 0;
+  transform-origin: left center;
+}
+
+.clothing-collection-intro__title {
+  margin: 0 0 -3px;
+  color: inherit;
+  font-family: "display", serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.clothing-collection-intro__signature {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: clamp(7px, 1.35vw, 12px);
+  white-space: nowrap;
+}
+
+.clothing-collection-intro__by {
+  color: inherit;
+  font-family: "display", serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.clothing-collection-intro__artist-fallback {
+  display: inline-block;
+  color: inherit;
+  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
+  font-size: clamp(38px, 5.6vw, 54px);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  transform: rotate(-4deg) translateY(2px);
+  transform-origin: left center;
+}
+
+.clothing-collection-intro__artist-signature {
+  display: block;
+  width: 96px;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-4px, 2px);
+}
+
+.clothing-collection-intro__copy {
+  max-width: 360px;
+  margin: 0;
+  color: var(--brown);
+  font-family: var(--baf-text-family);
+  font-size: var(--baf-text-medium-size);
+  font-weight: var(--baf-text-weight);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+@media screen and (max-width: 420px) {
+  .clothing-collection-intro {
+    grid-template-columns: minmax(136px, 0.5fr) minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .clothing-collection-intro__title,
+  .clothing-collection-intro__by {
+    font-size: 36px;
+  }
+
+  .clothing-collection-intro__artist-signature {
+    width: 96px;
+  }
+
+  .clothing-collection-intro__copy {
+    font-size: 14px;
+    line-height: 1.32;
+  }
+}

@@ -1,0 +1,242 @@
+<section class="home-logo-strip" {{ section.shopify_attributes }}>
+  <div class="home-logo-strip__inner" aria-label="Featured in">
+    <img
+      class="home-logo-strip__logo"
+      src="{{ 'baf-logo-strip-cosmopolitan-240.png' | asset_url }}"
+      alt="Cosmopolitan"
+      width="240"
+      height="51"
+      loading="lazy"
+      decoding="async"
+    >
+    <img
+      class="home-logo-strip__logo"
+      src="{{ 'baf-logo-strip-marie-claire-240.png' | asset_url }}"
+      alt="Marie Claire"
+      width="240"
+      height="50"
+      loading="lazy"
+      decoding="async"
+    >
+    <img
+      class="home-logo-strip__logo"
+      src="{{ 'baf-logo-strip-elle-180.png' | asset_url }}"
+      alt="Elle"
+      width="180"
+      height="72"
+      loading="lazy"
+      decoding="async"
+    >
+  </div>
+  <div class="home-logo-strip__reasons" aria-label="Portrait benefits">
+    <div class="home-logo-strip__reasons-list">
+      <div class="home-logo-strip__reason">
+        <img class="home-logo-strip__reason-icon home-logo-strip__reason-icon--designed" src="{{ 'reason-designed.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+        <span>Artist<br>Designed</span>
+      </div>
+      <div class="home-logo-strip__reason">
+        <img class="home-logo-strip__reason-icon home-logo-strip__reason-icon--signature" src="{{ 'reason-signature.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+        <span>Artist’s<br>Signature</span>
+      </div>
+      <div class="home-logo-strip__reason">
+        <img class="home-logo-strip__reason-icon home-logo-strip__reason-icon--materials" src="{{ 'reason-materials.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+        <span>Gallery Grade<br>Materials</span>
+      </div>
+      <div class="home-logo-strip__reason">
+        <img class="home-logo-strip__reason-icon home-logo-strip__reason-icon--guarantee" src="{{ 'reason-guarantee.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+        <span>Money-Back<br>Guarantee</span>
+      </div>
+      <div class="home-logo-strip__reason">
+        <img class="home-logo-strip__reason-icon home-logo-strip__reason-icon--donate" src="{{ 'reason-donate.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
+        <span>€2 to Charity<br>per Portrait</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .home-logo-strip {
+    box-sizing: border-box;
+    padding: 8px var(--page-margin) 24px;
+    background: var(--beige);
+  }
+
+  .home-logo-strip__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(28px, 6vw, 92px);
+    box-sizing: border-box;
+    width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+    height: 54px;
+    margin-inline: auto;
+    padding: 0 clamp(18px, 3vw, 48px);
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--purple);
+  }
+
+  .home-logo-strip__logo {
+    display: block;
+    width: auto;
+    height: clamp(20px, 2vw, 25px);
+    max-width: min(28vw, 210px);
+    object-fit: contain;
+    filter: grayscale(1);
+    mix-blend-mode: multiply;
+    opacity: 0.58;
+  }
+
+  .home-logo-strip__logo[alt="Elle"] {
+    height: clamp(25px, 2.55vw, 32px);
+  }
+
+  .home-logo-strip__reasons {
+    width: min(var(--page-content-width), calc(100vw - (var(--page-margin) * 2)));
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 24px auto 0;
+    padding: 16px 0 24px;
+    color: var(--brown);
+    background: var(--cream);
+    border-radius: 40px;
+  }
+
+  .home-logo-strip__reasons-list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 6px;
+  }
+
+  .home-logo-strip__reason {
+    min-width: 0;
+    min-height: 88px;
+    display: grid;
+    grid-template-rows: 34px 44px;
+    align-content: center;
+    justify-items: center;
+    row-gap: 10px;
+    padding: 0 2px;
+    text-align: center;
+  }
+
+  .home-logo-strip__reason + .home-logo-strip__reason {
+    border-left: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .home-logo-strip__reason-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .home-logo-strip__reason-icon--signature,
+  .home-logo-strip__reason-icon--guarantee {
+    width: 30px;
+    height: 30px;
+  }
+
+  .home-logo-strip__reason-icon--materials {
+    width: 32px;
+    height: 32px;
+  }
+
+  .home-logo-strip__reason span {
+    display: block;
+    max-width: 100%;
+    align-self: start;
+    color: color-mix(in srgb, var(--brown) 63%, transparent);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .home-logo-strip__reasons-button {
+    width: fit-content;
+    margin: 18px auto 0;
+  }
+
+  @media (max-width: 749px) {
+    .home-logo-strip {
+      padding-inline: var(--page-margin);
+      padding-bottom: 20px;
+    }
+
+    .home-logo-strip__inner {
+      gap: clamp(18px, 6vw, 28px);
+      justify-content: center;
+      padding-inline: 20px;
+    }
+
+    .home-logo-strip__logo {
+      height: 20px;
+      max-width: 27vw;
+    }
+
+    .home-logo-strip__logo[alt="Elle"] {
+      height: 26px;
+    }
+
+    .home-logo-strip__reasons {
+      margin-top: 20px;
+      padding: 14px 0 20px;
+    }
+
+    .home-logo-strip__reasons-list {
+      padding: 0 4px;
+    }
+
+    .home-logo-strip__reason {
+      min-height: 80px;
+      grid-template-rows: 31px auto;
+      row-gap: 8px;
+      padding: 0 1px;
+    }
+
+    .home-logo-strip__reason-icon {
+      width: 25px;
+      height: 25px;
+    }
+
+    .home-logo-strip__reason-icon--signature,
+    .home-logo-strip__reason-icon--guarantee {
+      width: 27px;
+      height: 27px;
+    }
+
+    .home-logo-strip__reason-icon--materials {
+      width: 29px;
+      height: 29px;
+    }
+
+    .home-logo-strip__reason span {
+      font-size: 12px;
+    }
+
+    .home-logo-strip__reasons-button {
+      margin-top: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home logo strip",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [],
+  "presets": [
+    {
+      "name": "Home logo strip"
+    }
+  ]
+}
+{% endschema %}

@@ -117,11 +117,9 @@
         "product_color_scheme": "default",
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default",
-        "cart_upsell_products": [
-          "chill-vibes-t-shirt",
-          "doggery-squad-crewneck",
-          "more-dog-is-more-dog-cap"
-        ],
+        "cart_upsell_collection": "",
+        "cart_upsell_products": [],
+        "cart_upsell_checkout_products": [],
         "cart_upsell_discount_percent": 15,
         "cart_upsell_default_tshirt_color": "Black",
         "cart_upsell_default_crewneck_color": "Heather Grey",

@@ -1,7 +1,11 @@
 {% assign slide_speed = section.settings.autoplay_speed | default: 4 %}
+{% assign has_multiple_slides = false %}
+{% if section.blocks.size > 1 %}
+  {% assign has_multiple_slides = true %}
+{% endif %}
 {% assign has_video = false %}
 {% for block in section.blocks %}
-  {% if block.settings.video != blank or block.settings.video_url != blank or block.settings.portrait_video_url != blank %}
+  {% if block.settings.video != blank or block.settings.video_url != blank or block.settings.portrait_video_url != blank or block.settings.portrait_video_mobile_url != blank %}
     {% assign has_video = true %}
     {% break %}
   {% endif %}
@@ -9,6 +13,55 @@
 <style>
   :root {
     --slideshow-duration: {{ slide_speed }}s;
+  }
+
+  @media (orientation: portrait) {
+    .custom-slideshow .slideshow__track {
+      height: 79.71svh;
+      min-height: 79.71svh;
+      max-height: none;
+    }
+
+    .custom-slideshow .slide-content {
+      padding-top: 26px !important;
+    }
+  }
+
+  @media (min-width: 750px) and (orientation: portrait) {
+    .custom-slideshow .slideshow__track {
+      height: 79.71svh;
+      min-height: 79.71svh;
+    }
+
+    .custom-slideshow .slide-content {
+      padding-top: 28px !important;
+    }
+
+    .custom-slideshow .slide-content .slide__title {
+      font-size: var(--baf-display-large-size) !important;
+    }
+  }
+
+  @media (min-width: 1200px) and (orientation: portrait) {
+    .custom-slideshow .slideshow__track {
+      height: 79.71svh;
+      min-height: 79.71svh;
+    }
+
+    .custom-slideshow .slide-content {
+      padding-top: 32px !important;
+    }
+
+    .custom-slideshow .slide-content .slide__title {
+      font-size: var(--baf-display-large-size) !important;
+    }
+  }
+
+  @media (min-width: 1200px) and (orientation: landscape) {
+    .custom-slideshow .slideshow__track {
+      height: min(53.846vw, calc(100dvh - var(--header-height) - 116px)) !important;
+      max-height: calc(100dvh - var(--header-height) - 116px) !important;
+    }
   }
 </style>
 
@@ -22,8 +75,25 @@
     data-autoplay="{{ section.settings.autoplay }}"
     data-speed="{{ section.settings.autoplay_speed }}"
   >
-    <div class="slideshow__track">
+      <div class="slideshow__track">
+      {% assign portrait_slide_button_count = 0 %}
       {% for block in section.blocks %}
+        {% assign slide_image_asset = block.settings.image_asset | strip %}
+        {% assign slide_mobile_image_asset = block.settings.mobile_image_asset | strip %}
+        {% if forloop.first and slide_image_asset == blank %}
+          {% assign slide_image_asset = 'hero banner desktop.jpg' %}
+        {% endif %}
+        {% if forloop.first and slide_mobile_image_asset == blank %}
+          {% assign slide_mobile_image_asset = 'hero banner mobil.jpg' %}
+        {% endif %}
+        {% assign slide_image_webp_asset = '' %}
+        {% assign slide_mobile_image_webp_asset = '' %}
+        {% if slide_image_asset == 'hero banner desktop.jpg' %}
+          {% assign slide_image_webp_asset = 'hero-banner-desktop-2215.webp' %}
+        {% endif %}
+        {% if slide_mobile_image_asset == 'hero banner mobil.jpg' %}
+          {% assign slide_mobile_image_webp_asset = 'hero-banner-mobile-989.webp' %}
+        {% endif %}
         {% assign portrait_image_position = block.settings.portrait_image_position | default: 'center center' %}
         {% assign portrait_image_position_key = portrait_image_position | split: ' ' | first %}
         {% assign has_landscape_video = false %}
@@ -31,18 +101,26 @@
         {% if block.settings.video != blank or block.settings.video_url != blank %}
           {% assign has_landscape_video = true %}
         {% endif %}
-        {% if block.settings.portrait_video_url != blank %}
+        {% if block.settings.portrait_video_url != blank or block.settings.portrait_video_mobile_url != blank %}
           {% assign has_portrait_video = true %}
         {% endif %}
         <div
-          class="slide {% if forloop.first %}is-active{% endif %}"
+          class="slide {% if forloop.first %}slide--first is-active{% endif %}"
           data-portrait-image-position="{{ portrait_image_position_key }}"
           style="--slide-image-position-portrait: {{ portrait_image_position }};"
           {{ block.shopify_attributes }}
         >
 
           {% if has_landscape_video or has_portrait_video %}
-            <div class="slide-image">
+            {% if block.settings.button_link != blank %}
+              <a
+                class="slide-image slide-image--link"
+                href="{{ block.settings.button_link }}"
+                aria-label="{{ block.settings.button_text | default: block.settings.title | strip_newlines | escape }}"
+              >
+            {% else %}
+              <div class="slide-image">
+            {% endif %}
               {% if has_landscape_video %}
                 <video
                   autoplay
@@ -54,14 +132,29 @@
                 >
                   {% if block.settings.video != blank %}
                     {% for source in block.settings.video.sources %}
-                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                      <source
+                        src="{{ source.url }}"
+                        type="{{ source.mime_type }}"
+                        {% if has_portrait_video %}media="(orientation: landscape)"{% endif %}
+                      >
                     {% endfor %}
                   {% else %}
-                    <source src="{{ block.settings.video_url }}" type="video/mp4">
+                    <source
+                      src="{{ block.settings.video_url }}"
+                      type="video/mp4"
+                      {% if has_portrait_video %}media="(orientation: landscape)"{% endif %}
+                    >
                   {% endif %}
                 </video>
               {% endif %}
               {% if has_portrait_video %}
+                {% assign portrait_desktop_media = '' %}
+                {% if has_landscape_video %}
+                  {% assign portrait_desktop_media = '(orientation: portrait)' %}
+                  {% if block.settings.portrait_video_mobile_url != blank %}
+                    {% assign portrait_desktop_media = '(min-width: 750px) and (orientation: portrait)' %}
+                  {% endif %}
+                {% endif %}
                 <video
                   autoplay
                   muted
@@ -70,43 +163,126 @@
                   preload="auto"
                   class="slide-video slide-video--portrait{% unless has_landscape_video %} slide-video--all{% endunless %}"
                 >
-                  <source src="{{ block.settings.portrait_video_url }}" type="video/mp4">
-                </video>
+                  {% if block.settings.portrait_video_mobile_url != blank %}
+                    <source
+                      src="{{ block.settings.portrait_video_mobile_url }}"
+                      type="video/mp4"
+                      media="(max-width: 749px)"
+                    >
+                  {% endif %}
+                  {% if block.settings.portrait_video_url != blank %}
+                    <source
+                      src="{{ block.settings.portrait_video_url }}"
+                      type="video/mp4"
+                      {% if portrait_desktop_media != blank %}media="{{ portrait_desktop_media }}"{% endif %}
+                    >
+                  {% endif %}
+                  </video>
               {% endif %}
-            </div>
-          {% elsif block.settings.image %}
-            <div class="slide-image">
-              <img
-                src="{{ block.settings.image | image_url: width: 2000 }}"
-                alt=""
-                loading="lazy"
-                width="1200" height="800">
-            </div>
+            {% if block.settings.button_link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          {% elsif block.settings.image != blank or slide_image_asset != blank %}
+            {% if block.settings.button_link != blank %}
+              <a
+                class="slide-image slide-image--link"
+                href="{{ block.settings.button_link }}"
+                aria-label="{{ block.settings.button_text | default: block.settings.title | strip_newlines | escape }}"
+              >
+            {% else %}
+              <div class="slide-image">
+            {% endif %}
+              <picture>
+                {% if slide_mobile_image_webp_asset != blank %}
+                  <source
+                    type="image/webp"
+                    media="(max-width: 749px)"
+                    sizes="100vw"
+                    srcset="{{ 'hero-banner-mobile-640.webp' | asset_url }} 640w"
+                  >
+                {% endif %}
+                {% if slide_mobile_image_asset != blank %}
+                  <source
+                    media="(max-width: 749px)"
+                    srcset="{{ slide_mobile_image_asset | asset_url }}"
+                  >
+                {% elsif block.settings.mobile_image != blank %}
+                  {% render 'mobile-image-source', image: block.settings.mobile_image %}
+                {% else %}
+                  {% render 'mobile-image-source', image: block.settings.image %}
+                {% endif %}
+                {% if slide_image_webp_asset != blank %}
+                  <source
+                    type="image/webp"
+                    sizes="100vw"
+                    srcset="{{ 'hero-banner-desktop-1600.webp' | asset_url }} 1600w, {{ slide_image_webp_asset | asset_url }} 2215w"
+                  >
+                {% endif %}
+                {% if slide_image_asset != blank %}
+                  <img
+                    src="{{ slide_image_asset | asset_url }}"
+                    alt=""
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                    width="1200"
+                    height="800">
+                {% else %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 2000 }}"
+                    alt=""
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                    width="1200"
+                    height="800">
+                {% endif %}
+              </picture>
+            {% if block.settings.button_link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
           {% endif %}
 
           <div class="slide-content">
-            <h2 class="slide__title">
-              {{ block.settings.title | newline_to_br }}
-            </h2>
-            <p class="slide__text">
-              {{ block.settings.text }}
-            </p>
-            {% if block.settings.button_link %}
-              <a href="{{ block.settings.button_link }}" class="slide__button button">
-                {{ block.settings.button_text }}
-              </a>
-            {% endif %}
+            <div class="slide-content__inner">
+              <h2 class="slide__title">
+                {{ block.settings.title | newline_to_br }}
+              </h2>
+              <p class="slide__text">
+                {{ block.settings.text }}
+              </p>
+              {% if block.settings.button_link %}
+                {%- liquid
+                  assign slide_button_id = ''
+                  if block.settings.button_link contains 'pages/portrait'
+                    assign portrait_slide_button_count = portrait_slide_button_count | plus: 1
+                    assign slide_button_id = 'baf-click-home-portrait-0' | append: portrait_slide_button_count
+                  endif
+                -%}
+                <a
+                  {% if slide_button_id != blank %}id="{{ slide_button_id }}"{% endif %}
+                  href="{{ block.settings.button_link }}"
+                  class="slide__button button"
+                >
+                  {{ block.settings.button_text }}
+                </a>
+              {% endif %}
+            </div>
           </div>
 
         </div>
       {% endfor %}
     </div>
 
-    <div class="slideshow__dots">
-      {% for block in section.blocks %}
-        <button class="dot {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}"></button>
-      {% endfor %}
-    </div>
+    {% if has_multiple_slides %}
+      <div class="slideshow__dots">
+        {% for block in section.blocks %}
+          <button class="dot {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}"></button>
+        {% endfor %}
+      </div>
+    {% endif %}
 
     {% if has_video %}
       <button class="slideshow__sound-toggle" type="button" aria-label="Turn sound on" aria-pressed="false" data-sound-toggle>
@@ -159,6 +335,11 @@
     height: 100%;
   }
 
+  .custom-slideshow .slide-image--link {
+    display: block;
+    cursor: pointer;
+  }
+
   .custom-slideshow .slide::after {
     content: "";
     position: absolute;
@@ -170,12 +351,17 @@
     z-index: 1;
   }
 
+  .custom-slideshow .slide-image picture,
   .custom-slideshow .slide-image img,
   .custom-slideshow .slide-image video {
     width: 100%;
     height: 100%;
+  }
+
+  .custom-slideshow .slide-image img,
+  .custom-slideshow .slide-image video {
     object-fit: cover;
-    object-position: right;
+    object-position: center;
   }
 
   .custom-slideshow .slide-video--portrait {
@@ -186,6 +372,7 @@
     position: relative;
     z-index: 2;
     display: flex;
+    pointer-events: none;
     height: 100%;
     flex-direction: column;
     align-items: flex-start;
@@ -194,6 +381,13 @@
     width: min( var(--page-width) - var(--page-margin) * 2, calc(100% - var(--page-margin) * 2) );
     margin: 0 auto;
     padding: 60px 0;
+
+    .slide-content__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: inherit;
+    }
 
     .slide__title{
       max-width: 250px;
@@ -216,7 +410,13 @@
 
     .slide__button{
       margin-top: 0;
+      pointer-events: auto;
     }
+  }
+
+  .custom-slideshow .slide--first .slide-content__inner {
+    align-items: center;
+    text-align: center;
   }
 
   .custom-slideshow .slide__button:not(:hover) {
@@ -351,7 +551,8 @@
     .custom-slideshow {
       .slideshow__track{
         aspect-ratio: 13/7;
-        max-height: calc(95dvh - var(--header-height));
+        height: min(53.846vw, calc(100dvh - var(--header-height) - 116px));
+        max-height: calc(100dvh - var(--header-height) - 116px);
       }
 
       .slide-image img,
@@ -381,7 +582,7 @@
 
       .slideshow__track {
         aspect-ratio: auto;
-        min-height: calc(94svh - var(--header-height));
+        min-height: 79.71svh;
         max-height: none;
       }
 
@@ -408,10 +609,15 @@
       .slide-content {
         width: auto;
         margin-inline: max(var(--util-page-margin-offset), 24px);
-        justify-content: flex-end;
-        align-items: flex-start;
+        justify-content: flex-start;
+        align-items: center;
         gap: 14px;
-        padding: 80px 0 92px;
+        padding: 26px 0 80px;
+
+        .slide-content__inner {
+          align-items: center;
+          text-align: center;
+        }
 
         .slide__title {
           max-width: 340px;
@@ -438,15 +644,15 @@
       margin-bottom: 120px;
 
       .slideshow__track {
-        min-height: calc(95svh - var(--header-height));
+        min-height: 79.71svh;
       }
 
       .slide-content {
-        padding: 110px 0 120px;
+        padding: 28px 0 110px;
 
         .slide__title {
           max-width: 520px;
-          font-size: var(--baf-display-extra-large-size);
+          font-size: var(--baf-display-large-size);
         }
 
         .slide__text {
@@ -460,11 +666,11 @@
   @media (min-width: 1200px) and (orientation: portrait) {
     .custom-slideshow {
       .slideshow__track {
-        min-height: calc(96svh - var(--header-height));
+        min-height: 79.71svh;
       }
 
       .slide-content {
-        padding: 140px 0 150px;
+        padding: 32px 0 140px;
 
         .slide__title {
           max-width: 650px;
@@ -495,15 +701,18 @@
   }
 {% endstylesheet %}
 
-{% javascript %}
+<script type="module">
 document.addEventListener("DOMContentLoaded", () => {
   const slideshow = document.querySelector(".custom-slideshow");
   if (!slideshow) return;
 
   const slides = slideshow.querySelectorAll(".slide");
+  if (!slides.length) return;
+
   const dots = slideshow.querySelectorAll(".dot");
   const soundToggle = slideshow.querySelector("[data-sound-toggle]");
   const swipeSurface = slideshow.querySelector(".slideshow__track");
+  const hasMultipleSlides = slides.length > 1;
   
   let index = 0;
   let soundOn = false;
@@ -512,7 +721,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let swipeStartY = 0;
   let swipeMoved = false;
 
-  const autoplay = slideshow.dataset.autoplay === "true";
+  const autoplay = hasMultipleSlides && slideshow.dataset.autoplay === "true";
+  const deferAutoplay = autoplay && window.matchMedia("(max-width: 749px), (hover: none), (pointer: coarse)").matches;
   const speed = (parseFloat(slideshow.dataset.speed) || 4) * 1000;
 
   let slideTimer;
@@ -605,9 +815,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  slideshow.addEventListener("click", pauseAutoplayTemporarily);
+  if (hasMultipleSlides) {
+    slideshow.addEventListener("click", pauseAutoplayTemporarily);
+  }
 
-  if (swipeSurface) {
+  if (hasMultipleSlides && swipeSurface) {
     swipeSurface.addEventListener("pointerdown", event => {
       if (event.pointerType === "mouse") return;
       swipePointerId = event.pointerId;
@@ -659,13 +871,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   portraitMedia.addEventListener?.("change", () => showSlide(index, false));
 
-  showSlide(index);
+  if (deferAutoplay) {
+    let deferredAutoplayStarted = false;
+    const startDeferredAutoplay = () => {
+      if (deferredAutoplayStarted) return;
+      deferredAutoplayStarted = true;
+      slideshow.classList.remove("is-autoplay-paused");
+      restartAutoplayTimer();
+    };
+
+    slideshow.classList.add("is-autoplay-paused");
+    ["pointerdown", "touchstart", "keydown", "wheel"].forEach(eventName => {
+      window.addEventListener(eventName, startDeferredAutoplay, { once: true, passive: true });
+    });
+    window.addEventListener("load", () => {
+      window.setTimeout(startDeferredAutoplay, 20000);
+    }, { once: true });
+    showSlide(index, false);
+  } else {
+    showSlide(index);
+  }
 });
-{% endjavascript %}
+</script>
 
 {% schema %}
 {
-  "name": "Fade Slideshow",
+  "name": "Home hero slideshow",
   "settings": [
     {
       "type": "checkbox",
@@ -704,9 +935,29 @@ document.addEventListener("DOMContentLoaded", () => {
           "label": "Portrait video URL"
         },
         {
+          "type": "text",
+          "id": "portrait_video_mobile_url",
+          "label": "Mobile portrait video URL"
+        },
+        {
           "type": "image_picker",
           "id": "image",
           "label": "Image (fallback if no video)"
+        },
+        {
+          "type": "text",
+          "id": "image_asset",
+          "label": "Theme asset image filename"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image (fallback if no video)"
+        },
+        {
+          "type": "text",
+          "id": "mobile_image_asset",
+          "label": "Mobile theme asset image filename"
         },
         {
           "type": "select",
@@ -753,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ],
   "presets": [
     {
-      "name": "Fade Slideshow"
+      "name": "Home hero slideshow"
     }
   ]
 }

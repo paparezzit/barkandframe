@@ -1,6 +1,6 @@
 <!doctype html>
 <html
-  class="no-js{% if request.design_mode %} shopify-design-mode{% endif %}"
+  class="no-js{% unless request.page_type == 'index' %} baf-page-loading{% endunless %}{% if request.design_mode %} shopify-design-mode{% endif %}"
   lang="{{ request.locale.iso_code }}"
 >
   <head>
@@ -20,7 +20,88 @@
       {%- endif -%}
     {%- endif -%}
 
+    {%- unless request.page_type == 'index' -%}
+      <style id="baf-page-load-fade">
+        html {
+          background: var(--beige, #fffaf1);
+        }
+
+        html.baf-page-loading body {
+          opacity: 0;
+        }
+
+        html.baf-page-loaded body {
+          opacity: 1;
+          transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          html.baf-page-loaded body {
+            transition: none;
+          }
+        }
+      </style>
+      <script>
+        (() => {
+          const root = document.documentElement;
+          let revealed = false;
+
+          root.classList.remove('no-js');
+
+          const revealPage = () => {
+            if (revealed) return;
+            revealed = true;
+            window.requestAnimationFrame(() => {
+              root.classList.add('baf-page-loaded');
+              root.classList.remove('baf-page-loading');
+            });
+          };
+
+          const waitForLoad = new Promise((resolve) => {
+            if (document.readyState === 'complete') {
+              resolve();
+              return;
+            }
+
+            window.addEventListener('load', resolve, { once: true });
+          });
+          const waitForFonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+          const fallback = new Promise((resolve) => window.setTimeout(resolve, 2600));
+
+          Promise.race([Promise.all([waitForLoad, waitForFonts]), fallback]).then(revealPage);
+          window.addEventListener('pageshow', (event) => {
+            if (event.persisted) revealPage();
+          });
+        })();
+      </script>
+      <noscript>
+        <style>
+          html.baf-page-loading body {
+            opacity: 1 !important;
+          }
+        </style>
+      </noscript>
+    {%- endunless -%}
+
     {%- render 'stylesheets' -%}
+    {%- if request.page_type == 'index' -%}
+      <link
+        rel="preload"
+        as="image"
+        href="{{ 'hero-banner-mobile-640.webp' | asset_url }}"
+        type="image/webp"
+        media="(max-width: 749px)"
+        fetchpriority="high"
+      >
+      <link
+        rel="preload"
+        as="image"
+        href="{{ 'hero-banner-desktop-1600.webp' | asset_url }}"
+        type="image/webp"
+        media="(min-width: 750px)"
+        fetchpriority="high"
+      >
+    {%- endif -%}
     <!-- BAF cache bust: hero content top 20260717b -->
     <style id="baf-overscroll-canvas">
       html {
@@ -176,6 +257,7 @@
     {% endif %}
 
     {{ content_for_header }}
+    <script src="{{ 'baf-cookie-consent.js' | asset_url }}" defer="defer"></script>
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">

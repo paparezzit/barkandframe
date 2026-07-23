@@ -1,10 +1,10 @@
 .about-page {
     color: var(--brown);
-    padding-bottom: 80px;
+    padding-bottom: 28px;
   }
 
   .about-hero {
-    padding: 80px var(--page-margin) 112px;
+    padding: 64px var(--page-margin) 44px;
     text-align: center;
   }
 
@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 64px var(--page-margin);
+    padding: 36px var(--page-margin);
     max-width: calc(1060px + (2 * var(--page-margin)));
     margin: 0 auto;
   }
@@ -37,12 +37,18 @@
   .about-photo-grid {
     min-height: 380px;
     width: 70%;
-    margin: 0 auto 80px;
+    margin: 0 auto 44px;
     max-width: 400px;
   }
 
   .about-photo-grid__item {
     overflow: hidden;
+  }
+
+  .about-photo-grid__item picture {
+    display: block;
+    height: 100%;
+    width: 100%;
   }
 
   .about-photo-grid__item--main {
@@ -89,6 +95,10 @@
     width: 100%;
   }
 
+  .about-split__heading-nowrap {
+    white-space: nowrap;
+  }
+
   .about-split__body {
     font-size: 14px;
     line-height: 1.5;
@@ -100,7 +110,7 @@
   }
 
   .about-split__btn {
-    margin-top: 32px;
+    margin-top: 24px;
     width: fit-content;
     background-color: transparent;
     color: var(--brown);
@@ -159,17 +169,17 @@
     }
 
     .about-split + .about-split {
-      margin-top: 72px;
+      margin-top: 20px;
     }
   }
 
   @media screen and (min-width: 750px) and (max-width: 1199px) {
     .about-split {
-      padding: 112px var(--page-margin);
+      padding: 56px var(--page-margin);
     }
 
     .about-split + .about-split {
-      margin-top: 96px;
+      margin-top: 28px;
     }
 
     .about-split__photos {
@@ -180,7 +190,7 @@
       min-height: 520px;
       max-width: 520px;
       width: 72%;
-      margin-bottom: 112px;
+      margin-bottom: 56px;
     }
 
     .about-split__content {
@@ -190,7 +200,7 @@
     .about-split__side-image {
       max-width: 460px;
       width: 72%;
-      margin-bottom: 48px;
+      margin-bottom: 28px;
     }
 
     .about-split__heading {
@@ -205,13 +215,14 @@
     .about-hero + .about-split .about-photo-grid__item--small {
       top: 72%;
     }
+
   }
 
   @media screen and (min-width: 1200px) {
     .about-split {
       flex-direction: row;
       align-items: center;
-      padding: 160px var(--page-margin);
+      padding: 72px var(--page-margin);
     }
 
     .about-split > * {
@@ -221,7 +232,7 @@
 
     .about-photo-grid {
       min-height: 460px;
-      margin: 0 0 200px;
+      margin: 0 0 84px;
       width: 80%;
     }
 

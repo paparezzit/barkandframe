@@ -158,13 +158,20 @@
                       assign _is_custom_portrait = true
                     endif
                     assign _cart_item_title = item.product.title
+                    assign cart_item_url = item.url
+                    if item.properties['_baf_display_product_title'] != blank
+                      assign _cart_item_title = item.properties['_baf_display_product_title']
+                    endif
+                    if item.properties['_baf_display_product_url'] != blank
+                      assign cart_item_url = item.properties['_baf_display_product_url']
+                    endif
                     if _is_custom_portrait and item.properties['Product'] != blank
                       assign _cart_item_title = item.properties['Product']
                     endif
                   -%}
                   <p>
                     <a
-                      href="{{ item.url }}"
+                      href="{{ cart_item_url }}"
                       class="cart-items__title"
                       {% if item.parent_relationship.parent != null %}
                         aria-label="{{ 'accessibility.nested_product' | t: product_title: _cart_item_title, parent_title: item.parent_relationship.parent.title | escape }}"
@@ -574,17 +581,17 @@
 
   .cart-items__details .cart-items__remove {
     position: absolute;
-    top: 6px;
+    top: 1px;
     right: 0;
     margin-block-start: 0;
-    height: 12px;
-    width: 12px;
+    height: 18px;
+    width: 18px;
     border-radius: 50%;
     background-color: var(--cream);
 
     svg{
-      width: 8px;
-      height: 8px;
+      width: 12px;
+      height: 12px;
     }
   }
 
@@ -943,6 +950,39 @@
 
   .cart-items__variants-overflow {
     margin-block-start: var(--margin-2xs);
+  }
+
+  .cart-drawer__items .cart-items__table-row {
+    grid-template-areas:
+      'media details details'
+      'media error error'
+      'media quantity price';
+  }
+
+  .cart-drawer__items .cart-items__quantity,
+  .cart-drawer__items .cart-items__price {
+    align-self: center;
+    margin-top: 0;
+    min-height: var(--minimum-touch-target);
+  }
+
+  .cart-drawer__items .cart-items__quantity {
+    align-items: center;
+  }
+
+  .cart-drawer__items .cart-items__quantity .quantity-selector {
+    flex: 0 0 var(--quantity-selector-width);
+    align-self: center;
+    width: var(--quantity-selector-width);
+    height: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
+  }
+
+  .cart-drawer__items .cart-items__price {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: end;
   }
 
   @media(min-width: 750px){

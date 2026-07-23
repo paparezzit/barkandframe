@@ -12,5 +12,5 @@ api_version = "2025-07"
 
   [[extensions.targeting]]
   module = "./src/index.js"
-  target = "purchase.cart-transform.run"
+  target = "cart.transform.run"
   input_query = "./src/index.graphql"
