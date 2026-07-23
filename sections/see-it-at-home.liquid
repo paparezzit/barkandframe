@@ -79,6 +79,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const setCount = 5;
     const middleSetIndex = Math.floor(setCount / 2);
 
+    function hydrateDeferredImages(root) {
+      root.querySelectorAll("[data-baf-deferred-picture]").forEach(picture => {
+        picture.querySelectorAll("source[data-srcset]").forEach(source => {
+          source.setAttribute("srcset", source.dataset.srcset);
+          source.removeAttribute("data-srcset");
+        });
+
+        const image = picture.querySelector("img[data-src]");
+        if (image) {
+          image.setAttribute("src", image.dataset.src);
+          image.removeAttribute("data-src");
+        }
+
+        picture.removeAttribute("data-baf-deferred-picture");
+      });
+    }
+
     function stabilizeImages(root) {
       root.querySelectorAll("img").forEach(image => {
         image.setAttribute("loading", "lazy");
@@ -96,6 +113,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const sets = Array.from(content.querySelectorAll(".marquee__repeated-items"));
       const baseSet = sets[0];
       if (!baseSet) return false;
+
+      hydrateDeferredImages(baseSet);
 
       const baseItemCount = baseSet.querySelectorAll(".image-block").length;
       const preparedItemCount = Number.parseInt(content.dataset.infiniteItemCount || "0", 10);

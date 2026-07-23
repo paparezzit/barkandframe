@@ -41,6 +41,7 @@
   assign image_loading = ''
   assign image_decoding = ''
   assign image_fetchpriority = ''
+  assign defer_asset_image = false
   assign image_asset = block_settings.image_asset | default: '' | strip
   assign mobile_image_asset = block_settings.mobile_image_asset | default: '' | strip
   assign image_alt = block_settings.alt | default: block_settings.image.alt | default: ''
@@ -58,6 +59,7 @@
     assign image_loading = 'lazy'
     assign image_decoding = 'async'
     assign image_fetchpriority = 'low'
+    assign defer_asset_image = true
     assign sizes = '(min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
 
     if block_settings.link contains 'style=studio_pencil'
@@ -108,12 +110,27 @@
 
 {% capture image %}
   {%- if image_asset != blank -%}
-    <picture class="image-block__picture">
+    <picture
+      class="image-block__picture"
+      {% if defer_asset_image %}data-baf-deferred-picture{% endif %}
+    >
       {%- if mobile_image_asset != blank -%}
-        <source media="(max-width: 749px)" srcset="{{ mobile_image_asset | asset_url }}">
+        <source
+          media="(max-width: 749px)"
+          {% if defer_asset_image %}
+            data-srcset="{{ mobile_image_asset | asset_url }}"
+          {% else %}
+            srcset="{{ mobile_image_asset | asset_url }}"
+          {% endif %}
+        >
       {%- endif -%}
       <img
-        src="{{ image_asset | asset_url }}"
+        {% if defer_asset_image %}
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+          data-src="{{ image_asset | asset_url }}"
+        {% else %}
+          src="{{ image_asset | asset_url }}"
+        {% endif %}
         alt="{{ image_alt | escape }}"
         width="1534"
         height="2048"
