@@ -5704,6 +5704,10 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-top: 32px !important;
   }
 
+  main.content-for-layout[data-template^="index"] .artist-intro {
+    margin-top: 30px !important;
+  }
+
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content,
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content__inner {
     gap: var(--baf-home-mobile-heading-gap) !important;
