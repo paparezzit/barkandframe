@@ -5687,11 +5687,17 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
 
   main.content-for-layout[data-template^="index"] .portrait-styles {
     margin-top: 24px !important;
+    margin-bottom: 32px !important;
   }
 
   main.content-for-layout[data-template^="index"] .portrait-styles__inner {
     padding-top: 36px !important;
     padding-bottom: 40px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .see-it-at-home,
+  main.content-for-layout[data-template^="index"] .see-it-at-home.see-it-at-home--compact {
+    margin-top: 0 !important;
   }
 
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content,
