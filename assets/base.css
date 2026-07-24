@@ -5686,6 +5686,7 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     --baf-home-mobile-section-gap: 32px;
     --baf-home-mobile-artist-outside-gap: 12px;
     --baf-home-mobile-artist-title-inset: 20px;
+    --baf-home-mobile-process-title-gap: 29px;
   }
 
   main.content-for-layout[data-template^="index"] [id$="__section_pick_a_style"],
@@ -5747,8 +5748,9 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-bottom: 5px !important;
   }
 
-  main.content-for-layout[data-template^="index"] .three-steps__title {
-    margin-bottom: 29px !important;
+  main.content-for-layout[data-template^="index"] .three-steps__title,
+  main.content-for-layout[data-template^="index"] .wearable-art-products__section-title {
+    margin-bottom: var(--baf-home-mobile-process-title-gap) !important;
   }
 
   main.content-for-layout[data-template^="index"] .portrait-styles__content {
