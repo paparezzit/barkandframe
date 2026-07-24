@@ -23,9 +23,9 @@
     margin: 0 auto clamp(14px, 2vw, 23px);
     text-align: center;
     font-family: "display", "Times New Roman", serif;
-    font-size: clamp(44px, 7vw, var(--baf-display-extra-large-size));
+    font-size: var(--baf-display-large-size);
     font-weight: 400;
-    line-height: .98;
+    line-height: 1;
     letter-spacing: 0;
   }
 
@@ -98,7 +98,6 @@
     .three-steps__title{
       max-width: calc(100vw - (var(--page-margin) * 2));
       margin-bottom: 13px;
-      font-size: clamp(40px, 12vw, 54px);
     }
 
     .three-steps__list{
