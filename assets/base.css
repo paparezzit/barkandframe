@@ -5686,6 +5686,7 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     --baf-home-mobile-section-gap: 32px;
     --baf-home-mobile-artist-outside-gap: 12px;
     --baf-home-mobile-artist-title-inset: 20px;
+    --baf-home-mobile-artist-button-bottom-gap: 28px;
     --baf-home-mobile-process-title-gap: 29px;
   }
 
@@ -5726,6 +5727,11 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
   main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
     border-radius: calc(var(--baf-radius-xl) + 40px) !important;
     padding-top: var(--baf-home-mobile-artist-title-inset) !important;
+    padding-bottom: 0 !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .artist-intro__content {
+    padding-bottom: var(--baf-home-mobile-artist-button-bottom-gap) !important;
   }
 
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content,
