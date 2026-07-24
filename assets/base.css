@@ -5722,7 +5722,7 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
 
   main.content-for-layout[data-template^="index"] .see-it-at-home__title,
   main.content-for-layout[data-template^="index"] .three-steps__title {
-    margin-bottom: 10px !important;
+    margin-bottom: 5px !important;
   }
 
   main.content-for-layout[data-template^="index"] .portrait-styles__content {
