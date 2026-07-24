@@ -609,11 +609,37 @@
 
   @media(max-width: 749px){
     .portrait-grid{
-      max-width: min(100%, calc((var(--portrait-style-tile-size) * 3) + 20px));
+      max-width: 100%;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      justify-content: stretch;
+      gap: 14px 8px;
+    }
+
+    .portrait-grid .portrait:not(.portrait--value-card){
+      width: 100%;
     }
 
     .portrait-grid .portrait.portrait--value-card{
       height: auto;
+    }
+
+    .portrait-grid .portrait .portrait__badge{
+      min-height: 13px;
+      padding: 2px 5px;
+      font-size: 8px;
+    }
+
+    .portrait-grid .portrait .portrait__soon{
+      padding: 2px 5px;
+      font-size: 9px;
+    }
+
+    .portrait-grid .portrait .portrait__label{
+      max-width: 100%;
+      padding: 2px 5px;
+      font-size: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
