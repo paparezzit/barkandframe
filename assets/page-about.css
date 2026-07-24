@@ -160,6 +160,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    .about-hero + .about-split .about-photo-grid__item--medium {
+      top: calc(50% + 25px);
+    }
+
     .about-split + .about-split {
       margin-top: 20px;
     }
