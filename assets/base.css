@@ -5700,6 +5700,10 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-top: 0 !important;
   }
 
+  main.content-for-layout[data-template^="index"] .three-steps {
+    margin-top: 32px !important;
+  }
+
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content,
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content__inner {
     gap: var(--baf-home-mobile-heading-gap) !important;
@@ -5716,8 +5720,9 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-bottom: var(--baf-home-mobile-heading-gap) !important;
   }
 
-  main.content-for-layout[data-template^="index"] .see-it-at-home__title {
-    margin-bottom: 15px !important;
+  main.content-for-layout[data-template^="index"] .see-it-at-home__title,
+  main.content-for-layout[data-template^="index"] .three-steps__title {
+    margin-bottom: 10px !important;
   }
 
   main.content-for-layout[data-template^="index"] .portrait-styles__content {
