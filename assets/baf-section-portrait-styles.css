@@ -607,13 +607,4 @@
     }
   }
 
-  @media(max-width: 749px){
-    .portrait-grid{
-      max-width: min(100%, calc((var(--portrait-style-tile-size) * 3) + 20px));
-    }
-
-    .portrait-grid .portrait.portrait--value-card{
-      height: auto;
-    }
-  }
 }
