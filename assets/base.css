@@ -5716,6 +5716,10 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-bottom: var(--baf-home-mobile-heading-gap) !important;
   }
 
+  main.content-for-layout[data-template^="index"] .see-it-at-home__title {
+    margin-bottom: 15px !important;
+  }
+
   main.content-for-layout[data-template^="index"] .portrait-styles__content {
     margin-top: 0 !important;
   }
