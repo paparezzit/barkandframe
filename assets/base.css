@@ -5685,6 +5685,14 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     --baf-home-mobile-heading-gap: 20px;
   }
 
+  main.content-for-layout[data-template^="index"] .portrait-styles {
+    margin-top: 24px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+    padding-top: 36px !important;
+  }
+
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content,
   main.content-for-layout[data-template^="index"] .custom-slideshow .slide-content__inner {
     gap: var(--baf-home-mobile-heading-gap) !important;
@@ -5719,5 +5727,15 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
 
   main.content-for-layout[data-template^="index"] [id*="__section_no_barriers_faq"] .section-content-wrapper {
     gap: var(--baf-home-mobile-heading-gap) !important;
+  }
+}
+
+@media(min-width: 750px) and (max-width: 1199px){
+  main.content-for-layout[data-template^="index"] .portrait-styles {
+    margin-top: 32px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .portrait-styles__inner {
+    padding-top: 48px !important;
   }
 }
