@@ -5723,6 +5723,7 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
   }
 
   main.content-for-layout[data-template^="index"] .artist-intro__wrapper {
+    border-radius: calc(var(--baf-radius-xl) + 40px) !important;
     padding-top: var(--baf-home-mobile-artist-title-inset) !important;
   }
 
