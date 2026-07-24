@@ -161,7 +161,7 @@
 
   @media screen and (max-width: 749px) {
     .about-hero + .about-split .about-photo-grid__item--medium {
-      top: calc(50% + 25px);
+      top: calc(50% + 50px);
     }
 
     .about-split + .about-split {
