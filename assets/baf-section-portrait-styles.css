@@ -625,21 +625,21 @@
 
     .portrait-grid .portrait .portrait__badge{
       min-height: 13px;
-      padding: 2px 5px;
-      font-size: 8px;
+      padding: 2px 4px;
+      font-size: 7px;
     }
 
     .portrait-grid .portrait .portrait__soon{
-      padding: 2px 5px;
-      font-size: 9px;
+      padding: 2px 4px;
+      font-size: 7px;
     }
 
     .portrait-grid .portrait .portrait__label{
       max-width: 100%;
-      padding: 2px 5px;
-      font-size: 10px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      padding: 2px 4px;
+      font-size: 7px;
+      overflow: visible;
+      text-overflow: clip;
     }
   }
 }
