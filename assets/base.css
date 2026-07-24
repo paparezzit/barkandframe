@@ -5720,9 +5720,12 @@ main.content-for-layout[data-template^="index"] .cta-section__inner {
     margin-bottom: var(--baf-home-mobile-heading-gap) !important;
   }
 
-  main.content-for-layout[data-template^="index"] .see-it-at-home__title,
-  main.content-for-layout[data-template^="index"] .three-steps__title {
+  main.content-for-layout[data-template^="index"] .see-it-at-home__title {
     margin-bottom: 5px !important;
+  }
+
+  main.content-for-layout[data-template^="index"] .three-steps__title {
+    margin-bottom: 29px !important;
   }
 
   main.content-for-layout[data-template^="index"] .portrait-styles__content {
