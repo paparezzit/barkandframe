@@ -1,10 +1,10 @@
 (function () {
   var TEXT = {
     title: 'We use cookies',
-    body: 'We use essential cookies to keep the shop working. With your permission, we also use cookies for preferences, analytics and marketing. You can review our',
+    body: 'Just the good kind \u2014 to remember your cart and make your visit smoother. No spam. You can review our',
     learnMore: 'Privacy policy',
-    accept: 'Accept all',
-    decline: 'Reject all',
+    accept: 'Sounds good',
+    decline: 'No thanks',
     manage: 'Manage choices',
     close: 'Close cookie banner',
     preferencesTitle: 'Cookie choices',
