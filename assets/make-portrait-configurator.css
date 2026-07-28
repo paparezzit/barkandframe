@@ -2396,6 +2396,27 @@
     color: var(--brown);
   }
 }
+.make-portrait__resume-banner #mp-resume-yes,
+.make-portrait__resume-banner #mp-resume-yes:hover,
+.make-portrait__resume-banner #mp-resume-yes:focus-visible {
+  --button-color: var(--beige);
+  --button-background-color: var(--green);
+  --button-border-color: var(--green);
+  background-color: var(--green);
+  color: var(--beige);
+  outline-color: var(--green);
+}
+.make-portrait__resume-banner #mp-resume-no,
+.make-portrait__resume-banner #mp-resume-no:hover,
+.make-portrait__resume-banner #mp-resume-no:focus-visible {
+  --button-color: var(--beige);
+  --button-background-color: transparent;
+  --button-border-color: var(--beige);
+  background-color: transparent;
+  border-color: var(--beige);
+  color: var(--beige);
+  outline-color: var(--beige);
+}
 .make-portrait__resume-banner__detail {
   color: inherit;
   font-size: var(--baf-text-medium-size);
