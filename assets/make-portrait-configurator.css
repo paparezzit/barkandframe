@@ -958,9 +958,12 @@
   background: var(--beige);
   border-radius: 8px;
 }
-.make-portrait__cta--secondary {
+.make-portrait .make-portrait__cta--secondary {
+  --button-border-color: var(--brown);
   background: color-mix(in srgb, var(--purple) 45%, transparent);
+  border-color: var(--brown);
   color: var(--brown);
+  outline-color: var(--brown);
   margin-top: 10px;
   font-size: 12px;
   width: 50% !important;
