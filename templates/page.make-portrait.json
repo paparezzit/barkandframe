@@ -138,96 +138,6 @@
             "artist_image": "shopify://shop_images/Snimek_obrazovky_2026-05-12_v_12.58.59_1_222b3a56-1f79-4f54-9a41-8d9dbf717112.jpg",
             "wall_image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg"
           }
-        },
-        "gallery_the_gentleman": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "the_gentleman",
-            "style_name": "The Gentleman",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-jack-russell-terrier-gentleman-old-masters-portrait-black-frame-leather-chair-office.jpg",
-            "alt_text": "The Gentleman portrait shown at home"
-          }
-        },
-        "gallery_studio_pencil": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "studio_pencil",
-            "style_name": "Studio Pencil",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-chihuahua-studio-pencil-sketch-portrait-black-frame-rattan-bed-headboard-bedroom.jpg",
-            "alt_text": "Studio Pencil portrait shown at home"
-          }
-        },
-        "gallery_the_duchess": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "the_duchess",
-            "style_name": "The Duchess",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-samoyed-duchess-old-masters-portrait-black-frame-cream-victorian-sofa-living-room.jpg",
-            "alt_text": "The Duchess portrait shown at home"
-          }
-        },
-        "gallery_atelier_sketch": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "atelier_sketch",
-            "style_name": "Atelier Sketch",
-            "image": "shopify://shop_images/custom-dog-portrait-canvas-olive-green-living-room-jack-russell-bark-and-frame.jpg",
-            "alt_text": "Atelier Sketch portrait shown at home"
-          }
-        },
-        "gallery_pure_portrait": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "pure_portrait",
-            "style_name": "Pure Portrait",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-golden-retriever-pure-portrait-oil-painting-oak-frame-kitchen.jpg",
-            "alt_text": "Pure Portrait shown at home"
-          }
-        },
-        "gallery_dream": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "dream",
-            "style_name": "Dream",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-husky-dream-style-portrait-on-swing-sunset-clouds-living-room-elderly-customer.jpg",
-            "alt_text": "Dream portrait shown at home"
-          }
-        },
-        "gallery_studio_watercolour": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "studio_watercolour",
-            "style_name": "Studio Watercolour",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-pomeranian-dream-watercolour-portrait-walnut-frame-day-bed-bedroom.jpg",
-            "alt_text": "Studio Watercolour portrait shown at home"
-          }
-        },
-        "gallery_la_parisienne": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "la_parisienne",
-            "style_name": "La Parisienne",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-cavalier-king-charles-spaniel-la-parisienne-style-portrait-victorian-desk-bedroom.jpg",
-            "alt_text": "La Parisienne portrait shown at home"
-          }
-        },
-        "gallery_indigo": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "indigo",
-            "style_name": "Indigo",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-border-collie-indigo-style-portrait-walnut-frame-mid-century-console-living-room.jpg",
-            "alt_text": "Indigo portrait shown at home"
-          }
-        },
-        "gallery_studio_pop": {
-          "type": "style_gallery_image",
-          "settings": {
-            "style_id": "studio_pop",
-            "style_name": "Studio Pop",
-            "image": "shopify://shop_images/bark-and-frame-see-it-at-home-french-bulldog-studio-pop-blue-portrait-white-frame-cream-sofa-living-room.jpg",
-            "alt_text": "Studio Pop portrait shown at home"
-          }
         }
       },
       "block_order": [
@@ -243,17 +153,7 @@
         "overview_studio_watercolour",
         "overview_la_parisienne",
         "overview_indigo",
-        "overview_studio_pop",
-        "gallery_the_gentleman",
-        "gallery_studio_pencil",
-        "gallery_the_duchess",
-        "gallery_atelier_sketch",
-        "gallery_pure_portrait",
-        "gallery_dream",
-        "gallery_studio_watercolour",
-        "gallery_la_parisienne",
-        "gallery_indigo",
-        "gallery_studio_pop"
+        "overview_studio_pop"
       ],
       "settings": {
         "products_collection": "configurator",
