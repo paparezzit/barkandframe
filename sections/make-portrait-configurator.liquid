@@ -79,142 +79,77 @@
       {%- endif -%}
     {%- endfor -%}
   };
-  window.MakePortraitGalleryImages = {
-    "the_gentleman": [
-    {
-      src: {{ "the-gentleman_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "the-gentleman_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "The Gentleman retriever portrait example"
-    },
-    {
-      src: {{ "the-gentleman_collie.png" | asset_url | json }},
-      thumbSrc: {{ "the-gentleman_collie.png" | asset_img_url: "240x" | json }},
-      alt: "The Gentleman collie portrait example"
-    },
-    {
-      src: {{ "the-gentleman_bulldog.png" | asset_url | json }},
-      thumbSrc: {{ "the-gentleman_bulldog.png" | asset_img_url: "240x" | json }},
-      alt: "The Gentleman bulldog portrait example"
-    }
-    ],
-    "studio_pencil": [
-    {
-      src: {{ "studio-pencil_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "studio-pencil_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Pencil retriever portrait example"
-    },
-    {
-      src: {{ "studio-pencil_bulldog.png" | asset_url | json }},
-      thumbSrc: {{ "studio-pencil_bulldog.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Pencil bulldog portrait example"
-    }
-    ],
-    "the_duchess": [
-    {
-      src: {{ "the-duchess_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "the-duchess_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "The Duchess retriever portrait example"
-    },
-    {
-      src: {{ "the-duchess_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "the-duchess_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "The Duchess chihuahua portrait example"
-    },
-    {
-      src: {{ "the-duchess_terrier.png" | asset_url | json }},
-      thumbSrc: {{ "the-duchess_terrier.png" | asset_img_url: "240x" | json }},
-      alt: "The Duchess terrier portrait example"
-    }
-    ],
-    "atelier_sketch": [],
-    "pure_portrait": [
-    {
-      src: {{ "pure-portrait_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "pure-portrait_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "Pure Portrait chihuahua portrait example"
-    },
-    {
-      src: {{ "pure-portrait_terrier.png" | asset_url | json }},
-      thumbSrc: {{ "pure-portrait_terrier.png" | asset_img_url: "240x" | json }},
-      alt: "Pure Portrait terrier portrait example"
-    },
-    {
-      src: {{ "pure-portrait_bulldog.png" | asset_url | json }},
-      thumbSrc: {{ "pure-portrait_bulldog.png" | asset_img_url: "240x" | json }},
-      alt: "Pure Portrait bulldog portrait example"
-    }
-    ],
-    "dream": [
-    {
-      src: {{ "dream_bulldog.png" | asset_url | json }},
-      thumbSrc: {{ "dream_bulldog.png" | asset_img_url: "240x" | json }},
-      alt: "Dream bulldog portrait example"
-    },
-    {
-      src: {{ "dream_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "dream_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "Dream chihuahua portrait example"
-    },
-    {
-      src: {{ "dream_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "dream_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "Dream retriever portrait example"
-    }
-    ],
-    "studio_watercolour": [
-    {
-      src: {{ "studio-watercolour_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "studio-watercolour_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Watercolour retriever portrait example"
-    },
-    {
-      src: {{ "studio-watercolour_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "studio-watercolour_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Watercolour chihuahua portrait example"
-    },
-    {
-      src: {{ "studio-watercolour_terrier.png" | asset_url | json }},
-      thumbSrc: {{ "studio-watercolour_terrier.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Watercolour terrier portrait example"
-    }
-    ],
-    "la_parisienne": [
-    {
-      src: {{ "la-parisienne_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "la-parisienne_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "La Parisienne chihuahua portrait example"
-    }
-    ],
-    "indigo": [
-    {
-      src: {{ "indigo_bulldog.png" | asset_url | json }},
-      thumbSrc: {{ "indigo_bulldog.png" | asset_img_url: "240x" | json }},
-      alt: "Indigo bulldog portrait example"
-    },
-    {
-      src: {{ "indigo_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "indigo_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "Indigo retriever portrait example"
-    },
-    {
-      src: {{ "indigo_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "indigo_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "Indigo chihuahua portrait example"
-    }
-    ],
-    "studio_pop": [
-    {
-      src: {{ "studio-pop_retriever.png" | asset_url | json }},
-      thumbSrc: {{ "studio-pop_retriever.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Pop retriever portrait example"
-    },
-    {
-      src: {{ "studio-pop_chihuahua.png" | asset_url | json }},
-      thumbSrc: {{ "studio-pop_chihuahua.png" | asset_img_url: "240x" | json }},
-      alt: "Studio Pop chihuahua portrait example"
-    }
-    ]
+  {%- assign _style_gallery_asset_filenames = 'the-gentleman_retriever.jpg|the-gentleman_collie.jpg|the-gentleman_bulldog.jpg|studio-pencil_retriever.jpg|studio-pencil_bulldog.jpg|the-duchess_retriever.jpg|the-duchess_chihuahua.jpg|the-duchess_terrier.jpg|pure-portrait_chihuahua.jpg|pure-portrait_terrier.jpg|pure-portrait_bulldog.jpg|dream_bulldog.jpg|dream_chihuahua.jpg|dream_retriever.jpg|studio-watercolour_retriever.jpg|studio-watercolour_chihuahua.jpg|studio-watercolour_terrier.jpg|la-parisienne_chihuahua.jpg|indigo_bulldog.jpg|indigo_retriever.jpg|indigo_chihuahua.jpg|studio-pop_retriever.jpg|studio-pop_chihuahua.jpg' | split: '|' -%}
+  window.MakePortraitGalleryAssetSources = {
+    {%- for _gallery_asset_filename in _style_gallery_asset_filenames -%}
+      {{ _gallery_asset_filename | json }}: {
+        src: {{ _gallery_asset_filename | asset_img_url: "1200x" | json }},
+        srcSet: {{ _gallery_asset_filename | asset_img_url: "720x" | json }} + " 720w, " + {{ _gallery_asset_filename | asset_img_url: "960x" | json }} + " 960w, " + {{ _gallery_asset_filename | asset_img_url: "1200x" | json }} + " 1200w",
+        thumbSrc: {{ _gallery_asset_filename | asset_img_url: "160x" | json }},
+        thumbSrcSet: {{ _gallery_asset_filename | asset_img_url: "80x" | json }} + " 80w, " + {{ _gallery_asset_filename | asset_img_url: "160x" | json }} + " 160w"
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
   };
+  window.MakePortraitGalleryImages = (function (sources) {
+    var previewSizes = "(max-width: 749px) calc(100vw - 32px), (max-width: 1199px) calc(100vw - 80px), 720px";
+    var thumbSizes = "56px";
+    function galleryImage(filename, alt) {
+      var source = sources[filename] || {};
+      return {
+        src: source.src || null,
+        srcSet: source.srcSet || "",
+        sizes: previewSizes,
+        thumbSrc: source.thumbSrc || source.src || null,
+        thumbSrcSet: source.thumbSrcSet || "",
+        thumbSizes: thumbSizes,
+        alt: alt
+      };
+    }
+    return {
+      "the_gentleman": [
+        galleryImage("the-gentleman_retriever.jpg", "The Gentleman retriever portrait example"),
+        galleryImage("the-gentleman_collie.jpg", "The Gentleman collie portrait example"),
+        galleryImage("the-gentleman_bulldog.jpg", "The Gentleman bulldog portrait example")
+      ],
+      "studio_pencil": [
+        galleryImage("studio-pencil_retriever.jpg", "Studio Pencil retriever portrait example"),
+        galleryImage("studio-pencil_bulldog.jpg", "Studio Pencil bulldog portrait example")
+      ],
+      "the_duchess": [
+        galleryImage("the-duchess_retriever.jpg", "The Duchess retriever portrait example"),
+        galleryImage("the-duchess_chihuahua.jpg", "The Duchess chihuahua portrait example"),
+        galleryImage("the-duchess_terrier.jpg", "The Duchess terrier portrait example")
+      ],
+      "atelier_sketch": [],
+      "pure_portrait": [
+        galleryImage("pure-portrait_chihuahua.jpg", "Pure Portrait chihuahua portrait example"),
+        galleryImage("pure-portrait_terrier.jpg", "Pure Portrait terrier portrait example"),
+        galleryImage("pure-portrait_bulldog.jpg", "Pure Portrait bulldog portrait example")
+      ],
+      "dream": [
+        galleryImage("dream_bulldog.jpg", "Dream bulldog portrait example"),
+        galleryImage("dream_chihuahua.jpg", "Dream chihuahua portrait example"),
+        galleryImage("dream_retriever.jpg", "Dream retriever portrait example")
+      ],
+      "studio_watercolour": [
+        galleryImage("studio-watercolour_retriever.jpg", "Studio Watercolour retriever portrait example"),
+        galleryImage("studio-watercolour_chihuahua.jpg", "Studio Watercolour chihuahua portrait example"),
+        galleryImage("studio-watercolour_terrier.jpg", "Studio Watercolour terrier portrait example")
+      ],
+      "la_parisienne": [
+        galleryImage("la-parisienne_chihuahua.jpg", "La Parisienne chihuahua portrait example")
+      ],
+      "indigo": [
+        galleryImage("indigo_bulldog.jpg", "Indigo bulldog portrait example"),
+        galleryImage("indigo_retriever.jpg", "Indigo retriever portrait example"),
+        galleryImage("indigo_chihuahua.jpg", "Indigo chihuahua portrait example")
+      ],
+      "studio_pop": [
+        galleryImage("studio-pop_retriever.jpg", "Studio Pop retriever portrait example"),
+        galleryImage("studio-pop_chihuahua.jpg", "Studio Pop chihuahua portrait example")
+      ]
+    };
+  })(window.MakePortraitGalleryAssetSources || {});
   window.MakePortraitMoneyFormat = {{ shop.money_format | json }};
   window.MakePortraitCloudinary = {
     cloudName: {{ section.settings.cloudinary_cloud_name | default: '' | json }},
@@ -429,6 +364,7 @@
           id="mp-preview-img"
           width="900"
           height="1125"
+          decoding="async"
           alt=""
           style="opacity: 0;"
         >
@@ -1925,12 +1861,19 @@
     if (step3btn) step3btn.classList.toggle('make-portrait__cta--upload-required', isOos);
     if (orderBtn) orderBtn.classList.toggle('make-portrait__cta--upload-required', isOos);
   }
-  function setPreviewImageElement(src, alt) {
+  function setPreviewImageElement(src, alt, srcSet, sizes) {
     if (!src) return;
     var img = $('mp-preview-img');
     if (!img) return;
     img.style.opacity = '0';
     img.onload = function () { img.style.opacity = '1'; };
+    if (srcSet) {
+      img.setAttribute('srcset', srcSet);
+      img.setAttribute('sizes', sizes || '100vw');
+    } else {
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
+    }
     img.src = src;
     img.alt = alt || '';
     if (img.complete) img.style.opacity = '1';
@@ -1961,8 +1904,6 @@
   function getPreviewGalleryItems() {
     var items = [];
     var seen = {};
-    var overviewMap = window.MakePortraitOverviewImages || {};
-    var overview = overviewMap[state.styleId] || {};
     var galleryMap = window.MakePortraitGalleryImages || {};
     var styleGalleryItems = galleryMap[state.styleId] || [];
     var style = state.style || {};
@@ -1978,7 +1919,11 @@
         key: key,
         label: label,
         src: src,
+        srcSet: data && data.srcSet ? data.srcSet : '',
+        sizes: data && data.sizes ? data.sizes : '',
         thumbSrc: data && data.thumbSrc ? normalizePreviewGallerySrc(data.thumbSrc) || src : src,
+        thumbSrcSet: data && data.thumbSrcSet ? data.thumbSrcSet : '',
+        thumbSizes: data && data.thumbSizes ? data.thumbSizes : '',
         alt: data && data.alt ? data.alt : label
       });
     }
@@ -2025,8 +1970,11 @@
       var thumb = document.createElement('img');
       thumb.className = 'preview-gallery__thumb';
       thumb.src = item.thumbSrc || item.src;
+      if (item.thumbSrcSet) thumb.setAttribute('srcset', item.thumbSrcSet);
+      if (item.thumbSizes) thumb.setAttribute('sizes', item.thumbSizes);
       thumb.alt = '';
       thumb.loading = 'lazy';
+      thumb.decoding = 'async';
       btn.appendChild(thumb);
       btn.addEventListener('click', function () {
         state.previewGalleryMode = item.key;
@@ -2040,7 +1988,7 @@
     var wrap = document.querySelector('.make-portrait__preview-wrap');
     var isGalleryPhoto = !!item && item.key !== 'config';
     if (wrap) wrap.classList.toggle('is-gallery-photo-active', isGalleryPhoto);
-    if (item) setPreviewImageElement(item.src, item.alt);
+    if (item) setPreviewImageElement(item.src, item.alt, item.srcSet, item.sizes);
     renderPreviewGallery();
   }
   function resetPreviewGalleryToConfigurator() {
