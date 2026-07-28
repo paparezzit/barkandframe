@@ -2589,3 +2589,24 @@
     columns: 3;
   }
 }
+
+.make-portrait .mp-dog-people-reviews {
+  position: relative;
+}
+
+.make-portrait .mp-dog-people-reviews::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 0;
+  left: 0;
+  border-top: 2px solid var(--cream);
+  pointer-events: none;
+}
+
+@media (min-width: 1200px) {
+  .make-portrait__layout {
+    column-gap: 120px;
+    row-gap: 40px;
+  }
+}
