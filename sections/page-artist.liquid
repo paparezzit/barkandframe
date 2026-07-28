@@ -77,17 +77,24 @@
 
         {%- if has_collections -%}
           <div class="artists-page__styles-section">
-            <h3 class="artists-page__styles-title">Collection by {{ artist_first_name }}</h3>
+            <h3 class="artists-page__styles-title">
+              {%- if artist.name.value == 'Maria Vakht' -%}
+                Wearable art by Maria
+              {%- else -%}
+                Collection by {{ artist_first_name }}
+              {%- endif -%}
+            </h3>
             <div class="artists-page__collections">
-              {%- for col in collections -%}
-                {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
-                  {%- assign collection_url = col.url -%}
-                  {%- if artist_first_name == 'Maria' -%}
-                    {%- assign collection_url = '/collections/all-products' -%}
+              {%- if artist.name.value == 'Maria Vakht' -%}
+                {%- assign wear_page_url = pages['wear'].url | default: '/pages/wear' -%}
+                <a href="{{ wear_page_url }}" class="button-secondary artists-page__collection-btn">Wear</a>
+              {%- else -%}
+                {%- for col in collections -%}
+                  {%- if col.metafields.custom.artist.value.system.handle == artist_handle -%}
+                    <a href="{{ col.url }}" class="button-secondary artists-page__collection-btn">{{ col.title }}</a>
                   {%- endif -%}
-                  <a href="{{ collection_url }}" class="button-secondary artists-page__collection-btn">{{ col.title }}</a>
-                {%- endif -%}
-              {%- endfor -%}
+                {%- endfor -%}
+              {%- endif -%}
             </div>
           </div>
         {%- endif -%}
