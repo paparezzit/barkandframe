@@ -2,10 +2,6 @@
   {%- liquid
     assign about_s1_main_desktop = 'about-us-founder-patrik-finn-desktop.jpg'
     assign about_s1_main_mobile = 'about-us-founder-patrik-finn-mobile.jpg'
-    assign about_s1_sketch_desktop = 'about-us-charcoal-sketch-jack-russell-desktop.jpg'
-    assign about_s1_sketch_mobile = 'about-us-charcoal-sketch-jack-russell-mobile.jpg'
-    assign about_s1_sofa_desktop = 'about-us-finn-grey-sofa-desktop.jpg'
-    assign about_s1_sofa_mobile = 'about-us-finn-grey-sofa-mobile.jpg'
     assign about_s3_main_desktop = 'about-us-hanging-gentleman-portrait-desktop.jpg'
     assign about_s3_main_mobile = 'about-us-hanging-gentleman-portrait-mobile.jpg'
   -%}
@@ -22,18 +18,6 @@
           <picture>
             <source media="(max-width: 749px)" srcset="{{ about_s1_main_mobile | asset_url }}">
             <img src="{{ about_s1_main_desktop | asset_url }}" alt="Patrik and Finn in the studio" width="1049" height="1400" loading="eager" fetchpriority="high" decoding="async">
-          </picture>
-        </div>
-        <div class="about-photo-grid__item about-photo-grid__item--medium" data-parallax>
-          <picture>
-            <source media="(max-width: 749px)" srcset="{{ about_s1_sketch_mobile | asset_url }}">
-            <img src="{{ about_s1_sketch_desktop | asset_url }}" alt="Hand-drawn Jack Russell charcoal sketch" width="1120" height="1400" loading="eager" decoding="async">
-          </picture>
-        </div>
-        <div class="about-photo-grid__item about-photo-grid__item--small" data-parallax="-10dvh">
-          <picture>
-            <source media="(max-width: 749px)" srcset="{{ about_s1_sofa_mobile | asset_url }}">
-            <img src="{{ about_s1_sofa_desktop | asset_url }}" alt="Finn at home on a grey sofa" width="1050" height="1400" loading="eager" decoding="async">
           </picture>
         </div>
       </div>

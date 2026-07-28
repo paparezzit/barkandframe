@@ -78,6 +78,11 @@
     display: block;
   }
 
+  .about-split--intro .about-photo-grid {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
   .about-split__content {
     display: flex;
     flex-direction: column;
