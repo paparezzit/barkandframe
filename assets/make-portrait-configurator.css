@@ -2610,3 +2610,15 @@
     row-gap: 40px;
   }
 }
+
+@media (min-width: 800px) {
+  .make-portrait__tabs {
+    margin-top: -16px;
+  }
+}
+
+@media (min-width: 750px) and (max-width: 1199px) and (orientation: portrait) {
+  .make-portrait__tabs {
+    margin-top: 40px;
+  }
+}
