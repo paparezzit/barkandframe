@@ -57,6 +57,18 @@
     transform: translate3d(0, 0, 0);
   }
 
+  @media screen and (max-width: 749px) {
+    .shop-products__nav {
+      top: 60px;
+      transform: none;
+      backface-visibility: visible;
+    }
+
+    .shop-products__nav.is-hidden-on-scroll {
+      transform: none;
+    }
+  }
+
   .shop-products__nav::before,
   .shop-products__nav::after {
     content: "";
