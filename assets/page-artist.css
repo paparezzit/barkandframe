@@ -74,6 +74,10 @@
     padding: 18px 20px;
   }
 
+  .artists-page__styles-section--collections {
+    align-items: center;
+  }
+
   .artists-page__styles-title {
     font-family: var(--baf-text-family);
     font-size: var(--baf-text-medium-size);
