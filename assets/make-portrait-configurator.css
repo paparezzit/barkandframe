@@ -107,7 +107,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  background: var(--purple);
+  background: var(--cream);
   padding: 15px;
   text-align: center;
   transition: opacity 0.3s;
